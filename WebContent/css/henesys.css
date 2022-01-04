@@ -1,0 +1,181 @@
+/* ==================================== */
+/* 				For DataTables 			*/
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+/* ==================================== */
+/* 				For DataTables 			*/
+th.dt-center, td.dt-center { 
+	text-align: center; 
+}
+
+th.dt-head-center {
+	text-align: center; 
+}
+
+td.dt-body-center {
+	text-align: center; 
+}
+
+td.dt-body-right {
+	text-align: right; 
+}
+/* ==================================== */
+/* 	For DataTables text, background color of selected td */
+
+table.dataTable tbody tr.selected {
+    /* color: white !important; */
+    background-color: #29946a  !important;
+    /*background-color: #f536e2  !important;*/
+    /*opacity: 1.5;*/
+    
+}
+
+/* ==================================== */
+/* 			For Modal Window 			*/
+
+.modal-auto {
+    min-width: auto; 
+    max-width: fit-content;
+    justify-content: center;
+    text-align: center;
+}
+
+/* ==================================== */
+/* 			For Bootstrap Icon 			*/
+.btn-circle.btn-sm { 
+    width: 30px; 
+    height: 30px; 
+    padding: 6px 0px; 
+    border-radius: 15px; 
+    font-size: 8px; 
+    text-align: center; 
+} 
+.btn-circle.btn-md { 
+    width: 50px; 
+    height: 50px; 
+    padding: 7px 10px; 
+    border-radius: 25px; 
+    font-size: 10px; 
+    text-align: center; 
+} 
+.btn-circle.btn-xl { 
+    width: 70px; 
+    height: 70px; 
+    padding: 10px 16px; 
+    border-radius: 35px; 
+    font-size: 12px; 
+    text-align: center; 
+}
+.fa-sign-out-alt.white {
+	color: #fff;
+}
+
+/* ==================================== */
+/* 		   To Hide Button On Start		*/
+button.btn-admin, button.btn-manager, button.btn-user {
+	display: none;
+}
+
+/* ==================================== */
+/* 		   ���� ��� ���� ���� ������			*/
+#chulhaModal .stepwizard-step p {
+    margin-top: 10px;
+}
+#chulhaModal .stepwizard-row {
+    display: table-row;
+}
+#chulhaModal .stepwizard {
+    display: table;
+    width: 90%;
+    position: relative;
+}
+#chulhaModal .stepwizard-step button[disabled] {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+}
+#chulhaModal .stepwizard-row:before {
+    top: 14px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    z-order: auto;
+}
+#chulhaModal .stepwizard-step {
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
+#chulhaModal .btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+#chulhaModal .modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    width: 70%;
+    margin: 0 auto;
+}
+#chulhaModal .disabled-control {
+	opacity: 0.4; 
+	cursor: not-allowed;
+	pointer-events: none;
+}
+#chulhaModal .modal-dialog {
+    min-width: 70%;
+}
+
+#chulhaModal .error-class {
+    border: 1px solid red !important;
+}
+
+.open_file i {
+	color: yellowgreen;
+    font-size: 21px;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.open_file:hover i,#open_file:hover {
+	color:darkseagreen;
+	border-color:darkseagreen;	
+}
+
+.open_file {
+    border-color: yellowgreen;
+    box-shadow: none;
+    padding: 0px 11px;
+    border-style: double;
+    border-radius: 3px;
+    padding-top: 3px;
+}
+
+#fileDelete {
+	position: relative;
+    bottom: 30.5px;
+    left: 93%;
+    color: lightslategrey;
+    cursor: pointer;
+}
+
+table.table {
+	margin-bottom: 0;
+}
+
+/* datatables pagingbar margin */
+.dataTables_wrapper .row:last-child {
+	margin-top: 0.5%;
+}

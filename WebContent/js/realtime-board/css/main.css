@@ -1,0 +1,91 @@
+/* 
+ * Main CSS File for RealtimeStatusBoard
+*/
+
+/* Google font */
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
+html, body {
+    height: 95%;
+}
+header {
+    color: white;
+    text-align: center;
+    height:12%;
+    width: 100%;
+    font-size: 1.7rem;
+}
+header h1 {
+    display: block;
+    margin-top: 1.5vh;
+    margin-bottom: 0;
+}
+header #digital-clock {
+    float: right;
+    font-family: 'Orbitron', sans-serif;
+    color: #e7f8ed;
+    font-size: 3rem;
+    text-align: center;
+    padding-bottom: 1.2vh;
+    margin-right: 1.2vw;
+}
+#container {
+    height: 78%;
+}
+#center {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 60%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+#main-table {
+    padding: 0;
+    margin: auto;
+    flex: 0 0 57%;
+    height: 100%;
+}
+#main-chart {
+    padding: 0;
+    margin: auto;
+    flex: 0 0 38%;
+    height: 100%;
+}
+#second-area {
+    margin-top: 5vh;
+    height: 40%;
+}
+#temp-chart .content {
+    height: 100%;
+    text-align: center;
+}
+.swal-overlay {
+    background-color: rgba(255,0,0,0.3);
+}
+
+@media screen and (max-width: 1300px) {
+    header h1 {
+        display: block;
+    }
+    #center {
+        display: block;
+        height: 1000px;
+    }
+    #main-table {
+        display: block;
+        height: 47.5%;
+    }
+    #main-chart {
+        display: block;
+        height: 47.5%;
+    }
+    #second-area {
+        display: block;
+    }
+    html, body, #container, #second-area, #temp-chart {
+        height: auto;
+    }
+}

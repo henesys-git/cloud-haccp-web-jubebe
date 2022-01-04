@@ -1,0 +1,168 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*,java.util.*,javax.servlet.http.*"%>
+<%@ page import="mes.client.comm.*" %>
+<%@ page import="mes.client.common.*" %>
+<%@ page import="mes.client.guiComponents.*" %>
+<%@ page import="mes.client.util.*" %>
+<%@ page import="mes.client.conf.*" %>
+<%@ page import="org.json.simple.*"%><%@ include file="/strings.jsp" %>
+<%
+/* 
+S202S120131.jsp
+원부자재 출고 등록 
+*/
+	String loginID = session.getAttribute("login_id").toString();
+	String member_key = session.getAttribute("member_key").toString();
+	String history_yn = session.getAttribute("history_yn").toString();
+	
+	String GV_PART_CD, GV_PART_REV_NO, GV_PART_NM, 
+		   GV_TRACE_KEY, GV_PART_CUR_STOCK;
+	
+	GV_PART_CD = request.getParameter("part_cd");
+	GV_PART_REV_NO = request.getParameter("part_rev_no");
+	GV_PART_NM = request.getParameter("part_nm");
+	GV_PART_CUR_STOCK = request.getParameter("part_cur_stock");
+	GV_TRACE_KEY = request.getParameter("trace_key");
+	
+	String initIpgoTypeCode = "PART_CHULGO_TYPE002";
+	Vector chulgoTypeCode = null;
+    Vector chulgoTypeName = null;
+    Vector chulgoTypeList = CommonData.getPartChulgoType();
+%>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+		new SetSingleDate2("", "#txt_chulgo_date", 0);
+		
+		$('#txt_io_user_id').val('<%=loginID%>');
+    });
+	
+	function SaveOderInfo() {
+		
+		if($('#txt_io_count').val() == '') {
+			heneSwal.warning("출고 수량을 입력하세요");
+			return false;
+		} else {
+	        var dataJsonHead = new Object();
+	        var jArray = new Array();
+	        
+			dataJsonHead.user_id = '<%=loginID%>';									
+			
+			var dataJsonBody = new Object();
+			dataJsonBody.trace_key = <%=GV_TRACE_KEY%>;				// '이력 추적 키'
+			dataJsonBody.part_cd = $('#txt_part_cd').val();			// 원부자재코드
+			dataJsonBody.part_rev_no = $('#txt_part_rev_no').val();	// 원부자재개정번호
+			dataJsonBody.chulgo_date = $('#txt_chulgo_date').val();	// 입출고날짜
+			dataJsonBody.io_count = $('#txt_io_count').val();		// 입출고 수량
+			dataJsonBody.chulgo_type = $('#chulgo_type option:selected').val();	// 입고 타입
+			dataJsonBody.bigo = $('#txt_bigo').val();				// 비고
+			
+			jArray.push(dataJsonBody);
+		    
+			var dataJsonMulti = new Object();
+			dataJsonMulti.paramHead = dataJsonHead;
+			dataJsonMulti.param = jArray;
+
+			var JSONparam = JSON.stringify(dataJsonMulti);
+			var chekrtn = confirm("등록하시겠습니까?");
+			
+			if(chekrtn) {
+				SendTojsp(JSONparam, "M202S120100E131");
+			}
+		}
+	}
+
+	function SendTojsp(bomdata, pid) {
+		
+		$.ajax({
+			type: "POST",
+	        dataType: "json",
+	        url: "<%=Config.this_SERVER_path%>/Contents/CommonView/insert_update_delete_json.jsp",
+	        data: {"bomdata" : bomdata, "pid" : pid},
+			success: function (rcvData) {
+				if(rcvData > -1) {
+					heneSwal.success('출고 완료되었습니다');
+					
+					vPartgubun_big = "";
+					vPartgubun_mid = "";
+					
+					$('#modalReport').modal('hide');
+	        		parent.fn_MainInfo_List();
+	        		parent.$('#SubInfo_List_contents').hide();
+				} else {
+					heneSwal.error('출고 실패했습니다, 다시 시도해주세요');	         		
+				}
+			}
+		});
+	}
+</script>
+
+<table class="table">
+	<tr>
+		<td>
+			출고일자
+		</td>
+	    <td>
+			<input type="text" data-date-format="yyyy-mm-dd" id="txt_chulgo_date" class="form-control">
+		</td>
+	</tr>
+   	<tr>
+   		<td>
+			원부자재 코드
+   		</td>
+   		<td>
+   			<input type="text" class="form-control" id="txt_part_cd" readonly value="<%=GV_PART_CD%>">
+   			<input type="hidden" class="form-control" id="txt_part_rev_no" readonly value="<%=GV_PART_REV_NO%>">
+   		</td>
+   	</tr>
+ 	<tr>
+ 		<td>
+			원부자재 명
+  		</td>
+  		<td>
+  			<input type="text" class="form-control" id="txt_part_name" readonly value="<%=GV_PART_NM%>">
+  		</td>
+  	</tr>
+  	<tr>
+ 		<td>
+			현재 재고
+  		</td>
+  		<td>
+  			<input type="text" class="form-control" id="txt_stock" readonly value="<%=GV_PART_CUR_STOCK%>">
+  		</td>
+  	</tr>
+ 	<tr>
+ 		<td>
+			출고 수량
+  		</td>
+  		<td>
+  			<input type="text" class="form-control" id="txt_io_count">
+  		</td>
+  	</tr>
+  	<tr>
+		<td>
+			출고 타입
+		</td>
+	  	<td>
+			<select class="form-control" id="chulgo_type">
+	        	<% chulgoTypeCode = (Vector) chulgoTypeList.get(1);%>
+	            <% chulgoTypeName = (Vector) chulgoTypeList.get(2);%>
+	            <% for(int i = 0; i < chulgoTypeName.size(); i++) { %>
+					<option value='<%=chulgoTypeName.get(i).toString()%>' 
+						<%=initIpgoTypeCode.equals(chulgoTypeCode.get(i).toString()) ? "selected" : "" %>>
+						<%=chulgoTypeName.get(i).toString()%>
+					</option>
+				<%} %>
+			</select>
+		</td>
+  	</tr>
+	<tr>
+		<td>
+			비고
+		</td>
+		<td>
+			<input type="text" class="form-control" id="txt_bigo">
+		</td>
+	</tr>
+</table>

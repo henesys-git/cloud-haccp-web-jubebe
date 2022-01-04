@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  metadata-complete="false">
+  
+  	<!-- 첨부파일 등록서블릿 삭제 안돼요 XXXX -->
+    <servlet>
+        <servlet-name>hcp_EdmsServerServlet</servlet-name>
+        <servlet-class>mes.edms.server.hcp_EdmsServerServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hcp_EdmsServerServlet</servlet-name>
+        <url-pattern>/hcp_EdmsServerServlet</url-pattern>
+    </servlet-mapping>
+	
+	<servlet>
+        <servlet-name>PrintBarcodeServlet</servlet-name>
+        <servlet-class>mes.frame.servlet.PrintBarcodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PrintBarcodeServlet</servlet-name>
+        <url-pattern>/PrintBarcodeServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>WeightCheckerServlet</servlet-name>
+        <servlet-class>mes.frame.servlet.WeightCheckerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WeightCheckerServlet</servlet-name>
+        <url-pattern>/WeightCheckerServlet</url-pattern>
+    </servlet-mapping>
+	
+    <servlet>
+        <servlet-name>ThermalServlet</servlet-name>
+        <servlet-class>mes.frame.servlet.ThermalServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ThermalServlet</servlet-name>
+        <url-pattern>/ThermalServlet</url-pattern>
+    </servlet-mapping>
+    <!-- 
+    <servlet>
+        <servlet-name>MetalDetectorInitService</servlet-name>
+        <servlet-class>mes.frame.servlet.MetalDetectorInitService</servlet-class>
+        <load-on-startup>3</load-on-startup>       
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MetalDetectorInitService</servlet-name>
+        <url-pattern>/ccp/metal-detector</url-pattern>
+    </servlet-mapping>
+   
+	<servlet>
+        <servlet-name>MetalDetectorStatusService</servlet-name>
+        <servlet-class>mes.frame.servlet.MetalDetectorStatusService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MetalDetectorStatusService</servlet-name>
+        <url-pattern>/ccp/metal-detector/status</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>MetalDetectorCountService</servlet-name>
+        <servlet-class>mes.frame.servlet.MetalDetectorCountService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MetalDetectorCountService</servlet-name>
+        <url-pattern>/ccp/metal-detector/count</url-pattern>
+    </servlet-mapping>
+     -->
+    <servlet>
+        <servlet-name>DocDisplayService</servlet-name>
+        <servlet-class>utils.service.DocDisplayService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DocDisplayService</servlet-name>
+        <url-pattern>/docDisplay</url-pattern>
+    </servlet-mapping>
+
+   	<!-- <servlet>
+        <servlet-name>SourceMakerServlet</servlet-name>
+        <servlet-class>mes.frame.servlet.SourceMakerServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet> -->
+    <!-- <servlet-mapping>
+        <servlet-name>SourceMakerServlet</servlet-name>
+        <url-pattern>/SourceMaker</url-pattern>
+    </servlet-mapping> -->
+    
+    <!-- ERROR HANDLER -->
+	<servlet>
+	   <servlet-name>ErrorHandler</servlet-name>
+	   <servlet-class>utils.ErrorHandler</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	   <servlet-name>ErrorHandler</servlet-name>
+	   <url-pattern>/ErrorHandler</url-pattern>
+	</servlet-mapping>
+    
+	<!-- 개발서버에서 주석해제 금지 kakao알림톡 연동api -->
+<!--     <servlet> 
+         <servlet-name>Kakao</servlet-name> 
+         <servlet-class>mes.edms.server.Kakao</servlet-class>
+ 		 <load-on-startup>8</load-on-startup> 
+  	</servlet>  -->
+    
+	<session-config>
+        <session-timeout>360</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    
+	<!-- ================CorsFilter========================= -->
+	<filter>
+		<filter-name>CorsFilter</filter-name>
+	  	<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+	  	<init-param>
+	    	<param-name>cors.allowed.origins</param-name>
+		    <param-value>
+		    	http://192.168.0.202, http://182.162.171.89:8080, http://182.162.171.90:8080, http://182.162.171.91:8080, http://airmonitorsystem.co.kr:8080
+		    </param-value>
+		</init-param>
+	  
+		<init-param>
+	    	<param-name>cors.allowed.methods</param-name>
+	  		<param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
+	  	</init-param>
+	  	<init-param>
+	    	<param-name>cors.allowed.headers</param-name>
+	    	<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+	  	</init-param>
+	  	<init-param>
+	    	<param-name>cors.exposed.headers</param-name>
+	    	<param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
+	  	</init-param>
+	  	<init-param>
+	    	<param-name>cors.support.credentials</param-name>
+	    	<param-value>true</param-value>
+	  	</init-param>
+	  	<init-param>
+	    	<param-name>cors.preflight.maxage</param-name>
+	    	<param-value>10</param-value>
+	  	</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+<!--     <error-page> -->
+<!--     	<error-code>400</error-code> -->
+<!--     	<location>/Contents/CommonView/ErrorPageView.jsp</location> -->
+<!--     </error-page> -->
+
+     <!-- <error-page>
+    		<error-code>404</error-code>
+   			<location>/Contents/CommonView/Error/ErrorPage_404.jsp</location>
+     </error-page> -->
+     
+	<!-- <error-page>
+	   <error-code>404</error-code>
+	   <location>/ErrorHandler</location>
+	</error-page>
+	
+	<error-page>
+	   <exception-type>java.lang.Throwable</exception-type >
+	   <location>/ErrorHandler</location>
+	</error-page> -->
+
+<!--     <error-page> -->
+<!--    		<error-code>403</error-code> -->
+<!--     	<location>/Contents/CommonView/ErrorPageView.jsp</location> -->
+<!--     </error-page> -->
+
+   <error-page> 
+  		<error-code>500</error-code>
+     	<location>/Contents/CommonView/Error/ErrorPage_500.jsp</location> 
+   </error-page> 
+
+<!--     <error-page> -->
+<!--     	<exception-type>java.lang.Throwable</exception-type> -->
+<!--     	<location>/Contents/CommonView/ErrorPageView.jsp</location> -->
+<!--     </error-page> -->
+</web-app>

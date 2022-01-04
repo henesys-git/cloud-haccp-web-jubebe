@@ -1,0 +1,47 @@
+/* Customized for Hyupjin Project 
+ * March 2020 to September 2020
+ * Project Manager : Hwang Jaesung
+ * Developer : Choi Hyeonsu, Kim Hyojung
+ * This CSS file is written by Choi Hyeonsu (31 Mar 2020)
+*/
+.tabulator-row .tabulator-cell{
+    padding:20px 16px;
+}
+.tabulator .tabulator-header {
+    height: 50px;
+}
+.tabulator .tabulator-header .tabulator-col {
+    height: 50px;
+    text-align: center;
+}
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+    height: 50px;
+}
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
+    font-size: 1.4rem;
+    vertical-align: middle;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.tabulator-cell {
+    font-size: 1.4rem;
+}
+/* 품목명 */
+.tabulator-row > div:first-of-type {
+    font-size: 2rem;
+}
+/* 계획수량 */
+.tabulator-row > div:nth-of-type(3) {
+    font-size: 2rem;
+}
+/* 완료수량 */
+.tabulator-row > div:nth-of-type(4) {
+    font-size: 2rem;
+    color: yellow;
+}
+/* .tabulator-tableHolder {
+    overflow-y: hidden;
+} */
