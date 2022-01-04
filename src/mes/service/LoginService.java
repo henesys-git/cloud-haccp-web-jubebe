@@ -14,8 +14,8 @@ public class LoginService {
 		this.userDao = userDao;
 	}
 	
-	public User checkPassword(String userId, String password) {
-		Connection conn = JDBCConnectionPool.getConnection();
+	public User checkPassword(String bizNo, String userId, String password) {
+		Connection conn = JDBCConnectionPool.getConnection(bizNo);
 		
 		User user = userDao.getUserById(conn, userId);
 

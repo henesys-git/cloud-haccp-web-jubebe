@@ -12,15 +12,18 @@ import mes.client.conf.Config;
 public class JDBCConnectionPool {
 	
 	static final Logger logger = Logger.getLogger(JDBCConnectionPool.class.getName());
-    static private String bizNo = "";
+    //static private String bizNo = "";
 	
-	public static Connection getConnection() {
+	public static Connection getConnection(String bizNo) {
 	      Connection conn = null;
 	      
 	      try {
 	           Class.forName("org.mariadb.jdbc.Driver");
 	           
 	           String url = "jdbc:mariadb://103.60.126.81:3306/" + bizNo;
+	           
+	           logger.debug("DB URL: " + url);
+	           
 	           conn = DriverManager.getConnection(url, "root", "henesys0728!");
 	           
 	           conn.setAutoCommit (true);
@@ -109,9 +112,9 @@ public class JDBCConnectionPool {
 	      return conn;
 	}
 	
-	public static void setBizNo(String bizNo) {
-		if(JDBCConnectionPool.bizNo == "") {
-			JDBCConnectionPool.bizNo = bizNo;
-		}
-	}
+//	public static void setBizNo(String bizNo) {
+//		if(JDBCConnectionPool.bizNo == "") {
+//			JDBCConnectionPool.bizNo = bizNo;
+//		}
+//	}
 }

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -34,11 +35,14 @@ public class CCPDataController extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		String bizNo = (String) session.getAttribute("bizNo");
+		
 		String ccpType = req.getParameter("ccpType");
 		String startDate = req.getParameter("startDate");
 		String endDate = req.getParameter("endDate");
 		
-		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl());
+		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
 		List<CCPData> listCCPData = ccpService.getCCPData(ccpType, startDate, endDate);
 		String result = ccpService.getListAsJson(listCCPData);
 		

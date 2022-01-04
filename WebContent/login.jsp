@@ -40,11 +40,12 @@
 		member_key = request.getParameter("member_key");
 	
 	// 서브도메인 별 db 주소 설정
+	//TODO: 삭제예정
 	BiznoSubdomainPairDao dao = new BiznoSubdomainPairDaoImpl();
 	BiznoSubdomainPairService bspService = new BiznoSubdomainPairService(dao);
 	String bizno = bspService.getBizno(subdomain);
-	System.out.println(bizno);
-	JDBCConnectionPool.setBizNo(bizno);
+	System.out.println("biz no : " + bizno);
+	//JDBCConnectionPool.setBizNo(bizno);
 	
 	// 아이디 복호화
 	int Loginid_char_length = Loginid.length() / 4;
@@ -96,13 +97,14 @@
     }
 
     LoginService loginService = new LoginService(new UserDaoImpl());
-	User user = loginService.checkPassword(Loginid_output, Password_output);
+	User user = loginService.checkPassword(bizNo, Loginid_output, Password_output);
 	
 	response.setContentType("text/html");
 	
     if(user.getUserId() != null) {
     	session.setAttribute("login_id", Loginid_output);
         session.setAttribute("login_name", user.getUserName());
+        session.setAttribute("bizNo", bizNo);
         
 		response.sendRedirect("MasterMainPage.jsp");
     } else {
