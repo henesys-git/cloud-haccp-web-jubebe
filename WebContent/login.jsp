@@ -39,13 +39,11 @@
 	if(request.getParameter("member_key") != null)
 		member_key = request.getParameter("member_key");
 	
-	// 서브도메인 별 db 주소 설정
-	//TODO: 삭제예정
+	// 서브도메인 별 biz no 조회
 	BiznoSubdomainPairDao dao = new BiznoSubdomainPairDaoImpl();
 	BiznoSubdomainPairService bspService = new BiznoSubdomainPairService(dao);
-	String bizno = bspService.getBizno(subdomain);
-	System.out.println("biz no : " + bizno);
-	//JDBCConnectionPool.setBizNo(bizno);
+	String bizNo = bspService.getBizno(subdomain);
+	System.out.println("biz no : " + bizNo);
 	
 	// 아이디 복호화
 	int Loginid_char_length = Loginid.length() / 4;

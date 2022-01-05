@@ -42,7 +42,6 @@ public class CCPDataService {
 		
 		try {
 			jsonArray = new JSONArray(listNode.toString());
-			//jsonObject.put("list", request);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

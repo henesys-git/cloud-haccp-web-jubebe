@@ -18,14 +18,18 @@ function SetRangeDate(divId, inputId, adjustDate) {
 	
 	this.start = moment().subtract(adjustDate, 'days');
 	this.end = moment();
-
-	function cb(start, end) {
-	    /*console.log('callback func called');
-		start = start.format('YYYY-MM-DD');
-		end = end.format('YYYY-MM-DD');*/
-	    console.log('test again. start date : ' + start.format('YYYY-MM-DD'));
-	    console.log('test again. end date : ' + end.format('YYYY-MM-DD'));
-	}
+	
+	this.getStartDate = function() {
+		var dates = this.rangedate[0].value;
+    	var startDate = dates.split(" - ")[0];
+    	return startDate;
+	};
+	
+	this.getEndDate = function() {
+		var dates = this.rangedate[0].value;
+    	var endDate = dates.split(" - ")[1];
+    	return endDate;
+	};
 	
 	this.rangedate = $('#' + inputId).daterangepicker({
 	    startDate: moment().subtract(adjustDate, 'days'),
@@ -71,17 +75,6 @@ function SetRangeDate(divId, inputId, adjustDate) {
 	            "12월"
 	        ]
 	    }	
-	}, function(start, end, label) {
-		console.log('start:' + start);
-		console.log('end:' + end);
-		console.log('label:' + label);
-		
-		if(startDate != undefined) {
-			startDate = start.format('YYYY-MM-DD');
-		}
-		if(endDate != undefined) {
-			endDate = end.format('YYYY-MM-DD');
-		}		
 	});
 }
 

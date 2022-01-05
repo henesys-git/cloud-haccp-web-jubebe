@@ -7,31 +7,32 @@
 
 <script type="text/javascript">
     
-    $(document).ready(function () {
+	$(document).ready(function () {
     	
-    	new SetRangeDate("dateParent", "dateRange", 7);
-       	
-    	displayData();
-    	
-	    function displayData() {
-	    	var startDate = $('#dateRange').data('daterangepicker')
-	    								   .startDate.format('YYYY-MM-DD');
-	       	var endDate = $('#dateRange').data('daterangepicker')
-	       								 .endDate.format('YYYY-MM-DD');
+		let date = new SetRangeDate("dateParent", "dateRange", 7);
+		let mainTable;
+		
+		async function getData() {
+	    	var startDate = date.getStartDate();
+    		var endDate = date.getEndDate();
 	    	
-	        $.ajax({
-	            type: "POST",
-	            url: "<%=Config.this_SERVER_path%>/ccp",
-	            data: "startDate=" + startDate + 
-	            	  "&endDate=" + endDate + 
-	            	  "&ccpType=" + "%25",
-	            success: function (result) {
-	                initTable(result);
-	            }
-	        });
+	        var fetchedData = $.ajax({
+			            type: "POST",
+			            url: "<%=Config.this_SERVER_path%>/ccp",
+			            data: "startDate=" + startDate + 
+			            	  "&endDate=" + endDate + 
+			            	  "&ccpType=" + "%25",
+			            success: function (result) {
+			            	return result;
+			            }
+			        });
+	    
+	    	return fetchedData;
 	    };
 	    
-	    function initTable(data) {
+	    async function initTable() {
+	    	var data = await getData();
+	    	
 		    var customOpts = {
 					data : data,
 					pageLength: 10,
@@ -48,10 +49,17 @@
 			        ]
 			}
 					
-			$('#ccpDataTable').DataTable(
+			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
+	     
+		initTable();
+    	
+    	$("#getDataBtn").click(async function() {
+    		var newData = await getData();
+    		mainTable.clear().rows.add(newData).draw();
+    	});
     });
     
 </script>
@@ -89,7 +97,7 @@
           	  <div class="input-group input-group-sm" id="dateParent">
           	  	<input type="text" class="form-control float-right" id="dateRange">
           	  	<div class="input-group-append">
-          	  	  <button type="submit" class="btn btn-default">
+          	  	  <button type="submit" class="btn btn-default" id="getDataBtn">
           	  	    <i class="fas fa-search"></i>
           	  	  </button>
           	  	</div>

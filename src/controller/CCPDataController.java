@@ -48,8 +48,6 @@ public class CCPDataController extends HttpServlet {
 		
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-
-		logger.debug(result);
 			
 		out.print(result);
 	}
