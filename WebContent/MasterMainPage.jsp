@@ -154,28 +154,28 @@
 							</a>
 						</li>
 						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/M202/M202S010200.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
+							onclick="return fn_MainSubMenuSelected(this, '/Contents/sensor.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
 								<p>센서</p>		
 							</a>
 						</li>
 						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/M202/M202S010200.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
+							onclick="return fn_MainSubMenuSelected(this, '/Contents/product.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
 								<p>제품</p>		
 							</a>
 						</li>
 						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/M202/M202S010200.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
+							onclick="return fn_MainSubMenuSelected(this, '/Contents/user.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
 								<p>사용자</p>		
 							</a>
 						</li>
 						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/M202/M202S010200.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
+							onclick="return fn_MainSubMenuSelected(this, '/Contents/common_code.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
 								<p>공통 코드</p>		

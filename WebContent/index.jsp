@@ -121,6 +121,12 @@
 			
 			// set subdomain
 			var subdomain =  window.location.host.split('.')[1] ? window.location.host.split('.')[0] : false;
+			
+			// for dev env
+			if( window.location.host.split(':')[0] === 'localhost' ) {
+				subdomain = 'henesys';
+			}
+			
 			console.log('subdomain:' + subdomain);
 			$("#subdomainId").val(subdomain);
 			
