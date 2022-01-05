@@ -14,7 +14,7 @@ public class BiznoSubdomainPairService {
 	}
 	
 	public String getBizno(String subdomain) {
-		Connection conn = JDBCConnectionPool.getConnectionMasterDb();
+		Connection conn = JDBCConnectionPool.getMasterDB();
 		
 		BiznoSubdomainPair bsPair = bspDao.getBiznoSubdomainPair(conn, subdomain);
 		

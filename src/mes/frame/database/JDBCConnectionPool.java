@@ -14,7 +14,27 @@ public class JDBCConnectionPool {
 	static final Logger logger = Logger.getLogger(JDBCConnectionPool.class.getName());
     //static private String bizNo = "";
 	
-	public static Connection getConnection(String bizNo) {
+	public static Connection getConnection() {
+	      Connection conn = null;
+	      
+	      try {
+	           Class.forName("org.mariadb.jdbc.Driver");
+	           
+	           String url = "jdbc:mariadb://103.60.126.81:3306/master";
+	           
+	           logger.debug("DB URL: " + url);
+	           
+	           conn = DriverManager.getConnection(url, "root", "henesys0728!");
+	           
+	           conn.setAutoCommit (true);
+	      } catch ( Exception e ) {
+	    	   logger.error("DB Connection ERROR : \n" + e.getMessage());
+	      }
+	      
+	      return conn;
+	}
+	
+	public static Connection getTenantDB(String bizNo) {
 	      Connection conn = null;
 	      
 	      try {
@@ -34,7 +54,7 @@ public class JDBCConnectionPool {
 	      return conn;
 	}
 	
-	public static Connection getConnectionMasterDb() {
+	public static Connection getMasterDB() {
 	      Connection conn = null;
 	      try {
 //	    	   String jsonFilePath = Config.sysConfigPath + "SysConfig.conf";
@@ -46,7 +66,7 @@ public class JDBCConnectionPool {
 //	  		   String JDBCStr = (String)jsonObject.get("jdbc_zip");
 	  		   
 	           Class.forName("org.mariadb.jdbc.Driver");
-	           conn = DriverManager.getConnection("jdbc:mariadb://103.60.126.81:3306/test", "root", "henesys0728!");
+	           conn = DriverManager.getConnection("jdbc:mariadb://103.60.126.81:3306/master", "root", "henesys0728!");
 	           conn.setAutoCommit (true);
 	      } catch ( Exception e ) {
 	    	  logger.error("Master DB Connection ERROR : " + e.getMessage());

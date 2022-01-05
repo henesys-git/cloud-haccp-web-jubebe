@@ -15,7 +15,7 @@ public class LoginService {
 	}
 	
 	public User checkPassword(String bizNo, String userId, String password) {
-		Connection conn = JDBCConnectionPool.getConnection(bizNo);
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
 		
 		User user = userDao.getUserById(conn, userId);
 

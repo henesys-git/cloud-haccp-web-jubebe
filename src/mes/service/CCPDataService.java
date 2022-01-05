@@ -17,15 +17,15 @@ import mes.model.CCPData;
 public class CCPDataService {
 
 	private CCPDataDao ccpDataDao;
-	private String subdomain;
+	private String bizNo;
 	
-	public CCPDataService(CCPDataDao ccpDataDao, String subdomain) {
+	public CCPDataService(CCPDataDao ccpDataDao, String bizNo) {
 		this.ccpDataDao = ccpDataDao;
-		this.subdomain = subdomain;
+		this.bizNo = bizNo;
 	}
 	
 	public List<CCPData> getCCPData(String type, String startDate, String endDate) {
-		Connection conn = JDBCConnectionPool.getConnection(subdomain);
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
 		
 		List<CCPData> ccpDataList = ccpDataDao.getAllCCPData(conn, type, startDate, endDate);
 		
