@@ -5,7 +5,7 @@ public class CCPData {
 	private int seqNo;
 	private String createTime;
 	private String sensorId;
-	private String sensorValue;
+	private double sensorValue;
 	private String improvementCode;
 	private String userId;
 	private String eventCode;
@@ -23,7 +23,7 @@ public class CCPData {
 	public String getSensorId() {
 		return sensorId;
 	}
-	public String getSensorValue() {
+	public double getSensorValue() {
 		return sensorValue;
 	}
 	public String getImprovementCode() {
@@ -50,7 +50,7 @@ public class CCPData {
 	public void setSensorId(String sensorId) {
 		this.sensorId = sensorId;
 	}
-	public void setSensorValue(String sensorValue) {
+	public void setSensorValue(double sensorValue) {
 		this.sensorValue = sensorValue;
 	}
 	public void setImprovementCode(String improvementCode) {

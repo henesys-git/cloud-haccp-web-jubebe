@@ -13,15 +13,18 @@
 		let mainTable;
 		
 		async function getData() {
+	    	var percentAsDefaultCcpType = "%25";
+
 	    	var startDate = date.getStartDate();
     		var endDate = date.getEndDate();
-	    	
+	    	var ccpType = percentAsDefaultCcpType;
+    		
 	        var fetchedData = $.ajax({
 			            type: "POST",
-			            url: "<%=Config.this_SERVER_path%>/ccp",
+			            url: "<%=Config.this_SERVER_path%>/ccpvm",
 			            data: "startDate=" + startDate + 
 			            	  "&endDate=" + endDate + 
-			            	  "&ccpType=" + "%25",
+			            	  "&ccpType=" + ccpType,
 			            success: function (result) {
 			            	return result;
 			            }
@@ -38,14 +41,13 @@
 					pageLength: 10,
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
-						{ data: "seqNo", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
-						{ data: "sensorId", defaultContent: '' },
+						{ data: "sensorName", defaultContent: '' },
+						{ data: "productName", defaultContent: '' },
+						{ data: "event", defaultContent: '' },
 						{ data: "sensorValue", defaultContent: '' },
-						{ data: "improvementCode", defaultContent: '' },
-						{ data: "userId", defaultContent: '' },
-						{ data: "eventCode", defaultContent: '' },
-						{ data: "productId", defaultContent: '' }
+						{ data: "valueJudge", defaultContent: '' },
+						{ data: "improvement", defaultContent: '' }
 			        ]
 			}
 					
@@ -110,14 +112,13 @@
 				<thead>
 					<tr>
 					    <th>묶음값</th>
-						<th>일련번호</th>
 					    <th>생성시간</th>
-					    <th>센서아이디</th>
-					    <th>센서값</th>
-					    <th>개선조치코드</th>
-					    <th>사용자아이디</th>
-					    <th>이벤트코드</th>
-					    <th>제품아이디</th>
+					    <th>센서명</th>
+					    <th>제품</th>
+					    <th>이벤트</th>
+					    <th>측정값</th>
+					    <th>적/부</th>
+					    <th>개선조치</th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">		

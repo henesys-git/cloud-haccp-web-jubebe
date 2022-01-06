@@ -14,12 +14,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import mes.dao.CCPDataDaoImpl;
-import mes.model.CCPData;
 import mes.service.CCPDataService;
 import utils.FormatTransformer;
+import viewmodel.CCPDataViewModel;
 
-@WebServlet("/ccp")
-public class CCPDataController extends HttpServlet {
+@WebServlet("/ccpvm")
+public class CCPDataViewModelController extends HttpServlet {
 
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class CCPDataController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	static final Logger logger = 
-			Logger.getLogger(CCPDataController.class.getName());
+			Logger.getLogger(CCPDataViewModelController.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
@@ -44,8 +44,8 @@ public class CCPDataController extends HttpServlet {
 		String endDate = req.getParameter("endDate");
 		
 		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
-		List<CCPData> listCCPData = ccpService.getCCPData(ccpType, startDate, endDate);
-		String result = FormatTransformer.toJson(listCCPData);
+		List<CCPDataViewModel> cvmList = ccpService.getCCPDataViewModels(ccpType, startDate, endDate);
+		String result = FormatTransformer.toJson(cvmList);
 		
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
