@@ -142,6 +142,3 @@
 	<tbody id="<%=tData.htmlTable_ID%>_body">
 	</tbody>
 </table>
-
-<div id="UserList_pager" class="text-center">
-</div>

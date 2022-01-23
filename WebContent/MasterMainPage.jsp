@@ -9,7 +9,8 @@
 	
 	String loginID = session.getAttribute("login_id").toString();
 	String login_name = session.getAttribute("login_name").toString();
-
+	String bizNo = session.getAttribute("bizNo").toString();
+	
 	if(loginID == null || loginID.equals("")) {
 		response.sendRedirect(Config.this_SERVER_path + "/Contents/index.jsp");
 	}
@@ -73,6 +74,7 @@
   		const heneServerPath = "<%=Config.this_SERVER_path%>";
   		const loggedUserId = '<%=loginID%>';
 		const userGroupCode = '<%=userGroupCode%>';
+		const heneBizNo = '<%=bizNo%>';
   	</script>
 </head>
 <style>
@@ -146,11 +148,18 @@
 				<nav class="mt-2">
 					<ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" 
 						data-widget="treeview" role="menu" data-accordion="true">
-						<li class="nav-item" id="M202S010200.jsp'_li'" 
+						<li class="nav-item"
 							onclick="return fn_MainSubMenuSelected(this, '/Contents/ccp_data.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
 								<p>CCP 데이터</p>		
+							</a>
+						</li>
+						<li class="nav-item"
+							onclick="return fn_MainSubMenuSelected(this, '/Contents/checklist16.jsp','M838','점검표 테스트','M838SS070500.jsp'); ">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>			
+								<p>점검표 테스트</p>		
 							</a>
 						</li>
 						<li class="nav-item"

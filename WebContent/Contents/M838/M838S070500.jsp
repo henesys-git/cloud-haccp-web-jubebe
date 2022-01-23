@@ -47,37 +47,7 @@
 		
 		$("#InfoContentTitle").html("점검표 목록");
 		fn_MainSubMenuSelect("<%=sMenuTitle%>");
-		fn_tagProcess();
 	});
-
-    function fn_tagProcess(){
-    	var vSelect = <%=prg_autho.vSelect%>;
-    	var vInsert = <%=prg_autho.vInsert%>;
-    	var vUpdate = <%=prg_autho.vUpdate%>;
-    	var vDelete = <%=prg_autho.vDelete%>;
-    	
-		if(vSelect == "0") {
-	    	$('button[id="select"]').each(function () {
-                $(this).prop("disabled",true);
-            });
-   		}
-		if(vInsert == "0") {
-	    	$('button[id="insert"]').each(function () {
-                $(this).prop("disabled",true);
-            });
-   		}
-		if(vUpdate == "0") {
-	    	$('button[id="update"]').each(function () {
-                $(this).prop("disabled",true);
-                $(this).attr("onclick", " ");
-            });
-   		}
-		if(vDelete == "0") {
-	    	$('button[id="delete"]').each(function () {
-                $(this).prop("disabled",true);
-            });
-   		}
-    }
         
     function fn_MainInfo_List(startDate, endDate) {
         $.ajax({

@@ -1,15 +1,11 @@
 package mes.service;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import mes.dao.CCPDataDao;
-import mes.dao.SensorDao;
-import mes.dao.SensorDaoImpl;
 import mes.frame.database.JDBCConnectionPool;
 import mes.model.CCPData;
-import mes.model.Sensor;
 import viewmodel.CCPDataViewModel;
 
 public class CCPDataService {
