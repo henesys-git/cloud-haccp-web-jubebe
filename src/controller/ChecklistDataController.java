@@ -18,6 +18,7 @@ import org.json.simple.parser.ParseException;
 import dao.ChecklistDataDaoImpl;
 import mes.model.ChecklistData;
 import mes.service.ChecklistDataService;
+import utils.FormatTransformer;
 
 @WebServlet("/checklist")
 public class ChecklistDataController extends HttpServlet {
@@ -32,7 +33,20 @@ public class ChecklistDataController extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		doPost(req, res);
+		HttpSession session = req.getSession();
+		String bizNo = (String) session.getAttribute("bizNo");
+
+		String checklistId = req.getParameter("checklistId");
+		int seqNo = Integer.parseInt(req.getParameter("seqNo"));
+		
+		ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
+		ChecklistData clData = cldService.select(checklistId, seqNo);
+		String result = FormatTransformer.toJson(clData);
+		
+		res.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = res.getWriter();
+		
+		out.print(result);
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import mes.model.ChecklistData;
+import mes.model.DailyPlanDetail;
 
 public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	
@@ -53,6 +54,37 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    return -1;
 	};
 	
+	@Override
+	public ChecklistData select(Connection conn, String checklistId, int seqNo) {
+		try {
+			String sql = new StringBuilder()
+					.append("SELECT *\n")
+					.append("FROM checklist_data\n")
+					.append("WHERE checklist_id = ?\n")
+					.append("AND seq_no = ?;\n")
+					.toString();
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, checklistId);
+			ps.setInt(2, seqNo);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			ChecklistData clData = new ChecklistData();
+					
+			if(rs.next()) {
+				clData = extractFromResultSet(rs);
+			}
+			
+			return clData;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	private ChecklistData extractFromResultSet(ResultSet rs) throws SQLException {
 	    ChecklistData clData = new ChecklistData();
 	    
@@ -63,7 +95,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    clData.setSignWriter(rs.getString("sign_writer"));
 	    clData.setSignChecker(rs.getString("sign_checker"));
 	    clData.setSignApprover(rs.getString("sign_approver"));
-
+	    
 	    return clData;
 	}
 }

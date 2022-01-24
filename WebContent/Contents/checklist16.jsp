@@ -54,7 +54,7 @@
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
-	     
+	    
 		initTable();
     	
     	$("#getDataBtn").click(async function() {
@@ -77,8 +77,8 @@
 			let modalHeight = xmlDoc.getElementsByTagName("height")[0].innerHTML;
 			
 			
-			document.getElementById('wrapper').style.width = modalWidth;
-			document.getElementById('wrapper').style.height = modalHeight;
+			document.getElementById('checklist-wrapper').style.width = modalWidth;
+			document.getElementById('checklist-wrapper').style.height = modalHeight;
 			
     		$("#myModal").modal("show");
     		
@@ -133,6 +133,21 @@
 			        }
 				});
     		});
+    	});
+    	
+    	$("#select-btn").click(function() {
+    		let checklistId = 'checklist16';
+    		let seqNo = '1';
+    		
+    		$.ajax({
+				type: "GET",
+		        url: heneServerPath + "/checklist"
+		        	+ "?checklistId=" + checklistId
+		        	+ "&seqNo=" + seqNo,
+		        success: function (result) {
+		        	console.log(result);
+		        }
+			});
     	});
     });
 	
@@ -192,7 +207,7 @@
 		tag.style.width = width;
 		tag.style.height = height;
 		
-		document.getElementById("wrapper").appendChild(tag);
+		document.getElementById("checklist-wrapper").appendChild(tag);
 	}
     
 </script>
@@ -287,7 +302,7 @@
         </button>
       </div>
       <div class="modal-body">
-      	<div id="wrapper" style="position:relative;">
+      	<div id="checklist-wrapper" style="position:relative;">
 			<canvas id="myCanvas"></canvas>
 		</div>
       </div>

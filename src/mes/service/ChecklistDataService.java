@@ -20,4 +20,10 @@ public class ChecklistDataService {
 		int result = clDao.insert(conn, clData);
 		return result;
 	}
+	
+	public ChecklistData select(String checklistId, int seqNo) {
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+		ChecklistData clData = clDao.select(conn, checklistId, seqNo);
+		return clData;
+	}
 }
