@@ -372,6 +372,52 @@
             </div>
         </div>
     </div>
+    
+    <!-- 점검표 등록용 모달창 -->
+    <div class="modal fade" id="checklist-insert-modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">점검표 등록</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div id="checklist-insert-wrapper" style="position:relative;">
+				<canvas id="checklist-insert-canvas"></canvas>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="checklist-insert-btn" class="btn btn-primary">등록</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 점검표 조회용 모달창 -->
+    <div class="modal fade" id="checklist-select-modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">점검표 조회</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div id="checklist-select-wrapper" style="position:relative;">
+				<canvas id="checklist-select-canvas"></canvas>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="checklist-print-btn" class="btn btn-primary">출력</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 	<form id="popform" name="popform" method="post" action="<%=Config.this_SERVER_path%>/Contents/CommonView/popup.jsp" target="popup_window">
   		<input type=hidden name="HeadmenuID" id="HeadmenuID" value="" />

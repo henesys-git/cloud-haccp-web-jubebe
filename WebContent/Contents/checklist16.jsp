@@ -62,153 +62,27 @@
     		mainTable.clear().rows.add(newData).draw();
     	});
     	
-    	$("#insert-btn").click(async function() {
-    		// read meta-data
-    		let filePath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/checklist16_0.txt';
-    		let response = await fetch(filePath);
-		    let metaData = await response.text();
-		    
-		 	// parse meta-data
-    		let parser = new DOMParser();
-    		let xmlDoc = parser.parseFromString(metaData, "text/xml");
+    	$("#insert-btn").click(function() {
+    		let checklistId = 'checklist16';
+    		// 제일 최신 포맷 수정이력번호 가져와야 함
+    		let checklistFormatRevisionNo = 0;
     		
-			// set modal size
-			let modalWidth = xmlDoc.getElementsByTagName("width")[0].innerHTML;
-			let modalHeight = xmlDoc.getElementsByTagName("height")[0].innerHTML;
-			
-			
-			document.getElementById('checklist-wrapper').style.width = modalWidth;
-			document.getElementById('checklist-wrapper').style.height = modalHeight;
-			
-    		$("#myModal").modal("show");
-    		
-    		// read checklist image
-    		var canvas = document.getElementById('myCanvas');
-    		
-    		let modalWidthWithoutPxKeyword = modalWidth.replace('px', '');
-			let modalHeightWithoutPxKeyword = modalHeight.replace('px', '');
-			
-    		canvas.width = modalWidthWithoutPxKeyword;
-    		canvas.height = modalHeightWithoutPxKeyword;
-    		
-			var ctx = canvas.getContext('2d');
-    		
-    		var bgImg = new Image();
-			bgImg.src = '/checklist/' + heneBizNo + '/images/checklist16_0.jpg';
-			
-			bgImg.onload = function() {
-				ctx.drawImage(bgImg, 0, 0);
-			};
-    		
-    		// generate tags
-    		var cellList = xmlDoc.getElementsByTagName("cells")[0].childNodes;
-    		
-			for(var i=0; i<cellList.length; i++) {
-				var cell = cellList[i];
-				makeTag(cell);
-			};
-    		
-    		// save data to db
-    		$('#save-btn').click(function() {
-    			var head = {};
-    			var checklistData = {};
-
-    			let elements = document.getElementsByClassName('checklist-data');
-
-				for(var i=0; i<elements.length; i++) {
-					let element = elements[i];
-					checklistData[element.id] = element.value;
-				}
-				
-    			head.checklistId = 'checklist16';
-    			head.revisionNo = '0';
-				head.checklistData = checklistData;
-				
-				$.ajax({
-					type: "POST",
-			        url: heneServerPath + "/checklist",
-			        data: "data=" + JSON.stringify(head),
-			        success: function (result) {
-			        	console.log(result);
-			        }
-				});
-    		});
+    		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo);
+    		modal.openModal();
     	});
     	
     	$("#select-btn").click(function() {
+    		console.log('select btn clicked');
+    		
     		let checklistId = 'checklist16';
     		let seqNo = '1';
     		
-    		$.ajax({
-				type: "GET",
-		        url: heneServerPath + "/checklist"
-		        	+ "?checklistId=" + checklistId
-		        	+ "&seqNo=" + seqNo,
-		        success: function (result) {
-		        	console.log(result);
-		        }
-			});
+    		var modal = new ChecklistSelectModal(checklistId, seqNo);
+    		modal.openModal();
     	});
     });
 	
-	function makeTag(cell) {
-		var id = cell.nodeName;
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent;
-		var startY = cell.childNodes[3].textContent;
-		var width = cell.childNodes[4].textContent;
-		var height = cell.childNodes[5].textContent;
-		
-		let tag;
-		
-		switch(type) {
-			case "signature-writer":
-				tag = document.createElement('button');
-				tag.classList.add('signature-writer');
-				tag.innerHTML = "서명";
-				break;
-			case "signature-approver":
-				tag = document.createElement('button');
-				tag.classList.add('signature-approver');
-				tag.innerHTML = "서명";
-				break;
-			case "signature-checker":
-				tag = document.createElement('button');
-				tag.classList.add('signature-checker');
-				tag.innerHTML = "서명";
-				break;
-			case "date":
-				tag = document.createElement('input');
-				tag.classList.add("checklist-data");
-				break;
-			case "text":
-				tag = document.createElement('input');
-				tag.classList.add("checklist-data");
-				break;
-			case "truefalse":
-				tag = document.createElement('input');
-				if(format === 'checkbox') {
-					tag.type = 'checkbox';
-				}
-				
-				tag.classList.add("checklist-data");
-				break;
-			case "textarea":
-				tag = document.createElement('textarea');
-				tag.classList.add("checklist-data");
-				break;
-		}
-		
-		tag.id = id;
-		tag.style.position = 'absolute';
-		tag.style.left = startX;
-		tag.style.top = startY;
-		tag.style.width = width;
-		tag.style.height = height;
-		
-		document.getElementById("checklist-wrapper").appendChild(tag);
-	}
+	
     
 </script>
 
@@ -291,25 +165,3 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">점검표 등록</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      	<div id="checklist-wrapper" style="position:relative;">
-			<canvas id="myCanvas"></canvas>
-		</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="save-btn" class="btn btn-primary">등록</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-      </div>
-    </div>
-  </div>
-</div>
