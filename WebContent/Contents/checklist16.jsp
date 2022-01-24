@@ -47,11 +47,6 @@
 	    
 		initTable();
     	
-    	$("#getDataBtn").click(async function() {
-    		var newData = await getData();
-    		mainTable.clear().rows.add(newData).draw();
-    	});
-    	
     	$("#insert-btn").click(function() {
     		let checklistId = 'checklist16';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
