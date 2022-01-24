@@ -62,10 +62,10 @@
     	});
     	
     	$("#select-btn").click(function() {
-    		console.log('select btn clicked');
+    		var selectedRow = mainTable.rows('.selected').data()[0];
     		
-    		let checklistId = 'checklist16';
-    		let seqNo = '1';
+    		let checklistId = selectedRow.checklistId;
+    		let seqNo = selectedRow.seqNo;
     		
     		var modal = new ChecklistSelectModal(checklistId, seqNo);
     		modal.openModal();
@@ -117,16 +117,6 @@
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
           		테스트 점검표 목록
           	</h3>
-          	<div class="card-tools">
-          	  <div class="input-group input-group-sm" id="dateParent">
-          	  	<input type="text" class="form-control float-right" id="dateRange">
-          	  	<div class="input-group-append">
-          	  	  <button type="submit" class="btn btn-default" id="getDataBtn">
-          	  	    <i class="fas fa-search"></i>
-          	  	  </button>
-          	  	</div>
-          	  </div>
-          	</div>
           </div>
           <div class="card-body" id="MainInfo_List_contents">
           	<table class='table table-bordered nowrap table-hover' 
