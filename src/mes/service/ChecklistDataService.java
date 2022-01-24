@@ -1,6 +1,7 @@
 package mes.service;
 
 import java.sql.Connection;
+import java.util.List;
 
 import dao.ChecklistDataDao;
 import mes.frame.database.JDBCConnectionPool;
@@ -25,5 +26,11 @@ public class ChecklistDataService {
 		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
 		ChecklistData clData = clDao.select(conn, checklistId, seqNo);
 		return clData;
+	}
+	
+	public List<ChecklistData> selectAll(String checklistId) {
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+		List<ChecklistData> list = clDao.selectAll(conn, checklistId);
+		return list;
 	}
 }

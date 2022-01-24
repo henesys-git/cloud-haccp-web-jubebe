@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import mes.model.CCPData;
 import mes.model.ChecklistData;
 import mes.model.DailyPlanDetail;
 
@@ -77,6 +81,35 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 			}
 			
 			return clData;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public List<ChecklistData> selectAll(Connection conn, String checklistId) {
+		try {
+			Statement stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT *									\n")
+				.append("FROM checklist_data						\n")
+				.append("WHERE checklist_id = '" + checklistId + "'	\n")
+				.toString();
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			List<ChecklistData> clDataList = new ArrayList<ChecklistData>();
+			
+			while(rs.next()) {
+				ChecklistData data = extractFromResultSet(rs);
+				clDataList.add(data);
+			}
+			
+			return clDataList;
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();

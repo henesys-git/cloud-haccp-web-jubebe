@@ -8,45 +8,35 @@
 <script type="text/javascript">
     
 	$(document).ready(function () {
-		let date = new SetRangeDate("dateParent", "dateRange", 7);
 		let mainTable;
 		
 		async function getData() {
-	    	var percentAsDefaultCcpType = "%25";
-
-	    	var startDate = date.getStartDate();
-    		var endDate = date.getEndDate();
-	    	var ccpType = percentAsDefaultCcpType;
-    		
-	        var fetchedData = $.ajax({
-			            type: "POST",
-			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "startDate=" + startDate + 
-			            	  "&endDate=" + endDate + 
-			            	  "&ccpType=" + ccpType,
+	        var fetchedList = $.ajax({
+			            type: "GET",
+			            url: "<%=Config.this_SERVER_path%>/checklist"
+				            	+ "?checklistId=" + 'checklist16'
+				            	+ "&seqNo=all",
 			            success: function (result) {
 			            	return result;
 			            }
 			        });
 	    
-	    	return fetchedData;
+	    	return fetchedList;
 	    };
 	    
 	    async function initTable() {
-	    	var data = await getData();
+	    	var list = await getData();
 	    	
 		    var customOpts = {
-					data : data,
+					data : list,
 					pageLength: 10,
 					columns: [
-						{ data: "sensorKey", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "sensorName", defaultContent: '' },
-						{ data: "productName", defaultContent: '' },
-						{ data: "event", defaultContent: '' },
-						{ data: "sensorValue", defaultContent: '' },
-						{ data: "valueJudge", defaultContent: '' },
-						{ data: "improvement", defaultContent: '' }
+						{ data: "checklistId", defaultContent: '' },
+						{ data: "seqNo", defaultContent: '' },
+						{ data: "revisionNo", defaultContent: '' },
+						{ data: "signWriter", defaultContent: '' },
+						{ data: "signChecker", defaultContent: '' },
+						{ data: "signApprover", defaultContent: '' }
 			        ]
 			}
 					
@@ -92,7 +82,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-        	CCP 데이터 관리
+        	점검표 테스트
         </h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
@@ -125,7 +115,7 @@
           <div class="card-header">
           	<h3 class="card-title">
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
-          		CCP 데이터 목록
+          		테스트 점검표 목록
           	</h3>
           	<div class="card-tools">
           	  <div class="input-group input-group-sm" id="dateParent">
@@ -143,14 +133,12 @@
 				   id="ccpDataTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>묶음값</th>
-					    <th>생성시간</th>
-					    <th>센서명</th>
-					    <th>제품</th>
-					    <th>이벤트</th>
-					    <th>측정값</th>
-					    <th>적/부</th>
-					    <th>개선조치</th>
+					    <th>점검표아이디</th>
+					    <th>일련번호</th>
+					    <th>양식수정이력번호</th>
+					    <th>작성자서명</th>
+					    <th>점검자서명</th>
+					    <th>승인자서명</th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">		

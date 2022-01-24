@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,18 +36,33 @@ public class ChecklistDataController extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
-
+		
 		String checklistId = req.getParameter("checklistId");
-		int seqNo = Integer.parseInt(req.getParameter("seqNo"));
+		String seqNoStr = req.getParameter("seqNo");
 		
-		ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
-		ChecklistData clData = cldService.select(checklistId, seqNo);
-		String result = FormatTransformer.toJson(clData);
+		System.out.println("seq no string:" + seqNoStr);
 		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		
-		out.print(result);
+		if(seqNoStr.equals("all")) {
+			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
+			List<ChecklistData> clDataList = cldService.selectAll(checklistId);
+			String result = FormatTransformer.toJson(clDataList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			
+			out.print(result);
+		} else {
+			int seqNo = Integer.parseInt(seqNoStr);
+			
+			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
+			ChecklistData clData = cldService.select(checklistId, seqNo);
+			String result = FormatTransformer.toJson(clData);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			
+			out.print(result);
+		}
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
