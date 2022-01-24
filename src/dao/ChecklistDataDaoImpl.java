@@ -22,7 +22,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    			.append("INSERT INTO checklist_data (\n")
 	    			.append("	checklist_id,\n")
 	    			.append("	seq_no,\n")
-	    			.append("	revisison_no,\n")
+	    			.append("	revision_no,\n")
 	    			.append("	check_data\n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
