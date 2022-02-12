@@ -33,25 +33,25 @@
         <url-pattern>/hcp_EdmsServerServlet</url-pattern>
     </servlet-mapping>
 	
-	<servlet>
+	<!-- <servlet>
         <servlet-name>PrintBarcodeServlet</servlet-name>
         <servlet-class>mes.frame.servlet.PrintBarcodeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PrintBarcodeServlet</servlet-name>
         <url-pattern>/PrintBarcodeServlet</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping> -->
     
-    <servlet>
+    <!-- <servlet>
         <servlet-name>WeightCheckerServlet</servlet-name>
         <servlet-class>mes.frame.servlet.WeightCheckerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>WeightCheckerServlet</servlet-name>
         <url-pattern>/WeightCheckerServlet</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping> -->
 	
-    <servlet>
+    <!-- <servlet>
         <servlet-name>ThermalServlet</servlet-name>
         <servlet-class>mes.frame.servlet.ThermalServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
@@ -59,7 +59,7 @@
     <servlet-mapping>
         <servlet-name>ThermalServlet</servlet-name>
         <url-pattern>/ThermalServlet</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping> -->
     <!-- 
     <servlet>
         <servlet-name>MetalDetectorInitService</servlet-name>
@@ -89,14 +89,14 @@
         <url-pattern>/ccp/metal-detector/count</url-pattern>
     </servlet-mapping>
      -->
-    <servlet>
+    <!-- <servlet>
         <servlet-name>DocDisplayService</servlet-name>
         <servlet-class>utils.service.DocDisplayService</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DocDisplayService</servlet-name>
         <url-pattern>/docDisplay</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping> -->
 
    	<!-- <servlet>
         <servlet-name>SourceMakerServlet</servlet-name>
@@ -117,13 +117,6 @@
 	   <servlet-name>ErrorHandler</servlet-name>
 	   <url-pattern>/ErrorHandler</url-pattern>
 	</servlet-mapping>
-    
-	<!-- 개발서버에서 주석해제 금지 kakao알림톡 연동api -->
-<!--     <servlet> 
-         <servlet-name>Kakao</servlet-name> 
-         <servlet-class>mes.edms.server.Kakao</servlet-class>
- 		 <load-on-startup>8</load-on-startup> 
-  	</servlet>  -->
     
 	<session-config>
         <session-timeout>360</session-timeout>

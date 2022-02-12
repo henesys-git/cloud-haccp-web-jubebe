@@ -4,10 +4,12 @@ import java.io.*;
 import java.net.URLEncoder;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 
+@WebServlet("/docDisplay")
 public class DocDisplayService extends HttpServlet {
  
 	private static final long serialVersionUID = 1L;
