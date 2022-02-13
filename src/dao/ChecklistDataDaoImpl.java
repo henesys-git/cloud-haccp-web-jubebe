@@ -8,9 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import mes.model.CCPData;
+import mes.frame.database.JDBCConnectionPool;
 import mes.model.ChecklistData;
-import mes.model.DailyPlanDetail;
 
 public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	
@@ -20,12 +19,14 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    try {
 	    	String sql = new StringBuilder()
 	    			.append("INSERT INTO checklist_data (\n")
+	    			.append("	tenant_id,\n")
 	    			.append("	checklist_id,\n")
 	    			.append("	seq_no,\n")
 	    			.append("	revision_no,\n")
 	    			.append("	check_data\n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
+	    			.append("	?,\n")
 	    			.append("	?,\n")
 	    			.append("	(SELECT * \n")
 	    			.append("	FROM (\n")
@@ -40,10 +41,11 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    	
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
-			ps.setString(1, clData.getChecklistId());
+			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
 			ps.setString(2, clData.getChecklistId());
-			ps.setInt(3, clData.getRevisionNo());
-			ps.setString(4, clData.getCheckData());
+			ps.setString(3, clData.getChecklistId());
+			ps.setInt(4, clData.getRevisionNo());
+			ps.setString(5, clData.getCheckData());
 			
 	        int i = ps.executeUpdate();
 
@@ -64,8 +66,9 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 			String sql = new StringBuilder()
 					.append("SELECT *\n")
 					.append("FROM checklist_data\n")
-					.append("WHERE checklist_id = ?\n")
-					.append("AND seq_no = ?;\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND checklist_id = ?\n")
+					.append("  AND seq_no = ?;\n")
 					.toString();
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -97,7 +100,8 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 			String sql = new StringBuilder()
 				.append("SELECT *									\n")
 				.append("FROM checklist_data						\n")
-				.append("WHERE checklist_id = '" + checklistId + "'	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND checklist_id = '" + checklistId + "'	\n")
 				.toString();
 			
 			ResultSet rs = stmt.executeQuery(sql);

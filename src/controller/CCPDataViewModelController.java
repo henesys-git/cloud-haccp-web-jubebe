@@ -16,7 +16,8 @@ import org.apache.log4j.Logger;
 import mes.dao.CCPDataDaoImpl;
 import mes.service.CCPDataService;
 import utils.FormatTransformer;
-import viewmodel.CCPDataViewModel;
+import viewmodel.CCPDataDetailViewModel;
+import viewmodel.CCPDataHeadViewModel;
 
 @WebServlet("/ccpvm")
 public class CCPDataViewModelController extends HttpServlet {
@@ -31,25 +32,46 @@ public class CCPDataViewModelController extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		doPost(req, res);
+		HttpSession session = req.getSession();
+		String bizNo = (String) session.getAttribute("bizNo");
+
+		String method = req.getParameter("method");
+		
+		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
+		
+		String result;
+		PrintWriter out;
+		
+		switch(method) {
+		case "head":
+			String ccpType = req.getParameter("ccpType");
+			String startDate = req.getParameter("startDate");
+			String endDate = req.getParameter("endDate");
+			
+			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(ccpType, startDate, endDate);
+			result = FormatTransformer.toJson(cvmHeadList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
+		case "detail":
+			String sensorKey = req.getParameter("sensorKey");
+			
+			List<CCPDataDetailViewModel> cvmDetailList = ccpService.getCCPDataDetailViewModels(sensorKey);
+			result = FormatTransformer.toJson(cvmDetailList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
+		}
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		String bizNo = (String) session.getAttribute("bizNo");
-		
-		String ccpType = req.getParameter("ccpType");
-		String startDate = req.getParameter("startDate");
-		String endDate = req.getParameter("endDate");
-		
-		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
-		List<CCPDataViewModel> cvmList = ccpService.getCCPDataViewModels(ccpType, startDate, endDate);
-		String result = FormatTransformer.toJson(cvmList);
-		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-			
-		out.print(result);
+		doGet(req, res);
 	}
 }

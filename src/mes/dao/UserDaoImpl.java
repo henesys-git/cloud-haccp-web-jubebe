@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import mes.frame.database.JDBCConnectionPool;
 import mes.model.User;
 
 public class UserDaoImpl implements UserDao {
@@ -13,7 +14,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public User getUserById(Connection conn, String userId) {
-		
+
 		try {
 			Statement stmt = conn.createStatement();
 			
@@ -21,6 +22,7 @@ public class UserDaoImpl implements UserDao {
 				.append("SELECT * 							\n")
 				.append("FROM user							\n")
 				.append("WHERE user_id = '" + userId + "'	\n")
+				.append("  AND tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
 				.toString();
 			
 			ResultSet rs = stmt.executeQuery(sql);

@@ -11,6 +11,7 @@
     	
 		let date = new SetRangeDate("dateParent", "dateRange", 7);
 		let mainTable;
+		let subTable;
 		
 		async function getData() {
 	    	var percentAsDefaultCcpType = "%25";
@@ -20,11 +21,27 @@
 	    	var ccpType = percentAsDefaultCcpType;
     		
 	        var fetchedData = $.ajax({
-			            type: "POST",
+			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "startDate=" + startDate + 
+			            data: "method=head" +
+			            	  "&startDate=" + startDate + 
 			            	  "&endDate=" + endDate + 
 			            	  "&ccpType=" + ccpType,
+			            success: function (result) {
+			            	return result;
+			            }
+			        });
+	    
+	    	return fetchedData;
+	    };
+	    
+	    async function getSubData(sensorKey) {
+	    	
+	        var fetchedData = $.ajax({
+			            type: "GET",
+			            url: "<%=Config.this_SERVER_path%>/ccpvm",
+			            data: "method=detail" +
+			            	  "&sensorKey=" + sensorKey,
 			            success: function (result) {
 			            	return result;
 			            }
@@ -41,13 +58,11 @@
 					pageLength: 10,
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "sensorName", defaultContent: '' },
+						{ data: "ccpType", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
-						{ data: "event", defaultContent: '' },
-						{ data: "sensorValue", defaultContent: '' },
-						{ data: "valueJudge", defaultContent: '' },
-						{ data: "improvement", defaultContent: '' }
+						{ data: "createTime", defaultContent: '' },
+						{ data: "judge", defaultContent: '' },
+						{ data: "improvementCompletion", defaultContent: '' }
 			        ]
 			}
 					
@@ -55,12 +70,64 @@
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
-	     
+	    
+	    async function fillSubTable(row) {
+	    	var data = await getSubData(row.sensorKey);
+	    	
+	    	if(subTable) {
+	    		// redraw
+	    		subTable.clear().rows.add(data).draw();
+	    	} else {
+	    		// initialize
+			    var option = {
+						data : data,
+						columns: [
+							{ data: "sensorName", defaultContent: '' },
+							{ data: "createTime", defaultContent: '' },
+							{ data: "event", defaultContent: '' },
+							{ data: "sensorValue", defaultContent: '' },
+							{ data: "judge", defaultContent: '' },
+							{ data: "improvementAction", defaultContent: '' }
+				        ],
+				        columnDefs : [
+				   			{
+					  			targets: [5],
+					  			render: function(td, cellData, rowData, row, col){
+					  				if (rowData.judge == '적합') {
+					  					return 'n/a';
+					  				} else {
+					  					if(rowData.improvementAction != null) {
+					  						return rowData.improvementAction;
+					  					} else {
+					  						return `<button class='btn btn-success'>개선조치</button>`;
+					  					}
+					  				}
+					  			}
+					  		}
+					    ]
+				}
+	    		
+				subTable = $('#ccpDataSubTable').DataTable(
+					mergeOptions(heneMainTableOpts, option)
+				);
+	    	}
+			
+	    }
+	    
 		initTable();
     	
     	$("#getDataBtn").click(async function() {
     		var newData = await getData();
     		mainTable.clear().rows.add(newData).draw();
+    	});
+    	
+    	$('#ccpDataTable tbody').on('click', 'tr', async function () {
+    		
+    		if ( !$(this).hasClass('selected') ) {
+	            let row = mainTable.row( this ).data();
+	            fillSubTable(row);
+            }
+    		
     	});
     });
     
@@ -106,22 +173,37 @@
           	  </div>
           	</div>
           </div>
-          <div class="card-body" id="MainInfo_List_contents">
+          <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
 				   id="ccpDataTable" style="width:100%">
 				<thead>
 					<tr>
 					    <th>묶음값</th>
-					    <th>생성시간</th>
-					    <th>센서명</th>
+					    <th>CCP종류</th>
 					    <th>제품</th>
+					    <th>생성시간</th>
+					    <th>적/부</th>
+					    <th>개선완료</th>
+					</tr>
+				</thead>
+				<tbody id="ccpDataTableBody">
+				</tbody>
+			</table>
+          </div> 
+          <div class="card-body">
+          	<table class='table table-bordered nowrap table-hover' 
+				   id="ccpDataSubTable" style="width:100%">
+				<thead>
+					<tr>
+					    <th>센서명</th>
+					    <th>생성시간</th>
 					    <th>이벤트</th>
 					    <th>측정값</th>
 					    <th>적/부</th>
 					    <th>개선조치</th>
 					</tr>
 				</thead>
-				<tbody id="ccpDataTableBody">		
+				<tbody id="ccpDataSubTableBody">
 				</tbody>
 			</table>
           </div> 

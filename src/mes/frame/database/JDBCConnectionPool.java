@@ -132,9 +132,16 @@ public class JDBCConnectionPool {
 	      return conn;
 	}
 	
-//	public static void setBizNo(String bizNo) {
-//		if(JDBCConnectionPool.bizNo == "") {
-//			JDBCConnectionPool.bizNo = bizNo;
-//		}
-//	}
+	public static String getTenantId (Connection conn) {
+		String tenantId = "";
+		
+		try {
+			tenantId = conn.getCatalog();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return tenantId;
+	}
 }

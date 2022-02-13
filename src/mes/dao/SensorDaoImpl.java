@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import mes.frame.database.JDBCConnectionPool;
 import mes.model.Sensor;
 
 public class SensorDaoImpl implements SensorDao {
@@ -29,6 +30,7 @@ public class SensorDaoImpl implements SensorDao {
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
 				.append("FROM sensor	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);

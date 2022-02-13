@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import mes.frame.database.JDBCConnectionPool;
 import mes.model.ChecklistInfo;
 
 public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
@@ -59,7 +60,8 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			String sql = new StringBuilder()
 					.append("SELECT *\n")
 					.append("FROM checklist_info\n")
-					.append("WHERE checklist_id = ?;\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND checklist_id = ?;\n")
 					.toString();
 			
 			PreparedStatement ps = conn.prepareStatement(sql);

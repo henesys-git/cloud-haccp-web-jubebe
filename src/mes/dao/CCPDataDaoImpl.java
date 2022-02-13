@@ -9,8 +9,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import mes.frame.database.JDBCConnectionPool;
 import mes.model.CCPData;
-import viewmodel.CCPDataViewModel;
+import viewmodel.CCPDataDetailViewModel;
+import viewmodel.CCPDataHeadViewModel;
 
 public class CCPDataDaoImpl implements CCPDataDao {
 	
@@ -27,13 +29,14 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			Statement stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT A.*														\n")
-				.append("FROM data_metal A												\n")
-				.append("INNER JOIN sensor B											\n")
-				.append("	ON A.sensor_id = B.sensor_id								\n")
-				.append("WHERE CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'	\n")
-				.append("  				   					   AND '" + endDate	+ "'	\n")
-				.append("  AND B.type_code LIKE '" + type + "'							\n")
+				.append("SELECT A.*															\n")
+				.append("FROM data_metal A													\n")
+				.append("INNER JOIN sensor B												\n")
+				.append("	ON A.sensor_id = B.sensor_id									\n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+				.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'		\n")
+				.append("  				   					   AND '" + endDate	+ "'		\n")
+				.append("  AND B.type_code LIKE '" + type + "'								\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -57,43 +60,97 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public List<CCPDataViewModel> getAllCCPDataViewModel(Connection conn, String type, String startDate, String endDate) {
+	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String type, String startDate, String endDate) {
 		
 		try {
 			Statement stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("SELECT 					\n")
-					.append("	A.sensor_key,			\n")
-					.append("	A.create_time,			\n")
-					.append("	B.sensor_name,			\n")
-					.append("	D.product_name,			\n")
-					.append("	C.code_name AS event,	\n")
-					.append("	A.sensor_value,			\n")
-					.append("	IF(A.sensor_value <= B.value_max && A.sensor_value >= B.value_min, '利钦', '何利钦') AS value_judge,\n")
-					.append("	E.code_name AS improvement									\n")
-					.append("FROM data_metal A												\n")
-					.append("INNER JOIN sensor B											\n")
-					.append("	ON A.sensor_id = B.sensor_id								\n")
-					.append("LEFT JOIN common_code C										\n")
-					.append("	ON A.event_code = C.code									\n")
-					.append("INNER JOIN product D											\n")
-					.append("	ON A.product_id = D.product_id 								\n")
-					.append("LEFT JOIN common_code E										\n")
-					.append("	ON A.improvement_code = E.code								\n")
-					.append("WHERE CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'	\n")
-					.append("  				   					  AND '" + endDate	+ "'	\n")
-					.append("  AND B.type_code LIKE '" + type + "'							\n")
+					.append("SELECT\n")
+					.append("	A.sensor_key,\n")
+					.append("	A.ccp_type,\n")
+					.append("	D.product_name,\n")
+					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
+					.append("	(\n")
+					.append("		SELECT CASE\n")
+					.append("			WHEN NOT EXISTS(\n")
+					.append("				SELECT *\n")
+					.append("				FROM data_metal aa\n")
+					.append("				INNER JOIN sensor bb\n")
+					.append("					ON aa.sensor_id = bb.sensor_id\n")
+					.append("				WHERE aa.sensor_key = A.sensor_key\n")
+					.append("			 	  AND aa.sensor_value > bb.value_max || aa.sensor_value < bb.value_min\n")
+					.append("			)\n")
+					.append("			THEN '利钦'\n")
+					.append("			ELSE '何利钦'\n")
+					.append("			END\n")
+					.append("	) AS judge,\n")
+					.append("	'on test' AS improvement_completion\n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("INNER JOIN product D\n")
+					.append("	ON A.product_id = D.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
+					.append("  				   					  AND '" + endDate	+ "'\n")
+					.append("  AND B.type_code LIKE '" + type + "'\n")
+					.append("GROUP BY sensor_key\n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
 			
 			ResultSet rs = stmt.executeQuery(sql);
 			
-			List<CCPDataViewModel> cvmList = new ArrayList<CCPDataViewModel>();
+			List<CCPDataHeadViewModel> cvmList = new ArrayList<CCPDataHeadViewModel>();
 			
 			while(rs.next()) {
-				CCPDataViewModel data = extractViewModelFromResultSet(rs);
+				CCPDataHeadViewModel data = extractHeadViewModelFromResultSet(rs);
+				cvmList.add(data);
+			}
+			
+			return cvmList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey) {
+		
+		try {
+			Statement stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	B.sensor_name,\n")
+					.append("	DATE_FORMAT(A.create_time, \"%H:%i:%s\") AS create_time,\n")
+					.append("	C.code_name as event,\n")
+					.append("	A.sensor_value,\n")
+					.append("	IF(A.sensor_value <= B.value_max && A.sensor_value >= B.value_min, '利钦', '何利钦') as judge,\n")
+					.append("	D.code_name as improvement_action\n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN common_code C\n")
+					.append("	ON A.event_code = C.code\n")
+					.append("LEFT JOIN common_code D\n")
+					.append("	ON A.improvement_code = D.code\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND A.sensor_key = '" + sensorKey + "'\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			List<CCPDataDetailViewModel> cvmList = new ArrayList<CCPDataDetailViewModel>();
+			
+			while(rs.next()) {
+				CCPDataDetailViewModel data = extractDetailViewModelFromResultSet(rs);
 				cvmList.add(data);
 			}
 			
@@ -224,17 +281,29 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	    return ccpData;
 	}
 	
-	private CCPDataViewModel extractViewModelFromResultSet(ResultSet rs) throws SQLException {
-		CCPDataViewModel cvm = new CCPDataViewModel();
+	private CCPDataHeadViewModel extractHeadViewModelFromResultSet(ResultSet rs) 
+												throws SQLException {
+		CCPDataHeadViewModel cvm = new CCPDataHeadViewModel();
 		
 		cvm.setSensorKey(rs.getString("sensor_key"));
-		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
-		cvm.setSensorName(rs.getString("sensor_name"));
+		cvm.setCcpType(rs.getString("ccp_type"));
 		cvm.setProductName(rs.getString("product_name"));
+		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
+		cvm.setJudge(rs.getString("judge"));
+		cvm.setImprovementCompletion(rs.getString("improvement_completion"));
+		
+		return cvm;
+	}
+
+	private CCPDataDetailViewModel extractDetailViewModelFromResultSet(ResultSet rs) throws SQLException {
+		CCPDataDetailViewModel cvm = new CCPDataDetailViewModel();
+		
+		cvm.setSensorName(rs.getString("sensor_name"));
+		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setEvent(rs.getString("event"));
 		cvm.setSensorValue(rs.getString("sensor_value"));
-		cvm.setValueJudge(rs.getString("value_judge"));
-		cvm.setImprovement(rs.getString("improvement"));
+		cvm.setJudge(rs.getString("judge"));
+		cvm.setImprovementAction(rs.getString("improvement_action"));
 		
 		return cvm;
 	}

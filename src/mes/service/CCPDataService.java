@@ -6,7 +6,8 @@ import java.util.List;
 import mes.dao.CCPDataDao;
 import mes.frame.database.JDBCConnectionPool;
 import mes.model.CCPData;
-import viewmodel.CCPDataViewModel;
+import viewmodel.CCPDataDetailViewModel;
+import viewmodel.CCPDataHeadViewModel;
 
 public class CCPDataService {
 
@@ -26,25 +27,19 @@ public class CCPDataService {
 		return ccpDataList;
 	}
 	
-	public List<CCPDataViewModel> getCCPDataViewModels(String type, String startDate, String endDate) {
+	public List<CCPDataHeadViewModel> getCCPDataHeadViewModels(String type, String startDate, String endDate) {
 		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
 		
-		List<CCPDataViewModel> cvmList = ccpDataDao.getAllCCPDataViewModel(conn, type, startDate, endDate);
+		List<CCPDataHeadViewModel> cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, type, startDate, endDate);
 		
 		return cvmList;
-//		SensorDao sensorDao = new SensorDaoImpl();
-//		List<Sensor> sensors = sensorDao.getAllSensors(conn);
-//		
-//		List<CCPDataViewModel> vmList = new ArrayList<>();
-//		
-//		for(int i=0; i<ccpDataList.size(); i++) {
-//			CCPDataViewModel vm = new CCPDataViewModel();
-//
-//			CCPData data = ccpDataList.get(i);
-//			
-//			vm.setCreateTime(data.getCreateTime());
-//			vm.setSensorKey(data.getSensorKey());
-//			vm.setEvent(data.getEventCode());
-//		}
+	}
+
+	public List<CCPDataDetailViewModel> getCCPDataDetailViewModels(String sensorKey) {
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+		
+		List<CCPDataDetailViewModel> cvmList = ccpDataDao.getAllCCPDataDetailViewModel(conn, sensorKey);
+		
+		return cvmList;
 	}
 }
