@@ -99,7 +99,7 @@
 					  					if(rowData.improvementAction != null) {
 					  						return rowData.improvementAction;
 					  					} else {
-					  						return `<button class='btn btn-success'>개선조치</button>`;
+					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
 					  					}
 					  				}
 					  			}
@@ -128,6 +128,22 @@
 	            fillSubTable(row);
             }
     		
+    	});
+    	
+    	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
+    		
+    		let row = subTable.row( this ).data();
+    		let sensorKey = row.sensorKey;
+    		let createTime = row.createTime;
+    		
+    		$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/fixLimitOut.jsp',
+                data: "sensorKey=" + sensorKey + "?createTime=" + createTime,
+                success: function (html) {
+                    $("#modalWrapper").html(html);
+                }
+            });
     	});
     });
     
@@ -215,3 +231,5 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<div id="modalWrapper"></div>

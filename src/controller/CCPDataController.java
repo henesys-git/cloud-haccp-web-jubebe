@@ -36,6 +36,13 @@ public class CCPDataController extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
+		
+	}
+	
+	public void doPut(HttpServletRequest req, HttpServletResponse res) 
+			throws ServletException, IOException {
+		System.out.println("TEST####################");
+		
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
 		
