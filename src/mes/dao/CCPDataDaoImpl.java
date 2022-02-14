@@ -128,7 +128,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			String sql = new StringBuilder()
 					.append("SELECT\n")
 					.append("	B.sensor_name,\n")
-					.append("	DATE_FORMAT(A.create_time, \"%H:%i:%s\") AS create_time,\n")
+//					.append("	DATE_FORMAT(A.create_time, \"%H:%i:%s\") AS create_time,\n")
+					.append("	A.create_time,\n")
 					.append("	C.code_name as event,\n")
 					.append("	A.sensor_value,\n")
 					.append("	IF(A.sensor_value <= B.value_max && A.sensor_value >= B.value_min, '적합', '부적합') as judge,\n")
@@ -167,22 +168,27 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	@Override
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvementCode) {
 		try {
+			Statement stmt = conn.createStatement();
+			
 			String sql = new StringBuilder()
 					.append("UPDATE data_metal\n")
-					.append("SET improvement_code = ?\n")
-					.append("WHERE tenant_id = ?\n")
-					.append("	AND sensor_key = ?\n")
-					.append("	AND create_time = ?\n")
+					.append("SET improvement_code = '" + improvementCode + "'\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND sensor_key = '" + sensorKey + "'\n")
+					.append("	AND create_time = '" + createTime + "'\n")
 					.toString();
 			
-			PreparedStatement ps = conn.prepareStatement(sql);
+			logger.debug("sql:\n" + sql);
 			
-			ps.setString(1, improvementCode);
-			ps.setString(2, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(3, sensorKey);
-			ps.setString(4, createTime);
-			
-	        int i = ps.executeUpdate();
+//			PreparedStatement ps = conn.prepareStatement(sql);
+//			
+//			ps.setString(1, improvementCode);
+//			ps.setString(2, JDBCConnectionPool.getTenantId(conn));
+//			ps.setString(3, sensorKey);
+//			ps.setString(4, createTime);
+//			int i = ps.executeUpdate();
+
+			int i = stmt.executeUpdate(sql);
 
 	        if(i == 1) {
 	        	return true;

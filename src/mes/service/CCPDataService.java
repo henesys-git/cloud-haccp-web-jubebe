@@ -48,6 +48,6 @@ public class CCPDataService {
 		
 		boolean fixed = ccpDataDao.fixLimitOut(conn, sensorKey, createTime, improvementCode);
 		
-		return false;
+		return fixed;
 	}
 }

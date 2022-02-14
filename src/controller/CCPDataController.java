@@ -41,20 +41,19 @@ public class CCPDataController extends HttpServlet {
 	
 	public void doPut(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		System.out.println("TEST####################");
 		
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
 		
-		String ccpType = req.getParameter("ccpType");
-		String startDate = req.getParameter("startDate");
-		String endDate = req.getParameter("endDate");
+		String sensorKey = req.getParameter("sensorKey");
+		String createTime = req.getParameter("createTime");
+		String improvementCode = req.getParameter("improvementCode");
 		
 		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
-		List<CCPData> listCCPData = ccpService.getCCPData(ccpType, startDate, endDate);
-		String result = FormatTransformer.toJson(listCCPData);
+		Boolean fixed = ccpService.fixLimitOut(sensorKey, createTime, improvementCode);
+		String result = fixed.toString();
 		
-		res.setContentType("application/json; charset=UTF-8");
+		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 			
 		out.print(result);

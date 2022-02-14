@@ -6,16 +6,18 @@
 <%@ page import="mes.client.conf.*" %>
 
 <script type="text/javascript">
+
+	var ccpDataJspPage = {};
     
 	$(document).ready(function () {
     	
 		let date = new SetRangeDate("dateParent", "dateRange", 7);
 		let mainTable;
 		let subTable;
+		let mainTableSelectedRow;
 		
 		async function getData() {
 	    	var percentAsDefaultCcpType = "%25";
-
 	    	var startDate = date.getStartDate();
     		var endDate = date.getEndDate();
 	    	var ccpType = percentAsDefaultCcpType;
@@ -71,8 +73,8 @@
 			);
 	    }
 	    
-	    async function fillSubTable(row) {
-	    	var data = await getSubData(row.sensorKey);
+	    ccpDataJspPage.fillSubTable = async function () {
+	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
 	    	if(subTable) {
 	    		// redraw
@@ -115,31 +117,36 @@
 	    }
 	    
 		initTable();
-    	
-    	$("#getDataBtn").click(async function() {
-    		var newData = await getData();
+		
+		async function refreshMainTable() {
+			var newData = await getData();
     		mainTable.clear().rows.add(newData).draw();
+		}
+    	
+    	$("#getDataBtn").click(function() {
+    		refreshMainTable();
     	});
     	
-    	$('#ccpDataTable tbody').on('click', 'tr', async function () {
+    	$('#ccpDataTable tbody').on('click', 'tr', function () {
     		
     		if ( !$(this).hasClass('selected') ) {
-	            let row = mainTable.row( this ).data();
-	            fillSubTable(row);
+    			mainTableSelectedRow = mainTable.row( this ).data();
+    			ccpDataJspPage.fillSubTable();
             }
     		
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
     		
-    		let row = subTable.row( this ).data();
-    		let sensorKey = row.sensorKey;
-    		let createTime = row.createTime;
+    		let sensorKey = mainTableSelectedRow.sensorKey;
+			
+    		let subRow = subTable.row( $(this).closest('tr') ).data();
+    		let createTime = subRow.createTime;
     		
     		$.ajax({
                 type: "POST",
                 url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: "sensorKey=" + sensorKey + "?createTime=" + createTime,
+                data: "sensorKey=" + sensorKey + "&createTime=" + createTime,
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }

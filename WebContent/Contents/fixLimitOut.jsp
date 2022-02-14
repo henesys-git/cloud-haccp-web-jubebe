@@ -51,34 +51,27 @@
 
 <script>
 $(document).ready(function () {
-	let row = 
 	
 	$('#improvementActionModal').modal('show');
 	
 	$('#closeBtn').click(function() {
-		console.log('close btn');
 		$('#improvementActionModal').modal('hide');
 	});
 	
 	$('#saveBtn').off().on('click', function() {
 		
 		let improvementCode = $("input[name='action']:checked").val();
-		alert(improvementCode);
-		return false;
 		
 		$.ajax({
 	    	type: "PUT",
-	        dataType: "json",
-	        url: "/ccp", 
-	        data: {
-		        "param" : JSON.stringify(objToDb), 
-	        	"pid" : "SPC.SPC000200",
-	        	"fid" : "savePlanInstruction"
-	       	},
-			success: function (data) {
-	        	if(data > 0) {
-					$('#settingModal').modal('hide');
-	        		parent.fn_MainInfo_List();
+	        url: "/ccp" + 
+	        	 "?sensorKey=" + '<%=sensorKey%>' +  
+	        	 "&createTime=" + '<%=createTime%>' + 
+	        	 "&improvementCode=" + improvementCode,
+			success: function (resultIfFixed) {
+	        	if(resultIfFixed == 'true') {
+					$('#improvementActionModal').modal('hide');
+					ccpDataJspPage.fillSubTable();
 	        		alert('저장 완료');
 	         	} else {
 	         		alert('저장 실패, 관리자 문의 필요');
