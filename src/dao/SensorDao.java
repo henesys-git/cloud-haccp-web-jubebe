@@ -1,9 +1,9 @@
-package mes.dao;
+package dao;
 
 import java.sql.Connection;
 import java.util.List;
 
-import mes.model.Sensor;
+import model.Sensor;
 
 public interface SensorDao {
 	public List<Sensor> getAllSensors(Connection conn);

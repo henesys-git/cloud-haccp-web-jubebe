@@ -1,10 +1,10 @@
-package mes.service;
+package service;
 
 import java.sql.Connection;
 
 import dao.ChecklistInfoDao;
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.ChecklistInfo;
+import model.ChecklistInfo;
 
 public class ChecklistInfoService {
 	private ChecklistInfoDao clDao;

@@ -1,4 +1,4 @@
-package mes.dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.User;
+import model.User;
 
 public class UserDaoImpl implements UserDao {
 	public UserDaoImpl() {

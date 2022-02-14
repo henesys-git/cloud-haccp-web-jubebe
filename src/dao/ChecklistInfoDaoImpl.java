@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.ChecklistInfo;
+import model.ChecklistInfo;
 
 public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	

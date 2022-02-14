@@ -1,11 +1,11 @@
-package mes.service;
+package service;
 
 import java.sql.Connection;
 
-import mes.dao.UserDao;
+import dao.UserDao;
 import mes.frame.database.JDBCConnectionPool;
 import mes.frame.util.PasswordHash;
-import mes.model.User;
+import model.User;
 
 public class LoginService {
 	private UserDao userDao;

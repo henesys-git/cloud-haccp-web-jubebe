@@ -1,4 +1,4 @@
-package mes.model;
+package model;
 
 public class User {
 	private String userId;

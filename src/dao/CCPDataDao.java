@@ -1,9 +1,9 @@
-package mes.dao;
+package dao;
 
 import java.sql.Connection;
 import java.util.List;
 
-import mes.model.CCPData;
+import model.CCPData;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 

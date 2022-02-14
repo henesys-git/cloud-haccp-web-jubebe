@@ -2,7 +2,7 @@ package dao;
 
 import java.sql.Connection;
 
-import mes.model.ChecklistInfo;
+import model.ChecklistInfo;
 
 public interface ChecklistInfoDao {
 	//public int insert(Connection conn, ChecklistData clData);

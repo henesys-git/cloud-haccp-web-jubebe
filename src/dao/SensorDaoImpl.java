@@ -1,4 +1,4 @@
-package mes.dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.Sensor;
+import model.Sensor;
 
 public class SensorDaoImpl implements SensorDao {
 	

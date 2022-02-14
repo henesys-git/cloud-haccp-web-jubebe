@@ -1,11 +1,11 @@
-package mes.service;
+package service;
 
 import java.sql.Connection;
 import java.util.List;
 
-import mes.dao.SensorDao;
+import dao.SensorDao;
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.Sensor;
+import model.Sensor;
 
 public class SensorService {
 

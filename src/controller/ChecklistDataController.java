@@ -17,8 +17,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import dao.ChecklistDataDaoImpl;
-import mes.model.ChecklistData;
-import mes.service.ChecklistDataService;
+import model.ChecklistData;
+import service.ChecklistDataService;
 import utils.FormatTransformer;
 
 @WebServlet("/checklist")

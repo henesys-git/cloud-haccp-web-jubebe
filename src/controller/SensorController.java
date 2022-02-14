@@ -13,9 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import mes.dao.SensorDaoImpl;
-import mes.model.Sensor;
-import mes.service.SensorService;
+import dao.SensorDaoImpl;
+import model.Sensor;
+import service.SensorService;
 import utils.FormatTransformer;
 
 

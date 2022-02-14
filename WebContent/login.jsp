@@ -1,4 +1,4 @@
-<%@page import="mes.service.LoginService"%>
+<%@page import="service.LoginService"%>
 <%@page import="mes.frame.database.JDBCConnectionPool"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -8,12 +8,12 @@
 <%@ page import="mes.client.guiComponents.*" %>
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
-<%@ page import="mes.service.BiznoSubdomainPairService" %>
-<%@ page import="mes.service.LoginService" %>
-<%@ page import="mes.dao.BiznoSubdomainPairDao" %>
-<%@ page import="mes.dao.BiznoSubdomainPairDaoImpl" %>
-<%@ page import="mes.dao.UserDaoImpl" %>
-<%@ page import="mes.model.User" %>
+<%@ page import="service.BiznoSubdomainPairService" %>
+<%@ page import="service.LoginService" %>
+<%@ page import="dao.BiznoSubdomainPairDao" %>
+<%@ page import="dao.BiznoSubdomainPairDaoImpl" %>
+<%@ page import="dao.UserDaoImpl" %>
+<%@ page import="model.User" %>
 <%@ page import="org.json.simple.*" %>
 
 <%

@@ -1,11 +1,11 @@
-package mes.dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import mes.model.BiznoSubdomainPair;
+import model.BiznoSubdomainPair;
 
 public class BiznoSubdomainPairDaoImpl implements BiznoSubdomainPairDao {
 	public BiznoSubdomainPairDaoImpl() {

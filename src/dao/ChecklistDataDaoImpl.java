@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.ChecklistData;
+import model.ChecklistData;
 
 public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	

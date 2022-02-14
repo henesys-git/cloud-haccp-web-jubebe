@@ -1,10 +1,10 @@
-package mes.service;
+package service;
 
 import java.sql.Connection;
 
-import mes.dao.BiznoSubdomainPairDao;
+import dao.BiznoSubdomainPairDao;
 import mes.frame.database.JDBCConnectionPool;
-import mes.model.BiznoSubdomainPair;
+import model.BiznoSubdomainPair;
 
 public class BiznoSubdomainPairService {
 	private BiznoSubdomainPairDao bspDao;

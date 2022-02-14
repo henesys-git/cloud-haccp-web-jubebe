@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import mes.dao.CCPDataDaoImpl;
-import mes.service.CCPDataService;
+import dao.CCPDataDaoImpl;
+import service.CCPDataService;
 import utils.FormatTransformer;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;

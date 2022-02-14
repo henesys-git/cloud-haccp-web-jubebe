@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import dao.ChecklistInfoDaoImpl;
-import mes.model.ChecklistInfo;
-import mes.service.ChecklistInfoService;
+import model.ChecklistInfo;
+import service.ChecklistInfoService;
 import utils.FormatTransformer;
 
 @WebServlet("/checklist-info")

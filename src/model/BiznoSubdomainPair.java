@@ -1,4 +1,4 @@
-package mes.model;
+package model;
 
 public class BiznoSubdomainPair {
 	private String bizNo;
