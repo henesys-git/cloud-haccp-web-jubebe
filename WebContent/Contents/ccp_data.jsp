@@ -98,7 +98,7 @@
 					  				if (rowData.judge == '적합') {
 					  					return 'n/a';
 					  				} else {
-					  					if(rowData.improvementAction != null) {
+					  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
 					  						return rowData.improvementAction;
 					  					} else {
 					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
