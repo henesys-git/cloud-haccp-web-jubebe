@@ -27,15 +27,9 @@ public class SensorService {
 	}
 	
 	public Sensor getSensorById(String id) {
-		for(int i=0; i<sensorList.size(); i++) {
-			Sensor sensor = sensorList.get(i);
-			
-			if(sensor.getSensorId().equals(id)) {
-				return sensor;
-			}
-		}
-		
-		return null;
+		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+		Sensor sensor = sensorDao.getSensor(conn, id);
+		return sensor;
 	}
 	
 	public boolean judgeValue(Sensor sensor, double value) {

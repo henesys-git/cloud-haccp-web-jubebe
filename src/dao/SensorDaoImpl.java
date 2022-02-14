@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,6 +45,37 @@ public class SensorDaoImpl implements SensorDao {
 			
 			return sensorList;
 			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public Sensor getSensor(Connection conn, String sensorId) {
+		
+		try {
+			Statement stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT * 		\n")
+				.append("FROM sensor	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND sensor_id = '" + sensorId + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			Sensor sensor = new Sensor();
+			
+			if(rs.next()) {
+				sensor = extractFromResultSet(rs);
+			}
+			
+			return sensor;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}

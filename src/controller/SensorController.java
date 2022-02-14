@@ -32,7 +32,31 @@ public class SensorController extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		doPost(req, res);
+		HttpSession session = req.getSession();
+		String bizNo = (String) session.getAttribute("bizNo");
+		
+		if(bizNo == null) {
+			bizNo = req.getParameter("bizNo");
+		}
+		
+		String id = req.getParameter("id");
+		
+		SensorService sensorService = new SensorService(new SensorDaoImpl(), bizNo);
+		
+		String result = "";
+		
+		if(id.equals("all")) {
+			List<Sensor> list = sensorService.getAllSensors();
+			result = FormatTransformer.toJson(list);
+		} else {
+			Sensor sensor = sensorService.getSensorById(id);
+			result = FormatTransformer.toJson(sensor);
+		}
+		
+		res.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = res.getWriter();
+		
+		out.print(result);
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 

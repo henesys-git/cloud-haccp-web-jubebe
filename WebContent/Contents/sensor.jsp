@@ -8,8 +8,8 @@
 		
 		async function getData() {
 	        var fetchedData = $.ajax({
-			            type: "POST",
-			            url: heneServerPath + "/sensor",
+			            type: "GET",
+			            url: heneServerPath + "/sensor?id=all",
 			            success: function (result) {
 			            	return result;
 			            }
