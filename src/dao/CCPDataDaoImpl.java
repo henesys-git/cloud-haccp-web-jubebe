@@ -90,7 +90,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
-					.append("INNER JOIN common_code C\n")
+					.append("LEFT JOIN common_code C\n")
 					.append("	ON A.process_code = C.code\n")
 					.append("INNER JOIN product D\n")
 					.append("	ON A.product_id = D.product_id\n")
