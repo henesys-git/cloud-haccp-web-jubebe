@@ -60,7 +60,7 @@
 					pageLength: 10,
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
-						{ data: "ccpType", defaultContent: '' },
+						{ data: "processName", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
 						{ data: "judge", defaultContent: '' },
@@ -202,7 +202,7 @@
 				<thead>
 					<tr>
 					    <th>묶음값</th>
-					    <th>CCP종류</th>
+					    <th>공정</th>
 					    <th>제품</th>
 					    <th>생성시간</th>
 					    <th>적/부</th>

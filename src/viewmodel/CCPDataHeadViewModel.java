@@ -2,7 +2,7 @@ package viewmodel;
 
 public class CCPDataHeadViewModel {
 	private String sensorKey;
-	private String ccpType;
+	private String processName;
 	private String productName;
 	private String createTime;
 	private String judge;
@@ -14,11 +14,11 @@ public class CCPDataHeadViewModel {
 	public void setSensorKey(String sensorKey) {
 		this.sensorKey = sensorKey;
 	}
-	public String getCcpType() {
-		return ccpType;
+	public String getProcessName() {
+		return processName;
 	}
-	public void setCcpType(String ccpType) {
-		this.ccpType = ccpType;
+	public void setProcessName(String processName) {
+		this.processName = processName;
 	}
 	public String getProductName() {
 		return productName;

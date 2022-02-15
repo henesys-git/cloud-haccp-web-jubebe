@@ -69,7 +69,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			String sql = new StringBuilder()
 					.append("SELECT\n")
 					.append("	A.sensor_key,\n")
-					.append("	A.ccp_type,\n")
+					.append("	C.code_name AS process_name,\n")
 					.append("	D.product_name,\n")
 					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
 					.append("	(\n")
@@ -90,6 +90,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("INNER JOIN common_code C\n")
+					.append("	ON A.process_code = C.code\n")
 					.append("INNER JOIN product D\n")
 					.append("	ON A.product_id = D.product_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
@@ -221,7 +223,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		CCPDataHeadViewModel cvm = new CCPDataHeadViewModel();
 		
 		cvm.setSensorKey(rs.getString("sensor_key"));
-		cvm.setCcpType(rs.getString("ccp_type"));
+		cvm.setProcessName(rs.getString("process_name"));
 		cvm.setProductName(rs.getString("product_name"));
 		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setJudge(rs.getString("judge"));
