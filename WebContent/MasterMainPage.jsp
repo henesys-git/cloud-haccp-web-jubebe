@@ -152,7 +152,7 @@
 							onclick="return fn_MainSubMenuSelected(this, '/Contents/ccp_data.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
 							<a href="#" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>			
-								<p>CCP 데이터</p>		
+								<p>금속검출 관리</p>		
 							</a>
 						</li>
 						<li class="nav-item"

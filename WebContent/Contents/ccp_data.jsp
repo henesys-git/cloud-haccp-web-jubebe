@@ -162,7 +162,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-        	CCP 데이터 관리
+        	금속검출 데이터 관리
         </h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
@@ -183,7 +183,7 @@
           <div class="card-header">
           	<h3 class="card-title">
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
-          		CCP 데이터 목록
+          		금속검출 데이터 목록
           	</h3>
           	<div class="card-tools">
           	  <div class="input-group input-group-sm" id="dateParent">
