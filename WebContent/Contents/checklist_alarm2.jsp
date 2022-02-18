@@ -84,7 +84,7 @@
 			            success: function (data) {
 			            	
 			            	console.log(data);
-			            	console.log(data[0].latestCheckDate);
+			            	console.log(data[0].timeDiff);
 			            	console.log(data[0].checklistId);
 			            	console.log(data[0].checklistName);
 			            	console.log(data[0].checkInterVal);
@@ -100,9 +100,28 @@
 								var goOnOff_minus = false;
 								var insertDaysText = "";
 								
+								
+								if(item.checkInterVal < item.timeDiff) {
+									year = item.alarmYear;
+									month = item.alarmMonth;
+									date = item.alarmDay;
+									
+									if(Number(month) < 10) month = "0"+month;
+									if(Number(date) < 10) date = "0"+date;
+									
+									insertDaysText = "(최근 작성일자 : "+year+"년 "+month+"월 "+date+"일)";
+									
+									console.log(insertDaysText);
+									var parsingDate = new Date(year+"-"+month+"-"+date);
+									goOnOff_minus = true;
+									console.log(goOnOff_minus);
+								}
+								
+								
+								/*
 								if(item[4] == "매년"){
-									month = item[5];
-									date = item[6];
+									month = item[6];
+									date = item[7];
 									
 									insertDaysText = " (매년 "+month+"월 "+date+"일)";
 									
@@ -157,6 +176,102 @@
 										
 									}
 								}
+								*/
+								if(goOnOff_minus){
+									className = 'fa-user text-red';
+								}else if(goOnOff_0){
+									className = 'fa-user text-yellow';
+								}else if(goOnOff_1){
+									className = 'fa-user text-green';
+								}else if(goOnOff_2){
+									className = 'fa-user text-green';
+								}else {
+									goOnOff_minus = false;
+									goOnOff_0 = false;
+									goOnOff_1 = false;
+									goOnOff_2 = false;
+								}
+								console.log(className);
+								//if(goOnOff_minus || goOnOff_0 || goOnOff_1 || goOnOff_2){
+									clickUrl = "<%=Config.this_SERVER_path%>/Contents/checklist16.jsp";
+									item1 = item[1];
+									item2 = item[2];
+									item3 = item[3];
+									
+									var insertFunction = "";
+									
+									if(item.revisionNo == '0') {
+										//insertFunction = "'"+clickUrl+"', + '"+item2+"', '"+item1+"', '"+item3+"')\"";
+										insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','점검표 테스트','M838SS070500.jsp')";
+			                
+										if(count == 0){
+											$("#document tbody").append(
+													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span>'+insertDaysText+'</a></td></tr></li>'
+											)
+										}else{
+											$("#document tbody").append(
+													'<tr><td><li><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</span></a></td></tr>'
+											)
+										}
+									}
+								//}
+			                });
+											
+			                if($("#document tbody tr").get().length == 0) $("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>')
+			                //if($("#document_sign tbody tr").get().length == 0) $("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>') 
+										
+			            },
+			            error: function (xhr, option, error) {
+
+			            }
+			        });
+	    
+	    	return fetchedList;
+	    };
+	    
+	    async function getData2() {
+			
+			 var count = 0;
+	       	 var fetchedList2 = $.ajax({
+			            type: "POST",
+			            url: "<%=Config.this_SERVER_path%>/checklist_alarm",
+			            success: function (data) {
+			            	
+			            	console.log(data);
+			                 
+			                data.forEach(function(item){
+			                	console.log(item);
+			                	console.log(item.revisionNo);
+								var className = "";
+								var goOnOff_2 = false;
+								var goOnOff_1 = false;
+								var goOnOff_0 = false;
+								var goOnOff_minus = false;
+								var insertText = "";
+								var signInfo = "";
+								
+									writer = item.signWriter;
+									checker = item.signChecker;
+									approver = item.signApprover;
+									
+									if(writer == null) {
+										signInfo += "작성자 ";	
+									}
+									
+									if(checker == null) {
+										signInfo += "확인자 ";	
+									}
+									
+									if(approver == null) {
+										signInfo += "승인자";	
+									}
+									
+									
+									insertText = "(서명 필요 : " + signInfo + ")";
+									
+									console.log(insertText);
+									goOnOff_minus = true;
+								//}
 								
 								if(goOnOff_minus){
 									className = 'fa-user text-red';
@@ -172,50 +287,28 @@
 									goOnOff_1 = false;
 									goOnOff_2 = false;
 								}
-								
-								//if(goOnOff_minus || goOnOff_0 || goOnOff_1 || goOnOff_2){
-									clickUrl = "<%=Config.this_SERVER_path%>/Contents/"
-											 + item[2] + "/" + item[3]
+								console.log(className);
+									clickUrl = "<%=Config.this_SERVER_path%>/Contents/checklist16.jsp";
 									item1 = item[1];
 									item2 = item[2];
 									item3 = item[3];
 									
 									var insertFunction = "";
 									
-									var sulClcikUrl = "<%=Config.this_SERVER_path%>/Contents/M909/M909S050100.jsp"
-									console.log(item.revisionNo == '0');
-									console.log(count == 0);
-									if(item.revisionNo == '0') {
-										insertFunction = "'"+clickUrl+"', '"+item2+"', '"+item1+"', '"+item3+"')\"";
-			                
-										if(count == 0){
-											$("#document tbody").append(
-													'<tr><td><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span>'+insertDaysText+'</a></td></tr></li>'
-											)
-										}else{
-											$("#document tbody").append(
-													'<tr><td><li><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</span></a></td></tr>'
-											)
-										}
-									}
-									
-									if(item[9] == "sign") {
-										insertFunction = "'"+sulClcikUrl+"', 'M909', '설비정보', 'M909S050100.jsp')\"";
+										insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','점검표 테스트','M838SS070500.jsp')";
 											
 										if(count == 0){
 											$("#document_sign tbody").append(
-													'<tr><td><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</a></td></tr>'
+													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span>'+insertText+'</a></td></tr>'
 											)
 										}else{
 											$("#document_sign tbody").append(
 													'<tr><td><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</span></a></td></tr>'
 											)
 										}
-									}
-								//}
 			                });
 											
-			                if($("#document tbody tr").get().length == 0) $("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>')
+			                //if($("#document tbody tr").get().length == 0) $("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>')
 			                if($("#document_sign tbody tr").get().length == 0) $("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>') 
 										
 			            },
@@ -224,10 +317,11 @@
 			            }
 			        });
 	    
-	    	return fetchedList;
+	    	return fetchedList2;
 	    };
 	    
 	    getData();
+	    getData2();
 	})
 	
 // 	alarmProcess1 = setInterval(show_now, 1000*60*5); // 주석시 웹 알람관련 로그 안보임 - 개발서버에서 주석 해제 금지
