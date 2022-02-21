@@ -145,8 +145,9 @@
 			</a>
 			
 			<div class="sidebar">
-				<nav class="mt-2">
-					<ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" 
+				<nav class="mt-2" id="sidebar-nav-id">
+					<!-- <ul id="sidebar-ul-id"
+						class="nav nav-pills nav-sidebar nav-child-indent flex-column" 
 						data-widget="treeview" role="menu" data-accordion="true">
 						<li class="nav-item"
 							onclick="return fn_MainSubMenuSelected(this, '/Contents/ccp_data.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
@@ -190,7 +191,7 @@
 								<p>공통 코드</p>		
 							</a>
 						</li>
-					</ul>
+					</ul> -->
 				</nav>
 			</div>
 		</aside>
@@ -582,7 +583,9 @@
         $(document).ready(async function() {
         	// 메뉴 생성
 			var sidebar = new Sidebar();
-        	console.log(await sidebar.getMenu());
+        	var menus = await sidebar.getMenu();
+        	console.log(menus);
+        	await sidebar.generateMenu(menus);
         	
         	// 배포 시 로그 메시지 disable
 			//logger.disableLogger();
