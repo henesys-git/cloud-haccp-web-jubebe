@@ -14,6 +14,9 @@ import model.EventInfo;
 
 public class EventInfoDaoImpl implements EventInfoDao {
 	
+	private Statement stmt;
+	private ResultSet rs;
+	
 	static final Logger logger = 
 			Logger.getLogger(EventInfoDaoImpl.class.getName());
 	
@@ -24,7 +27,7 @@ public class EventInfoDaoImpl implements EventInfoDao {
 	public List<EventInfo> getAllEventInfo(Connection conn) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT \n")
@@ -41,7 +44,7 @@ public class EventInfoDaoImpl implements EventInfoDao {
 			
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<EventInfo> list = new ArrayList<EventInfo>();
 			
@@ -54,6 +57,9 @@ public class EventInfoDaoImpl implements EventInfoDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -63,7 +69,7 @@ public class EventInfoDaoImpl implements EventInfoDao {
 	public EventInfo getEventInfo(Connection conn, String eventCode) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("SELECT \n")
@@ -81,7 +87,7 @@ public class EventInfoDaoImpl implements EventInfoDao {
 
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			EventInfo event = new EventInfo();
 			
@@ -92,6 +98,9 @@ public class EventInfoDaoImpl implements EventInfoDao {
 			return event;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;

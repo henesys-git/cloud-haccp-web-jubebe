@@ -9,14 +9,17 @@ import mes.frame.database.JDBCConnectionPool;
 import model.User;
 
 public class UserDaoImpl implements UserDao {
-	public UserDaoImpl() {
-	}
+	
+	private Statement stmt;
+	private ResultSet rs;
+	
+	public UserDaoImpl() {}
 
 	@Override
 	public User getUserById(Connection conn, String userId) {
 
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 							\n")
@@ -25,7 +28,7 @@ public class UserDaoImpl implements UserDao {
 				.append("  AND tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
 				.toString();
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			User user = new User();
 			
 			if(rs.next()) {
@@ -36,6 +39,9 @@ public class UserDaoImpl implements UserDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;

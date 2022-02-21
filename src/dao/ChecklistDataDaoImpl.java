@@ -13,6 +13,10 @@ import model.ChecklistData;
 
 public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	
+	private Statement stmt;
+	private PreparedStatement ps;
+	private ResultSet rs;
+	
 	@Override
 	public int insert(Connection conn, ChecklistData clData) {
 		
@@ -39,7 +43,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    			.append(");\n")
 	    			.toString();
 	    	
-			PreparedStatement ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
 			ps.setString(2, clData.getChecklistId());
@@ -52,16 +56,18 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	        if(i == 1) {
 	        	return 1;
 	        }
-
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
-	    }
+	    } finally {
+		    try { ps.close(); } catch (Exception e) { /* Ignored */ }
+		}
 
 	    return -1;
 	};
 	
 	@Override
 	public ChecklistData select(Connection conn, String checklistId, int seqNo) {
+		
 		try {
 			String sql = new StringBuilder()
 					.append("SELECT *\n")
@@ -71,11 +77,11 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 					.append("  AND seq_no = ?;\n")
 					.toString();
 			
-			PreparedStatement ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql);
 			ps.setString(1, checklistId);
 			ps.setInt(2, seqNo);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			ChecklistData clData = new ChecklistData();
 					
@@ -87,6 +93,9 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+			try { ps.close(); } catch (Exception e) { /* Ignored */ }
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -95,7 +104,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	@Override
 	public List<ChecklistData> selectAll(Connection conn, String checklistId) {
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT *									\n")
@@ -104,7 +113,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 				.append("  AND checklist_id = '" + checklistId + "'	\n")
 				.toString();
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<ChecklistData> clDataList = new ArrayList<ChecklistData>();
 			
@@ -117,6 +126,9 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
