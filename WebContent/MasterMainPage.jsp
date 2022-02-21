@@ -538,10 +538,11 @@
     <script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 	<!-- RowsGroup -->
 	<script src="<%=Config.this_SERVER_path%>/js/dataTables.rowsGroup.js"></script>
+	<!-- Sidebar -->
+	<script src="<%=Config.this_SERVER_path%>/js/components/sidebar.js"></script>
 	
     <script>
-    	/* 2020 12 12 최현수
-    	필요없는 전역변수 찾아서 다 없애야됨! */
+    	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */
 		var vOrderNo = "";
 		var vTraceKey = ""; //안쓰는듯
 		var vLotCount = ""; // 안쓰는듯?
@@ -578,7 +579,11 @@
 		// sweetalert 객체 생성
 		let heneSwal = new SweetAlert();
 		
-        $(document).ready(function() {
+        $(document).ready(async function() {
+        	// 메뉴 생성
+			var sidebar = new Sidebar();
+        	console.log(await sidebar.getMenu());
+        	
         	// 배포 시 로그 메시지 disable
 			//logger.disableLogger();
         	
