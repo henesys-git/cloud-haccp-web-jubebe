@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import dao.CCPDataDaoImpl;
-import model.CCPData;
 import service.CCPDataService;
-import utils.FormatTransformer;
 
 @WebServlet("/ccp")
 public class CCPDataController extends HttpServlet {

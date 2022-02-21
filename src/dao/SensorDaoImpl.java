@@ -14,6 +14,9 @@ import model.Sensor;
 
 public class SensorDaoImpl implements SensorDao {
 	
+	private Statement stmt;
+	private ResultSet rs;
+	
 	static final Logger logger = 
 			Logger.getLogger(SensorDaoImpl.class.getName());
 	
@@ -24,7 +27,7 @@ public class SensorDaoImpl implements SensorDao {
 	public List<Sensor> getAllSensors(Connection conn) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
@@ -34,7 +37,7 @@ public class SensorDaoImpl implements SensorDao {
 			
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<Sensor> sensorList = new ArrayList<Sensor>();
 			
@@ -47,6 +50,9 @@ public class SensorDaoImpl implements SensorDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -56,7 +62,7 @@ public class SensorDaoImpl implements SensorDao {
 	public Sensor getSensor(Connection conn, String sensorId) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
@@ -67,7 +73,7 @@ public class SensorDaoImpl implements SensorDao {
 			
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			Sensor sensor = new Sensor();
 			
@@ -78,6 +84,9 @@ public class SensorDaoImpl implements SensorDao {
 			return sensor;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;

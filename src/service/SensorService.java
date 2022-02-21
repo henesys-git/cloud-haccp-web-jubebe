@@ -3,6 +3,8 @@ package service;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import dao.SensorDao;
 import mes.frame.database.JDBCConnectionPool;
 import model.Sensor;
@@ -11,24 +13,42 @@ public class SensorService {
 
 	private SensorDao sensorDao;
 	private String bizNo;
-	private List<Sensor> sensorList;
+	private Connection conn;
 	
+	static final Logger logger = Logger.getLogger(SensorService.class.getName());
+
 	public SensorService(SensorDao sensorDao, String bizNo) {
 		this.sensorDao = sensorDao;
 		this.bizNo = bizNo;
 	}
 	
 	public List<Sensor> getAllSensors() {
-		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+		List<Sensor> sensorList = null;
 		
-		sensorList = sensorDao.getAllSensors(conn);
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			sensorList = sensorDao.getAllSensors(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
 		
 		return sensorList;
 	}
 	
 	public Sensor getSensorById(String id) {
-		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
-		Sensor sensor = sensorDao.getSensor(conn, id);
+		Sensor sensor = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			sensor = sensorDao.getSensor(conn, id);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
 		return sensor;
 	}
 	

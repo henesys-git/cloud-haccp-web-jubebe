@@ -16,17 +16,18 @@ import viewmodel.CCPDataHeadViewModel;
 
 public class CCPDataDaoImpl implements CCPDataDao {
 	
-	static final Logger logger = 
-			Logger.getLogger(CCPDataDaoImpl.class.getName());
+	static final Logger logger = Logger.getLogger(CCPDataDaoImpl.class.getName());
 	
-	public CCPDataDaoImpl() {
-	}
+	private Statement stmt;
+	private ResultSet rs;
+	
+	public CCPDataDaoImpl() {}
 
 	@Override
 	public List<CCPData> getAllCCPData(Connection conn, String type, String startDate, String endDate) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT A.*															\n")
@@ -41,7 +42,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<CCPData> ccpDataList = new ArrayList<CCPData>();
 			
@@ -54,6 +55,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -63,7 +67,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String type, String startDate, String endDate) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
@@ -102,7 +106,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<CCPDataHeadViewModel> cvmList = new ArrayList<CCPDataHeadViewModel>();
 			
@@ -115,6 +119,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -124,7 +131,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
@@ -148,7 +155,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			logger.debug("sql:\n" + sql);
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			List<CCPDataDetailViewModel> cvmList = new ArrayList<CCPDataDetailViewModel>();
 			
@@ -161,6 +168,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
@@ -169,7 +179,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	@Override
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvementCode) {
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("UPDATE data_metal\n")
@@ -180,14 +190,6 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
-			
-//			PreparedStatement ps = conn.prepareStatement(sql);
-//			
-//			ps.setString(1, improvementCode);
-//			ps.setString(2, JDBCConnectionPool.getTenantId(conn));
-//			ps.setString(3, sensorKey);
-//			ps.setString(4, createTime);
-//			int i = ps.executeUpdate();
 
 			int i = stmt.executeUpdate(sql);
 
@@ -196,6 +198,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	        }
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return false;

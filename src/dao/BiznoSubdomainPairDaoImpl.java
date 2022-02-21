@@ -8,6 +8,9 @@ import java.sql.Statement;
 import model.BiznoSubdomainPair;
 
 public class BiznoSubdomainPairDaoImpl implements BiznoSubdomainPairDao {
+	private Statement stmt;
+	private ResultSet rs;
+	
 	public BiznoSubdomainPairDaoImpl() {
 	}
 
@@ -15,7 +18,7 @@ public class BiznoSubdomainPairDaoImpl implements BiznoSubdomainPairDao {
 	public BiznoSubdomainPair getBiznoSubdomainPair(Connection conn, String subdomain) {
 		
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 								\n")
@@ -23,7 +26,7 @@ public class BiznoSubdomainPairDaoImpl implements BiznoSubdomainPairDao {
 				.append("WHERE subdomain = '" + subdomain + "'	\n")
 				.toString();
 			
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			
 			BiznoSubdomainPair csp = new BiznoSubdomainPair();
 			
@@ -35,6 +38,9 @@ public class BiznoSubdomainPairDaoImpl implements BiznoSubdomainPairDao {
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;
