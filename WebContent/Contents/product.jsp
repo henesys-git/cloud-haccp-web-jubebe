@@ -8,58 +8,28 @@
 <script type="text/javascript">
     
 	$(document).ready(function () {
-    	
-		let date = new SetRangeDate("dateParent", "dateRange", 7);
+		
 		let mainTable;
 		
-		async function getData() {
-	    	var startDate = date.getStartDate();
-    		var endDate = date.getEndDate();
-	    	
-	        var fetchedData = $.ajax({
-			            type: "POST",
-			            url: "<%=Config.this_SERVER_path%>/ccp",
-			            data: "startDate=" + startDate + 
-			            	  "&endDate=" + endDate + 
-			            	  "&ccpType=" + "%25",
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
-	    
-	    	return fetchedData;
-	    };
-	    
 	    async function initTable() {
-	    	var data = await getData();
+	    	var products = new Product();
+	    	var productsList = await products.getProducts();;
 	    	
 		    var customOpts = {
-					data : data,
+					data : productsList,
 					pageLength: 10,
 					columns: [
-						{ data: "sensorKey", defaultContent: '' },
-						{ data: "seqNo", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "sensorId", defaultContent: '' },
-						{ data: "sensorValue", defaultContent: '' },
-						{ data: "improvementCode", defaultContent: '' },
-						{ data: "userId", defaultContent: '' },
-						{ data: "eventCode", defaultContent: '' },
-						{ data: "productId", defaultContent: '' }
+						{ data: "productId", defaultContent: '' },
+						{ data: "productName", defaultContent: '' }
 			        ]
 			}
 					
-			mainTable = $('#ccpDataTable').DataTable(
+			mainTable = $('#productTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
 	     
 		initTable();
-    	
-    	$("#getDataBtn").click(async function() {
-    		var newData = await getData();
-    		mainTable.clear().rows.add(newData).draw();
-    	});
     });
     
 </script>
@@ -93,34 +63,17 @@
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
           		제품 목록
           	</h3>
-          	<div class="card-tools">
-          	  <div class="input-group input-group-sm" id="dateParent">
-          	  	<input type="text" class="form-control float-right" id="dateRange">
-          	  	<div class="input-group-append">
-          	  	  <button type="submit" class="btn btn-default" id="getDataBtn">
-          	  	    <i class="fas fa-search"></i>
-          	  	  </button>
-          	  	</div>
-          	  </div>
-          	</div>
           </div>
           <div class="card-body" id="MainInfo_List_contents">
           	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataTable" style="width:100%">
+				   id="productTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>묶음값</th>
-						<th>일련번호</th>
-					    <th>생성시간</th>
-					    <th>센서아이디</th>
-					    <th>센서값</th>
-					    <th>개선조치코드</th>
-					    <th>사용자아이디</th>
-					    <th>이벤트코드</th>
 					    <th>제품아이디</th>
+					    <th>제폼명</th>
 					</tr>
 				</thead>
-				<tbody id="ccpDataTableBody">		
+				<tbody id="productTableBody">		
 				</tbody>
 			</table>
           </div> 

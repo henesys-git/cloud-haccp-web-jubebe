@@ -141,57 +141,13 @@
  
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<a href="#" class="brand-link">
-				<span class="brand-text font-weight-light">&nbsp;&nbsp;&nbsp;&nbsp;SMART HACCP SYSTEM</span>
+				<span class="brand-text font-weight-light">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					SMART HACCP SYSTEM
+				</span>
 			</a>
-			
 			<div class="sidebar">
 				<nav class="mt-2" id="sidebar-nav-id">
-					<!-- <ul id="sidebar-ul-id"
-						class="nav nav-pills nav-sidebar nav-child-indent flex-column" 
-						data-widget="treeview" role="menu" data-accordion="true">
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/ccp_data.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>금속검출 관리</p>		
-							</a>
-						</li>
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/checklist16.jsp','M838','점검표 테스트','M838SS070500.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>점검표 테스트</p>		
-							</a>
-						</li>
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/sensor.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>센서</p>		
-							</a>
-						</li>
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/product.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>제품</p>		
-							</a>
-						</li>
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/user.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>사용자</p>		
-							</a>
-						</li>
-						<li class="nav-item"
-							onclick="return fn_MainSubMenuSelected(this, '/Contents/common_code.jsp','M202','원자재재고관리','M202S010200.jsp'); ">
-							<a href="#" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>			
-								<p>공통 코드</p>		
-							</a>
-						</li>
-					</ul> -->
 				</nav>
 			</div>
 		</aside>
@@ -541,6 +497,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/dataTables.rowsGroup.js"></script>
 	<!-- Sidebar -->
 	<script src="<%=Config.this_SERVER_path%>/js/components/sidebar.js"></script>
+	<!-- Product -->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/product.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */
