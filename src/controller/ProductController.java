@@ -61,16 +61,76 @@ public class ProductController extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		String bizNo = (String) session.getAttribute("bizNo");
 		
-		ProductService productService = new ProductService(new ProductDaoImpl(), bizNo);
-		List<Product> productList = productService.getAllProducts();
-		String result = FormatTransformer.toJson(productList);
+		if(req.getParameter("type").equals("insert")) {
+			insert(req, res);
+		}
 		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
+		if(req.getParameter("type").equals("update")) {
+			update(req, res);
+		}
 		
-		out.print(result);
+		if(req.getParameter("type").equals("delete")) {
+			delete(req, res);
+		}
 	}
+	
+	public void insert(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		Product product = new Product(req.getParameter("id"), req.getParameter("name"));
+		
+		ProductService productService = new ProductService(new ProductDaoImpl(), tenantId);
+		Boolean inserted = productService.insert(product);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(inserted.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void update(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		Product product = new Product(req.getParameter("id"), req.getParameter("name"));
+		
+		ProductService productService = new ProductService(new ProductDaoImpl(), tenantId);
+		Boolean updated = productService.update(product);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(updated.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delete(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		String productId = req.getParameter("id");
+		
+		ProductService productService = new ProductService(new ProductDaoImpl(), tenantId);
+		Boolean deleted = productService.delete(productId);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(deleted.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -91,6 +92,96 @@ public class ProductDaoImpl implements ProductDao {
 		
 		return null;
 	};
+	
+	@Override
+	public boolean insert(Connection conn, Product product) {
+		try {
+			String sql = new StringBuilder()
+					.append("INSERT INTO\n")
+					.append("	product (\n")
+					.append("		tenant_id,\n")
+					.append("		product_id,\n")
+					.append("		product_name\n")
+					.append("	)\n")
+					.append("VALUES\n")
+					.append("	(\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?\n")
+					.append("	);\n")
+					.toString();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(2, product.getProductId());
+			ps.setString(3, product.getProductName());
+			
+	        int i = ps.executeUpdate();
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
+	@Override
+	public boolean update(Connection conn, Product product) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("UPDATE product\n")
+					.append("SET product_name='" + product.getProductName() + "'\n")
+					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND product_id='" + product.getProductId() + "';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+	        int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
+	@Override
+	public boolean delete(Connection conn, String productId) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("DELETE FROM product\n")
+					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND product_id='" + productId + "';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
 	
 	private Product extractFromResultSet(ResultSet rs) throws SQLException {
 		return new Product(

@@ -6,10 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import dao.ProductDao;
-import dao.SensorDao;
 import mes.frame.database.JDBCConnectionPool;
 import model.Product;
-import model.Sensor;
 
 public class ProductService {
 
@@ -54,14 +52,42 @@ public class ProductService {
 		return product;
 	}
 	
-	public boolean judgeValue(Sensor sensor, double value) {
-		double min = sensor.getValueMin();
-		double max = sensor.getValueMax();
-		
-		if( value < min || value > max ) {
-			return false;
+	public boolean insert(Product product) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return productDao.insert(conn, product);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return true;
+		return false;
+	}
+	
+	public boolean update(Product product) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return productDao.update(conn, product);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	public boolean delete(String productId) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return productDao.delete(conn, productId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
 	}
 }
