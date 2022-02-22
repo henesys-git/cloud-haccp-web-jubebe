@@ -28,7 +28,7 @@ public class SensorController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	static final Logger logger = 
-			Logger.getLogger(CCPDataController.class.getName());
+			Logger.getLogger(SensorController.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
