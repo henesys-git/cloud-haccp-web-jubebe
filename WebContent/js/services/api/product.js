@@ -3,7 +3,7 @@
  */
  
 Product = function () {}
- 
+
 Product.prototype.getProductById = function () {
  	var product = $.ajax({
         type: "GET",

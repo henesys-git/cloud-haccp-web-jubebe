@@ -24,7 +24,7 @@ public class LoginService {
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			user = userDao.getUserById(conn, userId);
+			user = userDao.getUser(conn, userId);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -33,6 +33,8 @@ public class LoginService {
 
 		String hashedPassword = PasswordHash.hashPassword(password);
 		
+		// 나중에 db에 저장되는 password가 hashed password로 변경되면
+		// equals를 hashedPassword 변수로 변경하면 됨
 		if(user.getPassword().equals(password)) {
 			return user;
 		} else {

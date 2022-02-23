@@ -6,6 +6,22 @@ public class User {
 	private String password;
 	private String authority;
 	
+	public User() {}
+	
+	public User(String userId, String userName, String password, String authority) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.authority = authority;
+	}
+
+	public User(String userId, String authority) {
+		super();
+		this.userId = userId;
+		this.authority = authority;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -29,5 +45,11 @@ public class User {
 	}
 	public void setAuthority(String authority) {
 		this.authority = authority;
+	}
+	
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", authority="
+				+ authority + "]";
 	}
 }
