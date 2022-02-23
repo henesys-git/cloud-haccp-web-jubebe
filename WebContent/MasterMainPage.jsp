@@ -593,6 +593,8 @@
 			});	
 			
 			loadJs(heneServerPath + '/js/auth-button/auth-button.js');
+			
+			call_master_page_content(); // 점검표 알람 표시 영역 불러오는 함수
         });
 
 		function makeMenuHTML(htmlSideMenu){
@@ -1514,6 +1516,20 @@
                 }
             });
 		}
+		
+		function call_master_page_content() {
+        	$.ajax({
+           	        type: "POST",
+           	        url: "<%=Config.this_SERVER_path%>/Contents/checklist_alarm.jsp",
+           	        beforeSend: function () {
+           	        },
+           	        success: function (html) {
+           	            $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+           	        },
+           	        error: function (xhr, option, error) {
+           	        }
+           	    }); 
+    	}
 		
 		//뒤로가기 방지코드
 		history.pushState(null, null, location.href);
