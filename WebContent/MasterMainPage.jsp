@@ -541,11 +541,14 @@
 		let heneSwal = new SweetAlert();
 		
         $(document).ready(async function() {
-        	// 메뉴 생성
+        	// 메뉴 생성 & 트리뷰 초기화
 			var sidebar = new Sidebar();
         	var menus = await sidebar.getMenu();
-        	console.log(menus);
         	await sidebar.generateMenu(menus);
+        	
+        	$('[data-widget="treeview"]').each(function () {
+                $('[data-widget="treeview"]').Treeview.call($(this), 'init')
+            });
         	
         	// 배포 시 로그 메시지 disable
 			//logger.disableLogger();

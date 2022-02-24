@@ -26,7 +26,6 @@ Sidebar.prototype.generateMenu = function (menus) {
 		for (let menu of menus) {
 		
 			var li = document.createElement('li');
-			li.setAttribute('class', 'nav-item');
 			
 			var a = document.createElement('a');
 			a.setAttribute('href', '#');
@@ -37,7 +36,7 @@ Sidebar.prototype.generateMenu = function (menus) {
 			
 			var p = document.createElement('p');
 			p.appendChild(document.createTextNode(menu.menuName));
-
+			
 			a.appendChild(i);
 			a.appendChild(p);
 			li.appendChild(a);
@@ -45,8 +44,15 @@ Sidebar.prototype.generateMenu = function (menus) {
 			// if menu has children, recursion
 			// else add onclick event
 			if(menu.children.length > 0) {
+				li.setAttribute('class', 'nav-item has-treeview');
+				
+				var i = document.createElement('i');
+				i.setAttribute('class', 'right fas fa-angle-left');
+				p.appendChild(i);
+				
 				_generateLiElement(li, menu.children);
 			} else {
+				li.setAttribute('class', 'nav-item');
 				li.setAttribute("onclick", "return fn_MainSubMenuSelected(this,'" + menu.path + "', '', '', '');");
 			}
 			
@@ -64,13 +70,13 @@ Sidebar.prototype.generateMenu = function (menus) {
 		let ul = uls[i];
 	
 		if(i === 0) {
+			ul.setAttribute('id', 'menu-parent-ul');
 			ul.setAttribute('class', 'nav nav-pills nav-sidebar nav-child-indent flex-column');
 			ul.setAttribute('data-widget', 'treeview');
 			ul.setAttribute('role', 'menu');
 			ul.setAttribute('data-accordion', 'true');
 		} else {
-			ul.setAttribute('class', 'nav-item');
-			ul.setAttribute('style', 'display: block;');
+			ul.setAttribute('class', 'nav-item nav-treeview');
 		}
 	}
 }
