@@ -122,6 +122,10 @@
 		async function refreshMainTable() {
 			var newData = await getData();
     		mainTable.clear().rows.add(newData).draw();
+    		
+    		if(subTable) {
+	    		subTable.clear().draw();
+	    	}
 		}
     	
     	$("#getDataBtn").click(function() {
