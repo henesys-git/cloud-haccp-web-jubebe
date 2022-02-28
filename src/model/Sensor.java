@@ -3,8 +3,6 @@ package model;
 public class Sensor {
 	private String sensorId;
 	private String sensorName;
-	private double valueMax;
-	private double valueMin;
 	private String valueType;
 	private String ipAddress;
 	private String protocolInfo;
@@ -16,12 +14,6 @@ public class Sensor {
 	}
 	public String getSensorName() {
 		return sensorName;
-	}
-	public double getValueMax() {
-		return valueMax;
-	}
-	public double getValueMin() {
-		return valueMin;
 	}
 	public String getValueType() {
 		return valueType;
@@ -43,12 +35,6 @@ public class Sensor {
 	}
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
-	}
-	public void setValueMax(double valueMax) {
-		this.valueMax = valueMax;
-	}
-	public void setValueMin(double valueMin) {
-		this.valueMin = valueMin;
 	}
 	public void setValueType(String valueType) {
 		this.valueType = valueType;

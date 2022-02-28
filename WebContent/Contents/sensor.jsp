@@ -27,8 +27,6 @@
 					columns: [
 						{ data: "sensorId", defaultContent: '' },
 						{ data: "sensorName", defaultContent: '' },
-						{ data: "valueMax", defaultContent: '' },
-						{ data: "valueMin", defaultContent: '' },
 						{ data: "valueType", defaultContent: '' },
 						{ data: "ipAddress", defaultContent: '' },
 						{ data: "protocolInfo", defaultContent: '' },
@@ -89,8 +87,6 @@
 					<tr>
 					    <th>아이디</th>
 						<th>센서명</th>
-					    <th>최대값</th>
-					    <th>최소값</th>
 					    <th>값 타입</th>
 					    <th>IP</th>
 					    <th>프로토콜</th>

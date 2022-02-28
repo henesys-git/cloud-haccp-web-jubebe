@@ -51,15 +51,4 @@ public class SensorService {
 		
 		return sensor;
 	}
-	
-	public boolean judgeValue(Sensor sensor, double value) {
-		double min = sensor.getValueMin();
-		double max = sensor.getValueMax();
-		
-		if( value < min || value > max ) {
-			return false;
-		}
-		
-		return true;
-	}
 }
