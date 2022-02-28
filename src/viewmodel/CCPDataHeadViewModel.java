@@ -2,6 +2,7 @@ package viewmodel;
 
 public class CCPDataHeadViewModel {
 	private String sensorKey;
+	private String sensorName;
 	private String processName;
 	private String productName;
 	private String createTime;
@@ -11,35 +12,41 @@ public class CCPDataHeadViewModel {
 	public String getSensorKey() {
 		return sensorKey;
 	}
-	public void setSensorKey(String sensorKey) {
-		this.sensorKey = sensorKey;
+	public String getSensorName() {
+		return sensorName;
 	}
 	public String getProcessName() {
 		return processName;
 	}
-	public void setProcessName(String processName) {
-		this.processName = processName;
-	}
 	public String getProductName() {
 		return productName;
-	}
-	public void setProductName(String productName) {
-		this.productName = productName;
 	}
 	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
 	public String getJudge() {
 		return judge;
 	}
-	public void setJudge(String judge) {
-		this.judge = judge;
-	}
 	public String getImprovementCompletion() {
 		return improvementCompletion;
+	}
+	public void setSensorKey(String sensorKey) {
+		this.sensorKey = sensorKey;
+	}
+	public void setSensorName(String sensorName) {
+		this.sensorName = sensorName;
+	}
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	public void setJudge(String judge) {
+		this.judge = judge;
 	}
 	public void setImprovementCompletion(String improvementCompletion) {
 		this.improvementCompletion = improvementCompletion;

@@ -61,6 +61,7 @@
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
 						{ data: "processName", defaultContent: '' },
+						{ data: "sensorName", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
 						{ data: "judge", defaultContent: '' },
@@ -203,6 +204,7 @@
 					<tr>
 					    <th>묶음값</th>
 					    <th>공정</th>
+					    <th>센서명</th>
 					    <th>제품</th>
 					    <th>생성시간</th>
 					    <th>적/부</th>

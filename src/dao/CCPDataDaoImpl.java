@@ -73,6 +73,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("SELECT\n")
 					.append("	A.sensor_key,\n")
 					.append("	C.code_name AS process_name,\n")
+					.append("	B.sensor_name,\n")
 					.append("	D.product_name,\n")
 					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
 					.append("	(\n")
@@ -228,6 +229,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		
 		cvm.setSensorKey(rs.getString("sensor_key"));
 		cvm.setProcessName(rs.getString("process_name"));
+		cvm.setSensorName(rs.getString("sensor_name"));
 		cvm.setProductName(rs.getString("product_name"));
 		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setJudge(rs.getString("judge"));
