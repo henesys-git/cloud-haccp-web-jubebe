@@ -53,7 +53,6 @@
 			initModal();
 			
 			$('#insertModal').modal('show');
-			$('.modal-title').text('등록');
 			
 			$('#insert-btn').off().click(function() {
 				var id = $('#user-id').val();
@@ -242,7 +241,7 @@
     <!-- Modal content-->  
     <div class="modal-content">  
       <div class="modal-header">
-        <h4 class="modal-title">수정</h4>  
+        <h4 class="modal-title">등록</h4>  
       </div>  
       <div class="modal-body">
       	<label for="basic-url">아이디</label>
@@ -278,7 +277,7 @@
     <!-- Modal content-->  
     <div class="modal-content">  
       <div class="modal-header">
-        <h4 class="modal-title"></h4>  
+        <h4 class="modal-title">수정</h4>  
       </div>  
       <div class="modal-body">
       	<label for="basic-url">아이디</label>
