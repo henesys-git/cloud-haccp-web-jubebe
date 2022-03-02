@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
 import model.ChecklistInfo;
-import model.Product;
 
 public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	
@@ -60,7 +59,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
-				.append("FROM product	\n")
+				.append("FROM checklist_info	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
@@ -133,6 +132,9 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	@Override
 	public boolean update(Connection conn, ChecklistInfo clInfo) {
 		try {
+			
+			String tenantId = JDBCConnectionPool.getTenantId(conn);
+			
 			String sql = new StringBuilder()
 					.append("INSERT INTO checklist_info (\n")
 					.append("	tenant_id, \n")
@@ -144,10 +146,10 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 					.append(") VALUES(\n")
 					.append("	?, \n")
 					.append("	?, \n")
-					.append("	(SELECT MAX(revision_no) \n")
-					.append("	 FROM checklist_info \n")
-					.append("	 WHERE tenant_id = ? \n")
-					.append("	   AND checklist_id = ?), \n")
+					.append("	(SELECT * FROM (SELECT MAX(revision_no) + 1 AS next_rev_no\n")
+					.append("	 			   FROM checklist_info \n")
+					.append("	 			   WHERE tenant_id = '" + tenantId + "' \n")
+					.append("	   				 AND checklist_id = '" + clInfo.getChecklistId() + "') AS c), \n")
 					.append("	?, \n")
 					.append("	?, \n")
 					.append("	?\n")
@@ -156,13 +158,11 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
-			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(1, tenantId);
 			ps.setString(2, clInfo.getChecklistId());
-			ps.setString(3, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(4, clInfo.getChecklistId());
-			ps.setString(5, clInfo.getChecklistName());
-			ps.setString(6, clInfo.getImagePath());
-			ps.setString(7, clInfo.getMetaDataFilePath());
+			ps.setString(3, clInfo.getChecklistName());
+			ps.setString(4, clInfo.getImagePath());
+			ps.setString(5, clInfo.getMetaDataFilePath());
 			
 	        int i = ps.executeUpdate();
 
@@ -192,7 +192,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			
 			int i = stmt.executeUpdate(sql);
 
-	        if(i == 1) {
+	        if(i > 0) {
 	        	return true;
 	        }
 

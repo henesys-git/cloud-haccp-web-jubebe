@@ -12,34 +12,39 @@
 		let mainTable;
 		
 	    async function initTable() {
-	    	var products = new Product();
-	    	var productsList = await products.getProducts();
+	    	var clInfo = new ChecklistInfo();
+	    	var clList = await clInfo.getAll();
 	    	
 		    var customOpts = {
-					data : productsList,
+					data : clList,
 					pageLength: 10,
 					columns: [
-						{ data: "productId", defaultContent: '' },
-						{ data: "productName", defaultContent: '' }
+						{ data: "checklistId", defaultContent: '' },
+						{ data: "revisionNo", defaultContent: '' },
+						{ data: "checklistName", defaultContent: '' },
+						{ data: "imagePath", defaultContent: '' },
+						{ data: "metaDataFilePath", defaultContent: '' }
 			        ]
 			}
 					
-			mainTable = $('#productTable').DataTable(
+			mainTable = $('#checklistInfoTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
 	    
 	    async function refreshMainTable() {
-	    	var products = new Product();
-	    	var productsList = await products.getProducts();
+	    	var clInfo = new ChecklistInfo();
+	    	var clList = await clInfo.getAll();
 	    	
-    		mainTable.clear().rows.add(productsList).draw();
+    		mainTable.clear().rows.add(clList).draw();
 		}
 	    
 	    var initModal = function () {
-	    	$('#product-id').prop('disabled', false);
-	    	$('#product-id').val('');
-	    	$('#product-name').val('');
+	    	$('#checklist-id').prop('disabled', false);
+	    	$('#checklist-id').val('');
+	    	$('#checklist-name').val('');
+	    	$('#image-path').val('');
+	    	$('#metadata-file-path').val('');
 	    };
 	     
 		initTable();
@@ -52,25 +57,37 @@
 			$('.modal-title').text('등록');
 			
 			$('#save').off().click(function() {
-				var id = $('#product-id').val();
-				var name = $('#product-name').val();
+				var id = $('#checklist-id').val();
+				var name = $('#checklist-name').val();
+				var imagePath = $('#image-path').val();
+				var metaDataFilePath = $('#metadata-file-path').val();
 				
 				if(id === '') {
-					alert('제품아이디를 입력해주세요');
+					alert('선행요건 아이디를 입력해주세요');
 					return false;
 				}
 				if(name === '') {
-					alert('제품명을 입력해주세요');
+					alert('선행요건 명을 입력해주세요');
+					return false;
+				}
+				if(imagePath === '') {
+					alert('이미지 경로를 입력해주세요');
+					return false;
+				}
+				if(metaDataFilePath === '') {
+					alert('메타데이터 경로를 입력해주세요');
 					return false;
 				}
 				
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/product",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: {
 		            	"type" : "insert",
 		            	"id" : id, 
-		            	"name" : name 
+		            	"name" : name, 
+		            	"imagePath" : imagePath, 
+		            	"metaDataFilePath" : metaDataFilePath
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
@@ -92,26 +109,30 @@
 			var row = mainTable.rows( '.selected' ).data();
 			
 			if(row.length == 0) {
-				alert('수정할 제품을 선택해주세요.');
+				alert('수정할 선행요건을 선택해주세요.');
 				return false;
 			}
 			
 			$('#myModal').modal('show');
 			$('.modal-title').text('수정');
 			
-			$('#product-id').val(row[0].productId);
-			$('#product-name').val(row[0].productName);
+			$('#checklist-id').val(row[0].checklistId);
+			$('#checklist-name').val(row[0].checklistName);
+			$('#image-path').val(row[0].imagePath);
+			$('#metadata-file-path').val(row[0].metaDataFilePath);
 			
-			$('#product-id').prop('disabled', true);
+			$('#checklist-id').prop('disabled', true);
 			
 			$('#save').off().click(function() {
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/product",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: { 
 	            		"type" : "update",
-	            		"id" : row[0].productId,
-	            		"name" : $('#product-name').val()
+	            		"id" : row[0].checklistId,
+	            		"name" : $('#checklist-name').val(),
+	            		"imagePath" : $('#image-path').val(),
+	            		"metaDataFilePath" : $('#metadata-file-path').val(),
 		           	},
 		            success: function (deleteResult) {
 		            	if(deleteResult == 'true') {
@@ -138,12 +159,13 @@
 			if(confirm('삭제하시겠습니까?')) {
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/product",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: { 
-		            		"type" : "delete",
-		            		"id" : row[0].productId 
-		            	  },
+	            		"type" : "delete",
+	            		"id" : row[0].checklistId 
+		            },
 		            success: function (deleteResult) {
+		            	console.log(deleteResult);
 		            	if(deleteResult == 'true') {
 		            		alert('삭제되었습니다.');
 		            		refreshMainTable();
@@ -200,14 +222,17 @@
           </div>
           <div class="card-body" id="MainInfo_List_contents">
           	<table class='table table-bordered nowrap table-hover' 
-				   id="productTable" style="width:100%">
+				   id="checklistInfoTable" style="width:100%">
 				<thead>
 					<tr>
 					    <th>선행요건아이디</th>
+					    <th>수정이력번호</th>
 					    <th>선행요건명</th>
-ㅍ					</tr>
+					    <th>이미지경로</th>
+					    <th>메타데이터경로</th>
+					</tr>
 				</thead>
-				<tbody id="productTableBody">		
+				<tbody id="checklistInfoTableBody">		
 				</tbody>
 			</table>
           </div> 
@@ -230,13 +255,21 @@
         <h4 class="modal-title"></h4>  
       </div>  
       <div class="modal-body">
-      	<label for="basic-url">선행요건아이디</label>
+      	<label for="checklist-id">선행요건아이디</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="product-id">
+		  <input type="text" class="form-control" id="checklist-id">
 		</div>
-      	<label for="basic-url">선행요건명</label>
+      	<label for="checklist-name">선행요건명</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="product-name">
+		  <input type="text" class="form-control" id="checklist-name">
+		</div>
+      	<label for="image-path">이미지경로</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="image-path">
+		</div>
+      	<label for="metadata-file-path">메타데이터경로</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="metadata-file-path">
 		</div>
       </div>
       <div class="modal-footer">  

@@ -501,6 +501,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/product.js"></script>
 	<!-- User -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/user.js"></script>
+	<!-- ChecklistInfo -->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/ChecklistInfo.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */

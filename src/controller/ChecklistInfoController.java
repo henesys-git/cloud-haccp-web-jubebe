@@ -34,17 +34,17 @@ public class ChecklistInfoController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
 		
-		String checklistId = req.getParameter("checklistId");
+		String id = req.getParameter("id");
 		
 		ChecklistInfoService cldService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), bizNo);
 		
 		String result = "";
 		
-		if(checklistId.equals("all")) {
+		if(id.equals("all")) {
 			List<ChecklistInfo> list = cldService.selectAll();
 			result = FormatTransformer.toJson(list);
 		} else {
-			ChecklistInfo clInfo = cldService.select(checklistId);
+			ChecklistInfo clInfo = cldService.select(id);
 			result = FormatTransformer.toJson(clInfo);
 		}
 		
@@ -70,7 +70,7 @@ public class ChecklistInfoController extends HttpServlet {
 		}
 	}
 	
-	public void insert(HttpServletRequest req, HttpServletResponse res) {
+	private void insert(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
@@ -95,7 +95,7 @@ public class ChecklistInfoController extends HttpServlet {
 		}
 	}
 
-	public void update(HttpServletRequest req, HttpServletResponse res) {
+	private void update(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
@@ -119,7 +119,7 @@ public class ChecklistInfoController extends HttpServlet {
 		}
 	}
 	
-	public void delete(HttpServletRequest req, HttpServletResponse res) {
+	private void delete(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
