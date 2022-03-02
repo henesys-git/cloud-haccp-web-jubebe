@@ -37,6 +37,7 @@
 		}
 	    
 	    var initModal = function () {
+	    	$('#product-id').prop('disabled', false);
 	    	$('#product-id').val('');
 	    	$('#product-name').val('');
 	    };
@@ -66,9 +67,13 @@
 				$.ajax({
 		            type: "POST",
 		            url: "<%=Config.this_SERVER_path%>/product",
-		            data: {"id" : id, "name" : name },
+		            data: {
+		            	"type" : "insert",
+		            	"id" : id, 
+		            	"name" : name 
+		            },
 		            success: function (insertResult) {
-		            	if(insertResult== 'true') {
+		            	if(insertResult == 'true') {
 		            		alert('등록되었습니다.');
 		            		$('#myModal').modal('hide');
 		            		refreshMainTable();
@@ -99,17 +104,17 @@
 			
 			$('#product-id').prop('disabled', true);
 			
-			$('#save').click(function() {
+			$('#save').off().click(function() {
 				$.ajax({
 		            type: "POST",
 		            url: "<%=Config.this_SERVER_path%>/product",
 		            data: { 
-		            		"type" : "update",
-		            		"id" : row[0].productId,
-		            		"name" : $('#product-name').val()
-		            	  },
+	            		"type" : "update",
+	            		"id" : row[0].productId,
+	            		"name" : $('#product-name').val()
+		           	},
 		            success: function (deleteResult) {
-		            	if(deleteResult== 'true') {
+		            	if(deleteResult == 'true') {
 		            		alert('수정되었습니다.');
 		            		$('#myModal').modal('hide');
 		            		refreshMainTable();
@@ -139,7 +144,7 @@
 		            		"id" : row[0].productId 
 		            	  },
 		            success: function (deleteResult) {
-		            	if(deleteResult== 'true') {
+		            	if(deleteResult == 'true') {
 		            		alert('삭제되었습니다.');
 		            		refreshMainTable();
 		            	} else {
@@ -166,10 +171,9 @@
       <div class="col-sm-6">
       	<div class="float-sm-right">
       	  <button type="button" class="btn btn-info" id="insert">
-<!--       	  <button type="button" class="btn btn-info" id="insert" data-toggle="modal" data-target="#myModal"> -->
       	  	등록
       	  </button>
-      	  <button type="button" class="btn btn-success" id="update" data-toggle="modal" data-target="#myModal">
+      	  <button type="button" class="btn btn-success" id="update">
       	  	수정
       	  </button>
       	  <button type="button" class="btn btn-danger" id="delete">
