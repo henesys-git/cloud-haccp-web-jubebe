@@ -44,10 +44,10 @@ public class CCPDataController extends HttpServlet {
 		
 		String sensorKey = req.getParameter("sensorKey");
 		String createTime = req.getParameter("createTime");
-		String improvementCode = req.getParameter("improvementCode");
+		String improvementAction = req.getParameter("improvementAction");
 		
 		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
-		Boolean fixed = ccpService.fixLimitOut(sensorKey, createTime, improvementCode);
+		Boolean fixed = ccpService.fixLimitOut(sensorKey, createTime, improvementAction);
 		String result = fixed.toString();
 		
 		res.setContentType("text/html; charset=UTF-8");
