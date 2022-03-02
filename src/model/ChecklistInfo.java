@@ -7,6 +7,32 @@ public class ChecklistInfo {
 	private String imagePath;
 	private String metaDataFilePath;
 	
+	public ChecklistInfo() {}
+	
+	public ChecklistInfo(String checklistId, 
+			int revisionNo, 
+			String checklistName, 
+			String imagePath,
+			String metaDataFilePath) {
+		super();
+		this.checklistId = checklistId;
+		this.revisionNo = revisionNo;
+		this.checklistName = checklistName;
+		this.imagePath = imagePath;
+		this.metaDataFilePath = metaDataFilePath;
+	}
+
+	public ChecklistInfo(String checklistId, 
+			String checklistName, 
+			String imagePath,
+			String metaDataFilePath) {
+		super();
+		this.checklistId = checklistId;
+		this.checklistName = checklistName;
+		this.imagePath = imagePath;
+		this.metaDataFilePath = metaDataFilePath;
+	}
+	
 	public String getChecklistId() {
 		return checklistId;
 	}

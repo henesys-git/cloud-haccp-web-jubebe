@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.Connection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +21,21 @@ public class ChecklistInfoService {
 		this.bizNo = bizNo;
 	}
 	
+	public List<ChecklistInfo> selectAll() {
+		List<ChecklistInfo> checklistInfoList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			checklistInfoList = clDao.selectAll(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return checklistInfoList;
+	}
+	
 	public ChecklistInfo select(String checklistId) {
 		ChecklistInfo clInfo = null;
 		
@@ -33,5 +49,44 @@ public class ChecklistInfoService {
 		}
 		
 		return clInfo;
+	}
+	
+	public boolean insert(ChecklistInfo clInfo) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return clDao.insert(conn, clInfo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	public boolean update(ChecklistInfo clInfo) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return clDao.update(conn, clInfo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	public boolean delete(String checklistId) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return clDao.delete(conn, checklistId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
 	}
 }

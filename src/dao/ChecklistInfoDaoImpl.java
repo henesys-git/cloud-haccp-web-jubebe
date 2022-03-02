@@ -4,55 +4,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
 import model.ChecklistInfo;
+import model.Product;
 
 public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	
-//	@Override
-//	public int insert(Connection conn, ChecklistData clData) {
-//		
-//	    try {
-//	    	String sql = new StringBuilder()
-//	    			.append("INSERT INTO checklist_data (\n")
-//	    			.append("	checklist_id,\n")
-//	    			.append("	seq_no,\n")
-//	    			.append("	revision_no,\n")
-//	    			.append("	check_data\n")
-//	    			.append(")\n")
-//	    			.append("VALUES (\n")
-//	    			.append("	?,\n")
-//	    			.append("	(SELECT * \n")
-//	    			.append("	FROM (\n")
-//	    			.append("		SELECT IFNULL((MAX(seq_no) + 1), 0) \n")
-//	    			.append("		FROM checklist_data \n")
-//	    			.append("		WHERE checklist_id = ?\n")
-//	    			.append("	) AS A),\n")
-//	    			.append("	?,\n")
-//	    			.append("	?\n")
-//	    			.append(");\n")
-//	    			.toString();
-//	    	
-//			PreparedStatement ps = conn.prepareStatement(sql);
-//			
-//			ps.setString(1, clData.getChecklistId());
-//			ps.setString(2, clData.getChecklistId());
-//			ps.setInt(3, clData.getRevisionNo());
-//			ps.setString(4, clData.getCheckData());
-//			
-//	        int i = ps.executeUpdate();
-//
-//	        if(i == 1) {
-//	        	return 1;
-//	        }
-//
-//	    } catch (SQLException ex) {
-//	        ex.printStackTrace();
-//	    }
-//
-//	    return -1;
-//	};
+	private Statement stmt;
+	private ResultSet rs;
+	
+	static final Logger logger = 
+			Logger.getLogger(ChecklistInfoDaoImpl.class.getName());
 	
 	@Override
 	public ChecklistInfo select(Connection conn, String checklistId) {
@@ -67,7 +35,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, checklistId);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			ChecklistInfo clInfo = new ChecklistInfo();
 					
@@ -84,34 +52,156 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 		return null;
 	}
 	
-//	@Override
-//	public List<ChecklistData> selectAll(Connection conn, String checklistId) {
-//		try {
-//			Statement stmt = conn.createStatement();
-//			
-//			String sql = new StringBuilder()
-//				.append("SELECT *									\n")
-//				.append("FROM checklist_data						\n")
-//				.append("WHERE checklist_id = '" + checklistId + "'	\n")
-//				.toString();
-//			
-//			ResultSet rs = stmt.executeQuery(sql);
-//			
-//			List<ChecklistData> clDataList = new ArrayList<ChecklistData>();
-//			
-//			while(rs.next()) {
-//				ChecklistData data = extractFromResultSet(rs);
-//				clDataList.add(data);
-//			}
-//			
-//			return clDataList;
-//			
-//		} catch (SQLException ex) {
-//			ex.printStackTrace();
-//		}
-//		
-//		return null;
-//	}
+	@Override
+	public List<ChecklistInfo> selectAll(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT * 		\n")
+				.append("FROM product	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ChecklistInfo> list = new ArrayList<ChecklistInfo>();
+			
+			while(rs.next()) {
+				ChecklistInfo data = extractFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public boolean insert(Connection conn, ChecklistInfo clInfo) {
+		try {
+			String sql = new StringBuilder()
+					.append("INSERT INTO checklist_info (\n")
+					.append("	tenant_id, \n")
+					.append("	checklist_id, \n")
+					.append("	revision_no, \n")
+					.append("	checklist_name, \n")
+					.append("	image_path, \n")
+					.append("	meta_data_file_path\n")
+					.append(") VALUES(\n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	?\n")
+					.append(");\n")
+					.toString();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(2, clInfo.getChecklistId());
+			ps.setInt(3, clInfo.getRevisionNo());
+			ps.setString(4, clInfo.getChecklistName());
+			ps.setString(5, clInfo.getImagePath());
+			ps.setString(6, clInfo.getMetaDataFilePath());
+			
+	        int i = ps.executeUpdate();
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
+	@Override
+	public boolean update(Connection conn, ChecklistInfo clInfo) {
+		try {
+			String sql = new StringBuilder()
+					.append("INSERT INTO checklist_info (\n")
+					.append("	tenant_id, \n")
+					.append("	checklist_id, \n")
+					.append("	revision_no, \n")
+					.append("	checklist_name, \n")
+					.append("	image_path, \n")
+					.append("	meta_data_file_path\n")
+					.append(") VALUES(\n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	(SELECT MAX(revision_no) \n")
+					.append("	 FROM checklist_info \n")
+					.append("	 WHERE tenant_id = ? \n")
+					.append("	   AND checklist_id = ?), \n")
+					.append("	?, \n")
+					.append("	?, \n")
+					.append("	?\n")
+					.append(");\n")
+					.toString();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(2, clInfo.getChecklistId());
+			ps.setString(3, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(4, clInfo.getChecklistId());
+			ps.setString(5, clInfo.getChecklistName());
+			ps.setString(6, clInfo.getImagePath());
+			ps.setString(7, clInfo.getMetaDataFilePath());
+			
+	        int i = ps.executeUpdate();
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
+	@Override
+	public boolean delete(Connection conn, String checklistId) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("DELETE FROM checklist_info\n")
+					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND checklist_id='" + checklistId + "';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
 	
 	private ChecklistInfo extractFromResultSet(ResultSet rs) throws SQLException {
 	    ChecklistInfo clInfo = new ChecklistInfo();
