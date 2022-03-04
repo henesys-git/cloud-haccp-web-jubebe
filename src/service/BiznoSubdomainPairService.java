@@ -27,7 +27,8 @@ public class BiznoSubdomainPairService {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
-		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+//		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		    try { conn.close(); } catch (Exception e) { e.printStackTrace(); }
 		}
 		
 		return bsPair.getBizNo();

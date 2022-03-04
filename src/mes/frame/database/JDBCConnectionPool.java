@@ -70,6 +70,7 @@ public class JDBCConnectionPool {
 	           conn.setAutoCommit (true);
 	      } catch ( Exception e ) {
 	    	  logger.error("Master DB Connection ERROR : " + e.getMessage());
+	    	  e.printStackTrace();
 	      }
 	      return conn;
 	}

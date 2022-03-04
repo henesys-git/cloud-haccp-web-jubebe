@@ -12,38 +12,39 @@
 		let mainTable;
 		
 	    async function initTable() {
-	    	var user = new HENESYS_API.User();
-	    	var userList = await user.getUsers();
+	    	var clInfo = new ChecklistInfo();
+	    	var clList = await clInfo.getAll();
 	    	
 		    var customOpts = {
-					data : userList,
+					data : clList,
 					pageLength: 10,
 					columns: [
-						{ data: "userId", defaultContent: '' },
-						{ data: "userName", defaultContent: '' },
-						{ data: "authority", defaultContent: '' }
+						{ data: "checklistId", defaultContent: '' },
+						{ data: "revisionNo", defaultContent: '' },
+						{ data: "checklistName", defaultContent: '' },
+						{ data: "imagePath", defaultContent: '' },
+						{ data: "metaDataFilePath", defaultContent: '' }
 			        ]
 			}
 					
-			mainTable = $('#userTable').DataTable(
+			mainTable = $('#checklistInfoTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
 	    
 	    async function refreshMainTable() {
-	    	var user = new HENESYS_API.User();
-	    	var userList = await user.getUsers();
+	    	var clInfo = new ChecklistInfo();
+	    	var clList = await clInfo.getAll();
 	    	
-    		mainTable.clear().rows.add(userList).draw();
+    		mainTable.clear().rows.add(clList).draw();
 		}
 	    
 	    var initModal = function () {
-	    	$('#user-id').val('');
-	    	$('#user-name').val('');
-	    	$('#password').val('');
-	    	$('#authority').val('');
-	    	
-	    	$('#user-id').prop('disabled', false);
+	    	$('#checklist-id').prop('disabled', false);
+	    	$('#checklist-id').val('');
+	    	$('#checklist-name').val('');
+	    	$('#image-path').val('');
+	    	$('#metadata-file-path').val('');
 	    };
 	     
 		initTable();
@@ -52,45 +53,46 @@
 		$('#insert').click(function() {
 			initModal();
 			
-			$('#insertModal').modal('show');
+			$('#myModal').modal('show');
+			$('.modal-title').text('등록');
 			
-			$('#insert-btn').off().click(function() {
-				var id = $('#user-id').val();
-				var name = $('#user-name').val();
-				var password = $('#password').val();
-				var authority = $('#authority').val();
+			$('#save').off().click(function() {
+				var id = $('#checklist-id').val();
+				var name = $('#checklist-name').val();
+				var imagePath = $('#image-path').val();
+				var metaDataFilePath = $('#metadata-file-path').val();
 				
 				if(id === '') {
-					alert('사용자 아이디를 입력해주세요');
+					alert('선행요건 아이디를 입력해주세요');
 					return false;
 				}
 				if(name === '') {
-					alert('사용자 이름을 입력해주세요');
+					alert('선행요건 명을 입력해주세요');
 					return false;
 				}
-				if(password === '') {
-					alert('비밀번호를 입력해주세요');
+				if(imagePath === '') {
+					alert('이미지 경로를 입력해주세요');
 					return false;
 				}
-				if(authority === '') {
-					alert('권한을 선택해주세요');
+				if(metaDataFilePath === '') {
+					alert('메타데이터 경로를 입력해주세요');
 					return false;
 				}
 				
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/user",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: {
 		            	"type" : "insert",
 		            	"id" : id, 
-		            	"name" : name,
-		            	"password" : password,
-		            	"authority" : authority
+		            	"name" : name, 
+		            	"imagePath" : imagePath, 
+		            	"metaDataFilePath" : metaDataFilePath
 		            },
 		            success: function (insertResult) {
-		            	if(insertResult== 'true') {
+		            	if(insertResult == 'true') {
 		            		alert('등록되었습니다.');
-		            		$('#insertModal').modal('hide');
+		            		$('#myModal').modal('hide');
 		            		refreshMainTable();
 		            	} else {
 		            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
@@ -107,29 +109,35 @@
 			var row = mainTable.rows( '.selected' ).data();
 			
 			if(row.length == 0) {
-				alert('수정할 사용자를 선택해주세요.');
+				alert('수정할 선행요건을 선택해주세요.');
 				return false;
 			}
 			
-			$('#updateModal').modal('show');
+			$('#myModal').modal('show');
+			$('.modal-title').text('수정');
 			
-			$('#user-id-update').val(row[0].userId);
-			$('#user-name-update').val(row[0].userName);
-			$('#authority-update').val(row[0].authority);
+			$('#checklist-id').val(row[0].checklistId);
+			$('#checklist-name').val(row[0].checklistName);
+			$('#image-path').val(row[0].imagePath);
+			$('#metadata-file-path').val(row[0].metaDataFilePath);
 			
-			$('#update-btn').click(function() {
+			$('#checklist-id').prop('disabled', true);
+			
+			$('#save').off().click(function() {
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/user",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: { 
-	            		"type" : "updateAuthority",
-	            		"id" : row[0].userId,
-	            		"authority" : $('#authority-update').val()
-	            	},
-		            success: function (updateResult) {
-		            	if(updateResult== 'true') {
+	            		"type" : "update",
+	            		"id" : row[0].checklistId,
+	            		"name" : $('#checklist-name').val(),
+	            		"imagePath" : $('#image-path').val(),
+	            		"metaDataFilePath" : $('#metadata-file-path').val(),
+		           	},
+		            success: function (deleteResult) {
+		            	if(deleteResult == 'true') {
 		            		alert('수정되었습니다.');
-		            		$('#updateModal').modal('hide');
+		            		$('#myModal').modal('hide');
 		            		refreshMainTable();
 		            	} else {
 		            		alert('수정 실패했습니다, 관리자에게 문의해주세요.');
@@ -144,20 +152,21 @@
 			var row = mainTable.rows( '.selected' ).data();
 			
 			if(row.length == 0) {
-				alert('삭제할 사용자를 선택해주세요.');
+				alert('삭제할 제품을 선택해주세요.');
 				return false;
 			}
 			
 			if(confirm('삭제하시겠습니까?')) {
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/user",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
 		            data: { 
 	            		"type" : "delete",
-	            		"id" : row[0].userId 
-		           	},
+	            		"id" : row[0].checklistId 
+		            },
 		            success: function (deleteResult) {
-		            	if(deleteResult== 'true') {
+		            	console.log(deleteResult);
+		            	if(deleteResult == 'true') {
 		            		alert('삭제되었습니다.');
 		            		refreshMainTable();
 		            	} else {
@@ -178,7 +187,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-        	사용자 관리
+        	선행요건 관리
         </h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
@@ -207,21 +216,23 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
           	<h3 class="card-title">
-          		<i class="fas fa-edit"></i>
-          		사용자 목록
+          		<i class="fas fa-edit" id="InfoContentTitle"></i>
+          		선행요건 목록
           	</h3>
           </div>
-          <div class="card-body">
+          <div class="card-body" id="MainInfo_List_contents">
           	<table class='table table-bordered nowrap table-hover' 
-				   id="userTable" style="width:100%">
+				   id="checklistInfoTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>아이디</th>
-					    <th>이름</th>
-					    <th>권한</th>
+					    <th>선행요건아이디</th>
+					    <th>수정이력번호</th>
+					    <th>선행요건명</th>
+					    <th>이미지경로</th>
+					    <th>메타데이터경로</th>
 					</tr>
 				</thead>
-				<tbody id="userTableBody">		
+				<tbody id="checklistInfoTableBody">		
 				</tbody>
 			</table>
           </div> 
@@ -235,66 +246,34 @@
 <!-- /.content -->
 
 <!-- Modal -->  
-<div class="modal fade" id="insertModal" role="dialog">  
+<div class="modal fade" id="myModal" role="dialog">  
   <div class="modal-dialog">
     
     <!-- Modal content-->  
     <div class="modal-content">  
       <div class="modal-header">
-        <h4 class="modal-title">등록</h4>  
+        <h4 class="modal-title"></h4>  
       </div>  
       <div class="modal-body">
-      	<label for="basic-url">아이디</label>
+      	<label for="checklist-id">선행요건아이디</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="user-id">
+		  <input type="text" class="form-control" id="checklist-id">
 		</div>
-      	<label for="basic-url">이름</label>
+      	<label for="checklist-name">선행요건명</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="user-name">
+		  <input type="text" class="form-control" id="checklist-name">
 		</div>
-      	<label for="basic-url">비밀번호</label>
+      	<label for="image-path">이미지경로</label>
 		<div class="input-group mb-3">
-		  <input type="password" class="form-control" id="password">
+		  <input type="text" class="form-control" id="image-path">
 		</div>
-      	<label for="basic-url">권한</label>
+      	<label for="metadata-file-path">메타데이터경로</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="authority">
+		  <input type="text" class="form-control" id="metadata-file-path">
 		</div>
-      </div>  
+      </div>
       <div class="modal-footer">  
-        <button type="button" class="btn btn-primary" id="insert-btn">저장</button>  
-        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
-      </div>  
-    </div>  
-      
-  </div>  
-</div>
-
-<!-- Update Modal -->  
-<div class="modal fade" id="updateModal" role="dialog">  
-  <div class="modal-dialog">
-    
-    <!-- Modal content-->  
-    <div class="modal-content">  
-      <div class="modal-header">
-        <h4 class="modal-title">수정</h4>  
-      </div>  
-      <div class="modal-body">
-      	<label for="basic-url">아이디</label>
-		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="user-id-update" disabled>
-		</div>
-      	<label for="basic-url">이름</label>
-		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="user-name-update" disabled>
-		</div>
-      	<label for="basic-url">권한</label>
-		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="authority-update">
-		</div>
-      </div>  
-      <div class="modal-footer">  
-        <button type="button" class="btn btn-primary" id="update-btn">저장</button>  
+        <button type="button" class="btn btn-primary" id="save">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
       </div>  
     </div>  
