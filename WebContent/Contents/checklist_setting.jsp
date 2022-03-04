@@ -7,9 +7,10 @@
 
 <script type="text/javascript">
     
+    
+    let mainTable;
+    
 	$(document).ready(function () {
-		
-		let mainTable;
 		
 	    async function initTable() {
 	    	var clInfo = new ChecklistInfo();
@@ -23,7 +24,16 @@
 						{ data: "revisionNo", defaultContent: '' },
 						{ data: "checklistName", defaultContent: '' },
 						{ data: "imagePath", defaultContent: '' },
-						{ data: "metaDataFilePath", defaultContent: '' }
+						{ data: "metaDataFilePath", defaultContent: '' },
+						{ data: "", defaultContent: '' }
+			        ],
+			        'columnDefs': [
+			        	{
+							'targets': [5],
+				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
+				      			$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">알람주기 설정</button>'); 
+				   			}
+						}
 			        ]
 			}
 					
@@ -31,6 +41,8 @@
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
+	    
+	    
 	    
 	    async function refreshMainTable() {
 	    	var clInfo = new ChecklistInfo();
@@ -177,8 +189,76 @@
 			}
 			
 		});
+		
     });
     
+	//점검표 알람 정보 수정
+	function modifyAlarmInfo(obj) {
+		
+		var row = mainTable.rows( '.selected' ).data();
+		
+		var initModal2 = function () {
+	    	$('#checklist-id-alarm').prop('disabled', false);
+	    	$('#checklist-id-alarm').val(row[0].checklistId);
+	    	$('#checklist-name-alarm').val(row[0].checklistName);
+	    	$('#alarm-interval-hour').val(0);
+	    	
+	    };
+		
+		initModal2();
+		
+		$('#myModal2').modal('show');
+		$('.modal-title').text('선행요건 알람 정보 수정');
+		
+		$('#save_alarm').off().click(function() {
+			var id = $('#checklist-id-alarm').val();
+			var name = $('#checklist-name-alarm').val();
+			var alarmYear = $('#alarm-interval-year').val();
+			var alarmMonth = $('#alarm-interval-month').val();
+			var alarmDay = $('#alarm-interval-day').val();
+			var alarmHour = $('#alarm-interval-hour').val();
+			
+			if(id === '') {
+				alert('선행요건 아이디를 입력해주세요');
+				return false;
+			}
+			if(name === '') {
+				alert('선행요건 명을 입력해주세요');
+				return false;
+			}
+			if(alarmHour <= 0) {
+				alert('주기값이 입력되지 않았습니다.');
+				return false;
+			}
+			
+			var check = confirm('해당 선행요건 알람 정보를 수정하시겠습니까?');
+			
+			if(check) {
+			
+			$.ajax({
+	            type: "POST",
+	            url: "<%=Config.this_SERVER_path%>/checklist-info",
+	            data: {
+	            	"type" : "alarm",
+	            	"id" : id, 
+	            	"name" : name, 
+	            	"alarmInterval" : alarmHour
+	            },
+	            success: function (alarmResult) {
+	            	if(alarmResult == 'true') {
+	            		alert('선행요건 정보가 수정되었습니다.');
+	            		$('#myModal2').modal('hide');
+	            		refreshMainTable();
+	            	} else {
+	            		alert('선행요건 수정에 실패했습니다, 관리자에게 문의해주세요.');
+	            	}
+	            }
+	        });
+		   }
+		});
+		
+	}
+	
 </script>
 
 <!-- Content Header (Page header) -->
@@ -230,6 +310,7 @@
 					    <th>선행요건명</th>
 					    <th>이미지경로</th>
 					    <th>메타데이터경로</th>
+					    <th></th>
 					</tr>
 				</thead>
 				<tbody id="checklistInfoTableBody">		
@@ -274,6 +355,51 @@
       </div>
       <div class="modal-footer">  
         <button type="button" class="btn btn-primary" id="save">저장</button>  
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+      </div>  
+    </div>  
+      
+  </div>  
+</div>
+
+<!-- alarm modal -->
+<div class="modal fade" id="myModal2" role="dialog">  
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->  
+    <div class="modal-content">  
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>  
+      </div>  
+      <div class="modal-body">
+      	<label for="checklist-id-alarm">선행요건아이디</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="checklist-id-alarm">
+		</div>
+      	<label for="checklist-name-alarm">선행요건명</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="checklist-name-alarm">
+		</div>
+      	<label for="alarm-interval">알람주기</label>
+		<div class="input-group mb-3">
+		  <div class="alarm-interval" id ="alarm_interval">
+		  	<h6>작성 후</h6>
+		  </div>
+		</div>
+		<div class="input-group mb-3" style = "width:50%;">
+		  <input type="number" class="form-control" id="alarm-interval-year" min="1" max ="99"><label for="alarm-interval-year">년</label> &nbsp;&nbsp;
+		  <input type="number" class="form-control" id="alarm-interval-month" min="1" max ="11"><label for="alarm-interval-month">월</label> 
+		</div> 
+		<div class="input-group mb-3" style = "width:50%;">
+		  <input type="number" class="form-control" id="alarm-interval-day" min="1" max ="29"><label for="alarm-interval-day">일</label> &nbsp;&nbsp;
+		  <input type="number" class="form-control" id="alarm-interval-hour" min="1" max ="23"><label for="alarm-interval-hour">시간</label>
+		</div>
+		<div class="input-group mb-3">
+			<h6>마다 알람이 전송됩니다.</h6>
+		</div>
+      </div>
+      <div class="modal-footer">  
+        <button type="button" class="btn btn-primary" id="save_alarm">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
       </div>  
     </div>  

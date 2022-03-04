@@ -11,6 +11,15 @@ public class ChecklistAlarm {
 	private String alarmDay;
 	private String alarmHour;
 	
+	public ChecklistAlarm() {}
+	
+	public ChecklistAlarm(String checklistId,
+			String checkInterVal) {
+		super();
+		this.checklistId = checklistId;
+		this.checkInterVal = checkInterVal;
+	}
+	
 	public String getChecklistId() {
 		return checklistId;
 	}

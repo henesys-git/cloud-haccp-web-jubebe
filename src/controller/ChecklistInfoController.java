@@ -13,7 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import dao.ChecklistAlarmDaoImpl;
 import dao.ChecklistInfoDaoImpl;
+import mes.model.ChecklistAlarm;
+import mes.service.ChecklistAlarmService;
 import model.ChecklistInfo;
 import service.ChecklistInfoService;
 import utils.FormatTransformer;
@@ -67,6 +70,10 @@ public class ChecklistInfoController extends HttpServlet {
 		
 		if(req.getParameter("type").equals("delete")) {
 			delete(req, res);
+		}
+		
+		if(req.getParameter("type").equals("alarm")) {
+			alarm(req, res);
 		}
 	}
 	
@@ -133,6 +140,29 @@ public class ChecklistInfoController extends HttpServlet {
 		try {
 			PrintWriter out = res.getWriter();
 			out.print(deleted.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void alarm(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		ChecklistAlarm clAlarm = new ChecklistAlarm(
+				req.getParameter("id"),
+				req.getParameter("alarmInterval")
+				);
+		
+		ChecklistAlarmService clService = new ChecklistAlarmService(new ChecklistAlarmDaoImpl(), tenantId);
+		Boolean alarmDoned = clService.alarm(clAlarm);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(alarmDoned.toString());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -609,7 +609,7 @@
 	     <thead>
 	     <tr>
 	     	<th>
-	       		<span>점검표 서명 미작성 목록</span>
+	       		<span>점검표 서명 미완료 목록</span>
 	       		<!-- <button class="btn btn-success" id="sulbi_edit">수정</button> -->
 	       	</th>
 	     </tr>

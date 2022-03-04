@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import mes.frame.database.JDBCConnectionPool;
 import mes.model.ChecklistAlarm;
 import mes.model.ChecklistSign;
+import model.ChecklistInfo;
 
 public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 	static final Logger logger = 
@@ -98,6 +99,71 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 		
 		return null;
 	}
+	
+	@Override
+	public boolean alarm(Connection conn, ChecklistAlarm clAlarm) {
+		try {
+			
+			String tenantId = JDBCConnectionPool.getTenantId(conn);
+			
+			String sql = new StringBuilder()
+					/*
+					.append("MERGE INTO checklist_alarm mm USING (\n")
+					.append("	SELECT	\n")
+					.append("	'" + tenantId +"' AS tenant_id, \n")
+					.append("	'" + clAlarm.getChecklistId() +"' AS checklist_id, \n")
+					.append("	'" + clAlarm.getCheckInterVal() +"' AS check_interval, \n")
+					.append("	'' AS latest_check_date \n")
+					.append("	FROM DUAL \n")
+					.append(") mQ \n")
+					.append("ON ( \n")
+					.append("	mm.checklist_id = mQ.checklist_id \n")
+					.append(") \n")
+					.append("	WHEN MATCHED THEN \n")
+					.append("	UPDATE SET \n")
+					.append("	mm.tenant_id = mQ.tenant_id, \n")
+					.append("	mm.checklist_id = mQ.checklist_id,\n")
+					.append("	mm.check_interval = mQ.check_interval, \n")
+					.append("	mm.latest_check_date = mQ.latest_check_date \n")
+					.append("	WHEN NOT MATCHED THEN \n")
+					.append("	INSERT( \n")
+					.append("	mm.tenant_id, \n")
+					.append("	mm.checklist_id,\n")
+					.append("	mm.check_interval, \n")
+					.append("	mm.latest_check_date \n")
+					.append(")\n")
+					.append("	VALUES(\n")
+					.append("	mQ.tenant_id, \n")
+					.append("	mQ.checklist_id,\n")
+					.append("	mQ.check_interval, \n")
+					.append("	'' \n")
+					.append(");\n")
+					*/
+					.append("INSERT INTO checklist_alarm (tenant_id, checklist_id, check_interval, latest_check_date) \n")
+					.append("VALUES('" + tenantId +"', '" + clAlarm.getChecklistId() +"', '" + clAlarm.getCheckInterVal() +"', '')\n")
+					.append("ON DUPLICATE KEY \n")
+					.append("UPDATE tenant_id =  '" + tenantId +"', \n")
+					.append("checklist_id =  '" + clAlarm.getChecklistId() +"', \n")
+					.append("check_interval =  '" + clAlarm.getCheckInterVal() +"', \n")
+					.append("latest_check_date =  ''	 \n")
+					
+					.toString();
+
+			Statement ps = conn.createStatement();
+			
+			int i = ps.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
 	
 	private ChecklistAlarm extractFromResultSet(ResultSet rs) throws SQLException {
 	    ChecklistAlarm clAlarm = new ChecklistAlarm();
