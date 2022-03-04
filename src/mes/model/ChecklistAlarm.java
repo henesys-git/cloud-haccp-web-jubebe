@@ -5,7 +5,11 @@ public class ChecklistAlarm {
 	private int revisionNo;
 	private String checklistName;
 	private String checkInterVal;
-	private String latestCheckDate;
+	private String timeDiff;
+	private String alarmYear;
+	private String alarmMonth;
+	private String alarmDay;
+	private String alarmHour;
 	
 	public String getChecklistId() {
 		return checklistId;
@@ -19,8 +23,20 @@ public class ChecklistAlarm {
 	public String getCheckInterVal() {
 		return checkInterVal;
 	}
-	public String getLatestCheckDate() {
-		return latestCheckDate;
+	public String getTimeDiff() {
+		return timeDiff;
+	}
+	public String getAlarmYear() {
+		return alarmYear;
+	}
+	public String getAlarmMonth() {
+		return alarmMonth;
+	}
+	public String getAlarmDay() {
+		return alarmDay;
+	}
+	public String getAlarmHour() {
+		return alarmHour;
 	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
@@ -34,14 +50,29 @@ public class ChecklistAlarm {
 	public void setCheckInterVal(String checkInterVal) {
 		this.checkInterVal = checkInterVal;
 	}
-	public void setLatestCheckDate(String latestCheckDate) {
-		this.latestCheckDate = latestCheckDate;
+	public void setLatestCheckDate(String timeDiff) {
+		this.timeDiff = timeDiff;
+	}
+	public void setAlarmYear(String alarmYear) {
+		this.alarmYear = alarmYear;
+	}
+	public void setAlarmMonth(String alarmMonth) {
+		this.alarmMonth = alarmMonth;
+	}
+	public void setAlarmDay(String alarmDay) {
+		this.alarmDay = alarmDay;
+	}
+	public void setAlarmHour(String alarmHour) {
+		this.alarmHour = alarmHour;
 	}
 	
 	@Override
 	public String toString() {
 		return "ChecklistAlarm [checklistId=" + checklistId + ", revisionNo=" + revisionNo + ", checklistName="
-				+ checklistName + ", checkInterVal=" + checkInterVal + ", latestCheckDate=" + latestCheckDate + "]";
+				+ checklistName + ", checkInterVal=" + checkInterVal + ", timeDiff=" + timeDiff + ", alarmYear="
+				+ alarmYear + ", alarmMonth=" + alarmMonth + ", alarmDay=" + alarmDay + ", alarmHour=" + alarmHour
+				+ "]";
 	}
+	
 }
 

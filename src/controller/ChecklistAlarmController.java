@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import dao.ChecklistAlarmDaoImpl;
 import mes.model.ChecklistAlarm;
+import mes.model.ChecklistSign;
 import mes.service.ChecklistAlarmService;
 import utils.FormatTransformer;
 
@@ -45,6 +46,15 @@ public class ChecklistAlarmController extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		String bizNo = (String) session.getAttribute("bizNo");
+		ChecklistAlarmService cldService = new ChecklistAlarmService(new ChecklistAlarmDaoImpl(), bizNo);
+		List<ChecklistSign> clSignList = cldService.select2();
+		String result = FormatTransformer.toJson(clSignList);
+		
+		res.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = res.getWriter();
+		out.print(result);
 
 	}
 }
