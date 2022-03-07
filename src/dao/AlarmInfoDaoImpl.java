@@ -60,7 +60,7 @@ public class AlarmInfoDaoImpl implements AlarmInfoDao {
 		AlarmInfo info = new AlarmInfo();
 		
 		info.setChannelId(rs.getString("channel_id"));
-		info.setApiToken(rs.getString("api_toekn"));
+		info.setApiToken(rs.getString("api_token"));
 		
 	    return info;
 	}
