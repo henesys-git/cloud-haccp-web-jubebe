@@ -85,7 +85,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("					ON aa.event_code = bb.event_code\n")
 					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("				  AND aa.sensor_key = A.sensor_key\n")
-					.append("			 	  AND aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value\n")
+					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
 					.append("			)\n")
 					.append("			THEN '적합'\n")
 					.append("			ELSE '부적합'\n")
