@@ -85,7 +85,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("					ON aa.event_code = bb.event_code\n")
 					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("				  AND aa.sensor_key = A.sensor_key\n")
-					.append("			 	  AND aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value\n")
+					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
 					.append("			)\n")
 					.append("			THEN '利钦'\n")
 					.append("			ELSE '何利钦'\n")
@@ -138,19 +138,18 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			String sql = new StringBuilder()
 					.append("SELECT\n")
 					.append("	B.sensor_name,\n")
-//					.append("	DATE_FORMAT(A.create_time, \"%H:%i:%s\") AS create_time,\n")
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
 					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, '利钦', '何利钦') as judge,\n")
-					.append("	D.code_name as improvement_action\n")
+					.append("	A.improvement_action\n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("LEFT JOIN event_info C\n")
 					.append("	ON A.event_code = C.event_code\n")
-					.append("LEFT JOIN common_code D\n")
-					.append("	ON A.improvement_code = D.code\n")
+//					.append("LEFT JOIN common_code D\n")
+//					.append("	ON A.improvement_code = D.code\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND A.sensor_key = '" + sensorKey + "'\n")
 					.toString();
@@ -179,13 +178,13 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvementCode) {
+	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvementAction) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("UPDATE data_metal\n")
-					.append("SET improvement_code = '" + improvementCode + "'\n")
+					.append("SET improvement_action = '" + improvementAction + "'\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("	AND sensor_key = '" + sensorKey + "'\n")
 					.append("	AND create_time = '" + createTime + "'\n")
@@ -215,7 +214,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		ccpData.setCreateTime(rs.getString("create_time"));
 		ccpData.setSensorId(rs.getString("sensor_id"));
 		ccpData.setSensorValue(Double.parseDouble(rs.getString("sensor_value")));
-		ccpData.setImprovementCode(rs.getString("improvement_code"));
+		ccpData.setImprovementAction(rs.getString("improvement_action"));
 		ccpData.setUserId(rs.getString("user_id"));
 		ccpData.setEventCode(rs.getString("event_code"));
 		ccpData.setProductId(rs.getString("product_id"));

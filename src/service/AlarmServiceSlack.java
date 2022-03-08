@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import dao.AlarmInfoDaoImpl;
+
 public class AlarmServiceSlack implements AlarmService {
 
 	private String channelId;

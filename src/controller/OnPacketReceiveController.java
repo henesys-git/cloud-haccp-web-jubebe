@@ -11,10 +11,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import dao.AlarmInfoDaoImpl;
 import dao.AlarmMessageDaoImpl;
 import dao.EventInfoDaoImpl;
+import model.AlarmInfo;
 import model.EventInfo;
 import model.LimitOutAlarmMessage;
+import service.AlarmInfoService;
 import service.AlarmMessageService;
 import service.AlarmService;
 import service.AlarmServiceSlack;
@@ -65,16 +68,15 @@ public class OnPacketReceiveController extends HttpServlet {
 					.append("HACCP관리 -> 이탈데이터관리 메뉴에서 개선 조치를 해주세요 :slightly_smiling_face:")
 					.toString();
 			
-			AlarmService alarmService = new AlarmServiceSlack();
+			AlarmInfoService aiService = new AlarmInfoService(new AlarmInfoDaoImpl());
+			AlarmInfo alarmInfo = aiService.getAlarmInfo(bizNo);
+			
+			AlarmService alarmService = new AlarmServiceSlack(alarmInfo.getChannelId(), alarmInfo.getApiToken());
 			Boolean alertResult = alarmService.alert(msg);
 			
 			if(!alertResult) {
 				logger.error("[OnPacketReceiveController] 알람 전송 실패");
 			}
-//			res.setContentType("application/json; charset=UTF-8");
-//			PrintWriter out = res.getWriter();
-//			
-//			out.print( alertResult.toString() );
 		}
 	}
 

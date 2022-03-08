@@ -69,12 +69,12 @@ public class CCPDataService {
 		return cvmList;
 	}
 	
-	public boolean fixLimitOut(String sensorKey, String createTime, String improvementCode) {
+	public boolean fixLimitOut(String sensorKey, String createTime, String improvementAction) {
 		boolean fixed = false;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			fixed = ccpDataDao.fixLimitOut(conn, sensorKey, createTime, improvementCode);
+			fixed = ccpDataDao.fixLimitOut(conn, sensorKey, createTime, improvementAction);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

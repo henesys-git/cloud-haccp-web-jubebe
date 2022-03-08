@@ -6,7 +6,7 @@ public class CCPData {
 	private String createTime;
 	private String sensorId;
 	private double sensorValue;
-	private String improvementCode;
+	private String improvementAction;
 	private String userId;
 	private String eventCode;
 	private String productId;
@@ -26,8 +26,8 @@ public class CCPData {
 	public double getSensorValue() {
 		return sensorValue;
 	}
-	public String getImprovementCode() {
-		return improvementCode;
+	public String getImprovementAction() {
+		return improvementAction;
 	}
 	public String getUserId() {
 		return userId;
@@ -53,8 +53,8 @@ public class CCPData {
 	public void setSensorValue(double sensorValue) {
 		this.sensorValue = sensorValue;
 	}
-	public void setImprovementCode(String improvementCode) {
-		this.improvementCode = improvementCode;
+	public void setImprovementAction(String improvementAction) {
+		this.improvementAction = improvementAction;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;

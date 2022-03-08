@@ -19,22 +19,29 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="action" id="action1" value="FA01" checked>
+				  <input class="form-check-input" type="radio" name="action" id="action1" value="제품폐기" checked>
 				  <label class="form-check-label" for="exampleRadios1">
 				    제품폐기
 				  </label>
 				</div>
 				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="action" id="action2" value="FA02">
+				  <input class="form-check-input" type="radio" name="action" id="action2" value="장비수리">
 				  <label class="form-check-label" for="action2">
 				    장비수리
 				  </label>
 				</div>
 				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="action" id="action3" value="FA03">
+				  <input class="form-check-input" type="radio" name="action" id="action3" value="제상">
 				  <label class="form-check-label" for="action3">
 				    제상
 				  </label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="action" id="action4" value="직접입력">
+				  <label class="form-check-label" for="action4">
+				    직접입력
+				  </label>
+				  <input type="text" id="other-action-input">
 				</div>
      		</div>
      		<div class="modal-footer">
@@ -58,16 +65,25 @@ $(document).ready(function () {
 		$('#improvementActionModal').modal('hide');
 	});
 	
+	// 직업입력에 입력 시 자동 체크
+	$("#other-action-input").keyup(function() {
+		$("#action4").prop("checked", true);
+  	});
+	
 	$('#saveBtn').off().on('click', function() {
 		
-		let improvementCode = $("input[name='action']:checked").val();
+		let improvementAction = $("input[name='action']:checked").val();
+		
+		if(improvementAction === "직접입력") {
+			improvementAction = $("#other-action-input").val();
+		}
 		
 		$.ajax({
 	    	type: "PUT",
 	        url: "/ccp" + 
 	        	 "?sensorKey=" + '<%=sensorKey%>' +  
 	        	 "&createTime=" + '<%=createTime%>' + 
-	        	 "&improvementCode=" + improvementCode,
+	        	 "&improvementAction=" + improvementAction,
 			success: function (resultIfFixed) {
 	        	if(resultIfFixed == 'true') {
 					$('#improvementActionModal').modal('hide');
