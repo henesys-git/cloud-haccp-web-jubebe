@@ -208,7 +208,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	this.modalWidth;
 	this.modalHeight;
 	this.xmlDoc;
-	
+	this.tagIds;
+	this.tagTypes;
 	this.ctx;
 	
 	this.setMetadataAndImagePath = async function() {
@@ -230,7 +231,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-	
+		console.log(this.modalWidth);
+		
 		document.getElementById('checklist-insert-wrapper').style.width = this.modalWidth;
 		document.getElementById('checklist-insert-wrapper').style.height = this.modalHeight;
 	};
@@ -290,6 +292,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		        data: "data=" + JSON.stringify(head),
 		        success: function (result) {
 		        	console.log(result);
+					$('#checklist-insert-modal').modal('hide');
+					 refreshMainTable();
 		        }
 			});
 		});
@@ -308,6 +312,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var width = cell.childNodes[4].textContent;
 		var height = cell.childNodes[5].textContent;
 		
+		var tagId = "#" + id;
+		this.tagIds = tagId;
+		this.tagTypes = type;
 		let tag;
 		
 		switch(type) {
@@ -356,6 +363,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
+		
+		if(this.tagTypes == 'date') {
+			new SetSingleDate2("", this.tagIds, 0);
+		}
 	};
 }
 

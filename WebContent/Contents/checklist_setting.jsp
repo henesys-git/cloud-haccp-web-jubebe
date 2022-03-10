@@ -8,7 +8,7 @@
 <script type="text/javascript">
     
     
-    let mainTable;
+    var mainTable;
     
 	$(document).ready(function () {
 		
@@ -31,7 +31,8 @@
 			        	{
 							'targets': [5],
 				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
-				      			$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">알람주기 설정</button>'); 
+				      			//$(td).append('<button type="button" class="btn btn-warning" id="alarm">알람주기 설정</button>');
+				   				$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">알람주기 설정</button>');
 				   			}
 						}
 			        ]
@@ -57,6 +58,14 @@
 	    	$('#checklist-name').val('');
 	    	$('#image-path').val('');
 	    	$('#metadata-file-path').val('');
+	    };
+	    
+	    var initModal2 = function () {
+	    	$('#checklist-id-alarm').prop('disabled', false);
+	    	$('#checklist-id-alarm').val(row[0].checklistId);
+	    	$('#checklist-name-alarm').val(row[0].checklistName);
+	    	$('#alarm-interval-hour').val(0);
+	    	
 	    };
 	     
 		initTable();
@@ -190,7 +199,88 @@
 			
 		});
 		
-    });
+		// 점검표 알람 수정
+		$('#alarm').click(function() {
+			console.log("click");
+			initModal2();
+			
+			var row = mainTable.rows( '.selected' ).data();
+			
+			if(row.length == 0) {
+				alert('알람 정보를 수정할 선행요건을 선택해주세요.');
+				return false;
+			}
+			
+			$('#myModal2').modal('show');
+			$('.modal-title').text('선행요건 알람 정보 수정');
+			
+			$('#save_alarm').off().click(function() {
+				var id = $('#checklist-id-alarm').val();
+				var name = $('#checklist-name-alarm').val();
+				var alarmYear = $('#alarm-interval-year').val();
+				var alarmMonth = $('#alarm-interval-month').val();
+				var alarmDay = $('#alarm-interval-day').val();
+				var alarmHour = $('#alarm-interval-hour').val();
+				
+				var alarmTotal = alarmHour + (alarmDay * 24) + (alarmMonth * 24 * 30) + (alarmYear * 24 * 30 * 12)
+				
+				$("#alarm-interval-year").keyup(function() { 
+				});
+				
+				$("#alarm-interval-month").keyup(function() { 
+				});
+				
+				$("#alarm-interval-day").keyup(function() { 
+				});
+				
+				$("#alarm-interval-hour").keyup(function() { 
+				});
+
+				
+				if(id === '') {
+					alert('선행요건 아이디를 입력해주세요');
+					return false;
+				}
+				if(name === '') {
+					alert('선행요건 명을 입력해주세요');
+					return false;
+				}
+				if(alarmHour <= 0) {
+					alert('주기값이 입력되지 않았습니다.');
+					return false;
+				}
+				
+				var check = confirm('해당 선행요건 알람 정보를 수정하시겠습니까?');
+				
+				if(check) {
+				
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
+		            async : false,
+		            data: {
+		            	"type" : "alarm",
+		            	"id" : id, 
+		            	"name" : name, 
+		            	"alarmInterval" : alarmTotal
+		            },
+		            success: function (alarmResult) {
+		            	console.log(alarmResult);
+		            	if(alarmResult == 'true') {
+		            		alert('선행요건 정보가 수정되었습니다.');
+		            		$('#myModal2').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('선행요건 수정에 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+			   }
+			});
+			
+		});
+		
+    }); //document ready function end
     
 	//점검표 알람 정보 수정
 	function modifyAlarmInfo(obj) {
@@ -238,6 +328,7 @@
 			$.ajax({
 	            type: "POST",
 	            url: "<%=Config.this_SERVER_path%>/checklist-info",
+	            async : false,
 	            data: {
 	            	"type" : "alarm",
 	            	"id" : id, 
@@ -245,10 +336,11 @@
 	            	"alarmInterval" : alarmHour
 	            },
 	            success: function (alarmResult) {
+	            	console.log(alarmResult);
 	            	if(alarmResult == 'true') {
 	            		alert('선행요건 정보가 수정되었습니다.');
 	            		$('#myModal2').modal('hide');
-	            		refreshMainTable();
+	            		refreshMainTable2();
 	            	} else {
 	            		alert('선행요건 수정에 실패했습니다, 관리자에게 문의해주세요.');
 	            	}
@@ -257,6 +349,13 @@
 		   }
 		});
 		
+	}
+	
+	async function refreshMainTable2() {
+    	var clInfo = new ChecklistInfo();
+    	var clList = await clInfo.getAll();
+    	console.log(clList);
+		mainTable.clear().rows.add(clList).draw();
 	}
 	
 </script>

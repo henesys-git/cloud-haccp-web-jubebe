@@ -137,7 +137,7 @@ function SetSingleDate(divId, inputId, adjustDate) {
 				 -30: 기본날짜-30일이 기본날짜가 됨
 */
 function SetSingleDate2(initDate, selector, adjustDate) {
-	var booleanValue = true;
+	var booleanValue = true; console.log("setSingleDate");
 	
 	if(initDate == "") {
 		var adjustDate = parseInt(adjustDate);

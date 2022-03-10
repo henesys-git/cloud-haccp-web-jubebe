@@ -152,8 +152,8 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 			Statement ps = conn.createStatement();
 			
 			int i = ps.executeUpdate(sql);
-
-	        if(i == 1) {
+			System.out.println("i : "+ i);
+	        if(i == 1 || i == 2) {
 	        	return true;
 	        }
 

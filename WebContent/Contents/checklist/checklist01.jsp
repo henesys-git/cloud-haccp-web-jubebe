@@ -56,6 +56,41 @@
     		modal.openModal();
     	});
     	
+    	$("#update-btn").click(function() {
+    		var selectedRow = mainTable.rows('.selected').data()[0];
+    		
+    		if(selectedRow.length == 0) {
+				alert('정보를 수정할 선행요건을 선택해주세요.');
+				return false;
+			}
+    		
+    		let checklistId = selectedRow.checklistId;
+    		// 제일 최신 포맷 수정이력번호 가져와야 함
+    		let checklistFormatRevisionNo = 0;
+    		
+    		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo);
+    		modal.openModal();
+    		
+    	});
+    	
+    	$("#delete-btn").click(function() {
+    		var selectedRow = mainTable.rows('.selected').data()[0];
+    		
+    		if(selectedRow.length == 0) {
+				alert('정보를 삭제할 선행요건을 선택해주세요.');
+				return false;
+			}
+    		
+    		let checklistId = selectedRow.checklistId;
+    		let seqNo = selectedRow.seqNo;
+    		
+    		var check = confirm("해당 점검표를 삭제하시겠습니까?");
+    		
+    		if(check) {
+    		}
+    		
+    	});
+    	
     	$("#select-btn").click(function() {
     		var selectedRow = mainTable.rows('.selected').data()[0];
     		
@@ -66,6 +101,13 @@
     		modal.openModal();
     	});
     });
+	
+	async function refreshMainTable() {
+    	var clInfo = new ChecklistInfo();
+    	var clList = await clInfo.getAll();
+    	console.log(clList);
+		mainTable.clear().rows.add(clList).draw();
+	}
 	
 	
     
