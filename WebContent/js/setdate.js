@@ -137,6 +137,7 @@ function SetSingleDate(divId, inputId, adjustDate) {
 				 -30: 기본날짜-30일이 기본날짜가 됨
 */
 function SetSingleDate2(initDate, selector, adjustDate) {
+	var date;
 	var booleanValue = true;
 	
 	if(initDate == "") {
@@ -151,7 +152,11 @@ function SetSingleDate2(initDate, selector, adjustDate) {
 		defaultDate.setDate(defaultDate.getDate() + adjustDate);
 	}
 	
-	$(selector).daterangepicker({
+	this.getDate = function() {
+		return date[0].value;
+	}
+	
+	date = $(selector).daterangepicker({
 	    "singleDatePicker": true,
 	    "autoApply": true,
 		"autoUpdateInput": booleanValue,
