@@ -6,6 +6,7 @@ public class ChecklistInfo {
 	private String checklistName;
 	private String imagePath;
 	private String metaDataFilePath;
+	private int checkInterval;
 	
 	public ChecklistInfo() {}
 	
@@ -45,6 +46,9 @@ public class ChecklistInfo {
 	public String getImagePath() {
 		return imagePath;
 	}
+	public int getCheckInterval() {
+		return checkInterval;
+	}
 	public String getMetaDataFilePath() {
 		return metaDataFilePath;
 	}
@@ -62,6 +66,9 @@ public class ChecklistInfo {
 	}
 	public void setMetaDataFilePath(String metaDataFilePath) {
 		this.metaDataFilePath = metaDataFilePath;
+	}
+	public void setCheckInterval(int checkInterval) {
+		this.checkInterval = checkInterval;
 	}
 	
 	@Override

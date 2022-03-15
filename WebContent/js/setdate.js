@@ -138,7 +138,7 @@ function SetSingleDate(divId, inputId, adjustDate) {
 */
 function SetSingleDate2(initDate, selector, adjustDate) {
 	var booleanValue = true; console.log("setSingleDate");
-	
+	console.log(booleanValue);
 	if(initDate == "") {
 		var adjustDate = parseInt(adjustDate);
 		var defaultDate = new Date();
@@ -150,7 +150,7 @@ function SetSingleDate2(initDate, selector, adjustDate) {
 		var defaultDate = new Date(initDate);
 		defaultDate.setDate(defaultDate.getDate() + adjustDate);
 	}
-	
+	console.log(defaultDate);
 	$(selector).daterangepicker({
 	    "singleDatePicker": true,
 	    "autoApply": true,

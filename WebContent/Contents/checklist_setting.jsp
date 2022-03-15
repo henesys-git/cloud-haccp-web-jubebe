@@ -25,11 +25,18 @@
 						{ data: "checklistName", defaultContent: '' },
 						{ data: "imagePath", defaultContent: '' },
 						{ data: "metaDataFilePath", defaultContent: '' },
+						{ data: "checkInterval", defaultContent: '' },
 						{ data: "", defaultContent: '' }
 			        ],
 			        'columnDefs': [
 			        	{
 							'targets': [5],
+				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
+				   				$(td).attr('style', 'display: none;'); 
+				   			}
+						},
+			        	{
+							'targets': [6],
 				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
 				      			//$(td).append('<button type="button" class="btn btn-warning" id="alarm">알람주기 설정</button>');
 				   				$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">알람주기 설정</button>');
@@ -221,22 +228,7 @@
 				var alarmMonth = $('#alarm-interval-month').val();
 				var alarmDay = $('#alarm-interval-day').val();
 				var alarmHour = $('#alarm-interval-hour').val();
-				
-				var alarmTotal = alarmHour + (alarmDay * 24) + (alarmMonth * 24 * 30) + (alarmYear * 24 * 30 * 12)
-				
-				$("#alarm-interval-year").keyup(function() { 
-				});
-				
-				$("#alarm-interval-month").keyup(function() { 
-				});
-				
-				$("#alarm-interval-day").keyup(function() { 
-				});
-				
-				$("#alarm-interval-hour").keyup(function() { 
-				});
 
-				
 				if(id === '') {
 					alert('선행요건 아이디를 입력해주세요');
 					return false;
@@ -287,10 +279,38 @@
 		
 		var row = mainTable.rows( '.selected' ).data();
 		
+		var interVal = row[0].checkInterval;
+		console.log(interVal);
+		
+		var interValYear = Math.floor(interVal / 8760); // 알람주기 연단위 값
+		var interValMonth; // 알람주기 월단위 값
+		var interValDay; // 알람주기 일단위 값
+		var interValHour; // 알람주기 시간단위 값
+		
+		if(interVal >= 8760) {
+		 	interValMonth =  Math.floor(((parseInt(interVal) - 8760) * interValYear) / 720); 
+		}
+		else {
+			interValMonth = Math.floor(interVal / 720); 
+		}
+		
+		if(interVal >= 8760) {
+		 	interValMonth =  Math.floor(((parseInt(interVal) - 8760) * interValYear) / 720); 
+		}
+		else {
+			interValMonth = Math.floor(interVal / 720); 
+		}
+		
+		var interValDay = Math.floor(interVal % (30 * 24)); 
+		var interValHour = Math.floor(interVal % 24); 
+		
 		var initModal2 = function () {
 	    	$('#checklist-id-alarm').prop('disabled', false);
 	    	$('#checklist-id-alarm').val(row[0].checklistId);
 	    	$('#checklist-name-alarm').val(row[0].checklistName);
+	    	$('#alarm-interval-year').val(0);
+	    	$('#alarm-interval-month').val(0);
+	    	$('#alarm-interval-day').val(0);
 	    	$('#alarm-interval-hour').val(0);
 	    	
 	    };
@@ -307,6 +327,22 @@
 			var alarmMonth = $('#alarm-interval-month').val();
 			var alarmDay = $('#alarm-interval-day').val();
 			var alarmHour = $('#alarm-interval-hour').val();
+			
+			var alarmTotal = parseInt(alarmHour) + parseInt(alarmDay * 24) + parseInt(alarmMonth * 24 * 30) + parseInt(alarmYear * 24 * 30 * 12);
+			console.log("alarmTotal==");
+			console.log(alarmTotal);
+			
+			$("#alarm-interval-year").keyup(function() { 
+			});
+			
+			$("#alarm-interval-month").keyup(function() { 
+			});
+			
+			$("#alarm-interval-day").keyup(function() { 
+			});
+			
+			$("#alarm-interval-hour").keyup(function() { 
+			});
 			
 			if(id === '') {
 				alert('선행요건 아이디를 입력해주세요');
@@ -333,7 +369,7 @@
 	            	"type" : "alarm",
 	            	"id" : id, 
 	            	"name" : name, 
-	            	"alarmInterval" : alarmHour
+	            	"alarmInterval" : alarmTotal
 	            },
 	            success: function (alarmResult) {
 	            	console.log(alarmResult);
@@ -409,6 +445,7 @@
 					    <th>선행요건명</th>
 					    <th>이미지경로</th>
 					    <th>메타데이터경로</th>
+					    <th style='width:0px; display: none;'>작성주기값</th>
 					    <th></th>
 					</tr>
 				</thead>

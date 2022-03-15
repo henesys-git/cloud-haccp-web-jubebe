@@ -18,6 +18,8 @@ import service.CCPDataService;
 import utils.FormatTransformer;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataMonitoringModel;
+import viewmodel.CCPDataStatisticModel;
 
 @WebServlet("/ccpvm")
 public class CCPDataViewModelController extends HttpServlet {
@@ -61,6 +63,29 @@ public class CCPDataViewModelController extends HttpServlet {
 			
 			List<CCPDataDetailViewModel> cvmDetailList = ccpService.getCCPDataDetailViewModels(sensorKey);
 			result = FormatTransformer.toJson(cvmDetailList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
+		case "statistic":
+			String toDate = req.getParameter("toDate");
+			String sensorId = req.getParameter("sensorId");
+			
+			List<CCPDataStatisticModel> cvmStatisticList = ccpService.getCCPDataStatisticModel(toDate, sensorId);
+			result = FormatTransformer.toJson(cvmStatisticList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
+		case "monitoring":
+			String toDay = req.getParameter("toDay");
+			
+			List<CCPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel(toDay);
+			result = FormatTransformer.toJson(cvmMonitoringList);
 			
 			res.setContentType("application/json; charset=UTF-8");
 			out = res.getWriter();

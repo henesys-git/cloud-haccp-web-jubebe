@@ -10,6 +10,8 @@ import mes.frame.database.JDBCConnectionPool;
 import model.CCPData;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataMonitoringModel;
+import viewmodel.CCPDataStatisticModel;
 
 public class CCPDataService {
 
@@ -82,5 +84,35 @@ public class CCPDataService {
 		}
 		
 		return fixed;
+	}
+	
+	public List<CCPDataStatisticModel> getCCPDataStatisticModel(String toDate, String sensorId) {
+		List<CCPDataStatisticModel> cvmList = null;
+		
+		try {
+			Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+			cvmList = ccpDataDao.getCCPDataStatisticModel(conn, toDate, sensorId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
+	}
+	
+	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(String toDate) {
+		List<CCPDataMonitoringModel> cvmList = null;
+		
+		try {
+			Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
+			cvmList = ccpDataDao.getCCPDataMonitoringModel(conn, toDate);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
 	}
 }

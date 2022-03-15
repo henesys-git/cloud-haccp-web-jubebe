@@ -13,12 +13,18 @@
 <script>
  $(document).ready(function () {
 	 getData2();
+	 getData3();
  });
      function getData2() {
      	$.post("<%=Config.this_SERVER_path%>/Contents/checklist_alarm2.jsp", function(html) {
  	    	$("#parent_page2").hide().html(html).fadeIn(100);
  		})
  	}
+     function getData3() {
+      	$.post("<%=Config.this_SERVER_path%>/Contents/ccp_monitoring.jsp", function(html) {
+  	    	$("#parent_page3").hide().html(html).fadeIn(100);
+  		})
+  	}
 	</script>
 
 <!-- <div class="panel panel-default" style="margin-left: 5px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; width: 100%"> -->
@@ -26,6 +32,7 @@
 	<!-- Default panel contents -->
 	<div class="panel-heading" style="font-weight: bold" id="MenuTitle"></div>
 	<div class="panel-body">
-		<div id="parent_page2"></div>	
+		<div id="parent_page2"></div>
+		<div id="parent_page3"></div>	
 	</div>
 </div>

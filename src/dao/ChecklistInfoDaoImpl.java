@@ -58,9 +58,18 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT * 		\n")
-				.append("FROM checklist_info	\n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("SELECT  							\n")
+				.append("A.tenant_id,						\n")
+				.append("A.checklist_id,					\n")
+				.append("A.revision_no,						\n")
+				.append("A.checklist_name,					\n")
+				.append("A.image_path,						\n")
+				.append("A.meta_data_file_path,				\n")
+				.append("B.check_interval					\n")
+				.append("FROM checklist_info A				\n")
+				.append("INNER JOIN checklist_alarm	B		\n")
+				.append("ON A.checklist_id = B.checklist_id	\n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -211,6 +220,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	    clInfo.setChecklistName(rs.getString("checklist_name"));
 	    clInfo.setImagePath(rs.getString("image_path"));
 	    clInfo.setMetaDataFilePath(rs.getString("meta_data_file_path"));
+	    clInfo.setCheckInterval(rs.getInt("check_interval"));
 	    
 	    return clInfo;
 	}

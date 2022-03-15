@@ -299,11 +299,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		});
 	};
 	
-	this.drawImage = function(imageObject) {
+	this.drawImage = async function(imageObject) {
 		this.ctx.drawImage(imageObject, 0, 0);
 	}
 	
-	this.makeTag = function(cell) {
+	this.makeTag = async function(cell) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
@@ -317,6 +317,22 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		this.tagTypes = type;
 		let tag;
 		
+		var nowDate = new Date();
+		
+		var year = nowDate.getFullYear();
+		var month = nowDate.getMonth() + 1;
+		var day = nowDate.getDate();
+		
+		if(month < 10) {
+			month = "0" + month;
+		}
+		
+		if(day < 10) {
+			day = "0" + day;
+		}
+		
+		var today = year + "-" + month + "-" + day;
+				
 		switch(type) {
 			case "signature-writer":
 				tag = document.createElement('button');
@@ -334,8 +350,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag.innerHTML = "서명";
 				break;
 			case "date":
-				tag = document.createElement('input');
+				tag = document.createElement('date');
 				tag.classList.add("checklist-data");
+				tag.innerHTML = today;
 				break;
 			case "text":
 				tag = document.createElement('input');
@@ -364,8 +381,14 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
 		
+		console.log(this.tagTypes);
+		console.log(this.tagIds);
+		
 		if(this.tagTypes == 'date') {
-			new SetSingleDate2("", this.tagIds, 0);
+			//$(this.tagIds).off();
+			//$(this.tagIds).daterangepicker.destroy();
+			//new SetSingleDate2("", this.tagIds, 0);
+				
 		}
 	};
 }
