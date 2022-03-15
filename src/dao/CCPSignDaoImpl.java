@@ -65,7 +65,7 @@ public class CCPSignDaoImpl implements CCPSignDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("DELETE data_sign\n")
+					.append("DELETE FROM data_sign\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("	AND sign_date = '" + date + "'\n")
 					.append("	AND process_code = '" + processCode + "'\n")
@@ -75,7 +75,7 @@ public class CCPSignDaoImpl implements CCPSignDao {
 
 			int i = stmt.executeUpdate(sql);
 
-	        if(i == 1) {
+	        if(i > -1) {
 	        	return true;
 	        }
 		} catch (SQLException ex) {

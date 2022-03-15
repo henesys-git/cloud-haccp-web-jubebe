@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 
-	var ccpDataJspPage = {};
+	var ccpMetalDataJspPage = {};
     
 	$(document).ready(function () {
     	
@@ -73,7 +73,7 @@
 			);
 	    }
 	    
-	    ccpDataJspPage.fillSubTable = async function () {
+	    ccpMetalDataJspPage.fillSubTable = async function () {
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
 	    	if(subTable) {
@@ -113,6 +113,11 @@
 					mergeOptions(heneMainTableOpts, option)
 				);
 	    	}
+	    };
+	    
+	    ccpMetalDataJspPage.showSignBtn = function() {
+	    	$("#ccp-sign-btn").show();
+			$("#ccp-sign-text").text("");
 	    }
 	    
 		initTable();
@@ -127,6 +132,7 @@
 	    	}
 		}
     	
+		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
     		
@@ -140,8 +146,7 @@
     			$("#ccp-sign-btn").hide();
     			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
     		} else {
-    			$("#ccp-sign-btn").show();
-    			$("#ccp-sign-text").text("");
+    			ccpMetalDataJspPage.showSignBtn();
     		}
     	});
     	
@@ -149,7 +154,7 @@
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpDataJspPage.fillSubTable();
+    			ccpMetalDataJspPage.fillSubTable();
             }
     	});
     	
@@ -159,11 +164,18 @@
 			
     		let subRow = subTable.row( $(this).closest('tr') ).data();
     		let createTime = subRow.createTime;
+    		let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
     		
     		$.ajax({
                 type: "POST",
                 url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: "sensorKey=" + sensorKey + "&createTime=" + createTime,
+                data: {
+                	sensorKey: sensorKey,
+                	createTime: createTime,
+                	date: selectedDate,
+                	processCode: processCode
+                },
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }

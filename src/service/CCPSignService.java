@@ -24,6 +24,12 @@ public class CCPSignService {
 		this.tenantId = tenantId;
 	}
 	
+	public CCPSignService(CCPSignDao ccpSignDao, String tenantId, Connection conn) {
+		this.ccpSignDao = ccpSignDao;
+		this.tenantId = tenantId;
+		this.conn = conn;
+	}
+	
 	public CCPSign getCCPSignByDateAndProcessCode(String date, String processCode) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(tenantId);
