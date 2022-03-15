@@ -64,7 +64,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String type, String startDate, String endDate) {
+	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String type, String startDate, String endDate, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -102,7 +102,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
-					.append("  AND B.type_code LIKE '" + type + "'\n")
+					.append("  AND A.process_code LIKE '" + processCode	+ "'\n")
+					.append("  AND B.sensor_id LIKE '" + type + "'\n")
 					.append("GROUP BY sensor_key\n")
 					.toString();
 

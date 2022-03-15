@@ -39,12 +39,12 @@ public class CCPDataService {
 		return ccpDataList;
 	}
 	
-	public List<CCPDataHeadViewModel> getCCPDataHeadViewModels(String type, String startDate, String endDate) {
+	public List<CCPDataHeadViewModel> getCCPDataHeadViewModels(String type, String startDate, String endDate, String processCode) {
 		List<CCPDataHeadViewModel> cvmList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, type, startDate, endDate);
+			cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, type, startDate, endDate, processCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

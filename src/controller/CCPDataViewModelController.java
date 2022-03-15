@@ -45,10 +45,10 @@ public class CCPDataViewModelController extends HttpServlet {
 		switch(method) {
 		case "head":
 			String ccpType = req.getParameter("ccpType");
-			String startDate = req.getParameter("startDate");
-			String endDate = req.getParameter("endDate");
+			String date = req.getParameter("date");
+			String processCode = req.getParameter("processCode");
 			
-			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(ccpType, startDate, endDate);
+			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(ccpType, date, date, processCode);
 			result = FormatTransformer.toJson(cvmHeadList);
 			
 			res.setContentType("application/json; charset=UTF-8");
