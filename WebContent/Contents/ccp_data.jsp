@@ -7,34 +7,33 @@
 
 <script type="text/javascript">
 
-	var ccpDataJspPage = {};
+	var ccpMetalDataJspPage = {};
     
 	$(document).ready(function () {
     	
-		let date = new SetRangeDate("dateParent", "dateRange", 7);
+		let date = new SetSingleDate2("", "#date", 0);
 		let mainTable;
 		let subTable;
 		let mainTableSelectedRow;
 		
 		async function getData() {
-	    	var percentAsDefaultCcpType = "%25";
-	    	var startDate = date.getStartDate();
-    		var endDate = date.getEndDate();
-	    	var ccpType = percentAsDefaultCcpType;
+	    	var selectedDate = date.getDate();
+	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var ccpType = $("#md-type option:selected").val();
     		
 	        var fetchedData = $.ajax({
-			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "method=head" +
-			            	  "&startDate=" + startDate + 
-			            	  "&endDate=" + endDate + 
-			            	  "&ccpType=" + ccpType,
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
-	    
-	    	return fetchedData;
+	            type: "GET",
+	            url: "<%=Config.this_SERVER_path%>/ccpvm",
+	            data: "method=head" +
+	            	  "&date=" + selectedDate +
+	            	  "&processCode=" + processCode +
+	            	  "&ccpType=" + ccpType,
+	            success: function (result) {
+	            	return result;
+	            }
+	        });
+
+	        return fetchedData;
 	    };
 	    
 	    async function getSubData(sensorKey) {
@@ -54,8 +53,8 @@
 	    
 	    async function initTable() {
 	    	var data = await getData();
-	    	
-		    var customOpts = {
+
+	    	var customOpts = {
 					data : data,
 					pageLength: 10,
 					columns: [
@@ -74,7 +73,7 @@
 			);
 	    }
 	    
-	    ccpDataJspPage.fillSubTable = async function () {
+	    ccpMetalDataJspPage.fillSubTable = async function () {
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
 	    	if(subTable) {
@@ -114,31 +113,49 @@
 					mergeOptions(heneMainTableOpts, option)
 				);
 	    	}
-			
+	    };
+	    
+	    ccpMetalDataJspPage.showSignBtn = function() {
+	    	$("#ccp-sign-btn").show();
+			$("#ccp-sign-text").text("");
 	    }
 	    
 		initTable();
 		
 		async function refreshMainTable() {
 			var newData = await getData();
-    		mainTable.clear().rows.add(newData).draw();
+
+			mainTable.clear().rows.add(newData).draw();
     		
     		if(subTable) {
 	    		subTable.clear().draw();
 	    	}
 		}
     	
-    	$("#getDataBtn").click(function() {
+		// 조회 버튼 클릭 시
+    	$("#getDataBtn").click(async function() {
     		refreshMainTable();
+    		
+    		var selectedDate = date.getDate();
+	    	var processCode = $("input[name='test-yn']:checked").val();
+    		
+    		var ccpSign = new CCPSign();
+    		var signInfo = await ccpSign.get(selectedDate, processCode);
+    		
+    		if(signInfo.checkerName != null) {
+    			$("#ccp-sign-btn").hide();
+    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
+    		} else {
+    			ccpMetalDataJspPage.showSignBtn();
+    		}
     	});
     	
     	$('#ccpDataTable tbody').on('click', 'tr', function () {
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpDataJspPage.fillSubTable();
+    			ccpMetalDataJspPage.fillSubTable();
             }
-    		
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
@@ -147,15 +164,38 @@
 			
     		let subRow = subTable.row( $(this).closest('tr') ).data();
     		let createTime = subRow.createTime;
+    		let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
     		
     		$.ajax({
                 type: "POST",
                 url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: "sensorKey=" + sensorKey + "&createTime=" + createTime,
+                data: {
+                	sensorKey: sensorKey,
+                	createTime: createTime,
+                	date: selectedDate,
+                	processCode: processCode
+                },
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }
             });
+    	});
+    	
+    	$('#ccp-sign-btn').click(async function() {
+    		var selectedDate = date.getDate();
+	    	var processCode = $("input[name='test-yn']:checked").val();
+    		
+	    	var ccpSign = new CCPSign();
+    		var signUserName = await ccpSign.sign(selectedDate, processCode);
+    		
+    		if(signUserName) {
+    			alert('서명 완료되었습니다');
+    			$("#ccp-sign-btn").hide();
+    			$("#ccp-sign-text").text("서명 완료: " + signUserName);
+    		} else {
+    			alert('서명 실패, 관리자에게 문의해주세요');
+    		}
     	});
     });
     
@@ -163,17 +203,45 @@
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0 text-dark">
-        	금속검출 데이터 관리
-        </h1>
-      </div><!-- /.col -->
-      <div class="col-sm-6">
-      	<div class="float-sm-right">
-      	</div>
-      </div><!-- /.col -->
+  	<div class="container-fluid">
+    	<div class="row mb-2">
+	      	<div class="col-sm-3">
+	        	<h1 class="m-0 text-dark">
+	        		금속검출 데이터 관리
+	        	</h1>
+	      	</div>
+	      	<div class="col-md-3 form-group">
+				<label class="d-inline-block" for="md-type">종류:</label>
+				<select class="form-control w-auto d-inline-block" id="md-type">
+					<option value="CD%25">전체</option>
+			  		<option value="CD01">금속검출기1</option>
+			  		<option value="CD02">금속검출기2</option>
+			  		<option value="CD03">금속검출기3</option>
+				</select>
+	      	</div>
+			<div class="col-md-3">
+		      	<div class="form-check-inline">
+				    <label class="form-check-label">
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
+				    </label>
+				</div>
+				<div class="form-check-inline">
+				    <label class="form-check-label">
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
+				    </label>
+				</div>
+       	  	</div>
+        	  
+			<div class="col-md-2 input-group">
+	         	  	<input type="text" class="form-control float-right" id="date">
+			</div>
+		
+			<div class="col-md-1">
+	   	  		<button type="submit" class="btn btn-success" id="getDataBtn">
+	   	  	    	<i class="fas fa-search"></i>
+	   	  	     	조회
+	   	  	  	</button>
+	   	  	</div>
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
@@ -185,21 +253,23 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card card-primary card-outline">
-          <div class="card-header">
-          	<h3 class="card-title">
-          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-          		금속검출 데이터 목록
-          	</h3>
-          	<div class="card-tools">
-          	  <div class="input-group input-group-sm" id="dateParent">
-          	  	<input type="text" class="form-control float-right" id="dateRange">
-          	  	<div class="input-group-append">
-          	  	  <button type="submit" class="btn btn-default" id="getDataBtn">
-          	  	    <i class="fas fa-search"></i>
-          	  	  </button>
-          	  	</div>
-          	  </div>
-          	</div>
+          <div class="card-header row">
+       		<div class="col-md-6">
+	          	<h3 class="card-title">
+	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
+	          		금속검출 데이터 목록
+	          	</h3>
+	        </div>
+	        <div class="col-md-6">
+	        	<div class="float-right" id="ccp-sign-btn-wrapper">
+		          	<button class='btn btn-success' id="ccp-sign-btn">
+		          		<i class='fas fa-signature'></i>
+		          		서명
+		          	</button>
+		          	<div id="ccp-sign-text">
+		          	</div>
+	        	</div>
+	        </div>
           </div>
           <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 

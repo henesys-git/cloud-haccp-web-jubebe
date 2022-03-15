@@ -3,6 +3,8 @@
 <%
 	String sensorKey = "";
 	String createTime = "";
+	String date = "";
+	String processCode = "";
 
 	if(request.getParameter("sensorKey") != null) {
 		sensorKey = request.getParameter("sensorKey").toString();
@@ -12,6 +14,13 @@
 		createTime = request.getParameter("createTime").toString();
 	}
 	
+	if(request.getParameter("date") != null) {
+		date = request.getParameter("date").toString();
+	}
+	
+	if(request.getParameter("processCode") != null) {
+		processCode = request.getParameter("processCode").toString();
+	}
 %>
 
 <div id="improvementActionModal" class="modal fade" role="dialog">
@@ -81,16 +90,19 @@ $(document).ready(function () {
 		$.ajax({
 	    	type: "PUT",
 	        url: "/ccp" + 
-	        	 "?sensorKey=" + '<%=sensorKey%>' +  
+	        	 "?sensorKey=" + '<%=sensorKey%>' + 
 	        	 "&createTime=" + '<%=createTime%>' + 
-	        	 "&improvementAction=" + improvementAction,
+	        	 "&improvementAction=" + improvementAction +
+	        	 "&date=" + '<%=date%>' + 
+	        	 "&processCode=" + '<%=processCode%>',
 			success: function (resultIfFixed) {
 	        	if(resultIfFixed == 'true') {
 					$('#improvementActionModal').modal('hide');
-					ccpDataJspPage.fillSubTable();
-	        		alert('저장 완료');
+					ccpMetalDataJspPage.fillSubTable();
+					ccpMetalDataJspPage.showSignBtn();
+	        		alert('개선조치 완료 (서명 초기화)');
 	         	} else {
-	         		alert('저장 실패, 관리자 문의 필요');
+	         		alert('개선조치 실패, 관리자 문의 필요');
 	         	}
 			}
 		});
