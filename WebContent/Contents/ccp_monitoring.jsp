@@ -55,12 +55,27 @@
     	var labelArr = new Array();
     	var valueArr = new Array();
     	var valueArr2 = new Array();
+    	var valueSum = 0;
+    	var stepVal = 0;
     	for(x in dataArr){
     		labelArr.push(dataArr[x].sensorName);
     		valueArr.push(dataArr[x].countAll);
     		valueArr2.push(dataArr[x].countDetect);
+    		valueSum += parseInt(dataArr[x].countAll);
+    	}
+    	var testVal = 1150;
+    	var testLength = 0;
+    	var testVal2 = 0;
+    	if(valueSum == null || valueSum <= 1000) {
+    		valueSum = 1000;
+    		stepVal = 50;
     	}
     	
+    	else {
+    		testLength = valueSum.toString().length;
+    		testVal2 = parseInt(valueSum) - parseInt(valueSum.toString().substr(testLength - 3)) + parseInt(1000);
+    		stepVal = parseInt(testVal2 / 20);
+    	}
     	new Chart(document.getElementById("canvas"), {
     	    type: 'horizontalBar',
     	    //type: 'bar',
@@ -97,9 +112,9 @@
     	        scales: { 
 		            xAxes: [{
 		            	ticks: {
-        	        		stepSize: 50,
+        	        		stepSize: stepVal,
        	        	        min: 0,
-       	        	        max: 1000
+       	        	        max: testVal2
 		            	}
     	            }]
     	        } // scales

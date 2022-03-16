@@ -75,8 +75,13 @@
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/checklist_alarm",
 			            success: function (data) {
-			            	
 			            	console.log(data);
+			            	console.log(data[0]);
+			            	if(data == null || data == '') {
+			            		$("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>');
+			            		return false;
+			            	}
+			            	
 			            	console.log(data[0].timeDiff);
 			            	console.log(data[0].checklistId);
 			            	console.log(data[0].checklistName);
@@ -150,8 +155,9 @@
 									}
 								//}
 			                });
-											
+							/*			
 			                if($("#document tbody tr").get().length == 0) $("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>')
+			                */
 			                //if($("#document_sign tbody tr").get().length == 0) $("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>') 
 										
 			            },
@@ -172,7 +178,12 @@
 			            success: function (data) {
 			            	
 			            	console.log(data);
-			                 
+			                
+			            	if(data == null || data == '') {
+			            		$("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>');
+			            		return false;
+			            	}
+			            	
 			                data.forEach(function(item){
 			                	console.log(item);
 			                	console.log(item.revisionNo);
@@ -244,7 +255,7 @@
 			                });
 											
 			                //if($("#document tbody tr").get().length == 0) $("#document tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>')
-			                if($("#document_sign tbody tr").get().length == 0) $("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>') 
+			                /*if($("#document_sign tbody tr").get().length == 0) $("#document_sign tbody").append('<tr style="display: flex; align-items: center; justify-content: center;text-align: center;"><td>알람없음</td></tr>') */
 										
 			            },
 			            error: function (xhr, option, error) {
