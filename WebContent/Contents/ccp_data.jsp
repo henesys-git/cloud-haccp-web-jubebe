@@ -197,6 +197,28 @@
     			alert('서명 실패, 관리자에게 문의해주세요');
     		}
     	});
+    	
+		async function metalSensorList() {
+	    	
+			var itemList = new ItemList();
+			var type_cd = "CD";
+			var sensorList = await itemList.getMetalList(type_cd);
+			console.log(sensorList);
+	    	console.log(sensorList.length);
+	    	
+	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
+
+	    	
+	    	for(var i = 0; i < sensorList.length; i++) {
+	    		
+	    		sensorName = sensorList[i].metalSensorName;
+	    		sensorId = sensorList[i].metalSensorId;
+	    		$("#md-type").append('<option value = "'+sensorId+'">"'+sensorName+'"</option>');
+	    	}
+	    	
+	    };
+	    
+	    metalSensorList();
     });
     
 </script>
@@ -213,10 +235,10 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="md-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="md-type">
-					<option value="CD%25">전체</option>
+					<!-- <option value="CD%25">전체</option>
 			  		<option value="CD01">금속검출기1</option>
 			  		<option value="CD02">금속검출기2</option>
-			  		<option value="CD03">금속검출기3</option>
+			  		<option value="CD03">금속검출기3</option> -->
 				</select>
 	      	</div>
 			<div class="col-md-3">

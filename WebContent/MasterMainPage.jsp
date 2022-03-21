@@ -505,6 +505,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/ChecklistInfo.js"></script>
 	<!-- CCP Sign-->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/CCPSign.js"></script>
+	<!-- itemList-->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/itemList.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */

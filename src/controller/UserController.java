@@ -48,7 +48,12 @@ public class UserController extends HttpServlet {
 		if(id.equals("all")) {
 			List<User> list = userService.getAllUsers();
 			result = FormatTransformer.toJson(list);
-		} else {
+		} 
+		else if(id.equals("id-overlap")) {
+			User user = userService.getOverlapId(id);
+			result = FormatTransformer.toJson(user);
+		}
+		else {
 			User user = userService.getUser(id);
 			result = FormatTransformer.toJson(user);
 		}
@@ -73,6 +78,7 @@ public class UserController extends HttpServlet {
 		if(req.getParameter("type").equals("delete")) {
 			delete(req, res);
 		}
+		
 	}
 	
 	public void insert(HttpServletRequest req, HttpServletResponse res) {

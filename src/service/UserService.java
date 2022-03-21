@@ -92,4 +92,19 @@ public class UserService {
 		
 		return false;
 	}
+	
+	public User getOverlapId(String id) {
+		User user = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			user = userDao.getOverlapId(conn, id);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return user;
+	}
 }

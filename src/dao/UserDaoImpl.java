@@ -190,6 +190,41 @@ public class UserDaoImpl implements UserDao {
 	    return false;
 	}
 	
+	@Override
+	public User getOverlapId(Connection conn, String userId) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT COUNT(*)\n")
+				.append("FROM user\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND user_id = '" + userId + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			//User user = new User();
+			User user = new User();
+			
+			if(rs.next()) {
+				user = extractFromResultSet(rs);
+			}
+			
+			return user;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private User extractFromResultSet(ResultSet rs) throws SQLException {
 		return new User(
 					rs.getString("user_id"),
@@ -198,4 +233,5 @@ public class UserDaoImpl implements UserDao {
 					rs.getString("authority")
 				);
 	}
+	
 }

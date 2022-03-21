@@ -5,7 +5,16 @@
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
 
+<style>
+	.being-red{
+		color:red;
+	}
+</style>
+
 <script type="text/javascript">
+    
+    var idCheckVal = 0;
+    var pwdCheckVal = 0;
     
 	$(document).ready(function () {
 		
@@ -28,6 +37,8 @@
 			mainTable = $('#userTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
+		    
+		    //$("#authority option:eq(0)").attr("selected", "selected");
 	    }
 	    
 	    async function refreshMainTable() {
@@ -47,6 +58,38 @@
 	    };
 	     
 		initTable();
+		//$("#authority option:eq(0)").attr("selected", "selected");
+
+		function CV_checkIdPattern(str){
+			var pattern1 = /[0-9]/; // 숫자
+			var pattern2 = /[a-zA-Z]/; // 문자
+			var pattern3 = /[~!@#$%^&*()_+|<>?:{}]/; // 특수문자
+			
+			var numtextyn = (pattern1.test(str) || pattern2.test(str));
+			if(!numtextyn || pattern3.test(str) || str.length > 16) {
+				alert("아이디는 16자리 이하 문자 또는 숫자로만 구성하여야 합니다.");
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function CV_checkPasswordPattern(str) {
+			var pattern1 = /[0-9]/; // 숫자
+			var pattern2 = /[a-zA-Z]/; // 문자
+			var pattern3 = /[~!@#$%^&*()_+|<>?:{}]/; // 특수문자
+			if(!pattern1.test(str) || !pattern2.test(str) || !pattern3.test(str) || str.length < 8) {
+				$('#pwd-check-msg').text('비밀번호는 8자리 이상 문자, 숫자, 특수문자로 구성하여야 합니다.');
+        		$('#pwd-check-msg').attr('class', 'input-group mb-3 being-red');
+        		pwdCheckVal = 0;
+				return false;
+			} else {
+				$('#pwd-check-msg').text('사용하실 수 있는 비밀번호 입니다.');
+        		$('#pwd-check-msg').attr('class', 'input-group mb-3');
+        		pwdCheckVal = 1;
+				return true;
+			}
+		}
 		
 		// 등록
 		$('#insert').click(function() {
@@ -58,10 +101,19 @@
 				var id = $('#user-id').val();
 				var name = $('#user-name').val();
 				var password = $('#password').val();
-				var authority = $('#authority').val();
+				var authority = $('#authority option:selected').val();
 				
 				if(id === '') {
 					alert('사용자 아이디를 입력해주세요');
+					return false;
+				}
+				
+				if(!CV_checkIdPattern(id)){
+					return false;
+				}; // ID 유효성 검사 : 숫자와 문자로만 구성된 16자리 까지의 문자만 허용
+				
+				if(idCheckVal == 0) {
+					alert('아이디 중복체크 완료가 필요합니다.');
 					return false;
 				}
 				if(name === '') {
@@ -72,10 +124,24 @@
 					alert('비밀번호를 입력해주세요');
 					return false;
 				}
+				
+				if(pwdCheckVal == 0) {
+					alert('올바른 형식의 비밀번호를 입력해 주세요.');
+					return false;
+				}
+				
 				if(authority === '') {
 					alert('권한을 선택해주세요');
 					return false;
 				}
+				
+				console.log(id);
+				console.log(name);
+				console.log(password);
+				console.log(authority);
+				var check = confirm('등록하시겠습니까?');
+				
+				if(check){
 				
 				$.ajax({
 		            type: "POST",
@@ -97,6 +163,47 @@
 		            	}
 		            }
 		        });
+				
+				}
+				
+			});
+			
+			$('#overlap-btn').off().click(function() {
+				var id = $('#user-id').val();
+				
+				if(id === '') {
+					alert('사용자 아이디를 입력해주세요');
+					return false;
+				}
+				
+				$.ajax({
+		            type: "GET",
+		            url: "<%=Config.this_SERVER_path%>/user",
+		            data: {
+		            	"type" : "id-overlap",
+		            	"id" : id
+		            },
+		            success: function (overlapResult) {
+		            	console.log(overlapResult);
+		            	console.log(overlapResult.userId);
+		            	if(overlapResult.userId != null) {
+		            		alert('이미 등록된 아이디입니다. 다른 아이디를 사용해주세요.');
+		            		idCheckVal = 0;
+		            		$('#id-check-msg').text('이미 등록된 아이디입니다.');
+		            		$('#id-check-msg').attr('class', 'input-group mb-3 being-red');
+		            	} else {
+		            		alert('사용하실 수 있는 아이디입니다.');
+		            		idCheckVal = 1;
+		            		//$('#id-check-msg').text('아이디 중복체크 완료!');
+		            		$('#id-check-msg').attr('class', 'input-group mb-3');
+		            	}
+		            }
+		        });
+			});
+			
+			$("#password").keyup(function(){
+				var pwd = $("#password").val();
+				CV_checkPasswordPattern(pwd);
 			});
 		});
 
@@ -112,12 +219,23 @@
 			}
 			
 			$('#updateModal').modal('show');
-			
+			console.log(row[0].authority);
 			$('#user-id-update').val(row[0].userId);
 			$('#user-name-update').val(row[0].userName);
 			$('#authority-update').val(row[0].authority);
 			
 			$('#update-btn').click(function() {
+				
+				var authority = $('#authority-update option:selected').val();
+				
+				if(authority === '') {
+					alert('권한을 선택해주세요');
+					return false;
+				}
+				
+				var check = confirm('수정하시겠습니까?');
+				
+				if(check) {
 				$.ajax({
 		            type: "POST",
 		            url: "<%=Config.this_SERVER_path%>/user",
@@ -136,6 +254,7 @@
 		            	}
 		            }
 		        });
+				}
 			});
 		});
 		
@@ -245,9 +364,15 @@
       </div>  
       <div class="modal-body">
       	<label for="basic-url">아이디</label>
-		<div class="input-group mb-3">
+		<div class="input-group">
 		  <input type="text" class="form-control" id="user-id">
+		  	  <div class="input-group-append">
+		  		<span class="input-group-button">
+		  			<button type = "button" class="btn btn-primary" id = "overlap-btn">중복체크</button>
+		  		</span>
+		  	  </div>
 		</div>
+			<div class="input-group mb-3" id = "id-check-msg"></div>
       	<label for="basic-url">이름</label>
 		<div class="input-group mb-3">
 		  <input type="text" class="form-control" id="user-name">
@@ -256,9 +381,15 @@
 		<div class="input-group mb-3">
 		  <input type="password" class="form-control" id="password">
 		</div>
+			<div class="input-group mb-3" id = "pwd-check-msg"></div>
       	<label for="basic-url">권한</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="authority">
+		  <!-- <input type="text" class="form-control" id="authority"> -->
+		  <select class = "form-control w-auto d-inline-block" id ="authority">
+		  		<option value ="">선택</option>
+		 		<option value ="관리자">관리자</option>
+		 		<option value ="일반사용자">일반사용자</option>
+		  </select>
 		</div>
       </div>  
       <div class="modal-footer">  
@@ -290,7 +421,12 @@
 		</div>
       	<label for="basic-url">권한</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="authority-update">
+		  <!-- <input type="text" class="form-control" id="authority-update"> -->
+		  <select class = "form-control w-auto d-inline-block" id ="authority-update">
+		  		<option value ="">선택</option>
+		 		<option value ="관리자">관리자</option>
+		 		<option value ="일반사용자">일반사용자</option>
+		  </select>
 		</div>
       </div>  
       <div class="modal-footer">  

@@ -22,6 +22,11 @@ public class User {
 		this.authority = authority;
 	}
 	
+	public User(String userId) {
+		super();
+		this.userId = userId;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}

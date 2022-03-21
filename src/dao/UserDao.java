@@ -11,4 +11,5 @@ public interface UserDao {
 	public boolean insert(Connection conn, User user);
 	public boolean updateAuthority(Connection conn, User user);
 	public boolean delete(Connection conn, String id);
+	public User getOverlapId(Connection conn, String id);
 }
