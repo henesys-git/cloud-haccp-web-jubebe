@@ -213,7 +213,7 @@
 	    		
 	    		sensorName = sensorList[i].metalSensorName;
 	    		sensorId = sensorList[i].metalSensorId;
-	    		$("#md-type").append('<option value = "'+sensorId+'">"'+sensorName+'"</option>');
+	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    	
 	    };

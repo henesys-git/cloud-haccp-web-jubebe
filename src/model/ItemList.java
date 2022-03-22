@@ -1,38 +1,34 @@
 package model;
 
 public class ItemList {
-	private String metalSensorId;
-	private String metalSensorName;
+	private String sensorId;
+	private String sensorName;
 	
 	public ItemList() {}
 	
-	public ItemList(String metalSensorId, String metalSensorName) {
+	public ItemList(String sensorId, String sensorName) {
 		super();
-		this.metalSensorId = metalSensorId;
-		this.metalSensorName = metalSensorName;
+		this.sensorId = sensorId;
+		this.sensorName = sensorName;
 	}
 	
 	public String getMetalSensorId() {
-		return metalSensorId;
+		return sensorId;
 	}
-	
 	public String getMetalSensorName() {
-		return metalSensorName;
+		return sensorName;
 	}
-	
 	public void setMetalSensorId(String metalSensorId) {
-		this.metalSensorId = metalSensorId;
+		this.sensorId = metalSensorId;
 	}
-
 	public void setMetalSensorName(String metalSensorName) {
-		this.metalSensorName = metalSensorName;
+		this.sensorName = metalSensorName;
 	}
 
 	@Override
 	public String toString() {
-		return "ItemList [metalSensorId=" + metalSensorId + ", metalSensorName=" + metalSensorName + "]";
+		return "ItemList [sensorId=" + sensorId + ", sensorName=" + sensorName + "]";
 	}
-
 	
 	
 }

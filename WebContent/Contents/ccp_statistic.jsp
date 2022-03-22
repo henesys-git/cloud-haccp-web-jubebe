@@ -56,12 +56,53 @@
     		
 		}
 	    
+		async function metalSensorList() {
+	    	
+			var itemList = new ItemList();
+			var type_cd = "CD";
+			var sensorList = await itemList.getMetalList(type_cd);
+			console.log(sensorList);
+	    	console.log(sensorList.length);
+	    	
+	    	$("#sensor_id").prepend("<option value='CD%25'>전체</option>");
+
+	    	
+	    	for(var i = 0; i < sensorList.length; i++) {
+	    		
+	    		sensorName = sensorList[i].metalSensorName;
+	    		sensorId = sensorList[i].metalSensorId;
+	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    	}
+	    	
+	    };
+	    
+		async function CCPList() {
+	    	
+			var itemList = new ItemList();
+			var type_cd = "PC";
+			var ccpList = await itemList.getCCPList(type_cd);
+			console.log(ccpList);
+	    	console.log(ccpList.length);
+	    	
+	    	$("#sensor_id").prepend("<option value='PC%25'>전체</option>");
+
+	    	
+	    	for(var i = 0; i < ccpList.length; i++) {
+	    		
+	    		ccpName = ccpList[i].metalSensorName;
+	    		ccp = ccpList[i].Id;
+	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    	}
+	    	
+	    };
+	    
 	    $('#date_change').on('click', function(){
 	    	refreshMainTable();
 	    });
 	    
 		initTable();
-		
+		metalSensorList();
+		CCPList();
 		
     }); //document ready function end
 	
@@ -104,8 +145,8 @@
 		                           	</td>
 		                            <td>
 			                        	<select class="form-control" id="ccp_gubun">
-			                               <option value = 'metal'>금속검출</option>
-			                               <option value = 'disinfect'>소독/세척</option>
+			                              <!--  <option value = 'metal'>금속검출</option>
+			                               <option value = 'disinfect'>소독/세척</option> -->
 										</select>
 									</td>
 									<td>
@@ -113,10 +154,10 @@
 		                           	</td>
 		                            <td>
 			                        	<select class="form-control" id="sensor_id">
-			                        		<option value = ''>전체</option>
+			                        		<!-- <option value = ''>전체</option>
 			                                <option value = 'CD01'>금속검출기1</option>
 			                                <option value = 'CD02'>금속검출기2</option>
-			                                <option value = 'CD03'>금속검출기3</option>
+			                                <option value = 'CD03'>금속검출기3</option> -->
 										</select>
 									</td>
 									<td>

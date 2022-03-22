@@ -53,7 +53,11 @@ public class itemListController extends HttpServlet {
 		if(type.equals("sensorList")) {
 			List<ItemList> list = itemListService.getSensorList(type_cd);
 			result = FormatTransformer.toJson(list);
-		} 
+		}
+		else {
+			List<ItemList> list = itemListService.getCCPList(type_cd);
+			result = FormatTransformer.toJson(list);
+		}
 		
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();

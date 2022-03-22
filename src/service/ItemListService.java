@@ -39,5 +39,20 @@ public class ItemListService {
 		return itemList;
 	}
 	
+	public List<ItemList> getCCPList(String type_cd) {
+		List<ItemList> itemList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			itemList = itemListDao.getSensorList(conn, type_cd);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return itemList;
+	}
+	
 	
 }
