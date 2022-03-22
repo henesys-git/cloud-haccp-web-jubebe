@@ -87,53 +87,51 @@
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<!-- Left navbar links -->
 			<ul class="navbar-nav">
-			<li class="nav-item">
-				<a class="nav-link" data-widget="pushmenu" href="#" role="button">
-					<i class="fas fa-bars"></i>
-				</a>
-			</li>
-			<li class="nav-item d-none d-sm-inline-block">
-				<a class="nav-link" href="MasterMainPage.jsp" role="button">
-				   <i class="fas fa-home"></i>
-				</a>
-			</li>
-			<li class="nav-item d-none d-sm-inline-block">
-				 <a class="nav-link" onclick="pop_fn_WinUpdateKakaoAlarmUser_View()" role="button">
-				 	<i class="fas fa-clock"></i>
-				 </a>
-			</li>
-			<li class="nav-item d-none d-sm-inline-block">
-			<div class="nav-link">
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                       <label class="custom-control-label" for="customSwitch1"></label>
-                    </div>
-                  </div>
-             </li>
-			</ul>
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#" role="button">
+						<i class="fas fa-bars"></i>
+					</a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a class="nav-link" href="MasterMainPage.jsp" role="button">
+					   <i class="fas fa-home"></i>
+					</a>
+				</li>
+				<!-- 
+				<li class="nav-item d-none d-sm-inline-block">
+					 <a class="nav-link" onclick="pop_fn_WinUpdateKakaoAlarmUser_View()" role="button">
+					 	<i class="fas fa-clock"></i>
+					 </a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<div class="nav-link">
+	            		<div class="custom-control custom-switch">
+	                    	<input type="checkbox" class="custom-control-input" id="customSwitch1">
+	                       	<label class="custom-control-label" for="customSwitch1"></label>
+	                    </div>
+					</div>
+	            </li>
+				-->
+			</ul> 
 			
 			<!-- Right navbar links -->
 			<ul class="navbar-nav ml-auto">
-			<li class="nav-item dropdown">
-				<span style="color:black;"> <%=login_name%>님 환영합니다 </span>			
-			</li>
-			
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			
-			<li>
-				<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="pop_fn_WinUpdateUserPW_View()">
-					<i class="fa fa-wrench"></i>
-				</button>
-			</li>
-			
-			&nbsp;&nbsp;&nbsp;
-			<li>
-				<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="logout(this)">
-					<i class="fa fa-sign-out-alt white"></i>
-				</button>
-			</li>
-			&nbsp;&nbsp;&nbsp;
-			
+				<li class="nav-item dropdown">
+					<span style="color:black;"> <%=login_name%>님 환영합니다 </span>			
+				</li>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<li>
+					<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="pop_fn_WinUpdateUserPW_View()">
+						<i class="fa fa-wrench"></i>
+					</button>
+				</li>
+				&nbsp;&nbsp;&nbsp;
+				<li>
+					<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="logout(this)">
+						<i class="fa fa-sign-out-alt white"></i>
+					</button>
+				</li>
+				&nbsp;&nbsp;&nbsp;
 			</ul>
 		</nav>
 		<!-- /.navbar -->		
