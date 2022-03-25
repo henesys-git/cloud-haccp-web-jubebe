@@ -277,8 +277,9 @@
 	//점검표 알람 정보 수정
 	function modifyAlarmInfo(obj) {
 		
-		var row = mainTable.rows( '.selected' ).data();
-		
+    	var rowIdx = $(obj).closest("tr").index();
+		//var row = mainTable.rows( '.selected' ).data();
+		var row = mainTable.rows(rowIdx).data();
 		var interVal = row[0].checkInterval;
 		console.log(interVal);
 		

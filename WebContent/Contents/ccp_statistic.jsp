@@ -60,7 +60,7 @@
 	    	
 			var itemList = new ItemList();
 			var type_cd = "CD";
-			var sensorList = await itemList.getMetalList(type_cd);
+			var sensorList = await itemList.getSensorList(type_cd);
 			console.log(sensorList);
 	    	console.log(sensorList.length);
 	    	
@@ -69,9 +69,9 @@
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
 	    		
-	    		sensorName = sensorList[i].metalSensorName;
-	    		sensorId = sensorList[i].metalSensorId;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    		sensorName = sensorList[i].sensorName;
+	    		sensorId = sensorList[i].sensorId;
+	    		$("#sensor_id").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    	
 	    };
@@ -84,14 +84,14 @@
 			console.log(ccpList);
 	    	console.log(ccpList.length);
 	    	
-	    	$("#sensor_id").prepend("<option value='PC%25'>전체</option>");
+	    	$("#ccp_gubun").prepend("<option value='PC%25'>전체</option>");
 
 	    	
 	    	for(var i = 0; i < ccpList.length; i++) {
 	    		
-	    		ccpName = ccpList[i].metalSensorName;
-	    		ccp = ccpList[i].Id;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    		ccpName = ccpList[i].sensorName;
+	    		ccp = ccpList[i].sensorId;
+	    		$("#ccp_gubun").append("<option value = '"+ccp+"'>"+ccpName+"</option>");
 	    	}
 	    	
 	    };

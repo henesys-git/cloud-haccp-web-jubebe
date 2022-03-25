@@ -4,7 +4,7 @@
 
 ItemList = function () {}
 
-ItemList.prototype.getMetalList = function (type_cd) {
+ItemList.prototype.getSensorList = function (type_cd) {
 	var itemLists = $.ajax({
 		type : "GET",
 		url: heneServerPath + "/itemList?type=sensorList",

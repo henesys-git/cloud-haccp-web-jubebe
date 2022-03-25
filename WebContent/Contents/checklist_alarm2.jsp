@@ -145,11 +145,11 @@
 			                
 										if(count == 0){
 											$("#document tbody").append(
-													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span>'+insertDaysText+'</a></td></tr></li>'
+													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span><br>'+insertDaysText+'</a></td></tr></li>'
 											)
 										}else{
 											$("#document tbody").append(
-													'<tr><td><li><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</span></a></td></tr>'
+													'<tr><td><li><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span><br>'+insertDaysText+'</span></a></td></tr>'
 											)
 										}
 									}
@@ -245,11 +245,11 @@
 											
 										if(count == 0){
 											$("#document_sign tbody").append(
-													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span>'+insertText+'</a></td></tr>'
+													'<tr><td><a onclick="'+insertFunction+'"><i class="fa '+className+'"></i><span class="menu_name_in">'+item.checklistName+'</span><br>'+insertText+'</a></td></tr>'
 											)
 										}else{
 											$("#document_sign tbody").append(
-													'<tr><td><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span>'+insertDaysText+'</span></a></td></tr>'
+													'<tr><td><a onclick="fn_MainSubMenuSelectedAlarm(this, '+insertFunction+'><i class="fa '+className+'"></i><span class="menu_name_in">'+item[1]+'</span><br>'+insertDaysText+'</span></a></td></tr>'
 											)
 										}
 			                });

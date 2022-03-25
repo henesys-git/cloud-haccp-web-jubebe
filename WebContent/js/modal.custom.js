@@ -239,7 +239,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	
 	this.openModal = async function() {
 		let that = this;
-	
+		
 		await this.setMetadataAndImagePath();
 		await this.setModal();
 		
@@ -272,6 +272,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 		// save data to db
 		$('#checklist-insert-btn').click(function() {
+			
+			//var check = confirm('등록하시겠습니까?');
+			
+			//if(check) {
+			
 			var head = {};
 			var checklistData = {};
 	
@@ -289,13 +294,16 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			$.ajax({
 				type: "POST",
 		        url: heneServerPath + "/checklist",
-		        data: "data=" + JSON.stringify(head),
+		        data: "data=" + JSON.stringify(head) +
+					  "&type=insert",
 		        success: function (result) {
 		        	console.log(result);
 					$('#checklist-insert-modal').modal('hide');
-					 refreshMainTable();
+					 parent.refreshMainTable();
 		        }
 			});
+			
+			//}
 		});
 	};
 	
@@ -393,9 +401,271 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	};
 }
 
-function ChecklistSelectModal(checklistId, seqNo) {
+function ChecklistUpdateModal(checklistId, seqNo) {
 	this.checklistId = checklistId;
 	this.seqNo = seqNo;
+	
+	this.metaDataPath;
+	this.imagePath;
+	
+	this.modalWidth;
+	this.modalHeight;
+	this.xmlDoc;
+	this.tagIds;
+	this.tagTypes;
+	this.ctx;
+	
+	this.setMetadataAndImagePath = async function() {
+		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
+		// XX는 점검표 아이디, Y는 점검표 수정이력번호
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.txt';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.jpg';
+	}
+	
+	this.getChecklistData = async function() {
+		let fetchedData = $.ajax({
+							type: "GET",
+					        url: heneServerPath + "/checklist"
+					        	+ "?checklistId=" + this.checklistId
+					        	+ "&seqNo=" + this.seqNo,
+					        success: function (data) {
+					        	return data;
+					        }
+						});
+		
+		return fetchedData;
+	}
+	
+	this.setModal = async function() {
+		// read meta-data
+		let response = await fetch(this.metaDataPath);
+	    let metaData = await response.text();
+	    
+	 	// parse meta-data
+		let parser = new DOMParser();
+		this.xmlDoc = parser.parseFromString(metaData, "text/xml");
+		
+		// set modal size
+		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
+		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
+		console.log(this.modalWidth);
+		
+		document.getElementById('checklist-update-wrapper').style.width = this.modalWidth;
+		document.getElementById('checklist-update-wrapper').style.height = this.modalHeight;
+	};
+	
+	this.openModal = async function() {
+		let that = this;
+		
+		await this.setMetadataAndImagePath();
+		await this.setModal();
+		this.checklistData = await this.getChecklistData();
+		this.checkData = JSON.parse(this.checklistData.checkData);
+		
+		$("#checklist-update-modal").modal("show");
+		
+		// read checklist image
+		var canvas = document.getElementById('checklist-update-canvas');
+		
+		let modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		let modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		canvas.width = modalWidthWithoutPxKeyword;
+		canvas.height = modalHeightWithoutPxKeyword;
+		
+		this.ctx = canvas.getContext('2d');
+		
+		var bgImg = new Image();
+		bgImg.src = this.imagePath;
+		bgImg.onload = function() {
+			that.drawImage(bgImg);
+			
+			// display data
+			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
+			
+			for(var i=0; i<cellList.length; i++) {
+				var cell = cellList[i];
+				that.displayData(cell);
+			};
+		};
+		
+		// generate tags
+		var cellList = this.xmlDoc.getElementsByTagName("cells")[0].childNodes;
+		
+		for(var i=0; i<cellList.length; i++) {
+			var cell = cellList[i];
+			this.makeTag(cell);
+		};
+		
+		// save data to db
+		$('#checklist-update-btn').click(function() {
+			
+			//var check = confirm('등록하시겠습니까?');
+			
+			//if(check) {
+			
+			var head = {};
+			var checklistData = {};
+	
+			let elements = document.getElementsByClassName('checklist-data');
+	
+			for(var i=0; i<elements.length; i++) {
+				let element = elements[i];
+				checklistData[element.id] = element.value;
+			}
+			
+			head.checklistId = checklistId;
+			head.revisionNo = seqNo;
+			head.checklistData = checklistData;
+			
+			$.ajax({
+				type: "POST",
+		        url: heneServerPath + "/checklist",
+		        data: "data=" + JSON.stringify(head) +
+					  "&type=update",
+		        success: function (result) {
+		        	console.log(result);
+					$('#checklist-update-modal').modal('hide');
+					 parent.refreshMainTable();
+		        }
+			});
+			
+			//}
+		});
+	};
+	
+	this.drawImage = async function(imageObject) {
+		this.ctx.drawImage(imageObject, 0, 0);
+	}
+	
+	this.displayData = function(cell) {
+		var id = cell.nodeName;
+		var type = cell.childNodes[0].textContent;
+		var format = cell.childNodes[1].textContent;
+		var startX = cell.childNodes[2].textContent.replace('px', '');
+		var startY = cell.childNodes[3].textContent.replace('px', '');
+		var width = cell.childNodes[4].textContent.replace('px', '');
+		var height = cell.childNodes[5].textContent.replace('px', '');
+		
+		var data = this.checkData[id];
+		
+		console.log("update modal data====");
+		console.log(cell);
+		console.log(id);
+		console.log(data);
+		var tagId = "#"+ id;
+		
+		if(format == "checkbox") {
+			if(data == "on") {
+				$(tagId).attr("checked", true);
+			}
+		}
+		else {
+			$(tagId).val(data);
+		}
+		//var middleX = Number(startX) + (width / 2);
+		//var middleY = Number(startY) + (height / 2);
+		
+		//this.ctx.textAlign = "center";
+		//this.ctx.font = '10px serif';
+		//this.ctx.fillText(data, middleX, middleY);
+	};
+	
+	this.makeTag = async function(cell) {
+		var id = cell.nodeName;
+		var type = cell.childNodes[0].textContent;
+		var format = cell.childNodes[1].textContent;
+		var startX = cell.childNodes[2].textContent;
+		var startY = cell.childNodes[3].textContent;
+		var width = cell.childNodes[4].textContent;
+		var height = cell.childNodes[5].textContent;
+		
+		var tagId = "#" + id;
+		this.tagIds = tagId;
+		this.tagTypes = type;
+		let tag;
+		
+		var nowDate = new Date();
+		
+		var year = nowDate.getFullYear();
+		var month = nowDate.getMonth() + 1;
+		var day = nowDate.getDate();
+		
+		if(month < 10) {
+			month = "0" + month;
+		}
+		
+		if(day < 10) {
+			day = "0" + day;
+		}
+		
+		var today = year + "-" + month + "-" + day;
+				
+		switch(type) {
+			case "signature-writer":
+				tag = document.createElement('button');
+				tag.classList.add('signature-writer');
+				tag.innerHTML = "서명";
+				break;
+			case "signature-approver":
+				tag = document.createElement('button');
+				tag.classList.add('signature-approver');
+				tag.innerHTML = "서명";
+				break;
+			case "signature-checker":
+				tag = document.createElement('button');
+				tag.classList.add('signature-checker');
+				tag.innerHTML = "서명";
+				break;
+			case "date":
+				tag = document.createElement('input');
+				tag.classList.add("checklist-data");
+				//tag.innerText = today;
+				break;
+			case "text":
+				tag = document.createElement('input');
+				tag.classList.add("checklist-data");
+				break;
+			case "truefalse":
+				tag = document.createElement('input');
+				if(format === 'checkbox') {
+					tag.type = 'checkbox';
+				}
+				
+				tag.classList.add("checklist-data");
+				break;
+			case "textarea":
+				tag = document.createElement('textarea');
+				tag.classList.add("checklist-data");
+				break;
+		}
+		
+		tag.id = id;
+		tag.style.position = 'absolute';
+		tag.style.left = startX;
+		tag.style.top = startY;
+		tag.style.width = width;
+		tag.style.height = height;
+		
+		document.getElementById("checklist-update-wrapper").appendChild(tag);
+		
+		console.log(this.tagTypes);
+		console.log(this.tagIds);
+		
+		if(this.tagTypes == 'date') {
+			//$(this.tagIds).off();
+			//$(this.tagIds).daterangepicker.destroy();
+			//new SetSingleDate2("", this.tagIds, 0);
+				
+		}
+	};
+}
+
+
+function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
+	this.checklistId = checklistId;
+	this.seqNo = seqNo;
+	this.revisionNo = revisionNo;
 	
 	this.checklistData;
 	this.checkData;
@@ -413,8 +683,8 @@ function ChecklistSelectModal(checklistId, seqNo) {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
 	}
 	
 	this.getChecklistData = async function() {
@@ -485,7 +755,24 @@ function ChecklistSelectModal(checklistId, seqNo) {
 		
 		// 점검표 출력
 		$('#checklist-print-btn').click(function() {
-		
+			var dataUrl = document.getElementById("checklist-select-canvas").toDataURL();
+    		var windowContent = '<!DOCTYPE html>';
+   	 		windowContent += '<html>'
+    		windowContent += '<head><title>점검표 출력</title></head>';
+    		windowContent += '<body style="zoom:120%">'
+   		 	windowContent += '<img src="' + dataUrl + '">';
+    		windowContent += '</body>';
+    		windowContent += '</html>';
+    		var printWin = window.open();
+    		printWin.document.open();
+    		printWin.document.write(windowContent);
+    
+    		printWin.document.addEventListener('load', function() {
+        	printWin.focus();
+        	printWin.print();
+        	printWin.document.close();
+        	printWin.close();
+    		}, true);
 		});
 	};
 	

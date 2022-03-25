@@ -65,4 +65,64 @@ public class ChecklistDataService {
 		
 		return list;
 	}
+	
+	public int update(ChecklistData clData) {
+		int result = -1;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			result = clDao.update(conn, clData);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return result;
+	}
+	
+	public int delete(ChecklistData clData) {
+		int result = -1;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			result = clDao.delete(conn, clData);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return result;
+	}
+	
+	public int doSign(ChecklistData clData, String signTarget, String loginId) {
+		int result = -1;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			result = clDao.doSign(conn, clData, signTarget, loginId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return result;
+	}
+	
+	public List<ChecklistData> selectSignColumn(String checklistId) {
+		List<ChecklistData> list = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			list = clDao.selectSignColumn(conn, checklistId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return list;
+	}
 }

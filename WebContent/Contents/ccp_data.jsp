@@ -202,7 +202,7 @@
 	    	
 			var itemList = new ItemList();
 			var type_cd = "CD";
-			var sensorList = await itemList.getMetalList(type_cd);
+			var sensorList = await itemList.getSensorList(type_cd);
 			console.log(sensorList);
 	    	console.log(sensorList.length);
 	    	
@@ -211,8 +211,8 @@
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
 	    		
-	    		sensorName = sensorList[i].metalSensorName;
-	    		sensorId = sensorList[i].metalSensorId;
+	    		sensorName = sensorList[i].sensorName;
+	    		sensorId = sensorList[i].sensorId;
 	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    	

@@ -12,17 +12,17 @@ public class ItemList {
 		this.sensorName = sensorName;
 	}
 	
-	public String getMetalSensorId() {
+	public String getSensorId() {
 		return sensorId;
 	}
-	public String getMetalSensorName() {
+	public String getSensorName() {
 		return sensorName;
 	}
-	public void setMetalSensorId(String metalSensorId) {
-		this.sensorId = metalSensorId;
+	public void setSensorId(String sensorId) {
+		this.sensorId = sensorId;
 	}
-	public void setMetalSensorName(String metalSensorName) {
-		this.sensorName = metalSensorName;
+	public void setSensorName(String sensorName) {
+		this.sensorName = sensorName;
 	}
 
 	@Override

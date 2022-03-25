@@ -351,6 +351,29 @@
 	  </div>
 	</div>
 	
+	 <!-- 점검표 수정용 모달창 -->
+    <div class="modal fade" id="checklist-update-modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">점검표 수정</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div id="checklist-update-wrapper" style="position:relative;">
+				<canvas id="checklist-update-canvas"></canvas>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="checklist-update-btn" class="btn btn-primary">수정</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- 점검표 조회용 모달창 -->
     <div class="modal fade" id="checklist-select-modal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
@@ -505,6 +528,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/CCPSign.js"></script>
 	<!-- itemList-->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/itemList.js"></script>
+	<!-- ChecklistData-->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/ChecklistData.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */

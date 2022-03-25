@@ -41,6 +41,7 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 					.append("ON A.checklist_id = B.checklist_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("AND CAST(A.check_interval AS INT) < CAST(DATE_FORMAT(TIMEDIFF(SYSDATE(), A.latest_check_date), '%H') AS INT)\n")
+					.append("GROUP BY A.checklist_id\n")
 					.append("ORDER BY A.checklist_id\n")
 					.append(";\n")
 					.toString();
@@ -79,6 +80,7 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 					.append("ON A.checklist_id = B.checklist_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("AND A.sign_writer IS NULL OR A.sign_checker IS NULL OR A.sign_approver IS NULL \n")
+					.append("GROUP BY A.checklist_id\n")
 					.append("ORDER BY A.checklist_id ASC, A.seq_no DESC\n")
 					.append(";\n")
 					.toString();

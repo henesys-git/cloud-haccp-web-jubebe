@@ -44,7 +44,7 @@ public class ItemListService {
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			itemList = itemListDao.getSensorList(conn, type_cd);
+			itemList = itemListDao.getCCPList(conn, type_cd);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

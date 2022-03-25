@@ -7,8 +7,8 @@ public class ChecklistData {
 	private String checkData;
 	private String signWriter;
 	private String signChecker;
-	
 	private String signApprover;
+	private String signatureType;
 	
 	public String getChecklistId() {
 		return checklistId;
@@ -31,6 +31,9 @@ public class ChecklistData {
 	public String getSignApprover() {
 		return signApprover;
 	}
+	public String getSignatureType() {
+		return signatureType;
+	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
 	}
@@ -52,7 +55,9 @@ public class ChecklistData {
 	public void setSignApprover(String signApprover) {
 		this.signApprover = signApprover;
 	}
-	
+	public void setSignatureType(String signatureType) {
+		this.signatureType = signatureType;
+	}
 	@Override
 	public String toString() {
 		return "ChecklistData [checklistId=" + checklistId + ", seqNo=" + seqNo + ", revisionNo=" + revisionNo
