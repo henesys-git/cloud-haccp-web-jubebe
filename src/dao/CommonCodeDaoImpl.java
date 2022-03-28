@@ -11,29 +11,28 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
-import model.Sensor;
-import model.User;
+import model.CommonCode;
 
-public class SensorDaoImpl implements SensorDao {
+public class CommonCodeDaoImpl implements CommonCodeDao {
 	
 	private Statement stmt;
 	private ResultSet rs;
 	
 	static final Logger logger = 
-			Logger.getLogger(SensorDaoImpl.class.getName());
+			Logger.getLogger(CommonCodeDaoImpl.class.getName());
 	
-	public SensorDaoImpl() {
+	public CommonCodeDaoImpl() {
 	}
 
 	@Override
-	public List<Sensor> getAllSensors(Connection conn) {
+	public List<CommonCode> getAllCodes(Connection conn) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
-				.append("FROM sensor	\n")
+				.append("FROM common_code	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
@@ -41,14 +40,14 @@ public class SensorDaoImpl implements SensorDao {
 			
 			rs = stmt.executeQuery(sql);
 			
-			List<Sensor> sensorList = new ArrayList<Sensor>();
+			List<CommonCode> commonCodeList = new ArrayList<CommonCode>();
 			
 			while(rs.next()) {
-				Sensor data = extractFromResultSet(rs);
-				sensorList.add(data);
+				CommonCode data = extractFromResultSet(rs);
+				commonCodeList.add(data);
 			}
 			
-			return sensorList;
+			return commonCodeList;
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -61,29 +60,29 @@ public class SensorDaoImpl implements SensorDao {
 	};
 	
 	@Override
-	public Sensor getSensor(Connection conn, String sensorId) {
+	public CommonCode getCommonCode(Connection conn, String codeId) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
-				.append("FROM sensor	\n")
+				.append("FROM common_code	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("  AND sensor_id = '" + sensorId + "'\n")
+				.append("  AND code = '" + codeId + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
 			
 			rs = stmt.executeQuery(sql);
 			
-			Sensor sensor = new Sensor();
+			CommonCode commonCode = new CommonCode();
 			
 			if(rs.next()) {
-				sensor = extractFromResultSet(rs);
+				commonCode = extractFromResultSet(rs);
 			}
 			
-			return sensor;
+			return commonCode;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -95,43 +94,31 @@ public class SensorDaoImpl implements SensorDao {
 	};
 	
 	@Override
-	public boolean insert(Connection conn, Sensor sensor) {
+	public boolean insert(Connection conn, CommonCode commonCode) {
 		try {
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
 					.append("	sensor (\n")
 					.append("		tenant_id,\n")
-					.append("		sensor_id,\n")
-					.append("		sensor_name,\n")
-					.append("		value_type,\n")
-					.append("		ip_address,\n")
-					.append("		protocol_info,\n")
-					.append("		packet_info,\n")
-					.append("		type_code \n")
+					.append("		code,\n")
+					.append("		code_name,\n")
+					.append("		code_type\n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
 					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?\n")
+					.append("		? \n")
 					.append("	);\n")
 					.toString();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, sensor.getSensorId());
-			ps.setString(3, sensor.getSensorName());
-			ps.setString(4, sensor.getValueType());
-			ps.setString(5, sensor.getIpAddress());
-			ps.setString(6, sensor.getProtocolInfo());
-			ps.setString(7, sensor.getPacketInfo());
-			ps.setString(8, sensor.getTypeCode());
+			ps.setString(2, commonCode.getCommonCodeId());
+			ps.setString(3, commonCode.getCommonCodeName());
+			ps.setString(4, commonCode.getCommonCodeType());
 			
 	        int i = ps.executeUpdate();
 
@@ -147,21 +134,17 @@ public class SensorDaoImpl implements SensorDao {
 	}
 	
 	@Override
-	public boolean update(Connection conn, Sensor sensor) {
+	public boolean update(Connection conn, CommonCode commonCode) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 					.append("UPDATE sensor\n")
 					.append("SET\n")
-					.append("	sensor_name='" + sensor.getSensorName() + "',\n")
-					.append("	value_type='" + sensor.getValueType() + "',\n")
-					.append("	ip_address='" + sensor.getIpAddress() + "',\n")
-					.append("	protocol_info='" + sensor.getProtocolInfo() + "',\n")
-					.append("	packet_info='" + sensor.getPacketInfo() + "',\n")
-					.append("	type_code='" + sensor.getTypeCode() + "' \n")
+					.append("	code_name='" + commonCode.getCommonCodeName() + "',\n")
+					.append("	code_type='" + commonCode.getCommonCodeType() + "'\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND sensor_id='" + sensor.getSensorId() + "';\n")
+					.append("  AND code='" + commonCode.getCommonCodeId() + "';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -180,14 +163,14 @@ public class SensorDaoImpl implements SensorDao {
 	}
 	
 	@Override
-	public boolean delete(Connection conn, String sensorId) {
+	public boolean delete(Connection conn, String codeId) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("DELETE FROM sensor\n")
+					.append("DELETE FROM common_code\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("	AND sensor_id='" + sensorId + "';\n")
+					.append("	AND code='" + codeId + "';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -206,30 +189,15 @@ public class SensorDaoImpl implements SensorDao {
 	}
 	
 	
-	private Sensor extractFromResultSet(ResultSet rs) throws SQLException {
+	private CommonCode extractFromResultSet(ResultSet rs) throws SQLException {
 		
-		Sensor sensor = new Sensor();
+		CommonCode commonCode = new CommonCode();
 		
-		sensor.setSensorId(rs.getString("sensor_id"));
-		sensor.setSensorName(rs.getString("sensor_name"));
-		sensor.setValueType(rs.getString("value_type"));
-		sensor.setIpAddress(rs.getString("ip_address"));
-		sensor.setProtocolInfo(rs.getString("protocol_info"));
-		sensor.setPacketInfo(rs.getString("packet_info"));
-		sensor.setTypeCode(rs.getString("type_code"));
+		commonCode.setCommonCodeId(rs.getString("code"));
+		commonCode.setCommonCodeName(rs.getString("code_name"));
+		commonCode.setCommonCodeType(rs.getString("code_type"));
 		
-	    return sensor;
-	    
-		/*
-		return new Sensor(
-					rs.getString("sensor_id"),
-					rs.getString("sensor_name"),
-					rs.getString("value_type"),
-					rs.getString("ip_address"),
-					rs.getString("protocol_info"),
-					rs.getString("packet_info"),
-					rs.getString("type_code")
-				);
-		*/
+	    return commonCode;
+		
 	}
 }

@@ -13,17 +13,20 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import dao.CommonCodeDaoImpl;
 import dao.SensorDaoImpl;
 import dao.UserDaoImpl;
+import model.CommonCode;
 import model.Sensor;
 import model.User;
+import service.CommonCodeService;
 import service.SensorService;
 import service.UserService;
 import utils.FormatTransformer;
 
 
-@WebServlet("/sensor")
-public class SensorController extends HttpServlet {
+@WebServlet("/commonCode")
+public class CommonCodeController extends HttpServlet {
 	
 	/**
 	 * 
@@ -31,7 +34,7 @@ public class SensorController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	static final Logger logger = 
-			Logger.getLogger(SensorController.class.getName());
+			Logger.getLogger(CommonCodeController.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
@@ -44,16 +47,16 @@ public class SensorController extends HttpServlet {
 		
 		String id = req.getParameter("id");
 		
-		SensorService sensorService = new SensorService(new SensorDaoImpl(), bizNo);
+		CommonCodeService commonCodeService = new CommonCodeService(new CommonCodeDaoImpl(), bizNo);
 		
 		String result = "";
 		
 		if(id.equals("all")) {
-			List<Sensor> list = sensorService.getAllSensors();
+			List<CommonCode> list = commonCodeService.getAllCodes();
 			result = FormatTransformer.toJson(list);
 		} else {
-			Sensor sensor = sensorService.getSensorById(id);
-			result = FormatTransformer.toJson(sensor);
+			CommonCode commonCode = commonCodeService.getCodeById(id);
+			result = FormatTransformer.toJson(commonCode);
 		}
 		
 		res.setContentType("application/json; charset=UTF-8");
@@ -76,25 +79,22 @@ public class SensorController extends HttpServlet {
 		if(req.getParameter("type").equals("delete")) {
 			delete(req, res);
 		}
+		
 	}
 	
 	public void insert(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		Sensor sensor = new Sensor(
-				req.getParameter("id"), 
-				req.getParameter("name"),
-				req.getParameter("valueType"),
-				req.getParameter("IP"),
-				req.getParameter("protocol"),
-				req.getParameter("packet"),
-				req.getParameter("typeCode")
+		CommonCode commonCode = new CommonCode(
+				req.getParameter("code"), 
+				req.getParameter("codeName"),
+				req.getParameter("codeType")
 				
 			);
 		
-		SensorService sensorService = new SensorService(new SensorDaoImpl(), tenantId);
-		Boolean inserted = sensorService.insert(sensor);
+		CommonCodeService commonCodeService = new CommonCodeService(new CommonCodeDaoImpl(), tenantId);
+		Boolean inserted = commonCodeService.insert(commonCode);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		
@@ -110,19 +110,15 @@ public class SensorController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		Sensor sensor = new Sensor(
-				req.getParameter("id"), 
-				req.getParameter("name"),
-				req.getParameter("valueType"),
-				req.getParameter("IP"),
-				req.getParameter("protocol"),
-				req.getParameter("packet"),
-				req.getParameter("typeCode")
+		CommonCode commonCode = new CommonCode(
+				req.getParameter("code"), 
+				req.getParameter("codeName"),
+				req.getParameter("codeType")
 				
 			);
 		
-		SensorService sensorService = new SensorService(new SensorDaoImpl(), tenantId);
-		Boolean updated = sensorService.update(sensor);
+		CommonCodeService commonCodeService = new CommonCodeService(new CommonCodeDaoImpl(), tenantId);
+		Boolean updated = commonCodeService.update(commonCode);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		
@@ -138,10 +134,10 @@ public class SensorController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		String sensorId = req.getParameter("id");
+		String commonCodeId = req.getParameter("id");
 		
-		SensorService sensorService = new SensorService(new SensorDaoImpl(), tenantId);
-		Boolean deleted = sensorService.delete(sensorId);
+		CommonCodeService commonCodeService = new CommonCodeService(new CommonCodeDaoImpl(), tenantId);
+		Boolean deleted = commonCodeService.delete(commonCodeId);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		

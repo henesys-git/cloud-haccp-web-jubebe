@@ -29,6 +29,7 @@
 	    	return fetchedList;
 	    };
 	    
+	    //checklist_sign 테이블에서 해당 점검표의 사인 정보 조회
 	    async function getSignColumnData() {
 	        var fetchedList = $.ajax({
 			            type: "GET",
@@ -46,35 +47,33 @@
 	    async function initTable() {
 	    	var list = await getData();
 	    	var list2 = await getSignColumnData();
-	    	console.log(list2);
 	    	
-	    	var columnsContent = new Array();
-	    	var columnDefsContent = new Array();
+	    	//서명 칼럼 index 들어갈 배열
+	    	var columnDefsKeys = new Array();
 	    	
+	    	//html 고정th명(점검표아이디, 일련번호, 양식수정이력번호)
 	    	var fixedTh = new Array();
 	    	fixedTh[0] = "점검표아이디";
 			fixedTh[1] = "일련번호";
 			fixedTh[2] = "양식수정이력번호";
+			
+			//db로부터 받아온 칼럼명
 			var fixedColumn = new Array();
 			fixedColumn[0] = "checklistId";
 			fixedColumn[1] = "seqNo";
 			fixedColumn[2] = "revisionNo";
 	    	
+			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
+			var columnKeys =
+    			[ {data: fixedColumn[0] , defaultContent : ''}, {data:fixedColumn[1] , defaultContent : ''}, {data:fixedColumn[2] , defaultContent : ''}];
+			
+			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
 	    	for(var a = 0; a < 3; a++) {
-	    		
-	    		
-	    		//var column = new Object();
-				//column.data = fixedColumn[a];
-				//column.defaultContent = '';
-				//columnsContent.push(column);
 				$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
 	    	}
-	    	var columnKeys =
-    			[ {data: fixedColumn[0] , defaultContent : ''}, {data:fixedColumn[1] , defaultContent : ''}, {data:fixedColumn[2] , defaultContent : ''}];
 	    	
-	    	console.log(columnKeys);
-	    	console.log(columnsContent);
-	    	
+			//점검표의 사인정보를 조회해온 데이터를 판단하여 동적으로 
+			//columnKeys 배열에 push하여 칼럼을 늘리고 html th 태그를 생성한다.
 	    	for(var i = 0; i<list2.length; i++) {
 	    		var column = new Object();
 	    		var columnDef = new Object();
@@ -82,66 +81,58 @@
 	    			column.data = "signWriter";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
-					columnsContent.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>작성자서명</th>");
+	    			columnDefsKeys[i] = (i+3);
 	    			
-	    			/*
-	    			columnDef.targets = "[" + i + "]";
-	    			columnDef.creadtedCell = "function(td, cellData, rowData, rowinx, col) {if(cellData == null) {$(td).append('<button type='button' class='btn btn-success checklist-sign' id='sign_writer' onclick = 'registSignInfo(this);'>서명</button>');}}";
+	    		}
+	    		else if(list2[i].signatureType == "CHECK") {
+	    			column.data = "signChecker";
+	    			column.defaultContent = "";
+	    			columnKeys.push(column);
+	    			$("#ccpDataTable thead tr").append("<th>확인자서명</th>");
+	    			columnDefsKeys[i] = (i+3);
 	    			
-	    			columnDefsContent.push(
-	    					'targets' : [i],
-			        		'createdCell' : function(td, cellData, rowData, rowinx, col) {
-			        			if(cellData == null) {
-			        				$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
-			        			}
-			        		}		
-	    			);
-	    			*/
 	    		}
 	    		else if(list2[i].signatureType == "APPRV") {
 	    			column.data = "signApprover";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
-					columnsContent.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>승인자서명</th>");
-	    			/*
-	    			columnDefsContent.push(
-	    					'targets' : [i],
-			        		'createdCell' : function(td, cellData, rowData, rowinx, col) {
-			        			if(cellData == null) {
-			        				$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
-			        			}
-			        		}		
-	    			);
-	    			*/
+	    			columnDefsKeys[i] = (i+3);
+	    			
 	    		}
 	    	}
-	    	console.log(columnKeys);
-	    	console.log(columnsContent);
-	    	//console.log(columnsDefsContent);
+			
+			//columns : 상단에서 정의된 columnKeys 사용
+			//columnDefs - targets : 서명버튼 정의될 칼럼 index로 columnDefsKeys 사용
+			//서명 칼럼에 데이터가 없으면 서명버튼을 칼럼명에 맞게 생성한다. 
 		    var customOpts = {
 		    		
 					data : list,
 					pageLength: 10,
-					columns : columnKeys
-					//'columnDefs' : columnDefsContent
-					//columns = columnsContent
-					//columns: [
-					//	columnsContent
-						/*,
-						{ data: "checklistId", defaultContent: '' },
-						{ data: "seqNo", defaultContent: '' },
-						{ data: "revisionNo", defaultContent: '' }
-						
-						
-						{ data: "signWriter", defaultContent: '' },
-						{ data: "signChecker", defaultContent: '' },
-						{ data: "signApprover", defaultContent: '' }
-						*/
-			        //]
-		    		//columns.concat(columnsContent);
-		    		/*,
+					columns : columnKeys,
+					'columnDefs' : [
+						{
+							'targets' : columnDefsKeys,
+							'createdCell' : function(td, cellData, rowData, rowinx, col) {
+								var colInfo = $('#ccpDataTable').DataTable().settings()[0].aoColumns[col];
+							    
+							    if(cellData == null && colInfo.sTitle == "작성자서명") {
+							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
+							    }
+							    else if(cellData == null && colInfo.sTitle == "확인자서명") {
+							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick = "registSignInfo(this);">서명</button>');
+							    }
+							    else if(cellData == null && colInfo.sTitle == "승인자서명") {
+							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
+							    }
+							    
+							}
+							
+						}
+					]
+					
+					/*
 			        'columnDefs' : [
 			        	
 			        	{
@@ -169,7 +160,8 @@
 			        		}
 			        	}
 			        	
-			        ]*/
+			        ]
+					*/
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
@@ -197,9 +189,11 @@
     		
     		let checklistId = selectedRow.checklistId;
     		// 제일 최신 포맷 수정이력번호 가져와야 함
-    		let checklistFormatRevisionNo = 0;
+    		//let checklistFormatRevisionNo = 0;
+    		let checklistRevisionNo = selectedRow.revisionNo;
+    		let checklistSeqNo = selectedRow.seqNo;
     		
-    		var modal = new ChecklistUpdateModal(checklistId, checklistFormatRevisionNo);
+    		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo);
     		modal.openModal();
     		
     	});

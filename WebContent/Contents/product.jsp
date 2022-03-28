@@ -204,7 +204,7 @@
 				<thead>
 					<tr>
 					    <th>제품아이디</th>
-					    <th>제폼명</th>
+					    <th>제품명</th>
 					</tr>
 				</thead>
 				<tbody id="productTableBody">		

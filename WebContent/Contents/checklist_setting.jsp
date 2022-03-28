@@ -162,8 +162,8 @@
 	            		"imagePath" : $('#image-path').val(),
 	            		"metaDataFilePath" : $('#metadata-file-path').val(),
 		           	},
-		            success: function (deleteResult) {
-		            	if(deleteResult == 'true') {
+		            success: function (updateResult) {
+		            	if(updateResult == 'true') {
 		            		alert('수정되었습니다.');
 		            		$('#myModal').modal('hide');
 		            		refreshMainTable();

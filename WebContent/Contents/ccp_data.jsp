@@ -92,6 +92,18 @@
 							{ data: "improvementAction", defaultContent: '' }
 				        ],
 				        columnDefs : [
+				        	{
+					  			targets: [3],
+					  			render: function(td, cellData, rowData, row, col){
+					  				console.log(cellData);
+					  				if (rowData.sensorValue == '1') {
+					  					return '검출';
+					  				}
+					  				else {
+					  					return '비검출';
+					  				}
+					  			}
+					  		},
 				   			{
 					  			targets: [5],
 					  			render: function(td, cellData, rowData, row, col){

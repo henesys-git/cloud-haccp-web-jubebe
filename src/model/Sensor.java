@@ -9,6 +9,19 @@ public class Sensor {
 	private String packetInfo;
 	private String typeCode;
 	
+	public Sensor() {}
+	
+	public Sensor(String sensorId, String sensorName, String valueType, String ipAddress, String protocolInfo, String packetInfo, String typeCode) {
+		super();
+		this.sensorId = sensorId;
+		this.sensorName = sensorName;
+		this.valueType = valueType;
+		this.ipAddress = ipAddress;
+		this.protocolInfo = protocolInfo;
+		this.packetInfo = packetInfo;
+		this.typeCode = typeCode;
+	}
+	
 	public String getSensorId() {
 		return sensorId;
 	}

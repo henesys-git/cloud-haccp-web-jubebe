@@ -98,8 +98,8 @@
 	User user = loginService.checkPassword(bizNo, Loginid_output, Password_output);
 	
 	response.setContentType("text/html");
-	
-    if(user.getUserId() != null) {
+    //if(user.getUserId() != null) {
+    if(user != null) {
     	session.setAttribute("login_id", Loginid_output);
         session.setAttribute("login_name", user.getUserName());
         session.setAttribute("bizNo", bizNo);

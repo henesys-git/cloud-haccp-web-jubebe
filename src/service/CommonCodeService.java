@@ -5,70 +5,57 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import dao.SensorDao;
+import dao.CommonCodeDao;
 import mes.frame.database.JDBCConnectionPool;
-import model.Sensor;
+import model.CommonCode;
 
-public class SensorService {
+public class CommonCodeService {
 
-	private SensorDao sensorDao;
+	private CommonCodeDao commonCodeDao;
 	private String bizNo;
 	private Connection conn;
 	
-	static final Logger logger = Logger.getLogger(SensorService.class.getName());
+	static final Logger logger = Logger.getLogger(CommonCodeService.class.getName());
 
-	public SensorService(SensorDao sensorDao, String bizNo) {
-		this.sensorDao = sensorDao;
+	public CommonCodeService(CommonCodeDao commonCodeDao, String bizNo) {
+		this.commonCodeDao = commonCodeDao;
 		this.bizNo = bizNo;
 	}
 	
-	public List<Sensor> getAllSensors() {
-		List<Sensor> sensorList = null;
+	public List<CommonCode> getAllCodes() {
+		List<CommonCode> commonCodeList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			sensorList = sensorDao.getAllSensors(conn);
+			commonCodeList = commonCodeDao.getAllCodes(conn);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return sensorList;
+		return commonCodeList;
 	}
 	
-	public Sensor getSensorById(String id) {
-		Sensor sensor = null;
+	public CommonCode getCodeById(String codeId) {
+		CommonCode commonCode = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			sensor = sensorDao.getSensor(conn, id);
+			commonCode = commonCodeDao.getCommonCode(conn, codeId);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return sensor;
+		return commonCode;
 	}
 	
-	public boolean insert(Sensor sensor) {
+	public boolean insert(CommonCode commonCode) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return sensorDao.insert(conn, sensor);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		} finally {
-		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
-		}
-		
-		return false;
-	}
-	
-	public boolean update(Sensor sensor) {
-		try {
-			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return sensorDao.update(conn, sensor);
+			return commonCodeDao.insert(conn, commonCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -78,10 +65,23 @@ public class SensorService {
 		return false;
 	}
 	
-	public boolean delete(String sensorId) {
+	public boolean update(CommonCode commonCode) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return sensorDao.delete(conn, sensorId);
+			return commonCodeDao.update(conn, commonCode);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	public boolean delete(String codeId) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return commonCodeDao.delete(conn, codeId);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

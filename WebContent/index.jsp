@@ -131,8 +131,12 @@
 			$("#subdomainId").val(subdomain);
 			
 			//login.jsp에서 에러나서(아이디/비번틀려서) 다시 index.jsp로 온 경우
-			if("<%=GV_INVALID_LOGIN%>".length > 0) { 
+			if("<%=GV_INVALID_LOGIN%>".length > 0 && "<%=GV_INVALID_LOGIN%>" == "y") { 
 				heneSwal.error("아이디 또는 비밀번호가 틀립니다.")
+			}
+			
+			if("<%=GV_INVALID_LOGIN%>".length > 0 && "<%=GV_INVALID_LOGIN%>" == "yy") { 
+				heneSwal.error("로그인을 먼저 하시고 접속해 주세요.")
 			}
 			
 			$("#MainBody").keydown(function(key) { // 엔터키 누르면 로그인

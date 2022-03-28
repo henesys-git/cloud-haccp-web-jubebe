@@ -147,12 +147,15 @@ public class ChecklistDataController extends HttpServlet {
 			String checkData = json.get("checklistData").toString();
 			String checklistId = json.get("checklistId").toString();
 			String revisionNo = json.get("revisionNo").toString();
+			String seqNo = json.get("seqNo").toString();
 			int revisionNoInt = Integer.parseInt(revisionNo);
+			int seqNoInt = Integer.parseInt(seqNo);
 
 			ChecklistData clData = new ChecklistData();
 			clData.setChecklistId(checklistId);
 			clData.setRevisionNo(revisionNoInt);
 			clData.setCheckData(checkData);
+			clData.setSeqNo(seqNoInt);
 			
 			System.out.println(clData.toString());
 			

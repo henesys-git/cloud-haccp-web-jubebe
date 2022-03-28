@@ -401,10 +401,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	};
 }
 
-function ChecklistUpdateModal(checklistId, seqNo) {
+function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	this.checklistId = checklistId;
+	this.revisionNo = revisionNo;
 	this.seqNo = seqNo;
-	
 	this.metaDataPath;
 	this.imagePath;
 	
@@ -418,8 +418,8 @@ function ChecklistUpdateModal(checklistId, seqNo) {
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
 	}
 	
 	this.getChecklistData = async function() {
@@ -500,7 +500,7 @@ function ChecklistUpdateModal(checklistId, seqNo) {
 		// save data to db
 		$('#checklist-update-btn').click(function() {
 			
-			//var check = confirm('등록하시겠습니까?');
+			//var check = confirm('수정하시겠습니까?');
 			
 			//if(check) {
 			
@@ -515,7 +515,8 @@ function ChecklistUpdateModal(checklistId, seqNo) {
 			}
 			
 			head.checklistId = checklistId;
-			head.revisionNo = seqNo;
+			head.revisionNo = revisionNo;
+			head.seqNo = seqNo;
 			head.checklistData = checklistData;
 			
 			$.ajax({

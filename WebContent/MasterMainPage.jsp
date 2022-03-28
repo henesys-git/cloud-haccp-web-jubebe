@@ -7,17 +7,26 @@
 <%
 	Config.this_SERVER_path = request.getContextPath();
 	
-	String loginID = session.getAttribute("login_id").toString();
-	String login_name = session.getAttribute("login_name").toString();
-	String bizNo = session.getAttribute("bizNo").toString();
+	String loginID, login_name, bizNo = "";
 	
+	if(session.getAttribute("login_id") != null){
+		loginID = session.getAttribute("login_id").toString();
+		login_name = session.getAttribute("login_name").toString();
+		bizNo = session.getAttribute("bizNo").toString();
+	}
+	else {
+		loginID = "";
+		login_name = "";
+		bizNo = "";
+		response.sendRedirect("index.jsp" + "?invalid_login=yy"); 
+	}
+	/*
 	if(loginID == null || loginID.equals("")) {
 		response.sendRedirect(Config.this_SERVER_path + "/Contents/index.jsp");
 	}
-	
+	*/
 	String userGroupCode = "GRCD001";
 	
-	/* DoyosaeTableModel TableModelAlarm = new DoyosaeTableModel("M000S100000E995", jArrayUser); */
 %>
 
 <!DOCTYPE html>
@@ -530,6 +539,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/itemList.js"></script>
 	<!-- ChecklistData-->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/ChecklistData.js"></script>
+	<!-- sensor-->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/sensor.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */
