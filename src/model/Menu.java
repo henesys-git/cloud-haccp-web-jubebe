@@ -10,6 +10,8 @@ public class Menu {
 	private String parentMenuId;
 	private List<Menu> children;
 	
+	public Menu() {}
+	
 	public Menu(String menuId, String menuName, int menuLevel, String path, String parentMenuId) {
 		super();
 		this.menuId = menuId;
@@ -17,6 +19,11 @@ public class Menu {
 		this.menuLevel = menuLevel;
 		this.path = path;
 		this.parentMenuId = parentMenuId;
+	}
+	
+	public Menu(String menuId) {
+		super();
+		this.menuId = menuId;
 	}
 
 	public String getMenuId() {

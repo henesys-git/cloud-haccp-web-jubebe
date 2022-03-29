@@ -70,6 +70,7 @@
 			 var count = 0;
 			 today = new Date(year+"-"+month+"-"+date+" 09:00:00")
 			
+			 $('#document thead').attr('style', 'background-color: rgb(204,255,255)');
 			
 	        var fetchedList = $.ajax({
 			            type: "GET",
@@ -170,7 +171,7 @@
 	    };
 	    
 	    async function getData2() {
-			
+	    	$('#document_sign thead').attr('style', 'background-color:rgb(204,255,255)');
 			 var count = 0;
 	       	 var fetchedList2 = $.ajax({
 			            type: "POST",

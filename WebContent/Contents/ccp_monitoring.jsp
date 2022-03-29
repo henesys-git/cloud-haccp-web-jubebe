@@ -48,7 +48,7 @@
     	
     	async function initChart() {
     	
-    	$('#title').append("<h3 style ='text-align:center;'>금일 금속검출기 운영 현황</h3>");	
+    	$('#title').append("<h4 style ='text-align:center;'>금일 금속검출기 운영 현황</h4>");	
     		
     	var dataArr = await getData();
     	console.log(dataArr);
@@ -126,7 +126,7 @@
     });
 
 </script>
-<div style="width:40%; margin-left : 40px;">
+<div style="width:40%; margin-left : 40px; margin-top: 44px;">
 	<div id = "title" class = "title"></div>
 	<canvas id="canvas" height="80px"></canvas>
 </div>

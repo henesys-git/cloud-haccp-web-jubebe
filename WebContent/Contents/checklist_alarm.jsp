@@ -32,7 +32,9 @@
 	<!-- Default panel contents -->
 	<div class="panel-heading" style="font-weight: bold" id="MenuTitle"></div>
 	<div class="panel-body">
-		<div id="parent_page2"></div>
-		<div id="parent_page3"></div>	
+		<div class = "row">
+			<div class ="col-md-6" id="parent_page2"></div>
+			<div class ="col-md-6" id="parent_page3"></div>	
+		</div>
 	</div>
 </div>

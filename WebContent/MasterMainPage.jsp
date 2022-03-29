@@ -541,6 +541,10 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/ChecklistData.js"></script>
 	<!-- sensor-->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/sensor.js"></script>
+	<!-- commonCode-->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/commonCode.js"></script>
+	<!-- menu-->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/menu.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */

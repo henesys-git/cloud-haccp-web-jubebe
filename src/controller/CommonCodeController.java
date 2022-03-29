@@ -88,8 +88,8 @@ public class CommonCodeController extends HttpServlet {
 		
 		CommonCode commonCode = new CommonCode(
 				req.getParameter("code"), 
-				req.getParameter("codeName"),
-				req.getParameter("codeType")
+				req.getParameter("name"),
+				req.getParameter("valueType")
 				
 			);
 		
@@ -112,8 +112,8 @@ public class CommonCodeController extends HttpServlet {
 		
 		CommonCode commonCode = new CommonCode(
 				req.getParameter("code"), 
-				req.getParameter("codeName"),
-				req.getParameter("codeType")
+				req.getParameter("name"),
+				req.getParameter("valueType")
 				
 			);
 		
@@ -134,7 +134,7 @@ public class CommonCodeController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		String commonCodeId = req.getParameter("id");
+		String commonCodeId = req.getParameter("code");
 		
 		CommonCodeService commonCodeService = new CommonCodeService(new CommonCodeDaoImpl(), tenantId);
 		Boolean deleted = commonCodeService.delete(commonCodeId);

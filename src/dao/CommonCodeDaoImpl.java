@@ -98,7 +98,7 @@ public class CommonCodeDaoImpl implements CommonCodeDao {
 		try {
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
-					.append("	sensor (\n")
+					.append("	common_code (\n")
 					.append("		tenant_id,\n")
 					.append("		code,\n")
 					.append("		code_name,\n")
@@ -139,7 +139,7 @@ public class CommonCodeDaoImpl implements CommonCodeDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("UPDATE sensor\n")
+					.append("UPDATE common_code \n")
 					.append("SET\n")
 					.append("	code_name='" + commonCode.getCommonCodeName() + "',\n")
 					.append("	code_type='" + commonCode.getCommonCodeType() + "'\n")

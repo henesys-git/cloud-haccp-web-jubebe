@@ -554,6 +554,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		console.log(cell);
 		console.log(id);
 		console.log(data);
+		console.log(format);
 		var tagId = "#"+ id;
 		
 		if(format == "checkbox") {
@@ -564,6 +565,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		else {
 			$(tagId).val(data);
 		}
+		console.log($(tagId).val());
 		//var middleX = Number(startX) + (width / 2);
 		//var middleY = Number(startY) + (height / 2);
 		
