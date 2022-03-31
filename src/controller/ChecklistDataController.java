@@ -39,6 +39,7 @@ public class ChecklistDataController extends HttpServlet {
 		
 		String checklistId = req.getParameter("checklistId");
 		String seqNoStr = req.getParameter("seqNo");
+		String seqNoStr2 = req.getParameter("seqNo2");
 		
 		System.out.println("seq no string:" + seqNoStr);
 		
@@ -56,6 +57,17 @@ public class ChecklistDataController extends HttpServlet {
 			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
 			List<ChecklistData> clDataList = cldService.selectSignColumn(checklistId);
 			String result = FormatTransformer.toJson(clDataList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			
+			out.print(result);
+		}
+		else if(seqNoStr.equals("signData")) {
+			int seqNo2 = Integer.parseInt(seqNoStr2);
+			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
+			ChecklistData clData = cldService.selectSignData(checklistId, seqNo2);
+			String result = FormatTransformer.toJson(clData);
 			
 			res.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = res.getWriter();

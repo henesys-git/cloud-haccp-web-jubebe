@@ -58,7 +58,7 @@ let heneMainTableOpts = {
         }
     },
 	"retrieve": true,
-	"stateSave": true
+	"stateSave": false
 }
 
 

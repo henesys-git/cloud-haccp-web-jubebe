@@ -354,7 +354,8 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-insert-btn" class="btn btn-primary">등록</button>
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
+	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-insert-modal').modal('hide');">닫기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -377,7 +378,8 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-update-btn" class="btn btn-primary">수정</button>
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
+	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-update-modal').modal('hide');">닫기</button>
 	      </div>
 	    </div>
 	  </div>

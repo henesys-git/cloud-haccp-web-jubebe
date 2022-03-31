@@ -51,6 +51,21 @@ public class ChecklistDataService {
 		return clData;
 	}
 	
+	public ChecklistData selectSignData(String checklistId, int seqNo) {
+		ChecklistData clData = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			clData = clDao.selectSignData(conn, checklistId, seqNo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return clData;
+	}
+	
 	public List<ChecklistData> selectAll(String checklistId) {
 		List<ChecklistData> list = null;
 		

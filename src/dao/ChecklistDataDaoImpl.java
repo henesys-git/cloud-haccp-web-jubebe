@@ -174,6 +174,52 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	}
 	
 	@Override
+	public ChecklistData selectSignData(Connection conn, String checklistId, int seqNo) {
+		
+		try {
+			String sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("A.checklist_id, \n")
+					.append("B.user_name AS sign_writer, \n")
+					.append("C.user_name AS sign_checker, \n")
+					.append("D.user_name AS sign_approver \n")
+					.append("FROM checklist_data A \n")
+					.append("LEFT OUTER JOIN user B \n")
+					.append("ON A.sign_writer = B.user_id \n")
+					.append("LEFT OUTER JOIN user C \n")
+					.append("ON A.sign_checker = C.user_id \n")
+					.append("LEFT OUTER JOIN user D \n")
+					.append("ON A.sign_approver = D.user_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND A.checklist_id = ?\n")
+					.append("  AND A.seq_no = ?;\n")
+					.toString();
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, checklistId);
+			ps.setInt(2, seqNo);
+			
+			rs = ps.executeQuery();
+			
+			ChecklistData clData = new ChecklistData();
+					
+			if(rs.next()) {
+				clData = extractSignDataFromResultSet(rs);
+			}
+			
+			return clData;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { ps.close(); } catch (Exception e) { /* Ignored */ }
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	}
+	
+	@Override
 	public List<ChecklistData> selectAll(Connection conn, String checklistId) {
 		try {
 			stmt = conn.createStatement();
@@ -185,20 +231,22 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 				.append("A.seq_no, 									\n")
 				.append("A.revision_no, 							\n")
 				.append("A.check_data, 								\n")
-				.append("A.sign_writer, 							\n")
-				.append("A.sign_checker, 							\n")
-				.append("A.sign_approver 							\n")
+				//.append("A.sign_writer, 							\n")
+				//.append("A.sign_checker, 							\n")
+				//.append("A.sign_approver 							\n")
+				.append("B.user_name AS sign_writer, 				\n")
+				.append("C.user_name AS sign_checker, 				\n")
+				.append("D.user_name AS sign_approver 				\n")
 				.append("FROM checklist_data A						\n")
-				/*
 				.append("LEFT OUTER JOIN user B						\n")
 				.append("ON A.sign_writer = B.user_id				\n")
 				.append("LEFT OUTER JOIN user C						\n")
 				.append("ON A.sign_checker = C.user_id				\n")
 				.append("LEFT OUTER JOIN user D						\n")
 				.append("ON A.sign_approver = D.user_id				\n")
-				*/
 				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.append("  AND A.checklist_id = '" + checklistId + "'	\n")
+				//.append("  AND A.checklist_id = '" + checklistId + "'	\n")
 				.toString();
 			
 			rs = stmt.executeQuery(sql);
@@ -304,6 +352,17 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    
 	    clData.setChecklistId(rs.getString("checklist_id"));
 	    clData.setSignatureType(rs.getString("signature_type"));
+	    
+	    return clData;
+	}
+	
+	private ChecklistData extractSignDataFromResultSet(ResultSet rs) throws SQLException {
+	    ChecklistData clData = new ChecklistData();
+	    
+	    clData.setChecklistId(rs.getString("checklist_id"));
+	    clData.setSignWriter(rs.getString("sign_writer"));
+	    clData.setSignChecker(rs.getString("sign_checker"));
+	    clData.setSignApprover(rs.getString("sign_approver"));
 	    
 	    return clData;
 	}

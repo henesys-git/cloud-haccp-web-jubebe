@@ -118,7 +118,8 @@
 					  				}
 					  			}
 					  		}
-					    ]
+					    ],
+					    stateSave : true
 				}
 	    		
 				subTable = $('#ccpDataSubTable').DataTable(

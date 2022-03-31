@@ -319,6 +319,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var startY = cell.childNodes[3].textContent;
 		var width = cell.childNodes[4].textContent;
 		var height = cell.childNodes[5].textContent;
+		var readonly = "";
 		
 		var tagId = "#" + id;
 		this.tagIds = tagId;
@@ -343,24 +344,27 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				
 		switch(type) {
 			case "signature-writer":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-writer');
-				tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
+				//tag.innerHTML = "서명";
 				break;
 			case "signature-approver":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-approver');
-				tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
+				//tag.innerHTML = "서명";
 				break;
 			case "signature-checker":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-checker');
-				tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
+				//tag.innerHTML = "서명";
 				break;
 			case "date":
 				tag = document.createElement('date');
 				tag.classList.add("checklist-data");
-				tag.innerHTML = today;
+				//tag.innerHTML = today;
 				break;
 			case "text":
 				tag = document.createElement('input');
@@ -371,7 +375,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				if(format === 'checkbox') {
 					tag.type = 'checkbox';
 				}
-				
+				tag.classList.add("checklist-data");
+				break;
+			case "image":
+				tag = document.createElement('file');
 				tag.classList.add("checklist-data");
 				break;
 			case "textarea":
@@ -398,6 +405,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			//new SetSingleDate2("", this.tagIds, 0);
 				
 		}
+		
 	};
 }
 
@@ -436,6 +444,20 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		return fetchedData;
 	}
 	
+	this.getChecklistSignData = async function() {
+		let fetchedData = $.ajax({
+							type: "GET",
+					        url: heneServerPath + "/checklist"
+					        	+ "?checklistId=" + this.checklistId
+					        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
+					        success: function (data) {
+					        	return data;
+					        }
+						});
+		
+		return fetchedData;
+	}
+	
 	this.setModal = async function() {
 		// read meta-data
 		let response = await fetch(this.metaDataPath);
@@ -461,11 +483,18 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
 		this.checkData = JSON.parse(this.checklistData.checkData);
+		this.checklistSignData = await this.getChecklistSignData();
+		
+		//this.checklistSignData = await this.getChecklistSignData();
+		//this.signWriter = this.checklistSignData.signWriter;
+		//this.signChecker = this.checklistSignData.signChecker;
+		//this.signApprover = this.checklistSignData.signApprover;
+		
 		
 		$("#checklist-update-modal").modal("show");
 		
 		// read checklist image
-		var canvas = document.getElementById('checklist-update-canvas');
+		let canvas = document.getElementById('checklist-update-canvas');
 		
 		let modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
 		let modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
@@ -479,7 +508,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
 			that.drawImage(bgImg);
-			
+			/*
 			// display data
 			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
 			
@@ -487,6 +516,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				var cell = cellList[i];
 				that.displayData(cell);
 			};
+			*/
+			
 		};
 		
 		// generate tags
@@ -538,7 +569,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	this.drawImage = async function(imageObject) {
 		this.ctx.drawImage(imageObject, 0, 0);
 	}
-	
+	/*
 	this.displayData = function(cell) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
@@ -555,6 +586,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		console.log(id);
 		console.log(data);
 		console.log(format);
+		
 		var tagId = "#"+ id;
 		
 		if(format == "checkbox") {
@@ -565,6 +597,17 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		else {
 			$(tagId).val(data);
 		}
+		
+		if(type == "signature-writer") {
+			$(tagId).val(signWriter);
+		}
+		else if(type == "signature-approver") {
+			$(tagId).val(signApprover);
+		}
+		else if(type == "signature-checker") {
+			$(tagId).val(signChecker);
+		}
+		
 		console.log($(tagId).val());
 		//var middleX = Number(startX) + (width / 2);
 		//var middleY = Number(startY) + (height / 2);
@@ -573,7 +616,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		//this.ctx.font = '10px serif';
 		//this.ctx.fillText(data, middleX, middleY);
 	};
-	
+	*/
 	this.makeTag = async function(cell) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
@@ -587,12 +630,21 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		this.tagIds = tagId;
 		this.tagTypes = type;
 		let tag;
-		
+
 		var nowDate = new Date();
 		
 		var year = nowDate.getFullYear();
 		var month = nowDate.getMonth() + 1;
 		var day = nowDate.getDate();
+		
+		var data = this.checkData[id];
+		var signWriter = this.checklistSignData.signWriter;
+		var signChecker = this.checklistSignData.signChecker;
+		var signApprover = this.checklistSignData.signApprover;
+		
+		console.log(signWriter);
+		console.log(signChecker);
+		console.log(signApprover);
 		
 		if(month < 10) {
 			month = "0" + month;
@@ -603,43 +655,60 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		}
 		
 		var today = year + "-" + month + "-" + day;
-				
 		switch(type) {
 			case "signature-writer":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-writer');
-				tag.innerHTML = "서명";
+				tag.value = signWriter;
+				//tag.innerText = signWriter;
+				//tag.innerHTML = "서명";
 				break;
 			case "signature-approver":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-approver');
-				tag.innerHTML = "서명";
+				tag.value = signApprover;
+				//tag.innerHTML = signApprover;
+				//tag.innerHTML = "서명";
 				break;
 			case "signature-checker":
-				tag = document.createElement('button');
+				tag = document.createElement('input');
 				tag.classList.add('signature-checker');
-				tag.innerHTML = "서명";
+				tag.value = signChecker;
+				//tag.innerHTML = signChecker;
+				//tag.innerHTML = "서명";
 				break;
 			case "date":
-				tag = document.createElement('input');
+				tag = document.createElement('date');
 				tag.classList.add("checklist-data");
-				//tag.innerText = today;
+				tag.value = data;
 				break;
 			case "text":
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
+				tag.value = data;
+				//tag.innerText = data;
 				break;
 			case "truefalse":
 				tag = document.createElement('input');
 				if(format === 'checkbox') {
 					tag.type = 'checkbox';
+					if(data == 'on') {
+						console.log("checkbox data");
+						console.log(data);
+						tag.setAttribute("checked", true);
+					}
 				}
-				
 				tag.classList.add("checklist-data");
 				break;
+			case "image":
+				tag = document.createElement('file');
+				tag.classList.add("checklist-data");
+				break;	
 			case "textarea":
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
+				tag.value = data;
+				//tag.innerText = data;
 				break;
 		}
 		
@@ -651,9 +720,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-update-wrapper").appendChild(tag);
-		
-		console.log(this.tagTypes);
-		console.log(this.tagIds);
 		
 		if(this.tagTypes == 'date') {
 			//$(this.tagIds).off();
@@ -704,6 +770,20 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		return fetchedData;
 	}
 	
+	this.getChecklistSignData = async function() {
+		let fetchedData = $.ajax({
+							type: "GET",
+					        url: heneServerPath + "/checklist"
+					        	+ "?checklistId=" + this.checklistId
+					        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
+					        success: function (data) {
+					        	return data;
+					        }
+						});
+		
+		return fetchedData;
+	}
+	
 	this.setModal = async function() {
 		// read meta-data
 		let response = await fetch(this.metaDataPath);
@@ -728,6 +808,7 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
 		this.checkData = JSON.parse(this.checklistData.checkData);
+		this.checklistSignData = await this.getChecklistSignData();
 		
 		$("#checklist-select-modal").modal("show");
 		
@@ -794,11 +875,40 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		
 		var data = this.checkData[id];
 		
+		var signWriter = this.checklistSignData.signWriter;
+		var signChecker = this.checklistSignData.signChecker;
+		var signApprover = this.checklistSignData.signApprover;
+		
 		var middleX = Number(startX) + (width / 2);
 		var middleY = Number(startY) + (height / 2);
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
-		this.ctx.fillText(data, middleX, middleY);
+		
+		switch(type) {
+			case "signature-writer":
+				if(signWriter != null) {
+					this.ctx.fillText(signWriter, middleX, middleY);
+				}
+				break;
+			case "signature-approver":
+				if(signApprover != null) {
+					this.ctx.fillText(signApprover, middleX, middleY);
+				}
+				break;
+			case "signature-checker":
+				if(signChecker != null) {
+					this.ctx.fillText(signChecker, middleX, middleY);
+				}
+				break;
+			case "truefalse":
+				if(format === 'checkbox' && data === 'on') {
+					this.ctx.fillText("✔", middleX, middleY);
+				}
+				break;
+			default : 
+				this.ctx.fillText(data, middleX, middleY);
+				break;
+		}
 	};
 }
