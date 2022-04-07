@@ -284,7 +284,18 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	
 			for(var i=0; i<elements.length; i++) {
 				let element = elements[i];
-				checklistData[element.id] = element.value;
+				console.log(element.type);
+				if(element.type == 'checkbox') {
+					if(element.checked == true) {
+						checklistData[element.id] = element.value;
+					}
+					else {
+						checklistData[element.id] = '';
+					}
+				}
+				else {
+					checklistData[element.id] = element.value;
+				}
 			}
 			
 			head.checklistId = checklistId;
@@ -362,9 +373,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				//tag.innerHTML = "서명";
 				break;
 			case "date":
-				tag = document.createElement('date');
+				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
-				//tag.innerHTML = today;
+				tag.setAttribute("type", "date");
+				tag.value = today;
 				break;
 			case "text":
 				tag = document.createElement('input');
@@ -378,7 +390,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag.classList.add("checklist-data");
 				break;
 			case "image":
-				tag = document.createElement('file');
+				tag = document.createElement('input');
+				tag.setAttribute("type", "file");
 				tag.classList.add("checklist-data");
 				break;
 			case "textarea":
@@ -395,16 +408,6 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
-		
-		console.log(this.tagTypes);
-		console.log(this.tagIds);
-		
-		if(this.tagTypes == 'date') {
-			//$(this.tagIds).off();
-			//$(this.tagIds).daterangepicker.destroy();
-			//new SetSingleDate2("", this.tagIds, 0);
-				
-		}
 		
 	};
 }
@@ -485,12 +488,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		this.checkData = JSON.parse(this.checklistData.checkData);
 		this.checklistSignData = await this.getChecklistSignData();
 		
-		//this.checklistSignData = await this.getChecklistSignData();
-		//this.signWriter = this.checklistSignData.signWriter;
-		//this.signChecker = this.checklistSignData.signChecker;
-		//this.signApprover = this.checklistSignData.signApprover;
-		
-		
 		$("#checklist-update-modal").modal("show");
 		
 		// read checklist image
@@ -508,15 +505,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
 			that.drawImage(bgImg);
-			/*
-			// display data
-			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
-			
-			for(var i=0; i<cellList.length; i++) {
-				var cell = cellList[i];
-				that.displayData(cell);
-			};
-			*/
 			
 		};
 		
@@ -542,7 +530,18 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	
 			for(var i=0; i<elements.length; i++) {
 				let element = elements[i];
-				checklistData[element.id] = element.value;
+				console.log(element.type);
+				if(element.type == 'checkbox') {
+					if(element.checked == true) {
+						checklistData[element.id] = element.value;
+					}
+					else {
+						checklistData[element.id] = '';
+					}
+				}
+				else {
+					checklistData[element.id] = element.value;
+				}
 			}
 			
 			head.checklistId = checklistId;
@@ -569,54 +568,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	this.drawImage = async function(imageObject) {
 		this.ctx.drawImage(imageObject, 0, 0);
 	}
-	/*
-	this.displayData = function(cell) {
-		var id = cell.nodeName;
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent.replace('px', '');
-		var startY = cell.childNodes[3].textContent.replace('px', '');
-		var width = cell.childNodes[4].textContent.replace('px', '');
-		var height = cell.childNodes[5].textContent.replace('px', '');
-		
-		var data = this.checkData[id];
-		
-		console.log("update modal data====");
-		console.log(cell);
-		console.log(id);
-		console.log(data);
-		console.log(format);
-		
-		var tagId = "#"+ id;
-		
-		if(format == "checkbox") {
-			if(data == "on") {
-				$(tagId).attr("checked", true);
-			}
-		}
-		else {
-			$(tagId).val(data);
-		}
-		
-		if(type == "signature-writer") {
-			$(tagId).val(signWriter);
-		}
-		else if(type == "signature-approver") {
-			$(tagId).val(signApprover);
-		}
-		else if(type == "signature-checker") {
-			$(tagId).val(signChecker);
-		}
-		
-		console.log($(tagId).val());
-		//var middleX = Number(startX) + (width / 2);
-		//var middleY = Number(startY) + (height / 2);
-		
-		//this.ctx.textAlign = "center";
-		//this.ctx.font = '10px serif';
-		//this.ctx.fillText(data, middleX, middleY);
-	};
-	*/
+	
 	this.makeTag = async function(cell) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
@@ -642,9 +594,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
 		
-		console.log(signWriter);
-		console.log(signChecker);
-		console.log(signApprover);
 		
 		if(month < 10) {
 			month = "0" + month;
@@ -660,55 +609,63 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag = document.createElement('input');
 				tag.classList.add('signature-writer');
 				tag.value = signWriter;
-				//tag.innerText = signWriter;
-				//tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
 				break;
 			case "signature-approver":
 				tag = document.createElement('input');
 				tag.classList.add('signature-approver');
 				tag.value = signApprover;
-				//tag.innerHTML = signApprover;
-				//tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
 				break;
 			case "signature-checker":
 				tag = document.createElement('input');
 				tag.classList.add('signature-checker');
 				tag.value = signChecker;
-				//tag.innerHTML = signChecker;
-				//tag.innerHTML = "서명";
+				tag.setAttribute("readonly", true);
 				break;
 			case "date":
-				tag = document.createElement('date');
+				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
-				tag.value = data;
+				tag.setAttribute("type", "date");
+				if(data == null || data == '') {
+					tag.value = "";
+				}
+				else {
+					tag.value = data;
+				}
+				
 				break;
 			case "text":
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				tag.value = data;
-				//tag.innerText = data;
 				break;
 			case "truefalse":
 				tag = document.createElement('input');
 				if(format === 'checkbox') {
 					tag.type = 'checkbox';
+					console.log("checkbox");
+					console.log(data);
 					if(data == 'on') {
-						console.log("checkbox data");
-						console.log(data);
-						tag.setAttribute("checked", true);
+						//tag.setAttribute("autocomplete", "off");
+						tag.checked = true;
+					}
+					else {
+						tag.setAttribute("autocomplete", "off");
+						tag.checked = false;
 					}
 				}
 				tag.classList.add("checklist-data");
 				break;
 			case "image":
-				tag = document.createElement('file');
+				tag = document.createElement('input');
+				tag.setAttribute("type", "file");
 				tag.classList.add("checklist-data");
 				break;	
 			case "textarea":
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
 				tag.value = data;
-				//tag.innerText = data;
 				break;
 		}
 		
@@ -721,12 +678,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		
 		document.getElementById("checklist-update-wrapper").appendChild(tag);
 		
-		if(this.tagTypes == 'date') {
-			//$(this.tagIds).off();
-			//$(this.tagIds).daterangepicker.destroy();
-			//new SetSingleDate2("", this.tagIds, 0);
-				
-		}
 	};
 }
 
