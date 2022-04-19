@@ -429,8 +429,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
 	}
 	
 	this.getChecklistData = async function() {
@@ -703,8 +703,8 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
 	}
 	
 	this.getChecklistData = async function() {
