@@ -331,7 +331,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var width = cell.childNodes[4].textContent;
 		var height = cell.childNodes[5].textContent;
 		var readonly = "";
-		
+		console.log(id);
 		var tagId = "#" + id;
 		this.tagIds = tagId;
 		this.tagTypes = type;
@@ -352,6 +352,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		}
 		
 		var today = year + "-" + month + "-" + day;
+		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px 
 				
 		switch(type) {
 			case "signature-writer":
@@ -381,6 +382,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			case "text":
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
+				tag.maxlength = maxLengthText;
 				break;
 			case "truefalse":
 				tag = document.createElement('input');
@@ -602,7 +604,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		if(day < 10) {
 			day = "0" + day;
 		}
-		
+		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px 
+		console.log(parseInt(width) / 16.6); //text maxlength 글자 수
 		var today = year + "-" + month + "-" + day;
 		switch(type) {
 			case "signature-writer":
@@ -639,6 +642,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				tag.value = data;
+				tag.maxlength = maxLengthText;
 				break;
 			case "truefalse":
 				tag = document.createElement('input');
@@ -835,8 +839,10 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
-		
+		console.log(type);
+		console.log(format);
 		switch(type) {
+			
 			case "signature-writer":
 				if(signWriter != null) {
 					this.ctx.fillText(signWriter, middleX, middleY);
@@ -856,6 +862,12 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 				if(format === 'checkbox' && data === 'on') {
 					this.ctx.fillText("✔", middleX, middleY);
 				}
+				break;
+			case "textarea":
+				 this.ctx.textAlign = "left";
+				 this.ctx.fillText(data, middleX, middleY);
+				 //this.ctx.wrapText_XY(ctx, cl.bodies.body0, "row34", "col14", data,	
+ 	 							//'balck', "9px serif", "left", "top", 20, 2, 1, 1);
 				break;
 			default : 
 				this.ctx.fillText(data, middleX, middleY);
