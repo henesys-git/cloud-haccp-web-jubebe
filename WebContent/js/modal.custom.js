@@ -215,8 +215,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.png';
 	}
 	
 	this.setModal = async function() {
@@ -323,13 +323,13 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	}
 	
 	this.makeTag = async function(cell) {
-		var id = cell.nodeName;
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent;
-		var startY = cell.childNodes[3].textContent;
-		var width = cell.childNodes[4].textContent;
-		var height = cell.childNodes[5].textContent;
+		var id = cell.tagName;
+		var type = cell.childNodes[0].firstChild.textContent;
+		var format = cell.childNodes[1].firstChild.textContent;
+		var startX = cell.childNodes[2].firstChild.textContent;
+		var startY = cell.childNodes[3].firstChild.textContent;
+		var width = cell.childNodes[4].firstChild.textContent;
+		var height = cell.childNodes[5].firstChild.textContent;
 		var readonly = "";
 		console.log(id);
 		var tagId = "#" + id;
@@ -400,6 +400,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
 				break;
+			default:
+				tag = document.createElement('input');
+				tag.classList.add("checklist-data");
+				break;
 		}
 		
 		tag.id = id;
@@ -410,7 +414,6 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
-		
 	};
 }
 
@@ -431,8 +434,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
 	}
 	
 	this.getChecklistData = async function() {
@@ -573,12 +576,12 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	
 	this.makeTag = async function(cell) {
 		var id = cell.nodeName;
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent;
-		var startY = cell.childNodes[3].textContent;
-		var width = cell.childNodes[4].textContent;
-		var height = cell.childNodes[5].textContent;
+		var type = cell.childNodes[0].firstChild.textContent;
+		var format = cell.childNodes[1].firstChild.textContent;
+		var startX = cell.childNodes[2].firstChild.textContent;
+		var startY = cell.childNodes[3].firstChild.textContent;
+		var width = cell.childNodes[4].firstChild.textContent;
+		var height = cell.childNodes[5].firstChild.textContent;
 		
 		var tagId = "#" + id;
 		this.tagIds = tagId;
@@ -671,6 +674,10 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag.classList.add("checklist-data");
 				tag.value = data;
 				break;
+			default:
+				tag = document.createElement('input');
+				tag.classList.add("checklist-data");
+				break;
 		}
 		
 		tag.id = id;
@@ -681,7 +688,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-update-wrapper").appendChild(tag);
-		
 	};
 }
 
@@ -707,8 +713,8 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
 	}
 	
 	this.getChecklistData = async function() {
