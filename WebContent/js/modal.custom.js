@@ -215,8 +215,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.txt';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.jpg';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.png';
 	}
 	
 	this.setModal = async function() {
@@ -323,7 +323,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	}
 	
 	this.makeTag = async function(cell) {
-		var id = cell.nodeName;
+		console.log(cell);
+	
+		var id = cell.tagName;
+		console.log('id:');
+		console.log(id);
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
 		var startX = cell.childNodes[2].textContent;
@@ -396,6 +400,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				break;
 			case "textarea":
 				tag = document.createElement('textarea');
+				tag.classList.add("checklist-data");
+				break;
+			default:
+				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				break;
 		}
