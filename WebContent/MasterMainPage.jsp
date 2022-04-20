@@ -786,20 +786,45 @@
 			} else {
 				SubMenuTitle = SubmenuName.toString();
 			}
-
-			clearTimeout(REFRESHTIMEID);
+			
+			var checklistParam =  urlPage.substr(10, 9);
+			var checklistNum = urlPage.substr(29,2);
+			var checklistPath = urlPage.substr(0,29);
+			
+			//선행요건 메뉴가 아닐 경우 기존 function으로 진입
+			if(checklistParam != 'checklist') {
+				checklistParam = "";
+				checklistNum = "";
+				
+				 $.ajax({
+		                type: "POST",
+		                url: urlPage,
+		                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
+		                beforeSend: function () {
+		                    $("#ContentPlaceHolder1").children().remove();
+		                },
+		                success: function (html) {
+		                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+		                }
+		            });
+			}
             
-            $.ajax({
-                type: "POST",
-                url: urlPage,
-                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
-                beforeSend: function () {
-                    $("#ContentPlaceHolder1").children().remove();
-                },
-                success: function (html) {
-                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-                }
-            });
+			//선행요건 메뉴일 경우 checklist번호를 parameter로 받아 function 진입 
+			else {
+				$.ajax({
+	                type: "POST",
+	                url: checklistPath + ".jsp?checklistNum=" + checklistNum,
+	                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
+	                beforeSend: function () {
+	                    $("#ContentPlaceHolder1").children().remove();
+	                },
+	                success: function (html) {
+	                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+	                }
+	            });
+			}
+           
+			clearTimeout(REFRESHTIMEID);
         }
 		
 		

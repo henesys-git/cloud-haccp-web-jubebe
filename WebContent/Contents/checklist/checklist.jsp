@@ -7,6 +7,18 @@
 <%
 	String loginID = session.getAttribute("login_id").toString();
 	String login_name = session.getAttribute("login_name").toString();
+	
+	String checklistNum = "", menuName = "";
+	
+	if(request.getParameter("checklistNum")== null) 
+		checklistNum="";
+	else 
+		checklistNum = request.getParameter("checklistNum");
+	
+	if(request.getParameter("MenuTitle")== null) 
+		menuName="";
+	else 
+		menuName = request.getParameter("MenuTitle");
 %>
 <script type="text/javascript">
     
@@ -14,12 +26,11 @@
     
 	$(document).ready(function () {
 		//let mainTable;
-		
 		async function getData() {
 	        var fetchedList = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/checklist"
-				            	+ "?checklistId=" + 'checklist01'
+				            	+ "?checklistId=" + 'checklist' + '<%=checklistNum%>'
 				            	+ "&seqNo=all",
 			            success: function (result) {
 			            	return result;
@@ -34,7 +45,7 @@
 	        var fetchedList = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/checklist"
-				            	+ "?checklistId=" + 'checklist01'
+				            	+ "?checklistId=" + 'checklist' + '<%=checklistNum%>'
 				            	+ "&seqNo=signColumn",
 			            success: function (result) {
 			            	return result;
@@ -132,36 +143,6 @@
 						}
 					]
 					
-					/*
-			        'columnDefs' : [
-			        	
-			        	{
-			        		'targets' : [3],
-			        		'createdCell' : function(td, cellData, rowData, rowinx, col) {
-			        			if(cellData == null) {
-			        				$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
-			        			}
-			        		}
-			        	},
-			        	{
-			        		'targets' : [4],
-			        		'createdCell' : function(td, cellData, rowData, rowinx, col) {
-			        			if(cellData == null) {
-			        				$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick = "registSignInfo(this);">서명</button>');
-			        			}
-			        		}
-			        	},
-			        	{
-			        		'targets' : [5],
-			        		'createdCell' : function(td, cellData, rowData, rowinx, col) {
-			        			if(cellData == null) {
-			        				$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
-			        			}
-			        		}
-			        	}
-			        	
-			        ]
-					*/
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
@@ -172,7 +153,7 @@
 		initTable();
     	
     	$("#insert-btn").click(function() {
-    		let checklistId = 'checklist01';
+    		let checklistId = 'checklist' + '<%=checklistNum%>';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
     		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo);
@@ -340,7 +321,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-        	CCP 담당 교육일지
+        	<%=menuName%>
         </h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
@@ -373,7 +354,7 @@
           <div class="card-header">
           	<h3 class="card-title">
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
-          		CCP 담당 교육일지 목록
+          		<%=menuName%> 목록
           	</h3>
           </div>
           <div class="card-body" id="MainInfo_List_contents">
