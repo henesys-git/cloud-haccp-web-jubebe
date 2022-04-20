@@ -323,17 +323,13 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	}
 	
 	this.makeTag = async function(cell) {
-		console.log(cell);
-	
 		var id = cell.tagName;
-		console.log('id:');
-		console.log(id);
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent;
-		var startY = cell.childNodes[3].textContent;
-		var width = cell.childNodes[4].textContent;
-		var height = cell.childNodes[5].textContent;
+		var type = cell.childNodes[0].firstChild.textContent;
+		var format = cell.childNodes[1].firstChild.textContent;
+		var startX = cell.childNodes[2].firstChild.textContent;
+		var startY = cell.childNodes[3].firstChild.textContent;
+		var width = cell.childNodes[4].firstChild.textContent;
+		var height = cell.childNodes[5].firstChild.textContent;
 		var readonly = "";
 		
 		var tagId = "#" + id;
@@ -416,7 +412,6 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
-		
 	};
 }
 
@@ -579,12 +574,12 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	
 	this.makeTag = async function(cell) {
 		var id = cell.nodeName;
-		var type = cell.childNodes[0].textContent;
-		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[2].textContent;
-		var startY = cell.childNodes[3].textContent;
-		var width = cell.childNodes[4].textContent;
-		var height = cell.childNodes[5].textContent;
+		var type = cell.childNodes[0].firstChild.textContent;
+		var format = cell.childNodes[1].firstChild.textContent;
+		var startX = cell.childNodes[2].firstChild.textContent;
+		var startY = cell.childNodes[3].firstChild.textContent;
+		var width = cell.childNodes[4].firstChild.textContent;
+		var height = cell.childNodes[5].firstChild.textContent;
 		
 		var tagId = "#" + id;
 		this.tagIds = tagId;
@@ -675,6 +670,10 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag.classList.add("checklist-data");
 				tag.value = data;
 				break;
+			default:
+				tag = document.createElement('input');
+				tag.classList.add("checklist-data");
+				break;
 		}
 		
 		tag.id = id;
@@ -685,7 +684,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		tag.style.height = height;
 		
 		document.getElementById("checklist-update-wrapper").appendChild(tag);
-		
 	};
 }
 
