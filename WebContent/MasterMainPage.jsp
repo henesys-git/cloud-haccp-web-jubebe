@@ -20,13 +20,8 @@
 		bizNo = "";
 		response.sendRedirect("index.jsp" + "?invalid_login=yy"); 
 	}
-	/*
-	if(loginID == null || loginID.equals("")) {
-		response.sendRedirect(Config.this_SERVER_path + "/Contents/index.jsp");
-	}
-	*/
-	String userGroupCode = "GRCD001";
 	
+	String userGroupCode = "GRCD001";
 %>
 
 <!DOCTYPE html>
@@ -611,10 +606,10 @@
 			var onoff = "N";
 			
 			if (onoff == 'Y') {
-			 $("input:checkbox[id='customSwitch1']").prop('checked', true);	 
+				$("input:checkbox[id='customSwitch1']").prop('checked', true);	 
 			}
-			else{
-			 $("input:checkbox[id='customSwitch1']").prop('checked', false);	 
+			else {
+				$("input:checkbox[id='customSwitch1']").prop('checked', false);	 
 			}
 			
 			//메인페이지 알람 토글 버튼 on/off
@@ -623,21 +618,21 @@
 			        
 			    	var check = confirm("온도데이터 이탈 안내 알람을 활성화 하시겠습니까?")
 			    	
-			    	if(check){
+			    	if(check) {
 			    		poweron();
 			    	}
-			    		else {
-			    		 return false;
+			    	else {
+			    		return false;
 			    	}
 			    } 
 			    else {
 			    	
 					var check = confirm("온도데이터 이탈 안내 알람을 비활성화 하시겠습니까?")
 			    	
-			    	if(check){
+			    	if(check) {
 			    		poweroff();
 			    	}
-			    	   else{
+			    	else {
 			    		return false;
 			    	}
 			    }
@@ -1571,16 +1566,12 @@
 		
 		function call_master_page_content() {
         	$.ajax({
-           	        type: "POST",
-           	        url: "<%=Config.this_SERVER_path%>/Contents/checklist_alarm.jsp",
-           	        beforeSend: function () {
-           	        },
-           	        success: function (html) {
-           	            $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-           	        },
-           	        error: function (xhr, option, error) {
-           	        }
-           	    }); 
+     	        type: "POST",
+     	        url: "<%=Config.this_SERVER_path%>/Contents/checklist_alarm.jsp",
+     	        success: function (html) {
+     	            $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+     	        }
+     	    });
     	}
 		<%-- 
 		function call_master_page_content2() {
