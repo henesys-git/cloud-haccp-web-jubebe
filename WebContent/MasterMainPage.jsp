@@ -338,9 +338,11 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 등록</h5>
+	        <!--
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
+	        -->
 	      </div>
 	      <div class="modal-body">
 	      	<div id="checklist-insert-wrapper" style="position:relative;">
@@ -349,8 +351,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-insert-btn" class="btn btn-primary">등록</button>
-	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
-	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-insert-modal').modal('hide');">닫기</button>
+	        <button type="button" id="checklist-insert-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -373,8 +374,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-update-btn" class="btn btn-primary">수정</button>
-	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
-	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-update-modal').modal('hide');">닫기</button>
+	        <button type="button" id="checklist-update-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -508,6 +508,7 @@
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.builder.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.common.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.sign.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/checklist.modal.js"></script>
 	<!-- 숫자 관련 기능 -->
 	<script src="<%=Config.this_SERVER_path%>/js/hene.number.js"></script>
 	<!-- TimePicker -->
