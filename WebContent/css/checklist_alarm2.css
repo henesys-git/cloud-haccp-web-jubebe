@@ -1,0 +1,46 @@
+#cover_web_alarm {
+	display:flex;
+	align-content: space-between;
+   	margin-left: 40px;
+   	margin-top: 44px;
+   	margin-bottom: 44px;
+}
+
+#cover_web_alarm table {
+	font-size: 13px; 
+	font-weight: bold;
+	box-shadow: rgb(0 0 0 / 41%) 0px 3px 6px 0px;
+	width:18vw;
+	background:white;
+}
+
+#cover_web_alarm tbody {
+	overflow-y: scroll;
+	height: 400px;
+	display: grid;
+	background:white;
+}
+   
+#cover_web_alarm button {
+	height: 24px; 
+  	display: flex; 
+  	justify-content: center; 
+  	align-items: center; 
+  	font-size: 12px; 
+  	font-weight: bold;
+}
+  
+#cover_web_alarm th {
+  	display: flex; 
+	align-items: center; 
+  	justify-content: space-between;
+}
+  
+#cover_web_alarm td {
+	width:100%;
+	border-top:none;
+}
+  
+#cover_web_alarm .menu_name_in {
+	padding-left: 5px;
+}

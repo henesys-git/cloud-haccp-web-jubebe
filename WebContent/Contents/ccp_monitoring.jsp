@@ -8,8 +8,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.stream.*"%>
-<%
-%>
 <script>
 
     $(document).ready(function () {
@@ -48,85 +46,82 @@
     	
     	async function initChart() {
     	
-    	$('#title').append("<h4 style ='text-align:center;'>금일 금속검출기 운영 현황</h4>");	
-    		
-    	var dataArr = await getData();
-    	console.log(dataArr);
-    	var labelArr = new Array();
-    	var valueArr = new Array();
-    	var valueArr2 = new Array();
-    	var valueSum = 0;
-    	var stepVal = 0;
-    	for(x in dataArr){
-    		labelArr.push(dataArr[x].sensorName);
-    		valueArr.push(dataArr[x].countAll);
-    		valueArr2.push(dataArr[x].countDetect);
-    		valueSum += parseInt(dataArr[x].countAll);
-    	}
-    	var testVal = 1150;
-    	var testLength = 0;
-    	var testVal2 = 0;
-    	if(valueSum == null || valueSum <= 1000) {
-    		valueSum = 1000;
-    		stepVal = 50;
-    	}
-    	
-    	else {
-    		testLength = valueSum.toString().length;
-    		testVal2 = parseInt(valueSum) - parseInt(valueSum.toString().substr(testLength - 3)) + parseInt(1000);
-    		stepVal = parseInt(testVal2 / 20);
-    	}
-    	new Chart(document.getElementById("canvas"), {
-    	    type: 'horizontalBar',
-    	    //type: 'bar',
-    	    data: {
-    	    	labels: labelArr,
-    	        datasets: [{
-    	            label: '운영횟수',
-    	            data: valueArr,
-    	            borderColor: "rgba(255, 201, 14, 1)",
-    	            backgroundColor: "rgba(255, 201, 14, 0.5)",
-    	            fill: false,
-    	        },  {
-    	        	label: '검출횟수',
-     	            data: valueArr2,
-     	            borderColor: "rgba(255, 0, 0, 1)",
-     	            backgroundColor: "rgba(255, 0, 0, 0.5)",
-     	            fill: false,
-    	        }]
-    	    },
-    	    options: {
-    	    	/*   responsive: true,
-    	         title: {
-    	            display: true,
-    	            text: '모니터링 빈도'
-    	        }, */
-    	        tooltips: {
-    	            mode: 'index',
-    	            intersect: false,
-    	        },
-    	        hover: {
-    	            mode: 'nearest',
-    	            intersect: true
-    	        },
-    	        scales: { 
-		            xAxes: [{
-		            	ticks: {
-        	        		stepSize: stepVal,
-       	        	        min: 0,
-       	        	        max: testVal2
-		            	}
-    	            }]
-    	        } // scales
-    	    } // options
-    	});
+	    	$('#title').append("<h4 style ='text-align:center;'>금일 금속검출기 운영 현황</h4>");
+	    	
+	    	var dataArr = await getData();
+	    	console.log(dataArr);
+	    	var labelArr = new Array();
+	    	var valueArr = new Array();
+	    	var valueArr2 = new Array();
+	    	var valueSum = 0;
+	    	var stepVal = 0;
+	    	
+	    	for(x in dataArr) {
+	    		labelArr.push(dataArr[x].sensorName);
+	    		valueArr.push(dataArr[x].countAll);
+	    		valueArr2.push(dataArr[x].countDetect);
+	    		valueSum += parseInt(dataArr[x].countAll);
+	    	}
+	    	var testVal = 1150;
+	    	var testLength = 0;
+	    	var testVal2 = 0;
+	    	
+	    	if(valueSum == null || valueSum <= 1000) {
+	    		valueSum = 1000;
+	    		stepVal = 50;
+	    	} 
+	    	else {
+	    		testLength = valueSum.toString().length;
+	    		testVal2 = parseInt(valueSum) - parseInt(valueSum.toString().substr(testLength - 3)) + parseInt(1000);
+	    		stepVal = parseInt(testVal2 / 20);
+	    	}
+	    	
+	    	new Chart(document.getElementById("canvas"), {
+	    	    type: 'horizontalBar',
+	    	    data: {
+	    	    	labels: labelArr,
+	    	        datasets: [{
+	    	            label: '운영횟수',
+	    	            data: valueArr,
+	    	            borderColor: "rgba(255, 201, 14, 1)",
+	    	            backgroundColor: "rgba(255, 201, 14, 0.5)",
+	    	            fill: false
+	    	        },  
+	    	        {
+	    	        	label: '검출횟수',
+	     	            data: valueArr2,
+	     	            borderColor: "rgba(255, 0, 0, 1)",
+	     	            backgroundColor: "rgba(255, 0, 0, 0.5)",
+	     	            fill: false
+	    	        }]
+	    	    },
+	    	    options: {
+	    	        tooltips: {
+	    	            mode: 'index',
+	    	            intersect: false,
+	    	        },
+	    	        hover: {
+	    	            mode: 'nearest',
+	    	            intersect: true
+	    	        },
+	    	        scales: { 
+			            xAxes: [{
+			            	ticks: {
+	        	        		stepSize: stepVal,
+	       	        	        min: 0,
+	       	        	        max: testVal2
+			            	}
+	    	            }]
+	    	        } // scales
+	    	    } // options
+	    	});
        }
     	
        initChart();
     });
 
 </script>
-<div style="width:40%; margin-left : 40px; margin-top: 44px;">
-	<div id = "title" class = "title"></div>
-	<canvas id="canvas" height="80px"></canvas>
+<div>
+	<div id="title" class="title"></div>
+	<canvas id="canvas"></canvas>
 </div>

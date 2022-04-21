@@ -20,13 +20,8 @@
 		bizNo = "";
 		response.sendRedirect("index.jsp" + "?invalid_login=yy"); 
 	}
-	/*
-	if(loginID == null || loginID.equals("")) {
-		response.sendRedirect(Config.this_SERVER_path + "/Contents/index.jsp");
-	}
-	*/
-	String userGroupCode = "GRCD001";
 	
+	String userGroupCode = "GRCD001";
 %>
 
 <!DOCTYPE html>
@@ -343,9 +338,11 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 등록</h5>
+	        <!--
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
+	        -->
 	      </div>
 	      <div class="modal-body">
 	      	<div id="checklist-insert-wrapper" style="position:relative;">
@@ -354,22 +351,23 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-insert-btn" class="btn btn-primary">등록</button>
-	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
-	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-insert-modal').modal('hide');">닫기</button>
+	        <button type="button" id="checklist-insert-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	
-	 <!-- 점검표 수정용 모달창 -->
+	<!-- 점검표 수정용 모달창 -->
     <div class="modal fade" id="checklist-update-modal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 수정</h5>
+	        <!-- 
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
+	        -->
 	      </div>
 	      <div class="modal-body">
 	      	<div id="checklist-update-wrapper" style="position:relative;">
@@ -378,8 +376,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-update-btn" class="btn btn-primary">수정</button>
-	        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> -->
-	        <button type="button" class="btn btn-secondary" onclick = "$('#checklist-update-modal').modal('hide');">닫기</button>
+	        <button type="button" id="checklist-update-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -513,6 +510,7 @@
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.builder.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.common.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.sign.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/checklist.modal.js"></script>
 	<!-- 숫자 관련 기능 -->
 	<script src="<%=Config.this_SERVER_path%>/js/hene.number.js"></script>
 	<!-- TimePicker -->
@@ -611,10 +609,10 @@
 			var onoff = "N";
 			
 			if (onoff == 'Y') {
-			 $("input:checkbox[id='customSwitch1']").prop('checked', true);	 
+				$("input:checkbox[id='customSwitch1']").prop('checked', true);	 
 			}
-			else{
-			 $("input:checkbox[id='customSwitch1']").prop('checked', false);	 
+			else {
+				$("input:checkbox[id='customSwitch1']").prop('checked', false);	 
 			}
 			
 			//메인페이지 알람 토글 버튼 on/off
@@ -623,21 +621,21 @@
 			        
 			    	var check = confirm("온도데이터 이탈 안내 알람을 활성화 하시겠습니까?")
 			    	
-			    	if(check){
+			    	if(check) {
 			    		poweron();
 			    	}
-			    		else {
-			    		 return false;
+			    	else {
+			    		return false;
 			    	}
 			    } 
 			    else {
 			    	
 					var check = confirm("온도데이터 이탈 안내 알람을 비활성화 하시겠습니까?")
 			    	
-			    	if(check){
+			    	if(check) {
 			    		poweroff();
 			    	}
-			    	   else{
+			    	else {
 			    		return false;
 			    	}
 			    }
@@ -1596,16 +1594,12 @@
 		
 		function call_master_page_content() {
         	$.ajax({
-           	        type: "POST",
-           	        url: "<%=Config.this_SERVER_path%>/Contents/checklist_alarm.jsp",
-           	        beforeSend: function () {
-           	        },
-           	        success: function (html) {
-           	            $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-           	        },
-           	        error: function (xhr, option, error) {
-           	        }
-           	    }); 
+     	        type: "POST",
+     	        url: "<%=Config.this_SERVER_path%>/Contents/checklist_alarm.jsp",
+     	        success: function (html) {
+     	            $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+     	        }
+     	    });
     	}
 		<%-- 
 		function call_master_page_content2() {

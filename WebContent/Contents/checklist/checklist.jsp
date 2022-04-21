@@ -10,14 +10,10 @@
 	
 	String checklistNum = "", menuName = "";
 	
-	if(request.getParameter("checklistNum")== null) 
-		checklistNum="";
-	else 
+	if(request.getParameter("checklistNum") != null) 
 		checklistNum = request.getParameter("checklistNum");
 	
-	if(request.getParameter("MenuTitle")== null) 
-		menuName="";
-	else 
+	if(request.getParameter("MenuTitle") != null) 
 		menuName = request.getParameter("MenuTitle");
 %>
 <script type="text/javascript">
@@ -75,8 +71,11 @@
 			fixedColumn[2] = "revisionNo";
 	    	
 			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
-			var columnKeys =
-    			[ {data: fixedColumn[0] , defaultContent : ''}, {data:fixedColumn[1] , defaultContent : ''}, {data:fixedColumn[2] , defaultContent : ''}];
+			var columnKeys = [ 
+   				{data: fixedColumn[0] , defaultContent : ''}, 
+   			  	{data:fixedColumn[1] , defaultContent : ''}, 
+   			  	{data:fixedColumn[2] , defaultContent : ''}
+   			];
 			
 			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
 	    	for(var a = 0; a < 3; a++) {
@@ -119,30 +118,27 @@
 			//서명 칼럼에 데이터가 없으면 서명버튼을 칼럼명에 맞게 생성한다. 
 		    var customOpts = {
 		    		
-					data : list,
-					pageLength: 10,
-					columns : columnKeys,
-					'columnDefs' : [
-						{
-							'targets' : columnDefsKeys,
-							'createdCell' : function(td, cellData, rowData, rowinx, col) {
-								var colInfo = $('#ccpDataTable').DataTable().settings()[0].aoColumns[col];
-							    
-							    if(cellData == null && colInfo.sTitle == "작성자서명") {
-							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
-							    }
-							    else if(cellData == null && colInfo.sTitle == "확인자서명") {
-							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick = "registSignInfo(this);">서명</button>');
-							    }
-							    else if(cellData == null && colInfo.sTitle == "승인자서명") {
-							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
-							    }
-							    
-							}
-							
+				data : list,
+				pageLength: 10,
+				columns : columnKeys,
+				'columnDefs' : [
+					{
+						'targets' : columnDefsKeys,
+						'createdCell' : function(td, cellData, rowData, rowinx, col) {
+							var colInfo = $('#ccpDataTable').DataTable().settings()[0].aoColumns[col];
+						    
+						    if(cellData == null && colInfo.sTitle == "작성자서명") {
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
+						    }
+						    else if(cellData == null && colInfo.sTitle == "확인자서명") {
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick = "registSignInfo(this);">서명</button>');
+						    }
+						    else if(cellData == null && colInfo.sTitle == "승인자서명") {
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
+						    }
 						}
-					]
-					
+					}
+				]
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
@@ -161,9 +157,15 @@
     	});
     	
     	$("#update-btn").click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
-    		
-    		if(selectedRow.length == 0) {
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
 				alert('정보를 수정할 선행요건을 선택해주세요.');
 				return false;
 			}
@@ -176,13 +178,18 @@
     		
     		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo);
     		modal.openModal();
-    		
     	});
     	
     	$("#delete-btn").click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
-    		
-    		if(selectedRow.length == 0) {
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
 				alert('정보를 삭제할 선행요건을 선택해주세요.');
 				return false;
 			}
@@ -190,9 +197,7 @@
     		let checklistId = selectedRow.checklistId;
     		let seqNo = selectedRow.seqNo;
     		
-    		var check = confirm("해당 점검표를 삭제하시겠습니까?");
-    		
-    		if(check) {
+    		if(confirm("해당 점검표를 삭제하시겠습니까?")) {
     			
     			$.ajax({
     	            type: "POST",
@@ -226,6 +231,26 @@
     		
     		var modal = new ChecklistSelectModal(checklistId, seqNo, revisionNo);
     		modal.openModal();
+    	});
+    	
+    	$('#checklist-insert-btn-close').off().click(function() {
+    		var children = $('#checklist-insert-wrapper').children();
+    		
+    		for(let i=1; i<children.length; i++) {
+    			children[i].remove();
+    		}
+    		
+    		$('#checklist-insert-modal').modal('hide');
+    	});
+    	
+    	$('#checklist-update-btn-close').off().click(function() {
+    		var children = $('#checklist-update-wrapper').children();
+    		
+    		for(let i=1; i<children.length; i++) {
+    			children[i].remove();
+    		}
+    		
+    		$('#checklist-update-modal').modal('hide');
     	});
     	
     	$("#sign-writer").click(function() {
@@ -310,9 +335,6 @@
     	console.log(clList);
 		mainTable.clear().rows.add(clList).draw();
 	}
-	
-	
-    
 </script>
 
 <!-- Content Header (Page header) -->
