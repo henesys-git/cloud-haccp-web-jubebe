@@ -306,7 +306,7 @@
 	
 	async function refreshMainTable() {
     	var clData = new ChecklistData();
-    	var clList = await clData.getAll();
+    	var clList = await clData.getAll('<%=checklistNum%>');
     	console.log(clList);
 		mainTable.clear().rows.add(clList).draw();
 	}
