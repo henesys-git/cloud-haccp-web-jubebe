@@ -8,6 +8,9 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
+<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/css/checklist_alarm.css">
+
 <script>
 	$(document).ready(function () {
 		getData2();
@@ -27,13 +30,9 @@
   	}
 </script>
 
-<div class="panel panel-default" style="width:100%; height:800px; display:flex; flex-direction:column;">
-	<!-- Default panel contents -->
-	<div class="panel-heading" style="font-weight: bold" id="MenuTitle"></div>
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-lg-6" id="parent_page2"></div>
-			<div class="col-lg-6" id="parent_page3"></div>	
-		</div>
+<div id="checklist-alarm-wrapper">
+	<div class="row">
+		<div class="col-lg-6" id="parent_page2"></div>
+		<div class="col-lg-6" id="parent_page3"></div>	
 	</div>
 </div>

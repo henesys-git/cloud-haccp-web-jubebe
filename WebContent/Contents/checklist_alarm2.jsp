@@ -5,9 +5,7 @@
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
 
-<!-- 
 <link rel="stylesheet" href="<%=Config.this_SERVER_path%>/css/checklist_alarm2.css">
--->
 
 <script type="text/javascript">
 	
