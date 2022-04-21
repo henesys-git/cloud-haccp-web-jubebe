@@ -157,9 +157,15 @@
     	});
     	
     	$("#update-btn").click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
-    		
-    		if(selectedRow.length == 0) {
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
 				alert('정보를 수정할 선행요건을 선택해주세요.');
 				return false;
 			}
@@ -172,13 +178,18 @@
     		
     		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo);
     		modal.openModal();
-    		
     	});
     	
     	$("#delete-btn").click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
-    		
-    		if(selectedRow.length == 0) {
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
 				alert('정보를 삭제할 선행요건을 선택해주세요.');
 				return false;
 			}
@@ -186,9 +197,7 @@
     		let checklistId = selectedRow.checklistId;
     		let seqNo = selectedRow.seqNo;
     		
-    		var check = confirm("해당 점검표를 삭제하시겠습니까?");
-    		
-    		if(check) {
+    		if(confirm("해당 점검표를 삭제하시겠습니까?")) {
     			
     			$.ajax({
     	            type: "POST",
