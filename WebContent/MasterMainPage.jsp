@@ -333,16 +333,12 @@
     </div>
     
     <!-- 점검표 등록용 모달창 -->
-    <div class="modal fade" id="checklist-insert-modal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="checklist-insert-modal" 
+    	 data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 등록</h5>
-	        <!--
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	        -->
 	      </div>
 	      <div class="modal-body">
 	      	<div id="checklist-insert-wrapper" style="position:relative;">
@@ -358,16 +354,12 @@
 	</div>
 	
 	<!-- 점검표 수정용 모달창 -->
-    <div class="modal fade" id="checklist-update-modal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="checklist-update-modal" 
+    	 data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 수정</h5>
-	        <!-- 
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	        -->
 	      </div>
 	      <div class="modal-body">
 	      	<div id="checklist-update-wrapper" style="position:relative;">
