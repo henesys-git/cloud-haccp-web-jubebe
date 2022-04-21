@@ -504,6 +504,9 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 	
 	this.modalWidth;
 	this.modalHeight;
+	this.modalWidthWithoutPxKeyword;
+	this.modalHeightWithoutPxKeyword;
+	
 	this.xmlDoc;
 	
 	this.ctx;
@@ -556,9 +559,11 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-	
-		document.getElementById('checklist-select-wrapper').style.width = this.modalWidth;
-		document.getElementById('checklist-select-wrapper').style.height = this.modalHeight;
+		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
+		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
 	};
 	
 	this.openModal = async function() {
@@ -575,11 +580,8 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		// read checklist image
 		var canvas = document.getElementById('checklist-select-canvas');
 		
-		let modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
-		let modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		
-		canvas.width = modalWidthWithoutPxKeyword;
-		canvas.height = modalHeightWithoutPxKeyword;
+		canvas.width = this.modalWidthWithoutPxKeyword;
+		canvas.height = this.modalHeightWithoutPxKeyword;
 		
 		this.ctx = canvas.getContext('2d');
 		
@@ -644,10 +646,11 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
+		
 		console.log(type);
 		console.log(format);
+		
 		switch(type) {
-			
 			case "signature-writer":
 				if(signWriter != null) {
 					this.ctx.fillText(signWriter, middleX, middleY);

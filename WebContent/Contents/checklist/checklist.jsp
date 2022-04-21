@@ -223,7 +223,18 @@
     	});
     	
     	$("#select-btn").click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
+				alert('정보를 조회할 선행요건을 선택해주세요.');
+				return false;
+			}
     		
     		let checklistId = selectedRow.checklistId;
     		let seqNo = selectedRow.seqNo;
@@ -251,6 +262,16 @@
     		}
     		
     		$('#checklist-update-modal').modal('hide');
+    	});
+    	
+    	$('#checklist-select-btn-close').off().click(function() {
+    		var children = $('#checklist-select-wrapper').children();
+    		
+    		for(let i=1; i<children.length; i++) {
+    			children[i].remove();
+    		}
+    		
+    		$('#checklist-select-modal').modal('hide');
     	});
     	
     	$("#sign-writer").click(function() {
