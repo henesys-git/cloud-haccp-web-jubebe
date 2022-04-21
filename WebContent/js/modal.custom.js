@@ -207,13 +207,15 @@ function ChecklistInsertModal(checklistId, seqNo) {
 	
 	this.modalWidth;
 	this.modalHeight;
+	this.modalWidthWithoutPxKeyword;
+	this.modalHeightWithoutPxKeyword;
 	this.xmlDoc;
 	this.tagIds;
 	this.tagTypes;
 	this.ctx;
 	
 	this.setMetadataAndImagePath = async function() {
-		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
+		// checklistXX_Y.xml, checklistXX_Y.png에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
 		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.xml';
 		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.png';
@@ -231,10 +233,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-		console.log(this.modalWidth);
+		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
 		
-		document.getElementById('checklist-insert-wrapper').style.width = this.modalWidth;
-		document.getElementById('checklist-insert-wrapper').style.height = this.modalHeight;
+		var modalContent = document.querySelector('#checklist-insert-modal .modal-content');
+		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
 	};
 	
 	this.openModal = async function() {
@@ -248,11 +251,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		// read checklist image
 		var canvas = document.getElementById('checklist-insert-canvas');
 		
-		let modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
-		let modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		
-		canvas.width = modalWidthWithoutPxKeyword;
-		canvas.height = modalHeightWithoutPxKeyword;
+		canvas.width = this.modalWidthWithoutPxKeyword;
+		canvas.height = this.modalHeightWithoutPxKeyword;
 		
 		this.ctx = canvas.getContext('2d');
 		
@@ -426,13 +426,15 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	
 	this.modalWidth;
 	this.modalHeight;
+	this.modalWidthWithoutPxKeyword;
+	this.modalHeightWithoutPxKeyword;
 	this.xmlDoc;
 	this.tagIds;
 	this.tagTypes;
 	this.ctx;
 	
 	this.setMetadataAndImagePath = async function() {
-		// checklistXX_Y.txt, checklistXX_Y.jpg에서 
+		// checklistXX_Y.xml, checklistXX_Y.png에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
 		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
 		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
@@ -478,10 +480,11 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-		console.log(this.modalWidth);
+		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
 		
-		document.getElementById('checklist-update-wrapper').style.width = this.modalWidth;
-		document.getElementById('checklist-update-wrapper').style.height = this.modalHeight;
+		var modalContent = document.querySelector('#checklist-insert-modal .modal-content');
+		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
 	};
 	
 	this.openModal = async function() {
@@ -498,11 +501,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		// read checklist image
 		let canvas = document.getElementById('checklist-update-canvas');
 		
-		let modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
-		let modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		
-		canvas.width = modalWidthWithoutPxKeyword;
-		canvas.height = modalHeightWithoutPxKeyword;
+		canvas.width = this.modalWidthWithoutPxKeyword;
+		canvas.height = this.modalHeightWithoutPxKeyword;
 		
 		this.ctx = canvas.getContext('2d');
 		
@@ -510,7 +510,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
 			that.drawImage(bgImg);
-			
 		};
 		
 		// generate tags
