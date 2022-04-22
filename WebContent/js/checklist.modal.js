@@ -108,7 +108,14 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		        data: "data=" + JSON.stringify(head) +
 					  "&type=insert",
 		        success: function (result) {
-		        	console.log(result);
+					console.log(result);
+					
+					var children = $('#checklist-insert-wrapper').children();
+    		
+    				for(let i=1; i<children.length; i++) {
+    					children[i].remove();
+    				}
+
 					$('#checklist-insert-modal').modal('hide');
 					 parent.refreshMainTable();
 		        }
@@ -359,7 +366,15 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		        data: "data=" + JSON.stringify(head) +
 					  "&type=update",
 		        success: function (result) {
-		        	console.log(result);
+					console.log(result);
+					
+				var children = $('#checklist-update-wrapper').children();
+    		
+    			for(let i=1; i<children.length; i++) {
+    				children[i].remove();
+    			}
+    		
+
 					$('#checklist-update-modal').modal('hide');
 					 parent.refreshMainTable();
 		        }

@@ -148,7 +148,7 @@
 	    
 		initTable();
     	
-    	$("#insert-btn").click(function() {
+    	$("#insert-btn").off().click(function() {
     		let checklistId = 'checklist' + '<%=checklistNum%>';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
@@ -156,7 +156,7 @@
     		modal.openModal();
     	});
     	
-    	$("#update-btn").click(function() {
+    	$("#update-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -180,7 +180,7 @@
     		modal.openModal();
     	});
     	
-    	$("#delete-btn").click(function() {
+    	$("#delete-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -222,7 +222,7 @@
     		
     	});
     	
-    	$("#select-btn").click(function() {
+    	$("#select-btn").off().click(function() {
     		var selectedRow = mainTable.rows('.selected').data()[0];
     		
     		let checklistId = selectedRow.checklistId;
@@ -251,6 +251,16 @@
     		}
     		
     		$('#checklist-update-modal').modal('hide');
+    	});
+    	
+    	$('#checklist-select-btn-close').off().click(function() {
+    		var children = $('#checklist-select-wrapper').children();
+    		
+    		for(let i=1; i<children.length; i++) {
+    			children[i].remove();
+    		}
+    		
+    		$('#checklist-select-modal').modal('hide');
     	});
     	
     	$("#sign-writer").click(function() {

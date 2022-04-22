@@ -399,7 +399,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" id="checklist-print-btn" class="btn btn-primary">출력</button>
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        <button type="button" id="checklist-select-btn-close" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 	      </div>
 	    </div>
 	  </div>
