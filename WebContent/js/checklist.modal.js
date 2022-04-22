@@ -285,8 +285,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					        	return data;
 					        }
 						});
-		
 		return fetchedData;
+		
 	}
 	
 	this.getChecklistSignData = async function() {
@@ -369,7 +369,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	
 			for(var i=0; i<elements.length; i++) {
 				let element = elements[i];
-				console.log(element.type);
 				if(element.type == 'checkbox') {
 					if(element.checked == true) {
 						checklistData[element.id] = element.value;
@@ -394,7 +393,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		        data: "data=" + JSON.stringify(head) +
 					  "&type=update",
 		        success: function (result) {
-					console.log(result);
 					
 				var children = $('#checklist-update-wrapper').children();
     		
@@ -417,7 +415,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 	}
 	
 	this.makeTag = async function(cell) {
-		var id = cell.nodeName;
+		var id = cell.tagName;
 		var type = cell.childNodes[0].firstChild.textContent;
 		var format = cell.childNodes[1].firstChild.textContent;
 		var startX = cell.childNodes[2].firstChild.textContent;
@@ -435,8 +433,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var year = nowDate.getFullYear();
 		var month = nowDate.getMonth() + 1;
 		var day = nowDate.getDate();
-		
-		var data = "";
+		var data = this.checkData[id];
 			
 		if (data == null || data == '') {
 				data = "";
@@ -521,8 +518,6 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag = document.createElement('input');
 				if(format === 'checkbox') {
 					tag.type = 'checkbox';
-					console.log("checkbox");
-					console.log(data);
 					if(data == 'on') {
 						//tag.setAttribute("autocomplete", "off");
 						tag.checked = true;
@@ -554,6 +549,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 			default:
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
+				tag.value = data;
 				break;
 		}
 		
@@ -714,7 +710,7 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		var width = cell.childNodes[4].textContent.replace('px', '');
 		var height = cell.childNodes[5].textContent.replace('px', '');
 		
-		var data = "";
+		var data = this.checkData[id];
 			
 		if (data == null || data == '') {
 				data = "";
