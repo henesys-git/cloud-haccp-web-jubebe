@@ -148,7 +148,7 @@
 	    
 		initTable();
     	
-    	$("#insert-btn").off().click(function() {
+    	$("#insert-btn").click(function() {
     		let checklistId = 'checklist' + '<%=checklistNum%>';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
@@ -156,7 +156,7 @@
     		modal.openModal();
     	});
     	
-    	$("#update-btn").off().click(function() {
+    	$("#update-btn").click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -180,7 +180,7 @@
     		modal.openModal();
     	});
     	
-    	$("#delete-btn").off().click(function() {
+    	$("#delete-btn").click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -222,8 +222,19 @@
     		
     	});
     	
-    	$("#select-btn").off().click(function() {
-    		var selectedRow = mainTable.rows('.selected').data()[0];
+    	$("#select-btn").click(function() {
+    		let selectedRows = mainTable.rows('.selected').data();
+			let selectedRow = selectedRows[0];
+			
+    		if(selectedRows.length > 1) {
+    			alert('하나만 선택해주세요.');
+    			return false;
+    		}
+
+    		if(!selectedRow) {
+				alert('정보를 조회할 선행요건을 선택해주세요.');
+				return false;
+			}
     		
     		let checklistId = selectedRow.checklistId;
     		let seqNo = selectedRow.seqNo;
@@ -341,7 +352,7 @@
 	
 	async function refreshMainTable() {
     	var clData = new ChecklistData();
-    	var clList = await clData.getAll('<%=checklistNum%>');
+    	var clList = await clData.getAll();
     	console.log(clList);
 		mainTable.clear().rows.add(clList).draw();
 	}
