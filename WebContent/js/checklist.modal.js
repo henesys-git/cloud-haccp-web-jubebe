@@ -71,11 +71,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		};
 		
 		// save data to db
-		$('#checklist-insert-btn').click(function() {
+		$('#checklist-insert-btn').off().click(function() {
 			
-			//var check = confirm('등록하시겠습니까?');
+			var check = confirm('등록하시겠습니까?');
 			
-			//if(check) {
+			if(check) {
 			
 			var head = {};
 			var checklistData = {};
@@ -121,7 +121,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		        }
 			});
 			
-			//}
+			}
 		});
 	};
 	
@@ -160,7 +160,29 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 		var today = year + "-" + month + "-" + day;
 		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px 
-				
+		var heightNum = parseInt(height.replace("px", ""));
+		var textSizeVal = "";
+
+		if(heightNum >= 20) {
+			textSizeVal = "16px"; //text input default font-size = 16px;
+		}
+
+		else {
+			textSizeVal = parseInt(height.replace("px", "") * 0.8) + "px"; //input 태그 높이에 따라 font-size 조절위함
+
+		}
+		console.log(heightNum);
+		console.log(textSizeVal);
+		
+		var opt1 = document.createElement("option");
+		var opt2 = document.createElement("option");
+
+		opt1.value = "O";
+		opt1.text = "O";
+
+		opt2.value = "X";
+		opt2.text = "X"; 
+
 		switch(type) {
 			case "signature-writer":
 				tag = document.createElement('input');
@@ -207,6 +229,12 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
 				break;
+			case "select":
+				tag = document.createElement('select');
+				tag.add(opt1, null);
+				tag.add(opt2, null);
+				tag.classList.add("checklist-data");
+				break;
 			default:
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
@@ -219,7 +247,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.top = startY;
 		tag.style.width = width;
 		tag.style.height = height;
-		
+		tag.style.fontSize = textSizeVal;
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
 	};
 }
@@ -328,11 +356,11 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		};
 		
 		// save data to db
-		$('#checklist-update-btn').click(function() {
+		$('#checklist-update-btn').off().click(function() {
 			
-			//var check = confirm('수정하시겠습니까?');
+			var check = confirm('수정하시겠습니까?');
 			
-			//if(check) {
+			if(check) {
 			
 			var head = {};
 			var checklistData = {};
@@ -380,7 +408,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		        }
 			});
 			
-			//}
+			}
 		});
 	};
 	
@@ -408,7 +436,15 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var month = nowDate.getMonth() + 1;
 		var day = nowDate.getDate();
 		
-		var data = this.checkData[id];
+		var data = "";
+			
+		if (data == null || data == '') {
+				data = "";
+		}
+		else {
+				data = this.checkData[id];
+		}
+		
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
@@ -421,8 +457,28 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		if(day < 10) {
 			day = "0" + day;
 		}
-		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px 
-		console.log(parseInt(width) / 16.6); //text maxlength 글자 수
+		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px
+		var heightNum = parseInt(height.replace("px", ""));
+		var textSizeVal = "";
+
+		if(heightNum >= 20) {
+			textSizeVal = "16px"; //text input default font-size = 16px;
+		}
+
+		else {
+			textSizeVal = parseInt(height.replace("px", "") * 0.8) + "px"; //input 태그 높이에 따라 font-size 조절위함
+
+		}
+
+		var opt1 = document.createElement("option");
+		var opt2 = document.createElement("option");
+
+		opt1.value = "O";
+		opt1.text = "O";
+
+		opt2.value = "X";
+		opt2.text = "X"; 
+
 		var today = year + "-" + month + "-" + day;
 		switch(type) {
 			case "signature-writer":
@@ -488,6 +544,13 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag.classList.add("checklist-data");
 				tag.value = data;
 				break;
+			case "select":
+				tag = document.createElement('select');
+				tag.add(opt1, null);
+				tag.add(opt2, null);
+				tag.value = data;
+				tag.classList.add("checklist-data");
+				break;
 			default:
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
@@ -500,7 +563,8 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		tag.style.top = startY;
 		tag.style.width = width;
 		tag.style.height = height;
-		
+		tag.style.fontSize = textSizeVal;
+
 		document.getElementById("checklist-update-wrapper").appendChild(tag);
 	};
 }
@@ -650,8 +714,15 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		var width = cell.childNodes[4].textContent.replace('px', '');
 		var height = cell.childNodes[5].textContent.replace('px', '');
 		
-		var data = this.checkData[id];
-		
+		var data = "";
+			
+		if (data == null || data == '') {
+				data = "";
+		}
+		else {
+				data = this.checkData[id];
+		}
+
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;

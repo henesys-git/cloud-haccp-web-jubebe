@@ -16,6 +16,13 @@
 	if(request.getParameter("MenuTitle") != null) 
 		menuName = request.getParameter("MenuTitle");
 %>
+<style>
+	input[type="date"]::-webkit-inner-spin-button,
+	input[type="date"]::-webkit-calendar-picker-indicator {
+   	color: rgba(0, 0, 0, 0);
+}
+
+</style>
 <script type="text/javascript">
     
     var mainTable;
