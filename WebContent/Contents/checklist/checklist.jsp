@@ -148,7 +148,7 @@
 	    
 		initTable();
     	
-    	$("#insert-btn").click(function() {
+    	$("#insert-btn").off().click(function() {
     		let checklistId = 'checklist' + '<%=checklistNum%>';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
@@ -156,7 +156,7 @@
     		modal.openModal();
     	});
     	
-    	$("#update-btn").click(function() {
+    	$("#update-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -180,7 +180,7 @@
     		modal.openModal();
     	});
     	
-    	$("#delete-btn").click(function() {
+    	$("#delete-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -222,7 +222,7 @@
     		
     	});
     	
-    	$("#select-btn").click(function() {
+    	$("#select-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
 			
@@ -352,7 +352,7 @@
 	
 	async function refreshMainTable() {
     	var clData = new ChecklistData();
-    	var clList = await clData.getAll();
+    	var clList = await clData.getAll('<%=checklistNum%>');
     	console.log(clList);
 		mainTable.clear().rows.add(clList).draw();
 	}
