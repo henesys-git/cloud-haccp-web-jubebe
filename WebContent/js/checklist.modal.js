@@ -73,9 +73,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		// save data to db
 		$('#checklist-insert-btn').off().click(function() {
 			
-			var check = confirm('등록하시겠습니까?');
 			
-			if(check) {
 			
 			var head = {};
 			var checklistData = {};
@@ -102,6 +100,11 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			head.revisionNo = seqNo;
 			head.checklistData = checklistData;
 			
+			console.log(checklistData);
+			var check = confirm('등록하시겠습니까?');
+			
+			if(check) {
+
 			$.ajax({
 				type: "POST",
 		        url: heneServerPath + "/checklist",
@@ -123,6 +126,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			
 			}
 		});
+		
 	};
 	
 	this.drawImage = async function(imageObject) {
@@ -159,8 +163,13 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		}
 		
 		var today = year + "-" + month + "-" + day;
-		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px 
+		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px
+
+		var widthNum = parseInt(width.replace("px", ""));
 		var heightNum = parseInt(height.replace("px", ""));
+		var startXNum = parseInt(startX.replace("px", ""));
+		var startYNum = parseInt(startY.replace("px", ""));
+
 		var textSizeVal = "";
 
 		if(heightNum >= 20) {
@@ -171,8 +180,6 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			textSizeVal = parseInt(height.replace("px", "") * 0.8) + "px"; //input 태그 높이에 따라 font-size 조절위함
 
 		}
-		console.log(heightNum);
-		console.log(textSizeVal);
 		
 		var opt1 = document.createElement("option");
 		var opt2 = document.createElement("option");
@@ -182,6 +189,8 @@ function ChecklistInsertModal(checklistId, seqNo) {
 
 		opt2.value = "X";
 		opt2.text = "X"; 
+
+		var fileTag = "";
 
 		switch(type) {
 			case "signature-writer":
@@ -220,10 +229,34 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				}
 				tag.classList.add("checklist-data");
 				break;
-			case "image":
+			case "file":
 				tag = document.createElement('input');
 				tag.setAttribute("type", "file");
 				tag.classList.add("checklist-data");
+				break;	
+			case "image":
+				formTag = document.createElement('form');
+				formTag.id = id + "_form";
+				formTag.method = "post";
+				formTag.enctype = "multipart/form-data";
+				formTag.style.position = 'absolute';
+				formTag.style.left = startX;
+				formTag.style.top = (startYNum + heightNum - 30) + "px";
+				formTag.style.width = width;
+				formTag.style.height = "30px";
+
+				fileTag = document.createElement('input');
+				fileTag.id = id + "_file";
+				fileTag.name = "filename";
+				fileTag.setAttribute("type", "file");
+				fileTag.setAttribute("onchange", "changeIMG(this);");
+
+				formTag.append(fileTag);
+				document.getElementById("checklist-insert-wrapper").appendChild(formTag);
+				
+				tag = document.createElement('canvas');
+				tag.classList.add("checklist-data");
+
 				break;
 			case "textarea":
 				tag = document.createElement('textarea');
@@ -246,10 +279,22 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		tag.style.left = startX;
 		tag.style.top = startY;
 		tag.style.width = width;
-		tag.style.height = height;
+		
+		//이미지일 경우 파일 첨부 영역이 하단에 30px만큼 높이 고정되어 표시되도록 하기 귀함.
+		if(type == "image") {
+			tag.style.height = (heightNum - 30) + "px";
+		}
+		else {
+			tag.style.height = height;
+		}
+		
 		tag.style.fontSize = textSizeVal;
 		document.getElementById("checklist-insert-wrapper").appendChild(tag);
 	};
+	
+	//$("input:file[id='']").on('change',function(){ 
+	
+		//});
 }
 
 function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
@@ -358,9 +403,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		// save data to db
 		$('#checklist-update-btn').off().click(function() {
 			
-			var check = confirm('수정하시겠습니까?');
 			
-			if(check) {
 			
 			var head = {};
 			var checklistData = {};
@@ -386,7 +429,11 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 			head.revisionNo = revisionNo;
 			head.seqNo = seqNo;
 			head.checklistData = checklistData;
+			console.log(checklistData);
+            var check = confirm('수정하시겠습니까?');
 			
+			if(check) {
+
 			$.ajax({
 				type: "POST",
 		        url: heneServerPath + "/checklist",
@@ -456,6 +503,9 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		}
 		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px
 		var heightNum = parseInt(height.replace("px", ""));
+		var widthNum = parseInt(width.replace("px", ""));
+		var startXNum = parseInt(startX.replace("px", ""));
+		var startYNum = parseInt(startY.replace("px", ""));
 		var textSizeVal = "";
 
 		if(heightNum >= 20) {
@@ -529,10 +579,42 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				}
 				tag.classList.add("checklist-data");
 				break;
-			case "image":
+			case "file":
 				tag = document.createElement('input');
 				tag.setAttribute("type", "file");
 				tag.classList.add("checklist-data");
+				break;	
+			case "image":
+				formTag = document.createElement('form');
+				formTag.id = id + "_form";
+				formTag.method = "post";
+				formTag.enctype = "multipart/form-data";
+				formTag.style.position = 'absolute';
+				formTag.style.left = startX;
+				formTag.style.top = (startYNum + heightNum - 30) + "px";
+				formTag.style.width = width;
+				formTag.style.height = "30px";
+
+				fileTag = document.createElement('input');
+				fileTag.id = id + "_file";
+				fileTag.name = "filename";
+				fileTag.setAttribute("type", "file");
+				fileTag.setAttribute("onchange", "changeIMG(this);");
+				formTag.append(fileTag);
+				document.getElementById("checklist-update-wrapper").appendChild(formTag);
+
+				tag = document.createElement('canvas');
+				tag.classList.add("checklist-data");
+				tag.id = id;
+				tag.style.position = 'absolute';
+				tag.style.left = startX;
+				tag.style.top = startY;
+				tag.style.width = width;
+				tag.style.height = (heightNum - 30) + "px";
+				tag.value = data;
+				document.getElementById("checklist-update-wrapper").appendChild(tag);
+				fn_Set_Image_File_View(data, id, width, tag.style.height);
+
 				break;	
 			case "textarea":
 				tag = document.createElement('textarea');
@@ -553,15 +635,18 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				break;
 		}
 		
-		tag.id = id;
-		tag.style.position = 'absolute';
-		tag.style.left = startX;
-		tag.style.top = startY;
-		tag.style.width = width;
-		tag.style.height = height;
-		tag.style.fontSize = textSizeVal;
-
-		document.getElementById("checklist-update-wrapper").appendChild(tag);
+		//image는 상단 case문에서 tag 추가하기 때문에 제외 
+		if(type != "image") {
+			tag.id = id;
+			tag.style.position = 'absolute';
+			tag.style.left = startX;
+			tag.style.top = startY;
+			tag.style.width = width;
+			tag.style.height = height;
+			tag.style.fontSize = textSizeVal;
+			document.getElementById("checklist-update-wrapper").appendChild(tag);
+		}
+		
 	};
 }
 
@@ -759,6 +844,8 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 				 //this.ctx.wrapText_XY(ctx, cl.bodies.body0, "row34", "col14", data,	
  	 							//'balck', "9px serif", "left", "top", 20, 2, 1, 1);
 				break;
+			case "image":
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
 			default : 
 				this.ctx.fillText(data, middleX, middleY);
 				break;

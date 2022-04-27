@@ -7,6 +7,7 @@
 <%
 	String loginID = session.getAttribute("login_id").toString();
 	String login_name = session.getAttribute("login_name").toString();
+	String bizNo = session.getAttribute("bizNo").toString();
 	
 	String checklistNum = "", menuName = "";
 	
@@ -356,6 +357,126 @@
 		}
 		
 	}
+	
+	function changeIMG(obj) {
+		var image_file_name = $(obj).val();
+		
+		var cellId = $(obj).attr('id');
+		var cellId2 = cellId.split('_');
+		var formId = cellId2[0]+"_form";
+		var canvas = document.getElementById(cellId2[0]);
+		console.log(canvas);
+		console.log();
+		if( image_file_name.indexOf(".") ) { // 파일명 검사(파일이 선택됐는지) 및  확장자 검사(이미지파일-jpg,jpeg,png,gif 맞는지)
+			var aExt = image_file_name.split("."); // 파일명에서 확장자명 분리(aExt[1] : 파일 확장자)
+			if( aExt[1]!='jpg' && aExt[1]!='JPG' && aExt[1]!='JPEG' && aExt[1]!='jpeg' 
+				&& aExt[1]!='png' && aExt[1]!='PNG'  && aExt[1]!='gif' && aExt[1]!='GIF' ){
+				swal("선택한 파일은 지원하지 않는 파일형식입니다." + "\n" + "jpg, jpeg, png, gif 형식의 파일을 선택하세요!!!");
+				return;
+			} else {
+				vPicImageFileName1 = "<%=bizNo%>_" + 'checklist' + '<%=checklistNum%>_' + cellId2[0] + "_" + Math.random() + "." + aExt[1] ; 
+				// 실제로 저장할 파일명(사업자등록번호_직인)
+//					var image_save_name = "ex_pic1_1" + "." + aExt[1] ; // 저장할 파일명(임시)
+				fn_image_file_upload(vPicImageFileName1, formId, cellId2[0]) ;
+			}
+		}else {
+			swal("등록할 이미지 파일을 선택하세요.");
+			return;
+		}
+	}
+	
+	function fn_image_file_upload(image_save_name, formID, canvasID) {
+		if(image_save_name == ""){ // 파일명 없을때 실행안함
+			return;
+		}
+		var form = $('#' + formID)[0]; // 파일선택 버튼이 속해있는 form
+		console.log(form);
+		var data = new FormData(form);
+		data.append("fileName", image_save_name); // 보낼 데이터1(저장할 파일명)
+		console.log("data in form : =================");
+		for (var pair of data.entries()) {
+			console.log(pair[0]+ ', ' + pair[1]);
+		}
+
+    	// checklistImageFileUpload.jsp 호출 (이미지파일을 서버폴더에 저장)
+		$.ajax({
+			type: "POST",
+			enctype: "multipart/form-data",
+			url: "<%=Config.this_SERVER_path%>/Contents/ImageFileUpload/checklistImageFileUpload.jsp",
+			data: data,
+			processData: false,
+			contentType: false,
+			//async : false,
+			cache: false,
+			timeout: 600000,
+			success: function (html) {
+				// 화면에 저장한 이미지 미리보기로 띄움(canvasID가 있을때만 - 임시파일 저장할때만)
+				if(html.length>0 && canvasID != undefined){
+					var canvas = document.getElementById(canvasID);
+					var context = canvas.getContext('2d');
+					var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+								+ image_save_name
+								+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
+					loadImages(imgSrc, context);
+					function loadImages(ImgPage1, context) {
+						var images = new Image;
+						images.onload = function() {
+							context.clearRect(0, 0, canvas.width, canvas.height);
+							context.drawImage(this, 0, 0, canvas.width, canvas.height);  //캔버스에 이미지 디스플레이
+						};
+						images.src = ImgPage1;
+					}
+					$('#' + canvasID).val(image_save_name);
+                }
+	        },
+			error: function (e) {
+				console.log("ERROR : ", e);
+			}
+		});
+	}
+	// 점검표 image 영역 불러오는 function (수정 모달)
+	function fn_Set_Image_File_View(imageFile, canvasID, width, height){
+		var canvas = document.getElementById(canvasID);
+		var context = canvas.getContext('2d');
+		var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+					+ imageFile
+					+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
+		loadImages(imgSrc, context);
+		function loadImages(ImgPage1, context) {
+			var images;
+			images = new Image();
+			images.onload = function() {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				context.drawImage(this, 0, 0, canvas.width, canvas.height);
+			};
+			images.onerror = function () {
+			};
+			images.src = ImgPage1;
+		}
+	}
+	
+	
+	// 점검표 image 영역 불러오는 function (조회 모달)
+	function fn_Set_Image_File_View2(imageFile, canvasID, startX, startY, width, height){
+		var canvas = document.getElementById(canvasID);
+		var context = canvas.getContext('2d');
+		var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+					+ imageFile
+					+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
+		loadImages(imgSrc, context);
+		function loadImages(ImgPage1, context) {
+			var images;
+			images = new Image();
+			images.onload = function() {
+				context.clearRect(startX, startY, width, height);
+				context.drawImage(this, startX, startY, width, height);
+			};
+			images.onerror = function () {
+			};
+			images.src = ImgPage1;
+		}
+	}
+	
 	
 	async function refreshMainTable() {
     	var clData = new ChecklistData();

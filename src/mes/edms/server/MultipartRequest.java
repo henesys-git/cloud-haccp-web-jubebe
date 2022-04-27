@@ -730,7 +730,7 @@ public class MultipartRequest
         int read = -1;
 
         // First run through, check that the first line is a boundary, otherwise throw a exception as format incorrect.
-        read = readLine(in, blockOfBytes);
+        read = readLine(in, blockOfBytes); System.out.println(read);
         strLine = read>0? new String(blockOfBytes, 0, read, charEncoding): null;
 
         // Must be boundary at top of loop, otherwise we have finished.
@@ -751,7 +751,7 @@ public class MultipartRequest
                 // Mac IE4 adds extra line after last boundary - 1.21
                 if(strLine==null || strLine.length() == 0 || strLine.trim().length() == 0)
                     break;
-
+                System.out.println("strLine : ==========="); System.out.println(strLine);
                 // TODO: Improve performance by getting both the name and filename from strLine in one go...
                 strName = trimQuotes(getValue("name", strLine));
                 // If this is not null, it indicates that we are processing a filename.
