@@ -27,7 +27,8 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    			.append("	checklist_id,\n")
 	    			.append("	seq_no,\n")
 	    			.append("	revision_no,\n")
-	    			.append("	check_data\n")
+	    			.append("	check_data,\n")
+	    			.append("   write_date \n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
 	    			.append("	?,\n")
@@ -39,7 +40,8 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    			.append("		WHERE checklist_id = ?\n")
 	    			.append("	) AS A),\n")
 	    			.append("	?,\n")
-	    			.append("	?\n")
+	    			.append("	?,\n")
+	    			.append("	now() \n")
 	    			.append(");\n")
 	    			.toString();
 	    	
@@ -71,9 +73,14 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 		String sql = "";
 		
 	    try {
+	    	System.out.println("clData.getCheckData()===================");
+	    	System.out.println(clData.getCheckData());
+	    	System.out.println(clData.getCheckData().toString().replaceAll("\r\n", "\n"));
+	    	System.out.println(clData.getCheckData().replaceAll("\r\n", "<br>"));
+	    	System.out.println(clData.getCheckData().replaceAll("\n", "<br>"));
 	    	sql = new StringBuilder()
 	    			.append("UPDATE checklist_data \n")
-	    			.append("	SET check_data = '"+clData.getCheckData()+"'	\n")
+	    			.append("	SET check_data = '"+clData.getCheckData().toString()+"'	\n")
 	    			.append("WHERE checklist_id = '"+clData.getChecklistId()+"' \n")
 	    			.append("AND seq_no = '" +clData.getSeqNo() +"' \n")
 	    			.toString();
@@ -231,6 +238,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 				.append("A.seq_no, 									\n")
 				.append("A.revision_no, 							\n")
 				.append("A.check_data, 								\n")
+				.append("A.write_date, 								\n")
 				//.append("A.sign_writer, 							\n")
 				//.append("A.sign_checker, 							\n")
 				//.append("A.sign_approver 							\n")
@@ -340,6 +348,7 @@ public class ChecklistDataDaoImpl implements ChecklistDataDao {
 	    clData.setSeqNo(rs.getInt("seq_no"));
 	    clData.setRevisionNo(rs.getInt("revision_no"));
 	    clData.setCheckData(rs.getString("check_data"));
+	    clData.setWriteDate(rs.getString("write_date"));
 	    clData.setSignWriter(rs.getString("sign_writer"));
 	    clData.setSignChecker(rs.getString("sign_checker"));
 	    clData.setSignApprover(rs.getString("sign_approver"));

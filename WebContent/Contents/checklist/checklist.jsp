@@ -66,28 +66,36 @@
 	    	//서명 칼럼 index 들어갈 배열
 	    	var columnDefsKeys = new Array();
 	    	
-	    	//html 고정th명(점검표아이디, 일련번호, 양식수정이력번호)
+	    	//html 고정th명(점검표아이디, 일련번호, 양식수정이력번호, 작성일자)
 	    	var fixedTh = new Array();
 	    	fixedTh[0] = "점검표아이디";
 			fixedTh[1] = "일련번호";
 			fixedTh[2] = "양식수정이력번호";
+			fixedTh[3] = "작성일자";
 			
 			//db로부터 받아온 칼럼명
 			var fixedColumn = new Array();
 			fixedColumn[0] = "checklistId";
 			fixedColumn[1] = "seqNo";
 			fixedColumn[2] = "revisionNo";
+			fixedColumn[3] = "writeDate";
 	    	
-			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
+			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호, 작성일자) 
 			var columnKeys = [ 
-   				{data: fixedColumn[0] , defaultContent : ''}, 
+   				{data:fixedColumn[0] , defaultContent : ''}, 
    			  	{data:fixedColumn[1] , defaultContent : ''}, 
-   			  	{data:fixedColumn[2] , defaultContent : ''}
+   			  	{data:fixedColumn[2] , defaultContent : ''},
+   			 	{data:fixedColumn[3] , defaultContent : ''}
    			];
 			
-			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
-	    	for(var a = 0; a < 3; a++) {
-				$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
+			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호, 작성일자)
+	    	for(var a = 0; a < 4; a++) {
+	    		if(a%2 == 0) {
+					$("#ccpDataTable thead tr").append("<th style='display:none; width:0px'>"+fixedTh[a]+"</th>");
+	    		}
+	    		else {
+	    			$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
+	    		}
 	    	}
 	    	
 			//점검표의 사인정보를 조회해온 데이터를 판단하여 동적으로 
@@ -100,7 +108,7 @@
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>작성자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
+	    			columnDefsKeys[i] = (i+4);
 	    			
 	    		}
 	    		else if(list2[i].signatureType == "CHECK") {
@@ -108,7 +116,7 @@
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>확인자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
+	    			columnDefsKeys[i] = (i+4);
 	    			
 	    		}
 	    		else if(list2[i].signatureType == "APPRV") {
@@ -116,7 +124,7 @@
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>승인자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
+	    			columnDefsKeys[i] = (i+4);
 	    			
 	    		}
 	    	}
@@ -130,6 +138,12 @@
 				pageLength: 10,
 				columns : columnKeys,
 				'columnDefs' : [
+					{
+						'targets' : [0,2],
+						'createdCell' : function(td, cellData, rowData, rowinx, col) {
+							$(td).attr('style', 'display:none;');
+						}
+					},
 					{
 						'targets' : columnDefsKeys,
 						'createdCell' : function(td, cellData, rowData, rowinx, col) {
