@@ -577,7 +577,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					}
 				}
 				else {
-					checklistData[element.id] = element.value;
+					checklistData[element.id] = element.value.replace(/(\n|\r\n)/g, '<br>');
 				}
 			}
 			
@@ -937,7 +937,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 			case "textarea":
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
-				tag.value = data;
+				tag.value = data.split('<br>').join('\r\n');
 				break;
 			case "select":
 				tag = document.createElement('select');
@@ -1229,7 +1229,7 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 				break;
 			case "textarea":
 				 this.ctx.textAlign = "left";
-				 wrapText(this.ctx, data, startXWrite, startYWrite, width, 15);
+				 wrapText(this.ctx, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
 				 //this.ctx.fillText(data, startXWrite, startYWrite);
 				break;
 			case "file":
