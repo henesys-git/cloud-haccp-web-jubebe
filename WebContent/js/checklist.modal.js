@@ -1329,10 +1329,13 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		await this.setMetadataAndImagePath();
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
+		this.checklistSignData = await this.getChecklistSignData();
 		console.log(this.checklistData);
 		
 		let info = {
 			"rowStartCell":"cell3",
+			"writerSignCell":0,
+			"approverSignCell":1,
 			"dateCell":2,
 			"normalSumValueWhenAddAllTestResult":"4", 
 			"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
@@ -1360,11 +1363,6 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 			}
 		}
 		
-		console.log(outer);
-
-		//this.checkData = JSON.parse(this.checklistData.checkData);
-		this.checklistSignData = await this.getChecklistSignData();
-		
 		$("#checklist-select-modal").modal("show");
 		
 		// read checklist image
@@ -1377,15 +1375,26 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
-		bgImg.onload = function() {
+		bgImg.onload = async function() {
 			that.drawImage(bgImg);
 			
 			// display data
 			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
 			
 			// draw date
-			console.log(cellList[info.dateCell]);
 			that.displayData(cellList[info.dateCell], that.createDate);
+			
+			// draw signature
+			var ccpSign = new CCPSign();
+			var signInfo = await ccpSign.get(that.createDate, 'PC10');
+			console.log(signInfo);
+			
+			that.displayData(cellList[info.writerSignCell], '김치훈');
+			
+			if(signInfo.checkerName != null) {
+				console.log(signInfo.checkerName);
+				that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
+			}
 			
 			var currentRow = 0;
 			var startFlag = false;
