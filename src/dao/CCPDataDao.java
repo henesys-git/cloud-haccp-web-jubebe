@@ -8,9 +8,13 @@ import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
+import viewmodel.CCPTestDataHeadViewModel;
+import viewmodel.CCPTestDataViewModel;
 
 public interface CCPDataDao {
 	public List<CCPData> getAllCCPData(Connection conn, String type, String startDate, String endDate);
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate);
+	public List<CCPTestDataViewModel> getCCPTestData(Connection conn, String date, String processCode, String sensorId);
 	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String type, String startDate, String endDate, String processCode);
 	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey);
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvement);

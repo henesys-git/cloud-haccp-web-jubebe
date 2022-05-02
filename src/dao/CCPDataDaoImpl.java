@@ -15,6 +15,8 @@ import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
+import viewmodel.CCPTestDataHeadViewModel;
+import viewmodel.CCPTestDataViewModel;
 
 public class CCPDataDaoImpl implements CCPDataDao {
 	
@@ -50,6 +52,92 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			while(rs.next()) {
 				CCPData data = extractFromResultSet(rs);
+				ccpDataList.add(data);
+			}
+			
+			return ccpDataList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("	CAST(create_time AS DATE) AS create_date,\n")
+					.append("	sensor_id\n")
+					.append("FROM data_metal\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("	AND CAST(create_time as date) between '" + startDate + "' and '" + endDate + "'\n")
+					.append("	AND process_code = 'PC10'\n")
+					.append("GROUP BY cast(create_time as date), sensor_id;\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPTestDataHeadViewModel> list= new ArrayList<CCPTestDataHeadViewModel>();
+			
+			while(rs.next()) {
+				CCPTestDataHeadViewModel data = extractTestDataHeadFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) { /* Ignored */ }
+			try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<CCPTestDataViewModel> getCCPTestData(Connection conn, String date, String processCode, String sensorId) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("  B.product_name,\n")
+					.append("  A.sensor_key,\n")
+					.append("  A.create_time,\n")
+					.append("  A.event_code,\n")
+					.append("  A.sensor_value\n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN product B\n")
+					.append("  ON A.product_id = B.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("  AND CAST(create_time AS DATE) = '" + date + "' \n")
+					.append("  AND process_code = '" + processCode + "'\n")
+					.append("  AND sensor_id = '" + sensorId + "'\n")
+					.append("ORDER BY create_time ASC;\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPTestDataViewModel> ccpDataList = new ArrayList<CCPTestDataViewModel>();
+			
+			while(rs.next()) {
+				CCPTestDataViewModel data = extractTestDataFromResultSet(rs);
 				ccpDataList.add(data);
 			}
 			
@@ -337,6 +425,27 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		ccpData.setUserId(rs.getString("user_id"));
 		ccpData.setEventCode(rs.getString("event_code"));
 		ccpData.setProductId(rs.getString("product_id"));
+		
+	    return ccpData;
+	}
+	
+	private CCPTestDataHeadViewModel extractTestDataHeadFromResultSet(ResultSet rs) throws SQLException {
+		CCPTestDataHeadViewModel ccpData = new CCPTestDataHeadViewModel();
+		
+		ccpData.setSensorId(rs.getString("sensor_id"));
+		ccpData.setCreateDate(rs.getString("create_date"));
+		
+		return ccpData;
+	}
+
+	private CCPTestDataViewModel extractTestDataFromResultSet(ResultSet rs) throws SQLException {
+		CCPTestDataViewModel ccpData = new CCPTestDataViewModel();
+		
+		ccpData.setSensorKey(rs.getString("sensor_key"));
+		ccpData.setCreateTime(rs.getString("create_time"));
+		ccpData.setSensorValue(rs.getString(rs.getString("sensor_value")));
+		ccpData.setEventCode(rs.getString("event_code"));
+		ccpData.setProductName(rs.getString("product_name"));
 		
 	    return ccpData;
 	}

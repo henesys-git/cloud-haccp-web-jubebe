@@ -13,6 +13,8 @@ import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
+import viewmodel.CCPTestDataHeadViewModel;
+import viewmodel.CCPTestDataViewModel;
 
 public class CCPDataService {
 
@@ -131,5 +133,35 @@ public class CCPDataService {
 		}
 		
 		return cvmList;
+	}
+	
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(String startDate, String endDate) {
+		List<CCPTestDataHeadViewModel> list = null;
+		
+		try {
+			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
+			list = ccpDataDao.getCCPTestDataHead(conn, startDate, endDate);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return list;
+	}
+
+	public List<CCPTestDataViewModel> getCCPTestData(String date, String processCode, String sensorId) {
+		List<CCPTestDataViewModel> list = null;
+		
+		try {
+			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
+			list = ccpDataDao.getCCPTestData(conn, date, processCode, sensorId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return list;
 	}
 }

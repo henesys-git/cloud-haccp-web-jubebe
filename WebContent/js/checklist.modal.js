@@ -1242,3 +1242,215 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 	};
 }
 
+
+function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
+	this.checklistId = checklistId;
+	this.seqNo = seqNo;
+	this.revisionNo = revisionNo;
+	
+	this.checklistData;
+	this.checkData;
+		
+	this.metaDataPath;
+	this.imagePath;
+	
+	this.modalWidth;
+	this.modalHeight;
+	this.modalWidthWithoutPxKeyword;
+	this.modalHeightWithoutPxKeyword;
+	
+	this.xmlDoc;
+	
+	this.ctx;
+	
+	this.setMetadataAndImagePath = async function() {
+		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
+		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
+		// 이미지경로와 메타데이터파일경로를 구한다
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+	}
+	
+	this.getChecklistData = async function() {
+		let fetchedData = $.ajax({
+							type: "GET",
+					        url: heneServerPath + "/checklist"
+					        	+ "?checklistId=" + this.checklistId
+					        	+ "&seqNo=" + this.seqNo,
+					        success: function (data) {
+					        	return data;
+					        }
+						});
+		
+		return fetchedData;
+	}
+	
+	this.getChecklistSignData = async function() {
+		let fetchedData = $.ajax({
+							type: "GET",
+					        url: heneServerPath + "/checklist"
+					        	+ "?checklistId=" + this.checklistId
+					        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
+					        success: function (data) {
+					        	return data;
+					        }
+						});
+		
+		return fetchedData;
+	}
+	
+	this.setModal = async function() {
+		// read meta-data
+		let response = await fetch(this.metaDataPath);
+	    let metaData = await response.text();
+	    
+	 	// parse meta-data
+		let parser = new DOMParser();
+		this.xmlDoc = parser.parseFromString(metaData, "text/xml");
+		
+		// set modal size
+		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
+		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
+		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
+		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
+	};
+	
+	this.openModal = async function() {
+		let that = this;
+	
+		await this.setMetadataAndImagePath();
+		await this.setModal();
+		this.checklistData = await this.getChecklistData();
+		this.checkData = JSON.parse(this.checklistData.checkData);
+		this.checklistSignData = await this.getChecklistSignData();
+		
+		$("#checklist-select-modal").modal("show");
+		
+		// read checklist image
+		var canvas = document.getElementById('checklist-select-canvas');
+		
+		canvas.width = this.modalWidthWithoutPxKeyword;
+		canvas.height = this.modalHeightWithoutPxKeyword;
+		
+		this.ctx = canvas.getContext('2d');
+		
+		var bgImg = new Image();
+		bgImg.src = this.imagePath;
+		bgImg.onload = function() {
+			that.drawImage(bgImg);
+			
+			// display data
+			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
+			
+			for(var i=0; i<cellList.length; i++) {
+				var cell = cellList[i];
+				that.displayData(cell);
+			};
+		};
+		
+		// 점검표 출력
+		$('#checklist-print-btn').click(function() {
+			var dataUrl = document.getElementById("checklist-select-canvas").toDataURL();
+    		var windowContent = '<!DOCTYPE html>';
+   	 		windowContent += '<html>'
+    		windowContent += '<head><title>점검표 출력</title></head>';
+    		windowContent += '<body style="zoom:120%">'
+   		 	windowContent += '<img src="' + dataUrl + '">';
+    		windowContent += '</body>';
+    		windowContent += '</html>';
+    		var printWin = window.open();
+    		printWin.document.open();
+    		printWin.document.write(windowContent);
+    
+    		printWin.document.addEventListener('load', function() {
+        	printWin.focus();
+        	printWin.print();
+        	printWin.document.close();
+        	printWin.close();
+    		}, true);
+		});
+	};
+	
+	this.drawImage = function(imageObject) {
+		this.ctx.drawImage(imageObject, 0, 0);
+	}
+	
+	this.displayData = function(cell) {
+		var id = cell.nodeName;
+		var type = cell.childNodes[0].textContent;
+		var format = cell.childNodes[1].textContent;
+		var startX = cell.childNodes[5].textContent.replace('px', '');
+		var startY = cell.childNodes[6].textContent.replace('px', '');
+		var width = cell.childNodes[7].textContent.replace('px', '');
+		var height = cell.childNodes[8].textContent.replace('px', '');
+		
+		var data = this.checkData[id];
+			
+		if (data == null || data == '') {
+				data = "";
+		}
+		else {
+				data = this.checkData[id];
+		}
+
+		var signWriter = this.checklistSignData.signWriter;
+		var signChecker = this.checklistSignData.signChecker;
+		var signApprover = this.checklistSignData.signApprover;
+		
+		var middleX = Number(startX) + (width / 2);
+		var middleY = Number(startY) + (height / 2);
+		
+		this.ctx.textAlign = "center";
+		this.ctx.font = '10px serif';
+		
+		console.log(type);
+		console.log(format);
+		
+		switch(type) {
+			case "signature-writer":
+				if(signWriter != null) {
+					this.ctx.fillText(signWriter, middleX, middleY);
+				}
+				break;
+			case "signature-approver":
+				if(signApprover != null) {
+					this.ctx.fillText(signApprover, middleX, middleY);
+				}
+				break;
+			case "signature-checker":
+				if(signChecker != null) {
+					this.ctx.fillText(signChecker, middleX, middleY);
+				}
+				break;
+			case "radio button":
+				if(data === 'on') {
+					this.ctx.fillText("✔", middleX, middleY);
+				}
+				break;
+			case "checkbox":
+				if(data === 'on') {
+					this.ctx.fillText("✔", middleX, middleY);
+				}
+				break;
+			case "textarea":
+				 this.ctx.textAlign = "left";
+				 this.ctx.fillText(data, middleX, middleY);
+				 //this.ctx.wrapText_XY(ctx, cl.bodies.body0, "row34", "col14", data,	
+ 	 							//'balck', "9px serif", "left", "top", 20, 2, 1, 1);
+				break;
+			case "file":
+				if(format == 'image') {
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
+				}
+				else {
+					 this.ctx.fillText(data, middleX, middleY);
+				}	
+			default : 
+				this.ctx.fillText(data, middleX, middleY);
+				break;
+		}
+	};
+}
