@@ -81,11 +81,16 @@ public class CCPDataViewModelController extends HttpServlet {
 			
 			out.print(result);
 			break;
-		case "monitoring":
-			String toDay = req.getParameter("toDay");
-			
-			List<CCPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel(toDay);
-			result = FormatTransformer.toJson(cvmMonitoringList);
+		case "metal-breakaway":
+			String sensorKey2 = req.getParameter("sensorKey");
+			String sensorId2 = req.getParameter("sensorId");
+			String processCode2 = req.getParameter("processCode");
+			String toDate2 = req.getParameter("toDate");
+			String fromDate = req.getParameter("fromDate");
+			System.out.println("sensorId2 is ==========================");
+			System.out.println(sensorId2);
+			List<CCPDataDetailViewModel> cvmDetailList2 = ccpService.getMetalBreakAwayList(sensorKey2, sensorId2, processCode2, toDate2, fromDate);
+			result = FormatTransformer.toJson(cvmDetailList2);
 			
 			res.setContentType("application/json; charset=UTF-8");
 			out = res.getWriter();
@@ -93,6 +98,7 @@ public class CCPDataViewModelController extends HttpServlet {
 			out.print(result);
 			break;
 		}
+		
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 

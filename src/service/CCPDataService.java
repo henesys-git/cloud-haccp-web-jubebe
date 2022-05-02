@@ -132,4 +132,19 @@ public class CCPDataService {
 		
 		return cvmList;
 	}
+	
+	public List<CCPDataDetailViewModel> getMetalBreakAwayList(String sensorKey, String sensorId, String processCode, String toDate, String fromDate) {
+		List<CCPDataDetailViewModel> cvmList = null;
+		
+		try {
+			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
+			cvmList = ccpDataDao.getMetalBreakAwayList(conn, sensorKey, sensorId, processCode, toDate, fromDate);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
+	}
 }
