@@ -1243,10 +1243,13 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 }
 
 
-function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
-	this.checklistId = checklistId;
-	this.seqNo = seqNo;
-	this.revisionNo = revisionNo;
+function ChecklistSelectModalMetalDetector(createDate, sensorId) {
+	this.createDate = createDate;
+	this.sensorId = sensorId;	
+	
+	this.checklistId = 'checklist05';
+	this.seqNo = 0;
+	this.revisionNo = '0';
 	
 	this.checklistData;
 	this.checkData;
@@ -1267,34 +1270,36 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + this.checklistId + '_' + this.revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + this.checklistId + '_' + this.revisionNo + '.png';
 	}
 	
 	this.getChecklistData = async function() {
 		let fetchedData = $.ajax({
-							type: "GET",
-					        url: heneServerPath + "/checklist"
-					        	+ "?checklistId=" + this.checklistId
-					        	+ "&seqNo=" + this.seqNo,
-					        success: function (data) {
-					        	return data;
-					        }
-						});
+			type: "GET",
+	        url: heneServerPath + "/ccptestvm"
+	            	+ "?method=" + 'detail'
+	            	+ "&date=" + this.createDate
+	            	+ "&processCode=" + 'PC10'
+	            	+ "&sensorId=" + this.sensorId,
+	        success: function (data) {
+	        	return data;
+	        }
+		});
 		
 		return fetchedData;
 	}
 	
 	this.getChecklistSignData = async function() {
 		let fetchedData = $.ajax({
-							type: "GET",
-					        url: heneServerPath + "/checklist"
-					        	+ "?checklistId=" + this.checklistId
-					        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
-					        success: function (data) {
-					        	return data;
-					        }
-						});
+			type: "GET",
+	        url: heneServerPath + "/checklist"
+	        	+ "?checklistId=" + this.checklistId
+	        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
+	        success: function (data) {
+	        	return data;
+	        }
+		});
 		
 		return fetchedData;
 	}
@@ -1324,7 +1329,40 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 		await this.setMetadataAndImagePath();
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
-		this.checkData = JSON.parse(this.checklistData.checkData);
+		console.log(this.checklistData);
+		
+		let info = {
+			"rowStartCell":"cell3",
+			"dateCell":2,
+			"normalSumValueWhenAddAllTestResult":"4", 
+			"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
+		}
+		
+		let outer = new Array();
+		let row = new Object();
+		let sensorKey = this.checklistData[0].sensorKey;
+		
+		for(let i=0; i<this.checklistData.length; i++) {
+			if(sensorKey == this.checklistData[i].sensorKey) {
+				if(!row.detail) {
+					row.detail = new Object();
+				}
+				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
+			} else {
+				row = new Object();
+				row.prod = this.checklistData[i].productName;
+				row.time = this.checklistData[i].createTime;
+				row.detail = new Object();
+				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
+				
+				outer.push(row);
+				sensorKey = this.checklistData[i].sensorKey
+			}
+		}
+		
+		console.log(outer);
+
+		//this.checkData = JSON.parse(this.checklistData.checkData);
 		this.checklistSignData = await this.getChecklistSignData();
 		
 		$("#checklist-select-modal").modal("show");
@@ -1345,10 +1383,75 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 			// display data
 			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
 			
-			for(var i=0; i<cellList.length; i++) {
-				var cell = cellList[i];
-				that.displayData(cell);
-			};
+			// draw date
+			console.log(cellList[info.dateCell]);
+			that.displayData(cellList[info.dateCell], that.createDate);
+			
+			var currentRow = 0;
+			var startFlag = false;
+			var cellPos = 0;
+			for(let i=0; i<cellList.length; i++) {
+				if(cellList[i].nodeName == info.rowStartCell) {
+					console.log('start flag to true');
+					startFlag = true;
+					cellPos = i;
+				}
+				
+				if(!startFlag) {
+					continue;
+				} else {
+					var row = outer[currentRow];
+					
+					for(let j=0; j<info.roworder.length; j++) {
+						var item = info.roworder[j];
+						
+						switch(item) {
+							case "prod":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.prod);
+								break;
+							case "time":
+								var cell = cellList[cellPos];
+								var time = row.time.substring(11, 16);
+								that.displayData(cell, time);
+								break;
+							case "MC10":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC10"]);
+								break;
+							case "MC20":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC20"]);
+								break;
+							case "MC30":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC30"]);
+								break;
+							case "MC40":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC40"]);
+								break;
+							case "MC50":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC50"]);
+								break;
+							case "judge":
+								var cell = cellList[cellPos];
+
+								if(that.judgeResult(row.detail, info)) {
+									that.displayData(cell, "적합");
+								} else {
+									that.displayData(cell, "부적합");
+								}
+						}
+						
+						cellPos += 1;
+					}
+					
+					currentRow += 1;
+					i += info.roworder.length;
+				}
+			}
 		};
 		
 		// 점검표 출력
@@ -1366,10 +1469,10 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
     		printWin.document.write(windowContent);
     
     		printWin.document.addEventListener('load', function() {
-        	printWin.focus();
-        	printWin.print();
-        	printWin.document.close();
-        	printWin.close();
+	        	printWin.focus();
+	        	printWin.print();
+	        	printWin.document.close();
+	        	printWin.close();
     		}, true);
 		});
 	};
@@ -1378,7 +1481,21 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 		this.ctx.drawImage(imageObject, 0, 0);
 	}
 	
-	this.displayData = function(cell) {
+	this.judgeResult = function(testResults, info) {
+		let sum = 0;
+
+		for (const key in testResults) {
+			sum += Number(testResults[key]);
+		}
+		
+		if(sum == info.normalSumValueWhenAddAllTestResult) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	this.displayData = function(cell, data) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
@@ -1387,15 +1504,6 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 		var width = cell.childNodes[7].textContent.replace('px', '');
 		var height = cell.childNodes[8].textContent.replace('px', '');
 		
-		var data = this.checkData[id];
-			
-		if (data == null || data == '') {
-				data = "";
-		}
-		else {
-				data = this.checkData[id];
-		}
-
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
@@ -1406,51 +1514,16 @@ function ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo) {
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
 		
-		console.log(type);
-		console.log(format);
-		
-		switch(type) {
-			case "signature-writer":
-				if(signWriter != null) {
-					this.ctx.fillText(signWriter, middleX, middleY);
-				}
-				break;
-			case "signature-approver":
-				if(signApprover != null) {
-					this.ctx.fillText(signApprover, middleX, middleY);
-				}
-				break;
-			case "signature-checker":
-				if(signChecker != null) {
-					this.ctx.fillText(signChecker, middleX, middleY);
-				}
-				break;
-			case "radio button":
-				if(data === 'on') {
-					this.ctx.fillText("✔", middleX, middleY);
-				}
-				break;
-			case "checkbox":
-				if(data === 'on') {
-					this.ctx.fillText("✔", middleX, middleY);
-				}
-				break;
-			case "textarea":
-				 this.ctx.textAlign = "left";
-				 this.ctx.fillText(data, middleX, middleY);
-				 //this.ctx.wrapText_XY(ctx, cl.bodies.body0, "row34", "col14", data,	
- 	 							//'balck', "9px serif", "left", "top", 20, 2, 1, 1);
-				break;
-			case "file":
-				if(format == 'image') {
-					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
-				}
-				else {
-					 this.ctx.fillText(data, middleX, middleY);
-				}	
-			default : 
-				this.ctx.fillText(data, middleX, middleY);
-				break;
+		if(!data) {
+			data = '';
 		}
+		
+		if(data == 1) {
+			data = 'O';
+		}
+		if(data == 0) {
+			data = 'X';
+		}
+		this.ctx.fillText(data, middleX, middleY);
 	};
 }

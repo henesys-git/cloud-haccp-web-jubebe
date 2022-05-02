@@ -25,6 +25,7 @@
 	}
 </style>
 
+<script src="<%=Config.this_SERVER_path%>/js/checklist.modal.js"></script>
 <script type="text/javascript">
     
     var mainTable;
@@ -154,7 +155,7 @@
 	    }
 	    
 		initTable();
-    	
+		
     	$("#select-btn").off().click(function() {
     		let selectedRows = mainTable.rows('.selected').data();
 			let selectedRow = selectedRows[0];
@@ -169,11 +170,10 @@
 				return false;
 			}
     		
-    		let checklistId = selectedRow.checklistId;
-    		let seqNo = selectedRow.seqNo;
-    		let revisionNo = selectedRow.revisionNo;
+    		let createDate = selectedRow.createDate;
+    		let sensorId = selectedRow.sensorId;
     		
-    		var modal = new ChecklistSelectModalMetalDetector(checklistId, seqNo, revisionNo);
+    		var modal = new ChecklistSelectModalMetalDetector(createDate, sensorId);
     		modal.openModal();
     	});
     	

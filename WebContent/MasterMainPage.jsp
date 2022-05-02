@@ -75,10 +75,13 @@
   	<!-- Global Configuration -->
   	<script>
   		// server root path
-  		const heneServerPath = "<%=Config.this_SERVER_path%>";
+  		const heneServerPath = '<%=Config.this_SERVER_path%>';
   		const loggedUserId = '<%=loginID%>';
 		const userGroupCode = '<%=userGroupCode%>';
 		const heneBizNo = '<%=bizNo%>';
+		
+		console.log('heneServerPath: ' + heneServerPath);
+		console.log('loggedUserId: ' + loggedUserId);
   	</script>
 </head>
 <style>

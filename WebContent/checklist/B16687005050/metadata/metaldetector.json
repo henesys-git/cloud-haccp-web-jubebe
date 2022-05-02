@@ -1,2 +1,6 @@
-rowstartcell:cell0,
-roworder: prod,time,mc10,mc20,
+{
+	"B16687005050": {
+		"rowstartcell":"cell3",
+		"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
+	}
+}

@@ -443,7 +443,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		
 		ccpData.setSensorKey(rs.getString("sensor_key"));
 		ccpData.setCreateTime(rs.getString("create_time"));
-		ccpData.setSensorValue(rs.getString(rs.getString("sensor_value")));
+		ccpData.setSensorValue(rs.getString("sensor_value"));
 		ccpData.setEventCode(rs.getString("event_code"));
 		ccpData.setProductName(rs.getString("product_name"));
 		
