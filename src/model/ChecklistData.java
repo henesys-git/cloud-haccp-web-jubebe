@@ -9,6 +9,7 @@ public class ChecklistData {
 	private String signChecker;
 	private String signApprover;
 	private String signatureType;
+	private String writeDate;
 	
 	public String getChecklistId() {
 		return checklistId;
@@ -34,6 +35,9 @@ public class ChecklistData {
 	public String getSignatureType() {
 		return signatureType;
 	}
+	public String getWriteDate() {
+		return writeDate;
+	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
 	}
@@ -57,6 +61,9 @@ public class ChecklistData {
 	}
 	public void setSignatureType(String signatureType) {
 		this.signatureType = signatureType;
+	}
+	public void setWriteDate(String writeDate) {
+		this.writeDate = writeDate;
 	}
 	@Override
 	public String toString() {

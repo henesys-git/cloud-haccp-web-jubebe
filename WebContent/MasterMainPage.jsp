@@ -538,6 +538,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/commonCode.js"></script>
 	<!-- menu-->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/menu.js"></script>
+	<!-- documentData -->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/DocumentData.js"></script>
 	
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */
@@ -781,27 +783,12 @@
 			var checklistParam =  urlPage.substr(10, 9);
 			var checklistNum = urlPage.substr(29,2);
 			var checklistPath = urlPage.substr(0,29);
+			var documentNum = urlPage.substr(27,2);
+			var documentPath = urlPage.substr(0,27);
 			
-			//선행요건 메뉴가 아닐 경우 기존 function으로 진입
-			if(checklistParam != 'checklist') {
-				checklistParam = "";
-				checklistNum = "";
-				
-				 $.ajax({
-		                type: "POST",
-		                url: urlPage,
-		                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
-		                beforeSend: function () {
-		                    $("#ContentPlaceHolder1").children().remove();
-		                },
-		                success: function (html) {
-		                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-		                }
-		            });
-			}
-            
-			//선행요건 메뉴일 경우 checklist번호를 parameter로 받아 function 진입 
-			else {
+			//선행요건 메뉴일 경우 checklist번호를 parameter로 받아 function 진입
+			if(checklistParam == 'checklist') {
+
 				$.ajax({
 	                type: "POST",
 	                url: checklistPath + ".jsp?checklistNum=" + checklistNum,
@@ -813,6 +800,42 @@
 	                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
 	                }
 	            });
+				
+			}
+			
+			//문서등록 메뉴일 경우 document번호를 parameter로 받아 function 진입
+			else if(checklistParam == 'document/') {
+				$.ajax({
+	                type: "POST",
+	                url: documentPath + ".jsp?documentNum=" + documentNum,
+	                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
+	                beforeSend: function () {
+	                    $("#ContentPlaceHolder1").children().remove();
+	                },
+	                success: function (html) {
+	                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+	                }
+	            });
+			}
+            
+			//선행요건이나 문서 메뉴가 아닐 경우 기존 function으로 진입
+			else {
+				checklistParam = "";
+				documentParam = "";
+				checklistNum = "";
+				documentNum = "";
+				
+				$.ajax({
+		            type: "POST",
+		            url: urlPage,
+		            data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
+		            beforeSend: function () {
+		                $("#ContentPlaceHolder1").children().remove();
+		            },
+		            success: function (html) {
+		                $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+		            }
+		        });	
 			}
            
 			clearTimeout(REFRESHTIMEID);

@@ -413,6 +413,62 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	@Override
+	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			if(sensorId.equals("undefined")) {
+				sensorId = "";
+			}
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	A.sensor_key,\n")
+					.append("	B.sensor_name,\n")
+					.append("	A.create_time,\n")
+					.append("	C.event_name as event,\n")
+					.append("	A.sensor_value,\n")
+					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, '적합', '부적합') as judge,\n")
+					.append("	A.improvement_action \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN event_info C\n")
+					.append("	ON A.event_code = C.event_code\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("AND DATE_FORMAT(A.create_time, '%Y-%m-%d') BETWEEN '"+ toDate +"' \n")
+					.append("AND '"+ fromDate +"' \n")
+					.append("AND A.sensor_id LIKE '%" + sensorId + "%'\n")
+					.append("AND A.process_code LIKE '" + processCode	+ "'\n")
+					.append("AND (A.sensor_value > C.max_value \n")
+					.append("OR A.sensor_value < C.min_value) \n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPDataDetailViewModel> cvmList = new ArrayList<CCPDataDetailViewModel>();
+			
+			while(rs.next()) {
+				CCPDataDetailViewModel data = extractMetalBreakAwayFromResultSet(rs);
+				cvmList.add(data);
+			}
+			
+			return cvmList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private CCPData extractFromResultSet(ResultSet rs) throws SQLException {
 		CCPData ccpData = new CCPData();
 		
@@ -498,4 +554,20 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		
 		return cvm;
 	}
+	
+	// 이탈내용관리 - 금속검출
+	private CCPDataDetailViewModel extractMetalBreakAwayFromResultSet(ResultSet rs) throws SQLException {
+		CCPDataDetailViewModel cvm = new CCPDataDetailViewModel();
+		
+		cvm.setSensorKey(rs.getString("sensor_key"));
+		cvm.setSensorName(rs.getString("sensor_name"));
+		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
+		cvm.setEvent(rs.getString("event"));
+		cvm.setSensorValue(rs.getString("sensor_value"));
+		cvm.setJudge(rs.getString("judge"));
+		cvm.setImprovementAction(rs.getString("improvement_action"));
+		
+		return cvm;
+	}
+	
 }

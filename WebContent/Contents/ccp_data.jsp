@@ -242,7 +242,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		금속검출 데이터 관리
+	        		CCP 이탈 관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
@@ -324,7 +324,8 @@
 				</tbody>
 			</table>
           </div> 
-          <div class="card-body">
+           
+         <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
 				   id="ccpDataSubTable" style="width:100%">
 				<thead>
@@ -340,7 +341,8 @@
 				<tbody id="ccpDataSubTableBody">
 				</tbody>
 			</table>
-          </div> 
+          </div>  
+         
         </div>
       </div>
       <!-- /.col-md-6 -->

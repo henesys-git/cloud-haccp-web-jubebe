@@ -20,4 +20,5 @@ public interface CCPDataDao {
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvement);
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(Connection conn, String toDate, String sensorId);
 	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate);
+	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate);
 }

@@ -1,12 +1,14 @@
 package viewmodel;
 
 public class CCPDataDetailViewModel {
+	
 	private String sensorName;
 	private String createTime;
 	private String event;
 	private String sensorValue;
 	private String judge;
 	private String improvementAction;
+	private String sensorKey;
 	
 	public String getSensorName() {
 		return sensorName;
@@ -43,6 +45,12 @@ public class CCPDataDetailViewModel {
 	}
 	public void setImprovementAction(String improvementAction) {
 		this.improvementAction = improvementAction;
+	}
+	public String getSensorKey() {
+		return sensorKey;
+	}
+	public void setSensorKey(String sensorKey) {
+		this.sensorKey = sensorKey;
 	}
 	
 }

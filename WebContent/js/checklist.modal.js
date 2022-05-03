@@ -577,7 +577,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					}
 				}
 				else {
-					checklistData[element.id] = element.value;
+					checklistData[element.id] = element.value.replace(/(\n|\r\n)/g, '<br>');
 				}
 			}
 			
@@ -937,7 +937,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 			case "textarea":
 				tag = document.createElement('textarea');
 				tag.classList.add("checklist-data");
-				tag.value = data;
+				tag.value = data.split('<br>').join('\r\n');
 				break;
 			case "select":
 				tag = document.createElement('select');
@@ -1187,11 +1187,14 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
 		
+		var startXWrite = parseInt(startX) + 5;
+		var startYWrite = parseInt(startY) + 16;
+
 		var middleX = Number(startX) + (width / 2);
 		var middleY = Number(startY) + (height / 2);
 		
 		this.ctx.textAlign = "center";
-		this.ctx.font = '10px serif';
+		this.ctx.font = '15px serif';
 		
 		console.log(type);
 		console.log(format);
@@ -1215,28 +1218,30 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 			case "radio button":
 				if(data === 'on') {
 					this.ctx.fillText("✔", middleX, middleY);
+					this.ctx.font = '20px serif';
 				}
 				break;
 			case "checkbox":
 				if(data === 'on') {
 					this.ctx.fillText("✔", middleX, middleY);
+					this.ctx.font = '20px serif';
 				}
 				break;
 			case "textarea":
 				 this.ctx.textAlign = "left";
-				 this.ctx.fillText(data, middleX, middleY);
-				 //this.ctx.wrapText_XY(ctx, cl.bodies.body0, "row34", "col14", data,	
- 	 							//'balck', "9px serif", "left", "top", 20, 2, 1, 1);
+				 wrapText(this.ctx, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				 //this.ctx.fillText(data, startXWrite, startYWrite);
 				break;
 			case "file":
 				if(format == 'image') {
 					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
 				}
 				else {
-					 this.ctx.fillText(data, middleX, middleY);
-				}	
+					 //this.ctx.fillText(data, startX, startY);
+				}
+				break;	
 			default : 
-				this.ctx.fillText(data, middleX, middleY);
+				this.ctx.fillText(data, startXWrite, middleY);
 				break;
 		}
 	};
