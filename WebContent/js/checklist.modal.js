@@ -1247,3 +1247,297 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 	};
 }
 
+
+function ChecklistSelectModalMetalDetector(createDate, sensorId) {
+	this.createDate = createDate;
+	this.sensorId = sensorId;	
+	
+	this.checklistId = 'checklist05';
+	this.seqNo = 0;
+	this.revisionNo = '0';
+	
+	this.checklistData;
+	this.checkData;
+		
+	this.metaDataPath;
+	this.imagePath;
+	
+	this.modalWidth;
+	this.modalHeight;
+	this.modalWidthWithoutPxKeyword;
+	this.modalHeightWithoutPxKeyword;
+	
+	this.xmlDoc;
+	
+	this.ctx;
+	
+	this.setMetadataAndImagePath = async function() {
+		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
+		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
+		// 이미지경로와 메타데이터파일경로를 구한다
+		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + this.checklistId + '_' + this.revisionNo + '.xml';
+		this.imagePath = '/checklist/' + heneBizNo + '/images/' + this.checklistId + '_' + this.revisionNo + '.png';
+	}
+	
+	this.getChecklistData = async function() {
+		let fetchedData = $.ajax({
+			type: "GET",
+	        url: heneServerPath + "/ccptestvm"
+	            	+ "?method=" + 'detail'
+	            	+ "&date=" + this.createDate
+	            	+ "&processCode=" + 'PC10'
+	            	+ "&sensorId=" + this.sensorId,
+	        success: function (data) {
+	        	return data;
+	        }
+		});
+		
+		return fetchedData;
+	}
+	
+	this.getChecklistSignData = async function() {
+		let fetchedData = $.ajax({
+			type: "GET",
+	        url: heneServerPath + "/checklist"
+	        	+ "?checklistId=" + this.checklistId
+	        	+ "&seqNo=signData" + "&seqNo2=" + this.seqNo,
+	        success: function (data) {
+	        	return data;
+	        }
+		});
+		
+		return fetchedData;
+	}
+	
+	this.setModal = async function() {
+		// read meta-data
+		let response = await fetch(this.metaDataPath);
+	    let metaData = await response.text();
+	    
+	 	// parse meta-data
+		let parser = new DOMParser();
+		this.xmlDoc = parser.parseFromString(metaData, "text/xml");
+		
+		// set modal size
+		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
+		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
+		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
+		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
+	};
+	
+	this.openModal = async function() {
+		let that = this;
+	
+		await this.setMetadataAndImagePath();
+		await this.setModal();
+		this.checklistData = await this.getChecklistData();
+		this.checklistSignData = await this.getChecklistSignData();
+		console.log(this.checklistData);
+		
+		let info = {
+			"rowStartCell":"cell3",
+			"writerSignCell":0,
+			"approverSignCell":1,
+			"dateCell":2,
+			"normalSumValueWhenAddAllTestResult":"4", 
+			"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
+		}
+		
+		let outer = new Array();
+		let row = new Object();
+		let sensorKey = this.checklistData[0].sensorKey;
+		
+		for(let i=0; i<this.checklistData.length; i++) {
+			if(sensorKey == this.checklistData[i].sensorKey) {
+				if(!row.detail) {
+					row.detail = new Object();
+				}
+				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
+			} else {
+				row = new Object();
+				row.prod = this.checklistData[i].productName;
+				row.time = this.checklistData[i].createTime;
+				row.detail = new Object();
+				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
+				
+				outer.push(row);
+				sensorKey = this.checklistData[i].sensorKey
+			}
+		}
+		
+		$("#checklist-select-modal").modal("show");
+		
+		// read checklist image
+		var canvas = document.getElementById('checklist-select-canvas');
+		
+		canvas.width = this.modalWidthWithoutPxKeyword;
+		canvas.height = this.modalHeightWithoutPxKeyword;
+		
+		this.ctx = canvas.getContext('2d');
+		
+		var bgImg = new Image();
+		bgImg.src = this.imagePath;
+		bgImg.onload = async function() {
+			that.drawImage(bgImg);
+			
+			// display data
+			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
+			
+			// draw date
+			that.displayData(cellList[info.dateCell], that.createDate);
+			
+			// draw signature
+			var ccpSign = new CCPSign();
+			var signInfo = await ccpSign.get(that.createDate, 'PC10');
+			console.log(signInfo);
+			
+			that.displayData(cellList[info.writerSignCell], '김치훈');
+			that.displayData(cellList[info.approverSignCell], '노찬울');
+			
+/*			if(signInfo.checkerName != null) {
+				that.displayData(cellList[info.approverSignCell], '노찬울');
+			}*/
+			
+			var currentRow = 0;
+			var startFlag = false;
+			var cellPos = 0;
+			for(let i=0; i<cellList.length; i++) {
+				if(cellList[i].nodeName == info.rowStartCell) {
+					console.log('start flag to true');
+					startFlag = true;
+					cellPos = i;
+				}
+				
+				if(!startFlag) {
+					continue;
+				} else {
+					var row = outer[currentRow];
+					
+					for(let j=0; j<info.roworder.length; j++) {
+						var item = info.roworder[j];
+						
+						switch(item) {
+							case "prod":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.prod);
+								break;
+							case "time":
+								var cell = cellList[cellPos];
+								var time = row.time.substring(11, 16);
+								that.displayData(cell, time);
+								break;
+							case "MC10":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC10"]);
+								break;
+							case "MC20":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC20"]);
+								break;
+							case "MC30":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC30"]);
+								break;
+							case "MC40":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC40"]);
+								break;
+							case "MC50":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC50"]);
+								break;
+							case "judge":
+								var cell = cellList[cellPos];
+
+								if(that.judgeResult(row.detail, info)) {
+									that.displayData(cell, "적합");
+								} else {
+									that.displayData(cell, "부적합");
+								}
+						}
+						
+						cellPos += 1;
+					}
+					
+					currentRow += 1;
+					i += info.roworder.length;
+				}
+			}
+		};
+		
+		// 점검표 출력
+		$('#checklist-print-btn').click(function() {
+			var dataUrl = document.getElementById("checklist-select-canvas").toDataURL();
+    		var windowContent = '<!DOCTYPE html>';
+   	 		windowContent += '<html>'
+    		windowContent += '<head><title>점검표 출력</title></head>';
+    		windowContent += '<body style="zoom:120%">'
+   		 	windowContent += '<img src="' + dataUrl + '">';
+    		windowContent += '</body>';
+    		windowContent += '</html>';
+    		var printWin = window.open();
+    		printWin.document.open();
+    		printWin.document.write(windowContent);
+    
+    		printWin.document.addEventListener('load', function() {
+	        	printWin.focus();
+	        	printWin.print();
+	        	printWin.document.close();
+	        	printWin.close();
+    		}, true);
+		});
+	};
+	
+	this.drawImage = function(imageObject) {
+		this.ctx.drawImage(imageObject, 0, 0);
+	}
+	
+	this.judgeResult = function(testResults, info) {
+		let sum = 0;
+
+		for (const key in testResults) {
+			sum += Number(testResults[key]);
+		}
+		
+		if(sum == info.normalSumValueWhenAddAllTestResult) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	this.displayData = function(cell, data) {
+		var id = cell.nodeName;
+		var type = cell.childNodes[0].textContent;
+		var format = cell.childNodes[1].textContent;
+		var startX = cell.childNodes[5].textContent.replace('px', '');
+		var startY = cell.childNodes[6].textContent.replace('px', '');
+		var width = cell.childNodes[7].textContent.replace('px', '');
+		var height = cell.childNodes[8].textContent.replace('px', '');
+		
+		var signWriter = this.checklistSignData.signWriter;
+		var signChecker = this.checklistSignData.signChecker;
+		var signApprover = this.checklistSignData.signApprover;
+		
+		var middleX = Number(startX) + (width / 2);
+		var middleY = Number(startY) + (height / 2);
+		
+		this.ctx.textAlign = "center";
+		this.ctx.font = '10px serif';
+		
+		if(!data) {
+			data = '';
+		}
+		
+		if(data == 1) {
+			data = 'O';
+		}
+		if(data == 0) {
+			data = 'X';
+		}
+		this.ctx.fillText(data, middleX, middleY);
+	};
+}
