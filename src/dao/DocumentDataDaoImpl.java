@@ -19,17 +19,18 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	private ResultSet rs;
 	
 	@Override
-	public int insert(Connection conn, ChecklistData clData) {
+	public int insert(Connection conn, DocumentData docData) {
 		
 	    try {
 	    	String sql = new StringBuilder()
-	    			.append("INSERT INTO checklist_data (\n")
+	    			.append("INSERT INTO document_data (\n")
 	    			.append("	tenant_id,\n")
-	    			.append("	checklist_id,\n")
+	    			.append("	document_id,\n")
 	    			.append("	seq_no,\n")
 	    			.append("	revision_no,\n")
-	    			.append("	check_data,\n")
-	    			.append("   write_date \n")
+	    			.append("	document_data,\n")
+	    			.append("   regist_date, \n")
+	    			.append("   bigo \n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
 	    			.append("	?,\n")
@@ -37,22 +38,24 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	    			.append("	(SELECT * \n")
 	    			.append("	FROM (\n")
 	    			.append("		SELECT IFNULL((MAX(seq_no) + 1), 0) \n")
-	    			.append("		FROM checklist_data \n")
-	    			.append("		WHERE checklist_id = ?\n")
+	    			.append("		FROM document_data \n")
+	    			.append("		WHERE document_id = ?\n")
 	    			.append("	) AS A),\n")
 	    			.append("	?,\n")
 	    			.append("	?,\n")
-	    			.append("	now() \n")
+	    			.append("	now(), \n")
+	    			.append("	? \n")
 	    			.append(");\n")
 	    			.toString();
 	    	
 			ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, clData.getChecklistId());
-			ps.setString(3, clData.getChecklistId());
-			ps.setInt(4, clData.getRevisionNo());
-			ps.setString(5, clData.getCheckData());
+			ps.setString(2, docData.getDocumentId());
+			ps.setString(3, docData.getDocumentId());
+			ps.setInt(4, docData.getRevisionNo());
+			ps.setString(5, docData.getDocumentData());
+			ps.setString(6, docData.getBigo());
 			
 	        int i = ps.executeUpdate();
 
@@ -69,44 +72,25 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	};
 	
 	@Override
-	public int update(Connection conn, ChecklistData clData) {
+	public int update(Connection conn, DocumentData docData) {
 		
 		String sql = "";
 		
 	    try {
-	    	System.out.println("clData.getCheckData()===================");
-	    	System.out.println(clData.getCheckData());
-	    	System.out.println(clData.getCheckData().toString().replaceAll("\r\n", "\n"));
-	    	System.out.println(clData.getCheckData().replaceAll("\r\n", "<br>"));
-	    	System.out.println(clData.getCheckData().replaceAll("\n", "<br>"));
 	    	sql = new StringBuilder()
-	    			.append("UPDATE checklist_data \n")
-	    			.append("	SET check_data = '"+clData.getCheckData().toString()+"'	\n")
-	    			.append("WHERE checklist_id = '"+clData.getChecklistId()+"' \n")
-	    			.append("AND seq_no = '" +clData.getSeqNo() +"' \n")
+	    			.append("UPDATE document_data \n")
+	    			.append("	SET document_data = '"+docData.getDocumentData().toString()+"',	\n")
+	    			.append("	bigo = '"+docData.getBigo().toString()+"',	\n")
+	    			.append("WHERE document_id = '"+docData.getDocumentId()+"' \n")
+	    			.append("AND seq_no = '" +docData.getSeqNo() +"' \n")
 	    			.toString();
 	    	
 			Statement ps = conn.createStatement();
 			
 	        int i = ps.executeUpdate(sql);
 
-	        if(i < 0) {
-	        	conn.rollback();
-	        	return -1;
-	        }
-	        
-	        sql = new StringBuilder()
-	    			.append("UPDATE checklist_data \n")
-	    			.append("	SET sign_writer = NULL,	\n")
-	    			.append("		sign_checker = NULL,\n")
-	    			.append("		sign_approver = NULL \n")
-	    			.append("WHERE checklist_id = '"+clData.getChecklistId()+"' \n")
-	    			.append("AND seq_no = '" +clData.getSeqNo() +"' \n")
-	    			.toString();
-	        
-	        int j = ps.executeUpdate(sql);
-	        
-	        if(j == 1) {
+	        if(i == 1) {
+	        	
 	        	return 1;
 	        }
 	        
@@ -120,13 +104,15 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	};
 	
 	@Override
-	public int delete(Connection conn, ChecklistData clData) {
-		
+	public int delete(Connection conn, DocumentData docData) {
+		System.out.println("daoImpl###########");
+		System.out.println(docData.getDocumentId());
+		System.out.println(docData.getSeqNo());
 	    try {
 	    	String sql = new StringBuilder()
-	    			.append("DELETE FROM checklist_data \n")
-	    			.append("WHERE checklist_id = '"+clData.getChecklistId()+"' \n")
-	    			.append("AND seq_no = '" +clData.getSeqNo() +"' \n")
+	    			.append("DELETE FROM document_data \n")
+	    			.append("WHERE document_id = '"+docData.getDocumentId()+"' \n")
+	    			.append("AND seq_no = '" +docData.getSeqNo() +"' \n")
 	    			.toString();
 	    	
 			Statement ps = conn.createStatement();
@@ -136,6 +122,7 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	        if(i == 1) {
 	        	return 1;
 	        }
+	        
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
 	    } finally {
@@ -228,7 +215,7 @@ public class DocumentDataDaoImpl implements DocumentDataDao {
 	    clData.setRevisionNo(rs.getInt("revision_no"));
 	    clData.setDocumentData(rs.getString("document_data"));
 	    clData.setRegistDate(rs.getString("regist_date"));
-	    
+	    clData.setBigo(rs.getString("bigo"));
 	    return clData;
 	}
 	

@@ -69,7 +69,8 @@
 		        	{
 						'targets': [5],
 			   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
-			   				$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">문서 view</button>');
+			   				$(td).append('<button type="button" class="btn btn-warning" id="view" onclick = "docView(this);">문서 view</button>');
+			   				$(td).append('<button type="button" class="btn btn-success" id="download" onclick = "docDownload(this);">문서 다운로드</button>');
 			   			}
 					}
 		        ]
@@ -82,68 +83,169 @@
 	    
 		initTable();
     	
-    	$("#insert-btn").off().click(function() {
-    		let checklistId = 'document' + '<%=documentNum%>';
+		var initModal = function () {
+	    	//$('#file-data').prop('disabled', false);
+	    	$('#bigo').val('');
+	    };
+		
+    	$("#insert-btn").click(function() {
+    		initModal();
     		
-    		// 제일 최신 포맷 수정이력번호 가져와야 함
-    		let checklistFormatRevisionNo = 0;
-    		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo);
-    		modal.openModal();
+    		$('#myModal').modal('show');
+			$('.modal-title').text('문서정보등록');
+			
+			$('#save').off().click(function() {
+			
+			var document_id = 'document' + '<%=documentNum%>';
+			var fileVal = $('#file-data').val();
+			var fileExtension = fileVal.split(".")[1];
+			var file_name =  document_id + "." + fileExtension;
+			
+			var bigo = $('#bigo').val();
+			
+			var form = $('#upload_form')[0];	
+			var data2 = new FormData(form);
+			data2.append("fileName", file_name);
+			console.log(data2);
+			
+			if(file_name == '' || file_name == null) {
+				alert('문서파일을 등록해주세요');
+				return false;
+			}
+			
+			console.log("data2 in form : =================");
+			for (var pair of data2.entries()) {
+				console.log(pair[0]+ ', ' + pair[1]);
+			}
+			
+			console.log(document_id);
+			console.log(file_name);
+			console.log(bigo);
+			var check = confirm('등록하시겠습니까?');
+			
+			if(check) {
+			
+			$.ajax({
+				type: "POST",
+				async: true,
+	   	        enctype: "multipart/form-data",
+	   	        acceptcharset: "UTF-8",
+	   	        url: "<%=Config.this_SERVER_path%>/DocServer/upload/fileUploadNew.jsp", 
+	   	        data: data2,
+	   	        processData: false,
+	   	        contentType: false,
+				cache: false,
+	   	        timeout: 600000,
+	   	        success: function (data) {
+					if(data.length > 0) {
+						
+						//파일 업로드 성공하면 db에 data insert
+						$.ajax({
+				            type: "POST",
+				            url: "<%=Config.this_SERVER_path%>/document",
+				            data: {
+				            	"type" : "insert",
+				            	"id" : document_id,
+				            	"revisionNo" : 0,
+				            	"data" : file_name,
+				            	"bigo" : bigo
+				            },
+				            success: function (insertResult) {
+				            	if(insertResult == '1') {
+				            		alert('문서 등록에 성공하였습니다.');
+				            		$('#myModal').modal('hide');
+				            		refreshMainTable();
+				            	} else {
+				            		console.log('db 등록 실패');
+				            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
+				            		return false;
+				            	}
+				            }
+				           });
+					} else {
+						console.log("error2");
+						alert('등록 실패했습니다, 관리자에게 문의해주세요.');
+					}
+				},
+	   	        error: function (e) {
+	   	        	console.log("error3");
+	   	        	alert('등록 실패했습니다, 관리자에게 문의해주세요.');
+	   	        }
+	   	    });
+		   } 
+		  });
     	});
     	
-    	$("#update-btn").off().click(function() {
-    		let selectedRows = mainTable.rows('.selected').data();
-			let selectedRow = selectedRows[0];
-			
-    		if(selectedRows.length > 1) {
-    			alert('하나만 선택해주세요.');
-    			return false;
-    		}
+    	$("#update-btn").click(function() {
+    		var row = mainTable.rows( '.selected' ).data();
+    		
+    		if(row.length == 0) {
+				alert('수정할 문서정보를 선택해주세요.');
+				return false;
+			}
 
-    		if(!selectedRow) {
-				alert('정보를 수정할 선행요건을 선택해주세요.');
+    		$('#myModal').modal('show');
+			$('.modal-title').text('문서정보수정');
+			
+			$('#file-data').val(row[0].document_data);
+			$('#bigo').val(row[0].bigo);
+    		
+			$('#save').off().click(function() {
+				
+				var check = confirm('수정하시겠습니까?');
+				
+				if(check) {
+				
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/menu",
+		            data: { 
+	            		"type" : "update",
+	            		"id" : row[0].documentId,
+	            		"data" : $('#file-data').val(), 
+	            		"bigo" : $('#bigo').val(),
+	            		"seq_no" : row[0].seqNo
+		           	},
+		            success: function (updateResult) {
+		            	console.log(updateResult);
+		            	if(updateResult == '1') {
+		            		alert('수정되었습니다.');
+		            		$('#myModal').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('수정 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+				
+				}
+				
+			});
+    	});
+    	
+    	$("#delete-btn").click(function() {
+			var row = mainTable.rows( '.selected' ).data();
+			
+			if(row.length == 0) {
+				alert('삭제할 문서정보를 선택해주세요.');
 				return false;
 			}
     		
-    		let checklistId = selectedRow.checklistId;
-    		// 제일 최신 포맷 수정이력번호 가져와야 함
-    		//let checklistFormatRevisionNo = 0;
-    		let checklistRevisionNo = selectedRow.revisionNo;
-    		let checklistSeqNo = selectedRow.seqNo;
-    		
-    		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo);
-    		modal.openModal();
-    	});
-    	
-    	$("#delete-btn").off().click(function() {
-    		let selectedRows = mainTable.rows('.selected').data();
-			let selectedRow = selectedRows[0];
-			
-    		if(selectedRows.length > 1) {
-    			alert('하나만 선택해주세요.');
-    			return false;
-    		}
-
-    		if(!selectedRow) {
-				alert('정보를 삭제할 선행요건을 선택해주세요.');
-				return false;
-			}
-    		
-    		let checklistId = selectedRow.checklistId;
-    		let seqNo = selectedRow.seqNo;
-    		
-    		if(confirm("해당 점검표를 삭제하시겠습니까?")) {
+    		if(confirm("해당 문서정보를 삭제하시겠습니까?")) {
     			
     			$.ajax({
     	            type: "POST",
     	            url: "<%=Config.this_SERVER_path%>/document",
     	            data: {
     	            	"type" : "delete",
-    	            	"checklistId" : checklistId, 
-    	            	"seqNo" : seqNo
+    	            	"id" : row[0].documentId, 
+    	            	"seqNo" : row[0].seqNo
     	            },
-    	            success: function (insertResult) {
-    	            	if(insertResult == '1') {
+    	            success: function (deleteResult) {
+    	            	console.log("deleteResult");
+    	            	console.log(deleteResult);
+
+    	            	if(deleteResult == '1') {
     	            		alert('삭제되었습니다.');
     	            		$('#myModal').modal('hide');
     	            		refreshMainTable();
@@ -156,59 +258,6 @@
     		}
     		
     	});
-    	
-    	$("#select-btn").off().click(function() {
-    		let selectedRows = mainTable.rows('.selected').data();
-			let selectedRow = selectedRows[0];
-			
-    		if(selectedRows.length > 1) {
-    			alert('하나만 선택해주세요.');
-    			return false;
-    		}
-
-    		if(!selectedRow) {
-				alert('정보를 조회할 선행요건을 선택해주세요.');
-				return false;
-			}
-    		
-    		let documentId = selectedRow.documenttId;
-    		let seqNo = selectedRow.seqNo;
-    		let revisionNo = selectedRow.revisionNo;
-    		
-    		var modal = new ChecklistSelectModal(checklistId, seqNo, revisionNo);
-    		modal.openModal();
-    	});
-    	
-    	$('#checklist-insert-btn-close').off().click(function() {
-    		var children = $('#checklist-insert-wrapper').children();
-    		
-    		for(let i=1; i<children.length; i++) {
-    			children[i].remove();
-    		}
-    		
-    		$('#checklist-insert-modal').modal('hide');
-    	});
-    	
-    	$('#checklist-update-btn-close').off().click(function() {
-    		var children = $('#checklist-update-wrapper').children();
-    		
-    		for(let i=1; i<children.length; i++) {
-    			children[i].remove();
-    		}
-    		
-    		$('#checklist-update-modal').modal('hide');
-    	});
-    	
-    	$('#checklist-select-btn-close').off().click(function() {
-    		var children = $('#checklist-select-wrapper').children();
-    		
-    		for(let i=1; i<children.length; i++) {
-    			children[i].remove();
-    		}
-    		
-    		$('#checklist-select-modal').modal('hide');
-    	});
-    	
     });
 	<%-- 
 	function changeIMG(obj) {
@@ -359,9 +408,9 @@
 			<button type="button" id="delete-btn" class="btn btn-outline-danger">
 				문서정보 삭제
 			</button>
-			<button type="button" id="select-btn" class="btn btn-outline-dark">
+		<!-- 	<button type="button" id="select-btn" class="btn btn-outline-dark">
 				문서정보 조회
-			</button>
+			</button> -->
       	</div>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -391,7 +440,7 @@
 					    <th>일련번호</th>
 					    <th>등록일자</th>
 					    <th>비고</th>
-					    <th></th>
+					    <th style=' width:210px'></th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">		
@@ -406,3 +455,32 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+<!-- Modal -->  
+<div class="modal fade" id="myModal" role="dialog">  
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->  
+    <div class="modal-content">  
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>  
+      </div>  
+      <div class="modal-body">
+      	<label for="menu-id">파일명</label>
+		<div class="input-group mb-3">
+			<form id="upload_form" enctype="multipart/form-data" action="<%=Config.this_SERVER_path%>/DocServer/upload/fileUploadNew.jsp" method="post">
+		  		<input type="file" class="form-control" id="file-data" name = "filename">
+		  	</form>
+		</div>
+      	<label for="menu-name">비고</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="bigo">
+		</div>
+      </div>
+      <div class="modal-footer">  
+        <button type="button" class="btn btn-primary" id="save">저장</button>  
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+      </div>  
+    </div>  
+      
+  </div>  
+</div>

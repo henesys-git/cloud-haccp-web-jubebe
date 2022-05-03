@@ -23,12 +23,12 @@ public class DocumentDataService {
 		this.bizNo = bizNo;
 	}
 	
-	public int insert(ChecklistData clData) {
+	public int insert(DocumentData docData) {
 		int result = -1;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			result = docDao.insert(conn, clData);
+			result = docDao.insert(conn, docData);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -68,12 +68,12 @@ public class DocumentDataService {
 		return list;
 	}
 	
-	public int update(ChecklistData clData) {
+	public int update(DocumentData docData) {
 		int result = -1;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			result = docDao.update(conn, clData);
+			result = docDao.update(conn, docData);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -83,12 +83,12 @@ public class DocumentDataService {
 		return result;
 	}
 	
-	public int delete(ChecklistData clData) {
+	public int delete(DocumentData docData) {
 		int result = -1;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			result = docDao.delete(conn, clData);
+			result = docDao.delete(conn, docData);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

@@ -242,7 +242,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		CCP 이탈 관리
+	        		금속검출관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">

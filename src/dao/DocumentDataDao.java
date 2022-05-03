@@ -7,9 +7,9 @@ import model.ChecklistData;
 import model.DocumentData;
 
 public interface DocumentDataDao {
-	public int insert(Connection conn, ChecklistData clData);
-	public int update(Connection conn, ChecklistData clData);
-	public int delete(Connection conn, ChecklistData clData);
+	public int insert(Connection conn, DocumentData docData);
+	public int update(Connection conn, DocumentData docData);
+	public int delete(Connection conn, DocumentData docData);
 	public DocumentData select(Connection conn, String documentId, int seqNo);
 	public List<DocumentData> selectAll(Connection conn, String checklistId);
 }

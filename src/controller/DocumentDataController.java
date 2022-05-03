@@ -92,32 +92,28 @@ public class DocumentDataController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
 
-		String data = req.getParameter("data");
-		
-		JSONParser parser = new JSONParser();  
-		JSONObject json;
 		try {
-			json = (JSONObject) parser.parse(data);
-			String checkData = json.get("checklistData").toString();
-			String checklistId = json.get("checklistId").toString();
-			String revisionNo = json.get("revisionNo").toString();
+			String documentData = req.getParameter("data");
+			String documentId = req.getParameter("id");
+			String revisionNo = req.getParameter("revisionNo");
+			String bigo = req.getParameter("bigo");
 			int revisionNoInt = Integer.parseInt(revisionNo);
 
-			ChecklistData clData = new ChecklistData();
-			clData.setChecklistId(checklistId);
-			clData.setRevisionNo(revisionNoInt);
-			clData.setCheckData(checkData);
+			DocumentData docData = new DocumentData();
+			docData.setDocumentId(documentId);
+			docData.setRevisionNo(revisionNoInt);
+			docData.setDocumentData(documentData);
+			docData.setBigo(bigo);
 			
-			System.out.println(clData.toString());
+			System.out.println(docData.toString());
 			
-			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
-			int result = cldService.insert(clData);
+			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			int result = docService.insert(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = res.getWriter();
-			
 			out.print(result);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -131,33 +127,29 @@ public class DocumentDataController extends HttpServlet {
 
 		String data = req.getParameter("data");
 		
-		JSONParser parser = new JSONParser();  
-		JSONObject json;
 		try {
-			json = (JSONObject) parser.parse(data);
-			String checkData = json.get("checklistData").toString();
-			String checklistId = json.get("checklistId").toString();
-			String revisionNo = json.get("revisionNo").toString();
-			String seqNo = json.get("seqNo").toString();
-			int revisionNoInt = Integer.parseInt(revisionNo);
+			String documentData = req.getParameter("data");
+			String documentId = req.getParameter("id");
+			String seqNo = req.getParameter("seq_no");
+			String bigo = req.getParameter("bigo");
 			int seqNoInt = Integer.parseInt(seqNo);
 
-			ChecklistData clData = new ChecklistData();
-			clData.setChecklistId(checklistId);
-			clData.setRevisionNo(revisionNoInt);
-			clData.setCheckData(checkData);
-			clData.setSeqNo(seqNoInt);
+			DocumentData docData = new DocumentData();
+			docData.setDocumentId(documentId);
+			docData.setDocumentData(documentData);
+			docData.setSeqNo(seqNoInt);
+			docData.setBigo(bigo);
 			
-			System.out.println(clData.toString());
+			System.out.println(docData.toString());
 			
-			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
-			int result = cldService.update(clData);
+			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			int result = docService.update(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = res.getWriter();
 			
 			out.print(result);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -169,18 +161,18 @@ public class DocumentDataController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String bizNo = (String) session.getAttribute("bizNo");
 		
-		String checklistId = req.getParameter("checklistId");
+		String documentId = req.getParameter("id");
 		int seqNo = Integer.parseInt(req.getParameter("seqNo").toString());
 		try {
 
-			ChecklistData clData = new ChecklistData();
-			clData.setChecklistId(checklistId);
-			clData.setSeqNo(seqNo);
+			DocumentData docData = new DocumentData();
+			docData.setDocumentId(documentId);
+			docData.setSeqNo(seqNo);
 			
-			System.out.println(clData.toString());
+			System.out.println(docData.toString());
 			
-			ChecklistDataService cldService = new ChecklistDataService(new ChecklistDataDaoImpl(), bizNo);
-			int result = cldService.delete(clData);
+			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			int result = docService.delete(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = res.getWriter();
