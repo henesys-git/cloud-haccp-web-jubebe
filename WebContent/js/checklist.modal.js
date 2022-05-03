@@ -1390,11 +1390,11 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 			console.log(signInfo);
 			
 			that.displayData(cellList[info.writerSignCell], '김치훈');
+			that.displayData(cellList[info.approverSignCell], '노찬울');
 			
-			if(signInfo.checkerName != null) {
-				console.log(signInfo.checkerName);
-				that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
-			}
+/*			if(signInfo.checkerName != null) {
+				that.displayData(cellList[info.approverSignCell], '노찬울');
+			}*/
 			
 			var currentRow = 0;
 			var startFlag = false;

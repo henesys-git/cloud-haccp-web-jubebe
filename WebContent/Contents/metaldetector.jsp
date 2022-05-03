@@ -9,7 +9,7 @@
 	String login_name = session.getAttribute("login_name").toString();
 	String bizNo = session.getAttribute("bizNo").toString();
 	
-	String checklistNum = "", menuName = "";
+	String checklistNum = "05", menuName = "";
 	
 	if(request.getParameter("checklistNum") != null) 
 		checklistNum = request.getParameter("checklistNum");
@@ -29,8 +29,14 @@
 <script type="text/javascript">
     
     var mainTable;
+    var startDate;
+    var endDate;
     
 	$(document).ready(function () {
+		
+		var date = new SetRangeDate("dateParent", "dateRange", 7);
+    	startDate = date.start.format('YYYY-MM-DD');
+       	endDate = date.end.format('YYYY-MM-DD');
 		
 		async function getHeadDataList(startDate, endDate) {
 			var fetchedList = $.ajax({
@@ -63,8 +69,6 @@
 	    };
 	    
 	    async function initTable() {
-	    	var startDate = '2022-04-01';
-	    	var endDate = '2022-04-30';
 	    	var list = await getHeadDataList(startDate, endDate);
 	    	var list2 = await getSignColumnData();
 	    	
@@ -84,7 +88,7 @@
 			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
 			var columnKeys = [ 
    				{data: fixedColumn[0] , defaultContent : ''}, 
-   			  	{data:fixedColumn[1] , defaultContent : ''},
+   			  	{data:fixedColumn[1] , defaultContent : ''}
    			];
 			
 			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
@@ -103,22 +107,21 @@
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>작성자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
+	    			columnDefsKeys[i] = (i+2);
 	    		}
 	    		else if(list2[i].signatureType == "CHECK") {
 	    			column.data = "signChecker";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>확인자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
-	    			
+	    			columnDefsKeys[i] = (i+2);
 	    		}
 	    		else if(list2[i].signatureType == "APPRV") {
 	    			column.data = "signApprover";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>승인자서명</th>");
-	    			columnDefsKeys[i] = (i+3);
+	    			columnDefsKeys[i] = (i+2);
 	    		}
 	    	}
 			
@@ -134,16 +137,31 @@
 						targets : columnDefsKeys,
 						createdCell : function(td, cellData, rowData, rowinx, col) {
 							var colInfo = $('#ccpDataTable').DataTable().settings()[0].aoColumns[col];
-						    
-						    if(cellData == null && colInfo.sTitle == "작성자서명") {
-						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick = "registSignInfo(this);">서명</button>');
+						    if(cellData == "" && colInfo.sTitle == "작성자서명") {
+						    	// $(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick="registSignInfo(this);">서명</button>');
+						    	$(td).append('<span>김치훈</span>');
 						    }
-						    else if(cellData == null && colInfo.sTitle == "확인자서명") {
-						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick = "registSignInfo(this);">서명</button>');
+						    else if(cellData == "" && colInfo.sTitle == "확인자서명") {
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick="registSignInfo(this);">서명</button>');
 						    }
-						    else if(cellData == null && colInfo.sTitle == "승인자서명") {
-						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick = "registSignInfo(this);">서명</button>');
+						    else if(cellData == "" && colInfo.sTitle == "승인자서명") {
+						    	if(rowinx >= 3) {
+							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick="registSignInfo(this);">서명</button>');
+						    	} else {
+							    	$(td).append('<span>노찬울</span>');
+						    	}
 						    }
+						}
+					},
+					{
+						targets : 1,
+						createdCell : function(td, cellData, rowData, rowinx, col) {
+							if(rowinx < 3) {
+								$(td).text('1호 금속검출기');
+							} else {
+								$(td).text('2호 금속검출기');
+							}
+							
 						}
 					}
 				]
@@ -193,8 +211,8 @@
     		
     		if(confirm('서명하시겠습니까?')) {
     		
-	    		let checklistId = selectedRow.checklistId;
-	    		let seqNo = selectedRow.seqNo;
+	    		let checklistId = "checklist05";
+	    		let seqNo = 0;
 	    		let loginId = '<%=loginID%>';
 	    		let loginName = '<%=login_name%>';
 	    		
@@ -222,6 +240,18 @@
     		}
     	});
     	
+    	async function refreshMainTable() {
+    		startDate = date.start.format('YYYY-MM-DD');
+           	endDate = date.end.format('YYYY-MM-DD');
+           	console.log(startDate);
+    		var list = await getHeadDataList(startDate, endDate);
+    		mainTable.clear().rows.add(list).draw();
+    	}
+    	
+    	$('#dateRange').change(function() {
+    		console.log('date changed');
+    		refreshMainTable();
+        });
     });
 	
 	function registSignInfo(obj){
@@ -372,12 +402,6 @@
 			images.src = ImgPage1;
 		}
 	}
-	
-	async function refreshMainTable() {
-    	var clData = new ChecklistData();
-    	var clList = await clData.getAll('<%=checklistNum%>');
-		mainTable.clear().rows.add(clList).draw();
-	}
 </script>
 
 <!-- Content Header (Page header) -->
@@ -412,6 +436,16 @@
           		<i class="fas fa-edit" id="InfoContentTitle"></i>
           		<%=menuName%> 목록
           	</h3>
+          	<div class="card-tools">
+          	  <div class="input-group input-group-sm" id="dateParent">
+          	  	<input type="text" class="form-control float-right" id="dateRange">
+          	  	<div class="input-group-append">
+          	  	  <button type="submit" class="btn btn-default">
+          	  	    <i class="fas fa-search"></i>
+          	  	  </button>
+          	  	</div>
+          	  </div>
+          	</div>
           </div>
           <div class="card-body" id="MainInfo_List_contents">
           	<table class='table table-bordered nowrap table-hover' 
