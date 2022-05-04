@@ -57,17 +57,18 @@
 					{ data: "seqNo", defaultContent: '' },
 					{ data: "registDate", defaultContent: '' },
 					{ data: "bigo", defaultContent: '' },
+					{ data: "documentData", defaultContent: '' },
 					{ data: "", defaultContent: '' }
 		        ],
 		        'columnDefs': [
 		        	{
-						'targets': [0,1],
+						'targets': [0,1,5],
 			   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
 			   				$(td).attr('style', 'display: none;'); 
 			   			}
 					},
 		        	{
-						'targets': [5],
+						'targets': [6],
 			   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
 			   				$(td).append('<button type="button" class="btn btn-warning" id="view" onclick = "docView(this);">문서 view</button>');
 			   				$(td).append('<button type="button" class="btn btn-success" id="download" onclick = "docDownload(this);">문서 다운로드</button>');
@@ -98,17 +99,22 @@
 			
 			var document_id = 'document' + '<%=documentNum%>';
 			var fileVal = $('#file-data').val();
-			var fileExtension = fileVal.split(".")[1];
-			var file_name =  document_id + "." + fileExtension;
+			console.log(fileVal);
+			var fileRealNameSplit = fileVal.split("\\");
+			var fileRealName = fileRealNameSplit[fileRealNameSplit.length - 1];
+			console.log(fileRealName);
+			var fileName = fileRealName.split(".")[0];
+			var fileExtension = fileRealName.split(".")[1];
+			var upLoadedFileName =  fileName + "_" + Math.random() +  "." + fileExtension;
 			
 			var bigo = $('#bigo').val();
 			
 			var form = $('#upload_form')[0];	
 			var data2 = new FormData(form);
-			data2.append("fileName", file_name);
+			data2.append("fileName", upLoadedFileName);
 			console.log(data2);
 			
-			if(file_name == '' || file_name == null) {
+			if(fileVal == '' || fileVal == null) {
 				alert('문서파일을 등록해주세요');
 				return false;
 			}
@@ -119,7 +125,7 @@
 			}
 			
 			console.log(document_id);
-			console.log(file_name);
+			console.log(upLoadedFileName);
 			console.log(bigo);
 			var check = confirm('등록하시겠습니까?');
 			
@@ -147,7 +153,7 @@
 				            	"type" : "insert",
 				            	"id" : document_id,
 				            	"revisionNo" : 0,
-				            	"data" : file_name,
+				            	"data" : upLoadedFileName,
 				            	"bigo" : bigo
 				            },
 				            success: function (insertResult) {
@@ -287,7 +293,15 @@
 		}
 	}
 	 --%>
-	 
+	function docView(obj) {
+		console.log(obj);
+		console.log($(obj).closest('tr').children().eq(5).text().trim());
+		var fileName = $(obj).closest('tr').children().eq(5).text().trim();
+		
+		var url = "<%=Config.this_SERVER_path%>" + "/DocServer/upload/files/" + fileName;
+    	window.open(url);
+		
+	}  
 	function fn_image_file_upload(image_save_name, formID, canvasID) {
 		if(image_save_name == ""){ // 파일명 없을때 실행안함
 			return;
@@ -440,6 +454,7 @@
 					    <th>일련번호</th>
 					    <th>등록일자</th>
 					    <th>비고</th>
+					    <th style='display:none; width:0px'>파일명</th>
 					    <th style=' width:210px'></th>
 					</tr>
 				</thead>
