@@ -37,6 +37,7 @@
 	
 	// 서블릿상의 upload 폴더 경로를 알아온다.
 	String realFolder = context.getRealPath(docPaths);
+	System.out.println("실제 서블릿 상 경로 : " + realFolder);
 	
 	MultipartRequest multi = new MultipartRequest(request, realFolder, 5*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
 
@@ -58,7 +59,7 @@
 		String original = multi.getOriginalFileName(name);
 		String type = multi.getContentType(name);
 		File file = multi.getFile(name);
-		File renameFile = new File(docPath + "/" + fileRealName); 	
+		File renameFile = new File(realFolder + "/" + fileRealName); 	
 		renameFile.delete();
 		file.renameTo(renameFile);
 		

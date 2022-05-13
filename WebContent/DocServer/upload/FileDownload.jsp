@@ -32,14 +32,16 @@
 	String codedoc = request.getParameter("codedoc");
 	String revno = request.getParameter("revno");
 	// 업로드 폴더 위치와 폴더 이름을 알아야 한다.
-	String savePath =  Config.DOC_SAVEPATH;   // "/DocWebServer/DocUpload";
+	//String savePath =  Config.DOC_SAVEPATH;   // "/DocWebServer/DocUpload";
+	String savePath =  Config.DOC_FILE_SAVEPATH;
 	ServletContext context =  this.getServletContext();
 
 	// 갖고 온 위치에 연결해서  파일을 다운로드 받으면 된다.
 	String sDownPath = context.getRealPath(savePath);
 			
 	// 문자열 ex) c:\\data\\image.pdf를 만들었다.
-	String sFilePath = sDownPath + "/" + codedoc + "/" + fileName + "/" + revno + "/" + fileName;
+	//String sFilePath = sDownPath + "/" + codedoc + "/" + fileName + "/" + revno + "/" + fileName;
+	String sFilePath = sDownPath + "/" + fileName;
 	System.out.println("sFilePath:" + sFilePath);
 
 	// 위 문자열을 파일로 인식해야 한다.

@@ -70,8 +70,8 @@
 		        	{
 						'targets': [6],
 			   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
-			   				$(td).append('<button type="button" class="btn btn-warning" id="view" onclick = "docView(this);">문서 view</button>');
-			   				$(td).append('<button type="button" class="btn btn-success" id="download" onclick = "docDownload(this);">문서 다운로드</button>');
+			   				$(td).append('<button type="button" class="btn btn-warning" id="view" onclick = "docDownload(this);">문서 view</button>');
+			   				//$(td).append('<button type="button" class="btn btn-success" id="download" onclick = "docDownload(this);">문서 다운로드</button>');
 			   			}
 					}
 		        ]
@@ -103,8 +103,9 @@
 			var fileRealNameSplit = fileVal.split("\\");
 			var fileRealName = fileRealNameSplit[fileRealNameSplit.length - 1];
 			console.log(fileRealName);
-			var fileName = fileRealName.split(".")[0];
-			var fileExtension = fileRealName.split(".")[1];
+			var fileNames = fileRealName.split(".");
+			var fileName = fileRealName.replace(fileRealName.split(".")[fileNames.length - 1], "");
+			var fileExtension = fileRealName.split(".")[fileNames.length - 1];
 			var upLoadedFileName =  fileName + "_" + Math.random() +  "." + fileExtension;
 			
 			var bigo = $('#bigo').val();
@@ -293,15 +294,52 @@
 		}
 	}
 	 --%>
+	 
 	function docView(obj) {
-		console.log(obj);
-		console.log($(obj).closest('tr').children().eq(5).text().trim());
 		var fileName = $(obj).closest('tr').children().eq(5).text().trim();
 		
 		var url = "<%=Config.this_SERVER_path%>" + "/DocServer/upload/files/" + fileName;
     	window.open(url);
 		
+	}
+	
+	function docDownload(obj) {
+		var fileName = $(obj).closest('tr').children().eq(5).text().trim();
+		var fileNameSplit = fileName.split('.');
+		var aExt = fileNameSplit[fileNameSplit.length - 1];
+		console.log(aExt);
+		if(aExt == "pdf" || aExt == "PDF"){
+			fn_CommonPopup("<%=Config.this_SERVER_path%>/pdfjs-dist/web/viewer.html?file=http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName , "", 1024, 950);
+		} else if(aExt == "xls" || aExt == "XLS" || aExt == "xlsx" || aExt == "XLSX") {
+			window.open("http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName);
+		} else{
+			var url = "http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName;
+			window.open(url);
+		}
+		<%-- 
+		// FileDownload.jsp 호출
+		$.ajax({
+			type: "POST",
+			//enctype: "multipart/form-data",
+			url: "<%=Config.this_SERVER_path%>/DocServer/upload/fileDownloadNew.jsp?fileName=" + fileName,
+			//data: "fileName=" + fileName,
+			processData: false,
+			contentType: false,
+			//async : false,
+			cache: false,
+			timeout: 600000,
+			success: function (html) {
+				console.log(html);
+				
+	        },
+			error: function (e) {
+				alert('문서 다운로드 실패');
+				console.log("ERROR : ", e);
+			}
+		});
+		 --%>
 	}  
+	
 	function fn_image_file_upload(image_save_name, formID, canvasID) {
 		if(image_save_name == ""){ // 파일명 없을때 실행안함
 			return;
@@ -455,7 +493,7 @@
 					    <th>등록일자</th>
 					    <th>비고</th>
 					    <th style='display:none; width:0px'>파일명</th>
-					    <th style=' width:210px'></th>
+					    <th style=' width:100px'></th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">		

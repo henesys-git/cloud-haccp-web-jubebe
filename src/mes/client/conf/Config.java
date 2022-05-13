@@ -43,6 +43,7 @@ public class Config {
 	//DOC Server
 	public static String DOC_SERVER_IP = "localhost:8080";
 	public static String DOC_SAVEPATH = "/DocServer/DocUpload"; //한서버로 할 때 
+	public static String DOC_FILE_SAVEPATH = "/DocServer/upload/files";
 	public static String WEBSERVERURL = "http://localhost:8080/hcp_EdmsServerServlet";
 	public static String EDMSSERVERUPLOADURL = "/DocServer/upload/FileUpload.jsp";			//smt
 	public static String EDMSSERVERDOWNLOADURL = "/DocServer/upload/FileDownload.jsp";		//smt

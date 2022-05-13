@@ -781,13 +781,14 @@
 			}
 			
 			var checklistParam =  urlPage.substr(10, 9);
+			var checklistParam2 =  urlPage.substr(10, 10);
 			var checklistNum = urlPage.substr(29,2);
 			var checklistPath = urlPage.substr(0,29);
 			var documentNum = urlPage.substr(27,2);
 			var documentPath = urlPage.substr(0,27);
 			
 			//선행요건 메뉴일 경우 checklist번호를 parameter로 받아 function 진입
-			if(checklistParam == 'checklist') {
+			if(checklistParam == 'checklist' && checklistParam2 == 'checklist/') {
 
 				$.ajax({
 	                type: "POST",
