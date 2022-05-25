@@ -86,6 +86,17 @@ public class CCPDataViewModelController extends HttpServlet {
 			
 			out.print(result);
 			break;
+		case "monitoring":
+			String toDates = req.getParameter("toDay");
+			
+			List<CCPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel(toDates);
+			result = FormatTransformer.toJson(cvmMonitoringList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
 		case "metal-breakaway":
 			String sensorKey2 = req.getParameter("sensorKey");
 			String sensorId2 = req.getParameter("sensorId");

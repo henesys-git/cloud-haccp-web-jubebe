@@ -69,13 +69,18 @@
 	    	if(valueSum == null || valueSum <= 1000) {
 	    		valueSum = 1000;
 	    		stepVal = 50;
+	    		testVal2 = valueSum;
 	    	} 
 	    	else {
 	    		testLength = valueSum.toString().length;
 	    		testVal2 = parseInt(valueSum) - parseInt(valueSum.toString().substr(testLength - 3)) + parseInt(1000);
 	    		stepVal = parseInt(testVal2 / 20);
 	    	}
-	    	
+	    	console.log(valueSum);
+	    	console.log(stepVal);
+	    	console.log(valueArr);
+	    	console.log(valueArr2);
+	    	console.log(testVal2);
 	    	new Chart(document.getElementById("canvas"), {
 	    	    type: 'horizontalBar',
 	    	    data: {
