@@ -89,7 +89,7 @@
 						var insertFunction = "";
 						
 						if(item.revisionNo == '0') {
-							insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','"+item.checklistName+"','M838SS070500.jsp')";
+							insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','"+item.checklistName+"','checklistAlarm')";
                 
 							if(count == 0){
 								$("#document tbody").append(
@@ -177,7 +177,7 @@
 							
 						var insertFunction = "";
 							
-						insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','"+item.checklistName+"','M838SS070500.jsp')";
+						insertFunction = "fn_MainSubMenuSelected(this, '"+clickUrl+"','M838','"+item.checklistName+"','checklistSign')";
 									
 						if(count == 0){
 							$("#document_sign tbody").append(

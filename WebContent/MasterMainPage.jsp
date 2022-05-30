@@ -687,7 +687,18 @@
         								HeadmenuName, programId, SubmenuName) {
 			var $mstr = $(obj);
 			var $mObj = $(obj);
+			
 			var mMenuTitle = "" + $mstr.text().trim();
+			
+			// 메인화면 알람 목록 눌렀을 때 메뉴 불러오는 함수에서 메뉴명 다르게 뜨는 것 수정하기 위함 
+			if(programId == 'checklistAlarm') {
+				mMenuTitle = mMenuTitle.split('(최근')[0];
+			}
+			
+			else if(programId == 'checklistSign') {
+				mMenuTitle = mMenuTitle.split('(서명')[0];
+			}
+			
 			ProgramID = "" + programId;
 
             fn_SubMain(url, HeadmenuID, HeadmenuName, 

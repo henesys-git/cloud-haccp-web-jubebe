@@ -24,7 +24,6 @@ Sidebar.prototype.generateMenu = function (menus) {
 		tree.appendChild(ul);
 		
 		for (let menu of menus) {
-		
 			var li = document.createElement('li');
 			
 			var a = document.createElement('a');
@@ -51,6 +50,7 @@ Sidebar.prototype.generateMenu = function (menus) {
 				p.appendChild(i);
 				
 				_generateLiElement(li, menu.children);
+				
 			} else {
 				li.setAttribute('class', 'nav-item');
 				li.setAttribute("onclick", "return fn_MainSubMenuSelected(this,'" + menu.path + "', '', '', '');");

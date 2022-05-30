@@ -16,6 +16,28 @@
 		let subTable;
 		let mainTableSelectedRow;
 		
+		async function metalSensorList() {
+	    	
+			var itemList = new ItemList();
+			var type_cd = "CD";
+			var sensorList = await itemList.getSensorList(type_cd);
+			console.log(sensorList);
+	    	console.log(sensorList.length);
+	    	
+	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
+
+	    	
+	    	for(var i = 0; i < sensorList.length; i++) {
+	    		
+	    		sensorName = sensorList[i].sensorName;
+	    		sensorId = sensorList[i].sensorId;
+	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    	}
+	    	
+	    };
+		
+	    metalSensorList();
+	    
 		async function getData() {
 	    	var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
@@ -210,28 +232,7 @@
     			alert('서명 실패, 관리자에게 문의해주세요');
     		}
     	});
-    	
-		async function metalSensorList() {
-	    	
-			var itemList = new ItemList();
-			var type_cd = "CD";
-			var sensorList = await itemList.getSensorList(type_cd);
-			console.log(sensorList);
-	    	console.log(sensorList.length);
-	    	
-	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
-
-	    	
-	    	for(var i = 0; i < sensorList.length; i++) {
-	    		
-	    		sensorName = sensorList[i].sensorName;
-	    		sensorId = sensorList[i].sensorId;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
-	    	}
-	    	
-	    };
 	    
-	    metalSensorList();
     });
     
 </script>
