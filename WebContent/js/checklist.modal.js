@@ -193,7 +193,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
 
-		var maxLengthText = parseInt(width) / 16.6; //한글 한 글자당 차지하는 px넓이 : 16.6px
+		var maxLengthText = parseInt(parseInt(width) / 16.6); //한글 한 글자당 차지하는 px넓이 : 16.6px
 
 		var widthNum = parseInt(width.replace("px", ""));
 		var heightNum = parseInt(height.replace("px", ""));
@@ -304,7 +304,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			case "text":
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
-				tag.maxlength = maxLengthText;
+				//tag.maxlength = maxLengthText;
+				//tag.setAttribute("maxlength", maxLengthText);
+				console.log(maxLengthText);
 				break;
 			case "number":
 				tag = document.createElement('input');
@@ -430,6 +432,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 			default:
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
+				//tag.setAttribute("maxlength", maxLengthText);
 				break;
 		}
 		

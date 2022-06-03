@@ -89,4 +89,17 @@ public class ChecklistInfoService {
 		
 		return false;
 	}
+	
+	public boolean sign(ChecklistInfo clInfo, String aa) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return clDao.sign(conn, clInfo, aa);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
 }

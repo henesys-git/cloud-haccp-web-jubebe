@@ -11,4 +11,5 @@ public interface ChecklistInfoDao {
 	public boolean insert(Connection conn, ChecklistInfo clInfo);
 	public boolean update(Connection conn, ChecklistInfo clInfo);
 	public boolean delete(Connection conn, String checklistId);
+	public boolean sign(Connection conn, ChecklistInfo clInfo, String aa);
 }

@@ -65,11 +65,15 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 				.append("A.checklist_name,					\n")
 				.append("A.image_path,						\n")
 				.append("A.meta_data_file_path,				\n")
-				.append("B.check_interval					\n")
+				.append("B.check_interval,					\n")
+				.append("GROUP_CONCAT(C.signature_type) AS signature_type \n")
 				.append("FROM checklist_info A				\n")
-				.append("INNER JOIN checklist_alarm	B		\n")
+				.append("LEFT OUTER JOIN checklist_alarm B	\n")
 				.append("ON A.checklist_id = B.checklist_id	\n")
+				.append("LEFT OUTER JOIN checklist_sign C	\n")
+				.append("ON A.checklist_id = C.checklist_id	\n")
 				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("GROUP BY A.checklist_id \n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -212,6 +216,69 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	    return false;
 	}
 	
+	public boolean sign(Connection conn, ChecklistInfo clInfo, String aa) {
+		
+		String sql = "";
+		
+		String [] aa2 = null;
+		
+		if(aa != null) {
+			aa2 = aa.split(",");
+		}
+	
+		try {
+			stmt = conn.createStatement();
+			
+			sql = new StringBuilder()
+					.append("DELETE FROM checklist_sign")
+					.append("WHERE checklist_id = '"+ clInfo.getChecklistId()+ "'")
+					.toString();
+			
+			int a = stmt.executeUpdate(sql);
+			
+			if(a > 0) {
+				
+				System.out.println(aa2.length);
+				
+				for (int b = 0; b < aa2.length; b++) {
+					
+					sql = new StringBuilder()
+							.append("INSERT INTO checklist_sign (\n")
+							.append("	tenant_id, \n")
+							.append("	checklist_id, \n")
+							.append("	revision_no, \n")
+							.append(") VALUES(\n")
+							.append("	?, \n")
+							.append("	?, \n")
+							.append("	?\n")
+							.append(");\n")
+							.toString();
+
+					PreparedStatement ps = conn.prepareStatement(sql);
+					
+					ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+					ps.setString(2, clInfo.getChecklistId());
+					ps.setString(3, aa2[b]);
+					
+			        int i = ps.executeUpdate();
+
+			        	if(i == 1) {
+			        		return true;
+			        	}
+			        
+				}
+				
+				return true;
+	        }
+			
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
 	private ChecklistInfo extractFromResultSet(ResultSet rs) throws SQLException {
 	    ChecklistInfo clInfo = new ChecklistInfo();
 	    
@@ -221,6 +288,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	    clInfo.setImagePath(rs.getString("image_path"));
 	    clInfo.setMetaDataFilePath(rs.getString("meta_data_file_path"));
 	    clInfo.setCheckInterval(rs.getInt("check_interval"));
+	    clInfo.setSignatureType(rs.getString("signature_type"));
 	    
 	    return clInfo;
 	}

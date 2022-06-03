@@ -25,6 +25,7 @@
 						{ data: "checklistName", defaultContent: '' },
 						{ data: "imagePath", defaultContent: '' },
 						{ data: "metaDataFilePath", defaultContent: '' },
+						{ data: "signatureType", defaultContent: '' },
 						{ data: "checkInterval", defaultContent: '' },
 						{ data: "", defaultContent: '' }
 			        ],
@@ -32,11 +33,21 @@
 			        	{
 							'targets': [5],
 				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
-				   				$(td).attr('style', 'display: none;'); 
+				   				var a = "";
+				   				if(cellData != null) {
+				   					a = cellData.replace('WRITE', '작성자').replace('APPRV', '승인자').replace('CHECK', '확인자');
+				   				}
+				   				$(td).text(a); 
 				   			}
 						},
 			        	{
 							'targets': [6],
+				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
+				   				$(td).attr('style', 'display: none;'); 
+				   			}
+						},
+			        	{
+							'targets': [7],
 				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
 				      			//$(td).append('<button type="button" class="btn btn-warning" id="alarm">알람주기 설정</button>');
 				   				$(td).append('<button type="button" class="btn btn-warning" id="alarm" onclick = "modifyAlarmInfo(this);">알람주기 설정</button>');
@@ -65,6 +76,7 @@
 	    	$('#checklist-name').val('');
 	    	$('#image-path').val('');
 	    	$('#metadata-file-path').val('');
+	    	
 	    };
 	    
 	    var initModal2 = function () {
@@ -74,7 +86,18 @@
 	    	$('#alarm-interval-hour').val(0);
 	    	
 	    };
-	     
+	    
+	    var initModal3 = function () {
+	    	$('#checklist-id2').prop('disabled', false);
+	    	$('#checklist-name').prop('disabled', false);
+	    	$('#checklist-id2').val('');
+	    	$('#checklist-name2').val('');
+	    	$('#sign-writer').prop("checked", false);
+	    	$('#sign-approver').prop("checked", false);
+	    	$('#sign-checker').prop("checked", false);
+	    	
+	    };
+	    
 		initTable();
 		
 		// 등록
@@ -272,6 +295,87 @@
 			
 		});
 		
+		// 서명항목 설정
+		$('#sign').click(function() {
+			initModal3();
+			
+			var row = mainTable.rows( '.selected' ).data();
+			
+			if(row.length == 0) {
+				alert('서명항목을 설정할 선행요건을 선택해주세요.');
+				return false;
+			}
+			
+			$('#myModal3').modal('show');
+			$('.modal-title').text('서명항목설정');
+			
+			$('#checklist-id2').val(row[0].checklistId);
+			$('#checklist-name2').val(row[0].checklistName);
+			
+			var signData1 = row[0].signatureType.includes('WRITE');
+			var signData2 = row[0].signatureType.includes('APPRV');
+			var signData3 = row[0].signatureType.includes('CHECK');
+			
+			if(signData1 == true) {
+				$('#sign-writer').prop("checked", true);
+			}
+			if(signData2 == true) {
+				$('#sign-approver').prop("checked", true);
+			}
+			if(signData3 == true) {
+				$('#sign-checker').prop("checked", true);
+			}
+			
+			$('#checklist-id2').prop('disabled', true);
+			$('#checklist-name2').prop('disabled', true);
+			
+			$('#save_sign').off().click(function() {
+				var id = $('#checklist-id2').val();
+				
+				var arr = new Array();
+				
+				if($('input:checkbox[id="sign-writer"]').is(":checked") == true) {
+					arr.push($('#sign-writer').val());
+				}
+				if($('input:checkbox[id="sign-approver"]').is(":checked") == true) {
+					arr.push($('#sign-approver').val());
+				}
+				if($('input:checkbox[id="sign-checker"]').is(":checked") == true) {
+					arr.push($('#sign-checker').val());
+				}
+				
+				
+				var arrStr = arr.toString();
+				console.log(arrStr);
+				
+				var check = confirm('서명정보를 설정하시겠습니까?');
+				
+				if(check) {
+				
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/checklist-info",
+		            data: {
+		            	"type" : "sign",
+		            	"id" : id,
+		            	"signData" : arrStr 
+		            },
+		            success: function (insertResult) {
+		            	if(insertResult == 'true') {
+		            		alert('등록되었습니다.');
+		            		$('#myModal').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+				
+				}
+				
+			});
+		});
+		
     }); //document ready function end
     
 	//점검표 알람 정보 수정
@@ -417,6 +521,9 @@
       	  <button type="button" class="btn btn-danger" id="delete">
       	  	삭제
       	  </button>
+      	  <button type="button" class="btn btn-primary" id="sign">
+      	  	서명항목설정
+      	  </button>
       	</div>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -446,6 +553,7 @@
 					    <th>선행요건명</th>
 					    <th>이미지경로</th>
 					    <th>메타데이터경로</th>
+					    <th>서명항목</th>
 					    <th style='width:0px; display: none;'>작성주기값</th>
 					    <th></th>
 					</tr>
@@ -537,6 +645,39 @@
       </div>
       <div class="modal-footer">  
         <button type="button" class="btn btn-primary" id="save_alarm">저장</button>  
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+      </div>  
+    </div>  
+      
+  </div>  
+</div>
+<!-- Sign Setting Modal -->  
+<div class="modal fade" id="myModal3" role="dialog">  
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->  
+    <div class="modal-content">  
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>  
+      </div>  
+      <div class="modal-body">
+      	<label for="checklist-id2">선행요건아이디</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="checklist-id2">
+		</div>
+      	<label for="checklist-name2">선행요건명</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="checklist-name2">
+		</div>
+      	<label for="image-path">서명 항목</label>
+		<div class="input-group mb-3">
+		  작성자 <input type="checkbox" class="form-control" id="sign-writer" value = "WRITE">
+		  승인자<input type="checkbox" class="form-control" id="sign-approver" value = "APPRV">
+		  확인자 <input type="checkbox" class="form-control" id="sign-checker" value = "CHECK">
+		</div>
+      </div>
+      <div class="modal-footer">  
+        <button type="button" class="btn btn-primary" id="save_sign">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
       </div>  
     </div>  

@@ -75,6 +75,10 @@ public class ChecklistInfoController extends HttpServlet {
 		if(req.getParameter("type").equals("alarm")) {
 			alarm(req, res);
 		}
+		
+		if(req.getParameter("type").equals("sign")) {
+			sign(req, res);
+		}
 	}
 	
 	private void insert(HttpServletRequest req, HttpServletResponse res) {
@@ -167,5 +171,29 @@ public class ChecklistInfoController extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private void sign(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		String aa = req.getParameter("signData");
+		System.out.println("aa@@@@@@@@@@@@@@@");
+		System.out.println(aa);
+		ChecklistInfo clInfo = new ChecklistInfo(
+				req.getParameter("id")
+				);
+		
+		ChecklistInfoService clService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), tenantId);
+		Boolean signed = clService.sign(clInfo, aa);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(signed.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

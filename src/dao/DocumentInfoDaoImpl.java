@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import mes.frame.database.JDBCConnectionPool;
 import model.ChecklistInfo;
 
-public class DocumentInfoDaoImpl implements ChecklistInfoDao {
+public class DocumentInfoDaoImpl implements DocumentInfoDao {
 	
 	private Statement stmt;
 	private ResultSet rs;

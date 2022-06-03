@@ -41,7 +41,8 @@
 		async function getData() {
 	    	var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	var ccpType = $("#md-type option:selected").val();
+	    	//var ccpType = $("#md-type option:selected").val();
+	    	var ccpType = $("select[name=md-type]").val();
     		
 	        var fetchedData = $.ajax({
 	            type: "GET",
@@ -248,7 +249,7 @@
 	      	</div>
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="md-type">종류:</label>
-				<select class="form-control w-auto d-inline-block" id="md-type">
+				<select class="form-control w-auto d-inline-block" id="md-type" name="md-type">
 					<!-- <option value="CD%25">전체</option>
 			  		<option value="CD01">금속검출기1</option>
 			  		<option value="CD02">금속검출기2</option>
