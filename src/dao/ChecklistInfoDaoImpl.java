@@ -227,50 +227,46 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 		}
 	
 		try {
-			stmt = conn.createStatement();
+			
 			
 			sql = new StringBuilder()
-					.append("DELETE FROM checklist_sign")
-					.append("WHERE checklist_id = '"+ clInfo.getChecklistId()+ "'")
+					.append("DELETE FROM checklist_sign \n")
+					.append("WHERE checklist_id = '"+ clInfo.getChecklistId().toString() + "' \n")
 					.toString();
 			
-			int a = stmt.executeUpdate(sql);
+			Statement ps = conn.createStatement();
 			
-			if(a > 0) {
-				
-				System.out.println(aa2.length);
-				
+			int a = ps.executeUpdate(sql);
+			
+			 if(a < 0) {
+		        	conn.rollback();
+		        	return false;
+		       }
 				for (int b = 0; b < aa2.length; b++) {
 					
 					sql = new StringBuilder()
 							.append("INSERT INTO checklist_sign (\n")
 							.append("	tenant_id, \n")
 							.append("	checklist_id, \n")
-							.append("	revision_no, \n")
+							.append("	signature_type \n")
 							.append(") VALUES(\n")
-							.append("	?, \n")
-							.append("	?, \n")
-							.append("	?\n")
+							.append("	'"+ JDBCConnectionPool.getTenantId(conn) +"', \n")
+							.append("	'"+ clInfo.getChecklistId() +"', \n")
+							.append("	'"+ aa2[b] +"'\n")
 							.append(");\n")
 							.toString();
 
-					PreparedStatement ps = conn.prepareStatement(sql);
 					
-					ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-					ps.setString(2, clInfo.getChecklistId());
-					ps.setString(3, aa2[b]);
-					
-			        int i = ps.executeUpdate();
-
-			        	if(i == 1) {
-			        		return true;
-			        	}
+			        int i = ps.executeUpdate(sql);
+			        
+			        if(i == 1 && b < (aa2.length - 1) ) {
+			        	continue;
+			        }
+			        else {
+			        	return true;
+			        }
 			        
 				}
-				
-				return true;
-	        }
-			
 
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();

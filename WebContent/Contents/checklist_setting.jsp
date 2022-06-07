@@ -312,9 +312,24 @@
 			$('#checklist-id2').val(row[0].checklistId);
 			$('#checklist-name2').val(row[0].checklistName);
 			
-			var signData1 = row[0].signatureType.includes('WRITE');
-			var signData2 = row[0].signatureType.includes('APPRV');
-			var signData3 = row[0].signatureType.includes('CHECK');
+			var signData1;
+			var signData2;
+			var signData3;
+			console.log(row[0].signatureType);
+			console.log(row[0].signatureType == null);
+			
+			if(row[0].signatureType != null) {
+			
+				signData1 = row[0].signatureType.includes('WRITE');
+				signData2 = row[0].signatureType.includes('APPRV');
+				signData3 = row[0].signatureType.includes('CHECK');
+			}
+			
+			else {
+				signData1 = "";
+				signData2 = "";
+				signData3 = "";
+			}
 			
 			if(signData1 == true) {
 				$('#sign-writer').prop("checked", true);
@@ -362,8 +377,9 @@
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
+		            		console.log(insertResult);
 		            		alert('등록되었습니다.');
-		            		$('#myModal').modal('hide');
+		            		$('#myModal3').modal('hide');
 		            		refreshMainTable();
 		            	} else {
 		            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
