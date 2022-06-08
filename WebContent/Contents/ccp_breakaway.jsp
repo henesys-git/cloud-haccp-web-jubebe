@@ -11,11 +11,10 @@
 	var startDate;
 	var endDate;
 	var mainTable;
+	
 	$(document).ready(function () {
     	
 		var date = new SetRangeDate("dateParent", "date", 30);
-		//startDate = date.start.format('YYYY-MM-DD');
-	    //endDate = date.end.format('YYYY-MM-DD');
 	    
 		let mainTableSelectedRow;
 		
@@ -26,7 +25,6 @@
 			var ccpList = await itemList.getCCPList(type_cd);
 	    	
 	    	$("#ccp_gubun").prepend("<option value='PC%25'>전체</option>");
-
 	    	
 	    	for(var i = 0; i < ccpList.length; i++) {
 	    		
@@ -47,7 +45,6 @@
 	    	
 	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
 
-	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
 	    		
 	    		sensorName = sensorList[i].sensorName;
@@ -59,7 +56,6 @@
 	    
 	    metalSensorList();
 		
-		
 		async function getData() {
 			
 			var dateVal = $("#date").val();
@@ -68,8 +64,8 @@
 			
 	    	var processCode = $("input[name='test-yn']:checked").val();
 	    	var ccpType = $("#md-type option:selected").val();
-    		console.log(ccpType);
-	        var fetchedData = $.ajax({
+
+	    	var fetchedData = $.ajax({
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/ccpvm",
 	            data: "method=metal-breakaway" +
@@ -87,149 +83,83 @@
 	  
 	    async function initTable() {
 	    	var data = await getData();
-
+			
 	    	var customOpts = {
-					data : data,
-					pageLength: 10,
-					columns: [
-						{ data: "sensorKey", defaultContent: '' },
-						{ data: "sensorName", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "event", defaultContent: '' },
-						{ data: "sensorValue", defaultContent: '' },
-						{ data: "judge", defaultContent: '' },
-						{ data: "improvementAction", defaultContent: '' }
-			        ],
-			        columnDefs : [
-			        	{
-			        		targets: [0,5],
-			        		'createdCell': function(td, cellData, rowData, row, col){
-			        			$(td).attr('style', 'display:none;');
-				  			}
-			        	},
-			        	{
-				  			targets: [4],
-				  			render: function(td, cellData, rowData, row, col){
-				  				console.log(cellData);
-				  				if (rowData.sensorValue == '1') {
-				  					return '검출';
-				  				}
-				  				else {
-				  					return '비검출';
-				  				}
-				  			}
-				  		},
-			   			{
-				  			targets: [6],
-				  			render: function(td, cellData, rowData, row, col){
-				  				if (rowData.judge == '적합') {
-				  					return 'n/a';
-				  				} else {
-				  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-				  						return rowData.improvementAction;
-				  					} else {
-				  						return `<button class='btn btn-success fix-btn' id = 'fixLimit(this);'>개선조치</button>`;
-				  					}
-				  				}
-				  			}
-				  		}
-				    ]
-	    			//,
-				    //stateSave : true
+				data: data,
+				pageLength: 10,
+				columns: [
+					{ data: "sensorKey", defaultContent: '' },
+					{ data: "sensorName", defaultContent: '' },
+					{ data: "createTime", defaultContent: '' },
+					{ data: "event", defaultContent: '' },
+					{ data: "sensorValue", defaultContent: '' },
+					{ data: "judge", defaultContent: '' },
+					{ data: "improvementAction", defaultContent: '' }
+		        ],
+		        columnDefs : [
+		        	{
+		        		targets: [0,5],
+		        		'createdCell': function(td, cellData, rowData, row, col){
+		        			$(td).attr('style', 'display:none;');
+			  			}
+		        	},
+		        	{
+			  			targets: [4],
+			  			render: function(td, cellData, rowData, row, col){
+			  				if (rowData.sensorValue == '1') {
+			  					return '검출';
+			  				} else {
+			  					return '비검출';
+			  				}
+			  			}
+			  		},
+		   			{
+			  			targets: [6],
+			  			render: function(td, cellData, rowData, row, col){
+		  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
+		  						return rowData.improvementAction;
+		  					} else {
+		  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
+		  					}
+			  			}
+			  		}
+			    ]
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
-	    }
-	    ccpMetalDataJspPage.fillSubTable = async function () {
-	    	
-	    };
-	     
-	    ccpMetalDataJspPage.showSignBtn = function() {
-	    	refreshMainTable();
-	    } 
-	    
-	    
-		initTable();
-		
-		async function refreshMainTable() {
-			console.log();
-			var newData = await getData();
 
+	    	mainTable.draw();
+	    }
+	    
+	    ccpMetalDataJspPage.fillSubTable = async function () {
+			
+		};
+
+		ccpMetalDataJspPage.showSignBtn = function() {
+			refreshMainTable();
+		}
+
+	    initTable();
+	    
+		async function refreshMainTable() {
+			var newData = await getData();
 			mainTable.clear().rows.add(newData).draw();
-    		
 		}
     	
 		// 조회 버튼 클릭 시
-    	$("#getDataBtn").click(async function() {
+    	$("#getDataBtn").click(function() {
     		refreshMainTable();
-    		
-    		//var selectedDate = date.getDate();
-	    	//var processCode = $("input[name='test-yn']:checked").val();
-	    	//var ccpType = $("#md-type option:selected").val();
-    		
-    		//var ccpSign = new CCPSign();
-    		//var signInfo = await ccpSign.get(toDate, fromDate, ccpType, processCode);
-    		/*
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
-    		*/
-    	});
-    	
-    	//개선조치
-		function fixLimit(obj) {
-			
-			var rowIdx = $(obj).closest("tr").index();
-			var row = mainTable.rows(rowIdx).data();
-				
-    		let sensorKey = row.sensorKey;
-			
-    		let createTime = row.createTime;
-    		let selectedDate = row.createTime.substr(0, 10);
-	    	let processCode = $("input[name='test-yn']:checked").val();
-    		
-    		$.ajax({
-                type: "POST",
-                url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: {
-                	sensorKey: sensorKey,
-                	createTime: createTime,
-                	date: selectedDate,
-                	processCode: processCode
-                },
-                success: function (html) {
-                    $("#modalWrapper").html(html);
-                }
-            });
-			
-		}
-		
-    	$('#ccpDataTableBody').on('click', 'tr', function () {
-    		console.log('clickclick');
-    		if ( !$(this).hasClass('selected') ) {
-    			mainTableSelectedRow = mainTable.row( this ).data();
-            }
-    		console.log(mainTableSelectedRow);
     	});
     	
     	//개선조치
     	$('#ccpDataTableBody').off().on('click', 'button', function() {
-    		var rowIdx = $(this).closest("tr").index();
-			var row = mainTable.rows(rowIdx).data();
-    		
-			console.log(rowIdx);
-			console.log(row);
+			var tr = $(this).parents('tr')[0];
+			var row = mainTable.rows(tr).data()[0];
 			
-    		var sensorKey = row[0].sensorKey;
-    		var createTime = row[0].createTime;
-    		
-    		console.log(sensorKey);
-    		console.log(createTime);
+    		var sensorKey = row.sensorKey;
+    		var createTime = row.createTime;
     		
     		var selectedDate = createTime.toString().substr(0, 10);
 	    	var processCode = $("input[name='test-yn']:checked").val();
