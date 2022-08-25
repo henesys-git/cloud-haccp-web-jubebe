@@ -23,13 +23,32 @@
    	color: rgba(0, 0, 0, 0);
 }
 
+input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+  	-webkit-appearance: none;
+}
+
+table#ccpDataTable.dataTable tbody tr:hover {
+	background-color: #be7352;
+}
+ 
+table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
+	background-color: #be7352;
+}
+
 </style>
 <script type="text/javascript">
     
     var mainTable;
+    var checklistPage = 1;
+    var modalPageCnt;
     
 	$(document).ready(function () {
 		//let mainTable;
+		 var selected = [];
+		 var clInfo;
+		 var clList;
+		
 		async function getData() {
 	        var fetchedList = $.ajax({
 			            type: "GET",
@@ -62,6 +81,11 @@
 	    async function initTable() {
 	    	var list = await getData();
 	    	var list2 = await getSignColumnData();
+	    	
+	    	clInfo = new ChecklistInfo();
+	    	clList = await clInfo.getById('checklist' + '<%=checklistNum%>');
+	    	console.log(clInfo);
+	    	modalPageCnt = clList.pageCnt;
 	    	
 	    	//서명 칼럼 index 들어갈 배열
 	    	var columnDefsKeys = new Array();
@@ -160,7 +184,13 @@
 						    }
 						}
 					}
-				]
+				],
+				"rowCallback": function( row, data ) {
+		            if ( $.inArray(data.DT_RowId, selected) !== -1 ) {
+		                $(row).addClass('selected');
+		                $(row).addClass('hene-bg-color');
+		            }
+		        }
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
@@ -174,7 +204,19 @@
     		let checklistId = 'checklist' + '<%=checklistNum%>';
     		// 제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
-    		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo);
+    		let page = 2;
+    		
+    		$('#checklist-insert-wrapper1').css("display","block");
+    		$('#checklist-insert-wrapper2').css("display","none");
+    		$('#checklist-insert-wrapper3').css("display","none");
+    		$('#checklist-insert-wrapper4').css("display","none");
+    		$('#checklist-insert-wrapper5').css("display","none");
+    		$('#checklist-prev-btn').remove();
+    		$('#checklist-next-btn').remove();
+    		
+    		checklistPage = 1;
+    		
+    		var modal = new ChecklistInsertModal(checklistId, checklistFormatRevisionNo, clList.pageCnt);
     		modal.openModal();
     	});
     	
@@ -198,7 +240,17 @@
     		let checklistRevisionNo = selectedRow.revisionNo;
     		let checklistSeqNo = selectedRow.seqNo;
     		
-    		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo);
+    		$('#checklist-update-wrapper1').css("display","block");
+    		$('#checklist-update-wrapper2').css("display","none");
+    		$('#checklist-update-wrapper3').css("display","none");
+    		$('#checklist-update-wrapper4').css("display","none");
+    		$('#checklist-update-wrapper5').css("display","none");
+    		$('#checklist-prev-btn').remove();
+    		$('#checklist-next-btn').remove();
+    		
+    		checklistPage = 1;
+    		
+    		var modal = new ChecklistUpdateModal(checklistId, checklistRevisionNo, checklistSeqNo, clList.pageCnt);
     		modal.openModal();
     	});
     	
@@ -262,36 +314,106 @@
     		let seqNo = selectedRow.seqNo;
     		let revisionNo = selectedRow.revisionNo;
     		
-    		var modal = new ChecklistSelectModal(checklistId, seqNo, revisionNo);
+    		$('#checklist-select-wrapper1').css("display","block");
+    		$('#checklist-select-wrapper2').css("display","none");
+    		$('#checklist-select-wrapper3').css("display","none");
+    		$('#checklist-select-wrapper4').css("display","none");
+    		$('#checklist-select-wrapper5').css("display","none");
+    		$('#checklist-prev-btn').remove();
+    		$('#checklist-next-btn').remove();
+    		
+    		checklistPage = 1;
+    		
+    		var modal = new ChecklistSelectModal(checklistId, seqNo, revisionNo, clList.pageCnt);
     		modal.openModal();
     	});
     	
     	$('#checklist-insert-btn-close').off().click(function() {
-    		var children = $('#checklist-insert-wrapper').children();
+    		var children = $('#checklist-insert-wrapper1').children();
+    		var children2 = $('#checklist-insert-wrapper2').children();
+    		var children3 = $('#checklist-insert-wrapper3').children();
+    		var children4 = $('#checklist-insert-wrapper4').children();
+    		var children5 = $('#checklist-insert-wrapper5').children();
     		
     		for(let i=1; i<children.length; i++) {
     			children[i].remove();
     		}
+    		
+    		for(let j=1; j<children2.length; j++) {
+    			children2[j].remove();
+    		}
+    		
+    		for(let k=1; k<children3.length; k++) {
+				children3[k].remove();
+			}
+
+			for(let l=1; l<children4.length; l++) {
+				children4[l].remove();
+			}
+			
+			for(let m=1; m<children5.length; m++) {
+				children5[m].remove();
+			}
     		
     		$('#checklist-insert-modal').modal('hide');
     	});
     	
     	$('#checklist-update-btn-close').off().click(function() {
-    		var children = $('#checklist-update-wrapper').children();
+    		var children = $('#checklist-update-wrapper1').children();
+    		var children2 = $('#checklist-update-wrapper2').children();
+    		var children3 = $('#checklist-update-wrapper3').children();
+    		var children4 = $('#checklist-update-wrapper4').children();
+    		var children5 = $('#checklist-update-wrapper5').children();
     		
     		for(let i=1; i<children.length; i++) {
     			children[i].remove();
     		}
     		
+    		for(let j=1; j<children2.length; j++) {
+    			children2[j].remove();
+    		}
+    		
+    		for(let k=1; k<children3.length; k++) {
+				children3[k].remove();
+			}
+
+			for(let l=1; l<children4.length; l++) {
+				children4[l].remove();
+			}
+			
+			for(let m=1; m<children5.length; m++) {
+				children5[m].remove();
+			}
+			
     		$('#checklist-update-modal').modal('hide');
     	});
     	
     	$('#checklist-select-btn-close').off().click(function() {
-    		var children = $('#checklist-select-wrapper').children();
+    		var children = $('#checklist-select-wrapper1').children();
+    		var children2 = $('#checklist-select-wrapper2').children();
+    		var children3 = $('#checklist-select-wrapper3').children();
+    		var children4 = $('#checklist-select-wrapper4').children();
+    		var children5 = $('#checklist-select-wrapper5').children();
     		
     		for(let i=1; i<children.length; i++) {
     			children[i].remove();
     		}
+    		
+    		for(let j=1; j<children2.length; j++) {
+    			children2[j].remove();
+    		}
+    		
+    		for(let k=1; k<children3.length; k++) {
+				children3[k].remove();
+			}
+
+			for(let l=1; l<children4.length; l++) {
+				children4[l].remove();
+			}
+			
+			for(let m=1; m<children5.length; m++) {
+				children5[m].remove();
+			}
     		
     		$('#checklist-select-modal').modal('hide');
     	});
@@ -332,6 +454,20 @@
     		
     		}
     	});
+    	
+    	$('#ccpDataTable tbody').on('click', 'tr', function () {
+	        var id = this.id;
+	        var index = $.inArray(id, selected);
+	        
+	        if ( index === -1 ) {
+	            selected.push( id );
+	        } else {
+	            selected.splice( index, 1 );
+	        }	
+	 
+	        $(this).toggleClass('selected');
+	        $(this).toggleClass('hene-bg-color');
+	    } );
     	
     });
 	
@@ -497,6 +633,94 @@
     	var clList = await clData.getAll('<%=checklistNum%>');
     	console.log(clList);
 		mainTable.clear().rows.add(clList).draw();
+	}
+	
+function checklist_prev(page){
+		
+		if(checklistPage == 2) {
+			$('#checklist-insert-wrapper1').css("display","block");
+			$('#checklist-insert-wrapper2').css("display","none");
+			$('#checklist-update-wrapper1').css("display","block");
+			$('#checklist-update-wrapper2').css("display","none");
+			$('#checklist-select-wrapper1').css("display","block");
+			$('#checklist-select-wrapper2').css("display","none");
+			$('#checklist-prev-btn').css("display","none");
+		}
+		else if(checklistPage == 3) {
+			$('#checklist-insert-wrapper2').css("display","block");
+			$('#checklist-insert-wrapper3').css("display","none");
+			$('#checklist-update-wrapper2').css("display","block");
+			$('#checklist-update-wrapper3').css("display","none");
+			$('#checklist-select-wrapper2').css("display","block");
+			$('#checklist-select-wrapper3').css("display","none");
+		}
+		else if(checklistPage == 4) {
+			$('#checklist-insert-wrapper3').css("display","block");
+			$('#checklist-insert-wrapper4').css("display","none");
+			$('#checklist-update-wrapper3').css("display","block");
+			$('#checklist-update-wrapper4').css("display","none");
+			$('#checklist-select-wrapper3').css("display","block");
+			$('#checklist-select-wrapper4').css("display","none");
+		}
+		else if(checklistPage == 5) {
+			$('#checklist-insert-wrapper4').css("display","block");
+			$('#checklist-insert-wrapper5').css("display","none");
+			$('#checklist-update-wrapper4').css("display","block");
+			$('#checklist-update-wrapper5').css("display","none");
+			$('#checklist-select-wrapper4').css("display","block");
+			$('#checklist-select-wrapper5').css("display","none");
+			$('#checklist-next-btn').css("display","inline");
+		}
+		
+		checklistPage -= 1;
+		
+		if(modalPageCnt > checklistPage) {
+			$('#checklist-next-btn').css("display","inline");
+		}
+	}
+	
+	function checklist_next(page){
+		
+		if(checklistPage == 1) {
+			$('#checklist-insert-wrapper1').css("display","none");
+			$('#checklist-insert-wrapper2').css("display","block");
+			$('#checklist-update-wrapper1').css("display","none");
+			$('#checklist-update-wrapper2').css("display","block");
+			$('#checklist-select-wrapper1').css("display","none");
+			$('#checklist-select-wrapper2').css("display","block");
+			$('#checklist-prev-btn').css("display","inline");
+		}
+		else if(checklistPage == 2) {
+			$('#checklist-insert-wrapper2').css("display","none");
+			$('#checklist-insert-wrapper3').css("display","block");
+			$('#checklist-update-wrapper2').css("display","none");
+			$('#checklist-update-wrapper3').css("display","block");
+			$('#checklist-select-wrapper2').css("display","none");
+			$('#checklist-select-wrapper3').css("display","block");
+		}
+		else if(checklistPage == 3) {
+			$('#checklist-insert-wrapper3').css("display","none");
+			$('#checklist-insert-wrapper4').css("display","block");
+			$('#checklist-update-wrapper3').css("display","none");
+			$('#checklist-update-wrapper4').css("display","block");
+			$('#checklist-select-wrapper3').css("display","none");
+			$('#checklist-select-wrapper4').css("display","block");
+		}
+		else if(checklistPage == 4) {
+			$('#checklist-insert-wrapper4').css("display","none");
+			$('#checklist-insert-wrapper5').css("display","block");
+			$('#checklist-update-wrapper4').css("display","none");
+			$('#checklist-update-wrapper5').css("display","block");
+			$('#checklist-select-wrapper4').css("display","none");
+			$('#checklist-select-wrapper5').css("display","block");
+			$('#checklist-next-btn').css("display","none");
+		}
+		
+		checklistPage += 1;
+		
+		if(modalPageCnt == checklistPage) {
+			$('#checklist-next-btn').css("display","none");
+		}
 	}
 </script>
 

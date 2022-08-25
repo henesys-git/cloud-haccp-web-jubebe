@@ -90,7 +90,8 @@ public class ChecklistInfoController extends HttpServlet {
 				0,
 				req.getParameter("name"),
 				req.getParameter("imagePath"),
-				req.getParameter("metaDataFilePath")
+				req.getParameter("metaDataFilePath"),
+				0
 				);
 		
 		ChecklistInfoService clService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), tenantId);

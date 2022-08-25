@@ -25,7 +25,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	public ChecklistInfo select(Connection conn, String checklistId) {
 		try {
 			String sql = new StringBuilder()
-					.append("SELECT *\n")
+					.append("SELECT * \n")
 					.append("FROM checklist_info\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND checklist_id = ?;\n")
@@ -39,7 +39,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			ChecklistInfo clInfo = new ChecklistInfo();
 					
 			if(rs.next()) {
-				clInfo = extractFromResultSet(rs);
+				clInfo = extractFromResultSet2(rs);
 			}
 			
 			return clInfo;
@@ -285,6 +285,15 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	    clInfo.setMetaDataFilePath(rs.getString("meta_data_file_path"));
 	    clInfo.setCheckInterval(rs.getInt("check_interval"));
 	    clInfo.setSignatureType(rs.getString("signature_type"));
+	    
+	    return clInfo;
+	}
+	
+	
+	private ChecklistInfo extractFromResultSet2(ResultSet rs) throws SQLException {
+	    ChecklistInfo clInfo = new ChecklistInfo();
+	    
+	    clInfo.setPageCnt(rs.getInt("page_cnt"));
 	    
 	    return clInfo;
 	}

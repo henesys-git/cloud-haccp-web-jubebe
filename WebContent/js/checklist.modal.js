@@ -1,47 +1,270 @@
-function ChecklistInsertModal(checklistId, seqNo) {
+function ChecklistInsertModal(checklistId, seqNo, page) {
 	this.checklistId = checklistId;
 	this.seqNo = seqNo;
 	
 	this.metaDataPath;
 	this.imagePath;
 	
+	this.metaDataPath2;
+	this.imagePath2;
+	this.metaDataPath3;
+	this.imagePath3;
+	this.metaDataPath4;
+	this.imagePath4;
+	this.metaDataPath5;
+	this.imagePath5;
+	
+	
 	this.modalWidth;
 	this.modalHeight;
 	this.modalWidthWithoutPxKeyword;
 	this.modalHeightWithoutPxKeyword;
+	
+	this.modalWidth2;
+	this.modalHeight2;
+	this.modalWidthWithoutPxKeyword2;
+	this.modalHeightWithoutPxKeyword2;
+	
+	this.modalWidth3;
+	this.modalHeight3;
+	this.modalWidthWithoutPxKeyword3;
+	this.modalHeightWithoutPxKeyword3;
+	
+	this.modalWidth4;
+	this.modalHeight4;
+	this.modalWidthWithoutPxKeyword4;
+	this.modalHeightWithoutPxKeyword4;
+	
+	this.modalWidth5;
+	this.modalHeight5;
+	this.modalWidthWithoutPxKeyword5;
+	this.modalHeightWithoutPxKeyword5;
+	
+	
 	this.xmlDoc;
 	this.tagIds;
 	this.tagTypes;
 	this.ctx;
+	this.page = page;
+	var pageNum = page;
+	
+	var canvas2;
+	var response2;
+	var metaData2;
+	var parser2;
+	this.xmlDoc2;
+	this.ctx2;
+	
+	var canvas3;
+	var response3;
+	var metaData3;
+	var parser3;
+	this.xmlDoc3;
+	this.ctx3;
+	
+	var canvas4;
+	var response4;
+	var metaData4;
+	var parser4;
+	this.xmlDoc4;
+	this.ctx4;
+	
+	var canvas5;
+	var response5;
+	var metaData5;
+	var parser5;
+	this.xmlDoc5;
+	this.ctx5;
 	
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.xml, checklistXX_Y.png에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.xml';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.png';
-	}
+		// checklistXX_Y_Z.xml, checklistXX_Y_Z.png에서 
+		// XX는 점검표 아이디, Y는 점검표 수정이력번호 + Z는 page number
+		
+		if(this.page == 1) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '.png';
+			}
+		
+		else if(this.page >= 2) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '_' + 1 +'.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '_' + 1 + '.png';
+			this.metaDataPath2 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '_' + 2 +'.xml';
+			this.imagePath2 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '_' + 2 + '.png';
+			this.metaDataPath3 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '_' + 3 +'.xml';
+			this.imagePath3 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '_' + 3 + '.png';
+			this.metaDataPath4 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '_' + 4 +'.xml';
+			this.imagePath4 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '_' + 4 + '.png';
+			this.metaDataPath5 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + seqNo + '_' + 5 +'.xml';
+			this.imagePath5 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + seqNo + '_' + 5 + '.png';
+			}
+		
+		}
+	
 	
 	this.setModal = async function() {
 		// read meta-data
 		let response = await fetch(this.metaDataPath);
 	    let metaData = await response.text();
-	    
+		
 	 	// parse meta-data
 		let parser = new DOMParser();
 		this.xmlDoc = parser.parseFromString(metaData, "text/xml");
 		
 		// set modal size
+		
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
+		
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  )
+		{
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.3;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.3;
+		} 
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.8;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.8;
+		}
+		else {
+			this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+			this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		}
+		/*
 		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
 		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		
+		*/
 		var modalContent = document.querySelector('#checklist-insert-modal .modal-content');
 		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
+		
+		//if page length is more than 1page add additional modal setting
+		if(this.page >= 2) {
+			response2 = await fetch(this.metaDataPath2);
+	    	metaData2 = await response2.text();
+		    parser2 = new DOMParser();
+			this.xmlDoc2 = parser.parseFromString(metaData2, "text/xml");
+			
+			this.modalWidth2 = this.xmlDoc2.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight2 = this.xmlDoc2.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth2.replace('px', '')) < 800 || Number(this.modalHeight2.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword2 = this.modalWidth2.replace('px', '');
+				this.modalHeightWithoutPxKeyword2 = this.modalHeight2.replace('px', '');
+			}
+			
+			$('#checklist-insert-footer').prepend('<button type="button" id="checklist-next-btn" class="btn btn-success" onclick="checklist_next(2);">다음페이지</button>');
+			$('#checklist-insert-footer').prepend('<button type="button" id="checklist-prev-btn" class="btn btn-success" style="display:none;" onclick="checklist_prev(2);">이전페이지</button>');
+			
+			
+			
+		}
+		if(this.page >= 3) {
+			
+			response3 = await fetch(this.metaDataPath3);
+	    	metaData3 = await response3.text();
+		    parser3 = new DOMParser();
+			this.xmlDoc3 = parser.parseFromString(metaData3, "text/xml");
+			
+			this.modalWidth3 = this.xmlDoc3.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight3 = this.xmlDoc3.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth3.replace('px', '')) < 800 || Number(this.modalHeight3.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword3 = this.modalWidth3.replace('px', '');
+				this.modalHeightWithoutPxKeyword3 = this.modalHeight3.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 4) {
+			
+			response4 = await fetch(this.metaDataPath4);
+	    	metaData4 = await response4.text();
+		    parser4 = new DOMParser();
+			this.xmlDoc4 = parser.parseFromString(metaData4, "text/xml");
+			
+			this.modalWidth4 = this.xmlDoc4.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight4 = this.xmlDoc4.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth4.replace('px', '')) < 800 || Number(this.modalHeight4.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword4 = this.modalWidth4.replace('px', '');
+				this.modalHeightWithoutPxKeyword4 = this.modalHeight4.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 5) {
+			
+			response5 = await fetch(this.metaDataPath5);
+	    	metaData5 = await response5.text();
+		    parser5 = new DOMParser();
+			this.xmlDoc5 = parser.parseFromString(metaData5, "text/xml");
+			
+			this.modalWidth5 = this.xmlDoc5.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight5 = this.xmlDoc5.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth5.replace('px', '')) < 800 || Number(this.modalHeight5.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword5 = this.modalWidth5.replace('px', '');
+				this.modalHeightWithoutPxKeyword5 = this.modalHeight5.replace('px', '');
+			}
+			
+		}
+		
 	};
 	
 	this.openModal = async function() {
 		let that = this;
+		let that2 = this;
 		
 		await this.setMetadataAndImagePath();
 		await this.setModal();
@@ -56,10 +279,13 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 		this.ctx = canvas.getContext('2d');
 		
+		console.log(this.modalWidthWithoutPxKeyword);
+		console.log(this.modalHeightWithoutPxKeyword);
+		
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
-			that.drawImage(bgImg);
+			that.drawImage(bgImg, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 		};
 		
 		// generate tags
@@ -67,22 +293,133 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 		for(var i=0; i<cellList.length; i++) {
 			var cell = cellList[i];
-			this.makeTag(cell);
+			this.makeTag(cell, 1);
 		};
+		
+		if(this.page >= 2) {
+			
+			var canvas2 = document.getElementById('checklist-insert-canvas2');
+		
+			canvas2.width = this.modalWidthWithoutPxKeyword2;
+			canvas2.height = this.modalHeightWithoutPxKeyword2;
+		
+			this.ctx2 = canvas2.getContext('2d');
+		
+		
+			var bgImg2 = new Image();
+			bgImg2.src = this.imagePath2;
+			bgImg2.onload = function() {
+				that.drawImage2(bgImg2, 0, 0, this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+			};
+		
+			// generate tags
+			var cellList2 = this.xmlDoc2.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList2.length; i++) {
+				var cell2 = cellList2[i];
+				this.makeTag(cell2, 2);
+			};
+			
+			}
+			
+		if(this.page >= 3) {
+			
+			var canvas3 = document.getElementById('checklist-insert-canvas3');
+		
+			canvas3.width = this.modalWidthWithoutPxKeyword3;
+			canvas3.height = this.modalHeightWithoutPxKeyword3;
+		
+			this.ctx3 = canvas3.getContext('2d');
+		
+		
+			var bgImg3 = new Image();
+			bgImg3.src = this.imagePath3;
+			bgImg3.onload = function() {
+				that.drawImage3(bgImg3, 0, 0, this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+			};
+		
+			// generate tags
+			var cellList3 = this.xmlDoc3.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList3.length; i++) {
+				var cell3 = cellList3[i];
+				this.makeTag(cell3, 3);
+			};
+			
+			}
+		
+		if(this.page >= 4) {
+			
+			var canvas4 = document.getElementById('checklist-insert-canvas4');
+		
+			canvas4.width = this.modalWidthWithoutPxKeyword4;
+			canvas4.height = this.modalHeightWithoutPxKeyword4;
+		
+			this.ctx4 = canvas4.getContext('2d');
+		
+		
+			var bgImg4 = new Image();
+			bgImg4.src = this.imagePath4;
+			bgImg4.onload = function() {
+				that.drawImage4(bgImg4, 0, 0, this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+			};
+		
+			// generate tags
+			var cellList4 = this.xmlDoc4.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList4.length; i++) {
+				var cell4 = cellList4[i];
+				this.makeTag(cell4, 4);
+			};
+			
+			}
+			
+		if(this.page >= 5) {
+			
+			var canvas5 = document.getElementById('checklist-insert-canvas5');
+		
+			canvas5.width = this.modalWidthWithoutPxKeyword5;
+			canvas5.height = this.modalHeightWithoutPxKeyword5;
+		
+			this.ctx5 = canvas5.getContext('2d');
+		
+		
+			var bgImg5 = new Image();
+			bgImg5.src = this.imagePath5;
+			bgImg5.onload = function() {
+				that.drawImage5(bgImg5, 0, 0, this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
+			};
+		
+			// generate tags
+			var cellList5 = this.xmlDoc5.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList5.length; i++) {
+				var cell5 = cellList5[i];
+				this.makeTag(cell5, 5);
+			};
+			
+			}
 		
 		// save data to db
 		$('#checklist-insert-btn').off().click(function() {
 			
-			
-			
+			var dataArray = new Array();
 			var head = {};
 			var checklistData = {};
+			var checklistData2 = {};
+			var checklistData3 = {};
+			var checklistData4 = {};
+			var checklistData5 = {};
 	
-			let elements = document.getElementsByClassName('checklist-data');
+			//let elements = document.getElementsByClassName('checklist-data');
+			let elements = document.getElementById('checklist-insert-wrapper1').getElementsByClassName('checklist-data');
+			let elements2 = document.getElementById('checklist-insert-wrapper2').getElementsByClassName('checklist-data');
+			let elements3 = document.getElementById('checklist-insert-wrapper3').getElementsByClassName('checklist-data');
+			let elements4 = document.getElementById('checklist-insert-wrapper4').getElementsByClassName('checklist-data');
+			let elements5 = document.getElementById('checklist-insert-wrapper5').getElementsByClassName('checklist-data');
 	
 			for(var i=0; i<elements.length; i++) {
 				let element = elements[i];
-				console.log(element.type);
 				if(element.type == 'checkbox') {
 					if(element.checked == true) {
 						checklistData[element.id] = element.value;
@@ -95,12 +432,95 @@ function ChecklistInsertModal(checklistId, seqNo) {
 					checklistData[element.id] = element.value;
 				}
 			}
+			dataArray.push(checklistData);
+			
+			if(pageNum >= 2) {
+				for(var j=0; j<elements2.length; j++) {
+					let element2 = elements2[j];
+						if(element2.type == 'checkbox') {
+							if(element2.checked == true) {
+								checklistData2[element2.id] = element2.value;
+							}
+						else {
+							checklistData2[element2.id] = '';
+							}
+						}
+						else {
+							checklistData2[element2.id] = element2.value;
+							}
+				}
+			dataArray.push(checklistData2);	
+			}
+			
+			if(pageNum >= 3) {
+				for(var k=0; k<elements3.length; k++) {
+					let element3 = elements3[k];
+						if(element3.type == 'checkbox') {
+							if(element3.checked == true) {
+								checklistData3[element3.id] = element3.value;
+							}
+						else {
+							checklistData3[element3.id] = '';
+							}
+						}
+						else {
+							checklistData3[element3.id] = element3.value;
+							}
+				}
+			dataArray.push(checklistData3);	
+			}
+			
+			if(pageNum >= 4) {
+				for(var l=0; l<elements4.length; l++) {
+					let element4 = elements4[l];
+						if(element4.type == 'checkbox') {
+							if(element4.checked == true) {
+								checklistData4[element4.id] = element4.value;
+							}
+						else {
+							checklistData4[element4.id] = '';
+							}
+						}
+						else {
+							checklistData4[element4.id] = element4.value;
+							}
+				}
+			dataArray.push(checklistData4);	
+			}
+			
+			if(pageNum >= 5) {
+				for(var m=0; m<elements5.length; m++) {
+					let element5 = elements5[m];
+						if(element5.type == 'checkbox') {
+							if(element5.checked == true) {
+								checklistData5[element5.id] = element5.value;
+							}
+						else {
+							checklistData5[element5.id] = '';
+							}
+						}
+						else {
+							checklistData5[element5.id] = element5.value;
+							}
+				}
+			dataArray.push(checklistData5);	
+			}
 			
 			head.checklistId = checklistId;
 			head.revisionNo = seqNo;
-			head.checklistData = checklistData;
+			//head.checklistData = checklistData;
 			
-			console.log(checklistData);
+			if(pageNum >= 2) {
+				head.checklistData = dataArray;
+			}
+			else {
+				head.checklistData = checklistData;
+			}
+			
+			//console.log(checklistData);
+			console.log(dataArray);
+			console.log(head);
+			console.log(JSON.stringify(head));
 			var check = confirm('등록하시겠습니까?');
 			
 			if(check) {
@@ -113,11 +533,32 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		        success: function (result) {
 					console.log(result);
 					
-					var children = $('#checklist-insert-wrapper').children();
+					var children = $('#checklist-insert-wrapper1').children();
+					var children2 = $('#checklist-insert-wrapper2').children();
+					var children3 = $('#checklist-insert-wrapper3').children();
+					var children4 = $('#checklist-insert-wrapper4').children();
+					var children5 = $('#checklist-insert-wrapper5').children();
     		
     				for(let i=1; i<children.length; i++) {
     					children[i].remove();
     				}
+
+					for(let j=1; j<children2.length; j++) {
+    					children2[j].remove();
+    				}
+
+					for(let k=1; k<children3.length; k++) {
+    					children3[k].remove();
+    				}
+
+					for(let l=1; l<children4.length; l++) {
+    					children4[l].remove();
+    				}
+					
+					for(let m=1; m<children5.length; m++) {
+    					children5[m].remove();
+    				}
+
 
 					$('#checklist-insert-modal').modal('hide');
 					 parent.refreshMainTable();
@@ -129,23 +570,60 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		
 	};
 	
-	this.drawImage = async function(imageObject) {
-		this.ctx.drawImage(imageObject, 0, 0);
+	this.drawImage = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
+	}
+	this.drawImage2 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx2.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+	}
+	this.drawImage3 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx3.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+	}
+	this.drawImage4 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx4.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+	}
+	this.drawImage5 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx5.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
 	}
 	
-	this.makeTag = async function(cell) {
+	this.makeTag = async function(cell, pages) {
+		
+		var startX = "";
+		var startY = "";
+		var width = "";
+		var height = "";
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  ) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+		}
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+		} 
+		else {
+			startX = cell.childNodes[5].firstChild.textContent;
+			startY = cell.childNodes[6].firstChild.textContent;
+			width = cell.childNodes[7].firstChild.textContent;
+			height = cell.childNodes[8].firstChild.textContent;
+		}
 		var id = cell.tagName;
 		var type = cell.childNodes[0].firstChild.textContent;
 		var format = cell.childNodes[1].firstChild.textContent;
 		var default_value = cell.childNodes[2].firstChild.textContent;
 		var min = cell.childNodes[3].firstChild.textContent;
 		var max = cell.childNodes[4].firstChild.textContent;
-		var startX = cell.childNodes[5].firstChild.textContent;
-		var startY = cell.childNodes[6].firstChild.textContent;
-		var width = cell.childNodes[7].firstChild.textContent;
-		var height = cell.childNodes[8].firstChild.textContent;
+		//var startX = cell.childNodes[5].firstChild.textContent;
+		//var startY = cell.childNodes[6].firstChild.textContent;
+		//var width = cell.childNodes[7].firstChild.textContent;
+		//var height = cell.childNodes[8].firstChild.textContent;
 		var readonly = "";
-		console.log(id);
 		var tagId = "#" + id;
 		this.tagIds = tagId;
 		this.tagTypes = type;
@@ -192,7 +670,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var today = year + "-" + month + "-" + day;
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
-
+		
+		var reductDay = month.replace("0", "") + "/" + day;
+		
 		var maxLengthText = parseInt(parseInt(width) / 16.6); //한글 한 글자당 차지하는 px넓이 : 16.6px
 
 		var widthNum = parseInt(width.replace("px", ""));
@@ -216,6 +696,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		var opt3 = document.createElement("option");
 		var opt4 = document.createElement("option");
 		var opt5 = document.createElement("option");
+		var opt6 = document.createElement("option");
 
 		opt1.value = "O";
 		opt1.text = "O";
@@ -230,7 +711,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		opt4.text = "적합"; 
 
 		opt5.value = "부적합";
-		opt5.text = "부적합"; 
+		opt5.text = "부적합";
+		
+		opt6.value = "";
+		opt6.text = ""; 
 
 		var fileTag = "";
 
@@ -254,6 +738,7 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				tag.setAttribute("type", "date");
+				tag.style.fontSize = "10px";
 				
 				if(format == 'yyyy-mm-dd') {
 				   tag.setAttribute("date-format", 'yyyy-mm-dd');
@@ -284,6 +769,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				   else if(default_value == '한달전') {
 					  tag.value = monthDay;
 				   }
+	 			   else if(default_value == 'todayReduct') {
+					  tag.value = reductDay;
+				   }
 				}
 				break;
 			case "time":
@@ -306,7 +794,6 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				tag.classList.add("checklist-data");
 				//tag.maxlength = maxLengthText;
 				//tag.setAttribute("maxlength", maxLengthText);
-				console.log(maxLengthText);
 				break;
 			case "number":
 				tag = document.createElement('input');
@@ -361,8 +848,25 @@ function ChecklistInsertModal(checklistId, seqNo) {
 					fileTag.setAttribute("onchange", "changeIMG(this);");
 
 					formTag.append(fileTag);
-					document.getElementById("checklist-insert-wrapper").appendChild(formTag);
-				
+					if(pages == 1) {
+						document.getElementById("checklist-insert-wrapper1").appendChild(formTag);
+					}
+					else if(pages == 2) {
+						document.getElementById("checklist-insert-wrapper2").appendChild(formTag);
+
+					}
+					else if(pages == 3) {
+						document.getElementById("checklist-insert-wrapper3").appendChild(formTag);
+
+					}
+					else if(pages == 4) {
+						document.getElementById("checklist-insert-wrapper4").appendChild(formTag);
+
+					}
+					else if(pages == 5) {
+						document.getElementById("checklist-insert-wrapper5").appendChild(formTag);
+
+					}
 					tag = document.createElement('canvas');
 					tag.classList.add("checklist-data");
 					}
@@ -383,9 +887,10 @@ function ChecklistInsertModal(checklistId, seqNo) {
 				if(format == 'OX') {
 					tag.add(opt1, null);
 					tag.add(opt3, null);
+					tag.add(opt6, null);
 					
 					if(default_value == null) {
-
+						
 					}
 					else if(default_value == 'O') {
 						tag.value = 'O';
@@ -393,11 +898,15 @@ function ChecklistInsertModal(checklistId, seqNo) {
 					else if(default_value == 'X') {
 						tag.value = 'X';
 					}
+					else if(default_value == '') {
+						tag.value = '';
+					}
 				}
 				else if(format == 'O△X') {
 					tag.add(opt1, null);
 					tag.add(opt2, null);
 					tag.add(opt3, null);
+					tag.add(opt6, null);
 
 					if(default_value == null) {
 						
@@ -410,7 +919,9 @@ function ChecklistInsertModal(checklistId, seqNo) {
 					}
 					else if(default_value == 'X') {
 						tag.value = 'X';
-
+					}
+					else if(default_value == '') {
+						tag.value = '';
 					}
 				}
 				else if(format == 'good/bad') {
@@ -451,32 +962,122 @@ function ChecklistInsertModal(checklistId, seqNo) {
 		}
 		
 		tag.style.fontSize = textSizeVal;
-		document.getElementById("checklist-insert-wrapper").appendChild(tag);
+		if(pages == 1) {
+			document.getElementById("checklist-insert-wrapper1").appendChild(tag);
+		}
+		else if(pages == 2) {
+			document.getElementById("checklist-insert-wrapper2").appendChild(tag);
+		}
+		else if(pages == 3) {
+			document.getElementById("checklist-insert-wrapper3").appendChild(tag);
+		}
+		else if(pages == 4) {
+			document.getElementById("checklist-insert-wrapper4").appendChild(tag);
+		}
+		else if(pages == 5) {
+			document.getElementById("checklist-insert-wrapper5").appendChild(tag);
+		}
 	};
 	
 }
 
-function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
+function ChecklistUpdateModal(checklistId, revisionNo, seqNo, page) {
 	this.checklistId = checklistId;
 	this.revisionNo = revisionNo;
 	this.seqNo = seqNo;
 	this.metaDataPath;
 	this.imagePath;
 	
+	this.metaDataPath2;
+	this.imagePath2;
+	this.metaDataPath3;
+	this.imagePath3;
+	this.metaDataPath4;
+	this.imagePath4;
+	this.metaDataPath5;
+	this.imagePath5;
+	
 	this.modalWidth;
 	this.modalHeight;
 	this.modalWidthWithoutPxKeyword;
 	this.modalHeightWithoutPxKeyword;
+	
+	this.modalWidth2;
+	this.modalHeight2;
+	this.modalWidthWithoutPxKeyword2;
+	this.modalHeightWithoutPxKeyword2;
+	
+	this.modalWidth3;
+	this.modalHeight3;
+	this.modalWidthWithoutPxKeyword3;
+	this.modalHeightWithoutPxKeyword3;
+	
+	this.modalWidth4;
+	this.modalHeight4;
+	this.modalWidthWithoutPxKeyword4;
+	this.modalHeightWithoutPxKeyword4;
+	
+	this.modalWidth5;
+	this.modalHeight5;
+	this.modalWidthWithoutPxKeyword5;
+	this.modalHeightWithoutPxKeyword5;
+	
 	this.xmlDoc;
 	this.tagIds;
 	this.tagTypes;
 	this.ctx;
+	this.page = page;
+	var pageNum = page;
+	
+	var canvas2;
+	var response2;
+	var metaData2;
+	var parser2;
+	this.xmlDoc2;
+	this.ctx2;
+	
+	var canvas3;
+	var response3;
+	var metaData3;
+	var parser3;
+	this.xmlDoc3;
+	this.ctx3;
+	
+	var canvas4;
+	var response4;
+	var metaData4;
+	var parser4;
+	this.xmlDoc4;
+	this.ctx4;
+	
+	var canvas5;
+	var response5;
+	var metaData5;
+	var parser5;
+	this.xmlDoc5;
+	this.ctx5;
 	
 	this.setMetadataAndImagePath = async function() {
 		// checklistXX_Y.xml, checklistXX_Y.png에서 
 		// XX는 점검표 아이디, Y는 점검표 수정이력번호
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+		
+		if(this.page == 1) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+		}
+		
+		else if(this.page >= 2) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 1 +'.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 1 + '.png';
+			this.metaDataPath2 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 2 +'.xml';
+			this.imagePath2 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 2 + '.png';
+			this.metaDataPath3 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 3 +'.xml';
+			this.imagePath3 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 3 + '.png';
+			this.metaDataPath4 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 4 +'.xml';
+			this.imagePath4 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 4 + '.png';
+			this.metaDataPath5 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 5 +'.xml';
+			this.imagePath5 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 5 + '.png';
+		}
 	}
 	
 	this.getChecklistData = async function() {
@@ -519,11 +1120,151 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
-		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  )
+		{
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.3;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.3;
+		} 
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.8;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.8;
+		}
+		else {
+			this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+			this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		}
+		
+		
+		//this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		//this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
 		
 		var modalContent = document.querySelector('#checklist-update-modal .modal-content');
 		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
+		
+		//if page length is more than 1page add additional modal setting
+		if(this.page >= 2) {
+			response2 = await fetch(this.metaDataPath2);
+	    	metaData2 = await response2.text();
+		    parser2 = new DOMParser();
+			this.xmlDoc2 = parser.parseFromString(metaData2, "text/xml");
+			
+			this.modalWidth2 = this.xmlDoc2.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight2 = this.xmlDoc2.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth2.replace('px', '')) < 800 || Number(this.modalHeight2.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword2 = this.modalWidth2.replace('px', '');
+				this.modalHeightWithoutPxKeyword2 = this.modalHeight2.replace('px', '');
+			}
+			
+			$('#checklist-update-footer').prepend('<button type="button" id="checklist-next-btn" class="btn btn-success" onclick="checklist_next(2);">다음페이지</button>');
+			$('#checklist-update-footer').prepend('<button type="button" id="checklist-prev-btn" class="btn btn-success" style="display:none;" onclick="checklist_prev(2);">이전페이지</button>');
+			
+			
+			
+		}
+		if(this.page >= 3) {
+			
+			response3 = await fetch(this.metaDataPath3);
+	    	metaData3 = await response3.text();
+		    parser3 = new DOMParser();
+			this.xmlDoc3 = parser.parseFromString(metaData3, "text/xml");
+			
+			this.modalWidth3 = this.xmlDoc3.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight3 = this.xmlDoc3.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth3.replace('px', '')) < 800 || Number(this.modalHeight3.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword3 = this.modalWidth3.replace('px', '');
+				this.modalHeightWithoutPxKeyword3 = this.modalHeight3.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 4) {
+			
+			response4 = await fetch(this.metaDataPath4);
+	    	metaData4 = await response4.text();
+		    parser4 = new DOMParser();
+			this.xmlDoc4 = parser.parseFromString(metaData4, "text/xml");
+			
+			this.modalWidth4 = this.xmlDoc4.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight4 = this.xmlDoc4.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth4.replace('px', '')) < 800 || Number(this.modalHeight4.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword4 = this.modalWidth4.replace('px', '');
+				this.modalHeightWithoutPxKeyword4 = this.modalHeight4.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 5) {
+			
+			response5 = await fetch(this.metaDataPath5);
+	    	metaData5 = await response5.text();
+		    parser5 = new DOMParser();
+			this.xmlDoc5 = parser.parseFromString(metaData5, "text/xml");
+			
+			this.modalWidth5 = this.xmlDoc5.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight5 = this.xmlDoc5.getElementsByTagName("height")[0].innerHTML;
+			
+			if(
+		   		(Number(this.modalWidth5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth5.replace('px', '')) < 800 || Number(this.modalHeight5.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword5 = this.modalWidth5.replace('px', '');
+				this.modalHeightWithoutPxKeyword5 = this.modalHeight5.replace('px', '');
+			}
+			
+		}
+		
 	};
 	
 	this.openModal = async function() {
@@ -548,7 +1289,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
-			that.drawImage(bgImg);
+			that.drawImage(bgImg, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 		};
 		
 		// generate tags
@@ -556,18 +1297,130 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		
 		for(var i=0; i<cellList.length; i++) {
 			var cell = cellList[i];
-			this.makeTag(cell);
+			this.makeTag(cell, 1);
 		};
+		
+		if(this.page >= 2) {
+			
+			var canvas2 = document.getElementById('checklist-update-canvas2');
+		
+			canvas2.width = this.modalWidthWithoutPxKeyword2;
+			canvas2.height = this.modalHeightWithoutPxKeyword2;
+		
+			this.ctx2 = canvas2.getContext('2d');
+		
+		
+			var bgImg2 = new Image();
+			bgImg2.src = this.imagePath2;
+			bgImg2.onload = function() {
+				that.drawImage2(bgImg2, 0, 0, this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+			};
+		
+			// generate tags
+			var cellList2 = this.xmlDoc2.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList2.length; i++) {
+				var cell2 = cellList2[i];
+				this.makeTag(cell2, 2);
+			};
+			
+		}
+		
+		if(this.page >= 3) {
+			
+			var canvas3 = document.getElementById('checklist-update-canvas3');
+		
+			canvas3.width = this.modalWidthWithoutPxKeyword3;
+			canvas3.height = this.modalHeightWithoutPxKeyword3;
+		
+			this.ctx3 = canvas3.getContext('2d');
+		
+		
+			var bgImg3 = new Image();
+			bgImg3.src = this.imagePath3;
+			bgImg3.onload = function() {
+				that.drawImage3(bgImg3, 0, 0, this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+			};
+		
+			// generate tags
+			var cellList3 = this.xmlDoc3.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList3.length; i++) {
+				var cell3 = cellList3[i];
+				this.makeTag(cell3, 3);
+			};
+			
+		}
+		
+		if(this.page >= 4) {
+			
+			var canvas4 = document.getElementById('checklist-update-canvas4');
+		
+			canvas4.width = this.modalWidthWithoutPxKeyword4;
+			canvas4.height = this.modalHeightWithoutPxKeyword4;
+		
+			this.ctx4 = canvas4.getContext('2d');
+		
+		
+			var bgImg4 = new Image();
+			bgImg4.src = this.imagePath4;
+			bgImg4.onload = function() {
+				that.drawImage4(bgImg4, 0, 0, this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+			};
+		
+			// generate tags
+			var cellList4 = this.xmlDoc4.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList4.length; i++) {
+				var cell4 = cellList4[i];
+				this.makeTag(cell4, 4);
+			};
+			
+		}
+		
+		if(this.page >= 5) {
+			
+			var canvas5 = document.getElementById('checklist-update-canvas5');
+		
+			canvas5.width = this.modalWidthWithoutPxKeyword5;
+			canvas5.height = this.modalHeightWithoutPxKeyword5;
+		
+			this.ctx5 = canvas5.getContext('2d');
+		
+		
+			var bgImg5 = new Image();
+			bgImg5.src = this.imagePath5;
+			bgImg5.onload = function() {
+				that.drawImage5(bgImg5, 0, 0, this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
+			};
+		
+			// generate tags
+			var cellList5 = this.xmlDoc5.getElementsByTagName("cells")[0].childNodes;
+		
+			for(var i=0; i<cellList5.length; i++) {
+				var cell5 = cellList5[i];
+				this.makeTag(cell5, 5);
+			};
+			
+		}
 		
 		// save data to db
 		$('#checklist-update-btn').off().click(function() {
 			
 			
-			
+			var dataArray = new Array();
 			var head = {};
 			var checklistData = {};
-	
-			let elements = document.getElementsByClassName('checklist-data');
+			var checklistData2 = {};
+			var checklistData3 = {};
+			var checklistData4 = {};
+			var checklistData5 = {};
+			
+			let elements = document.getElementById('checklist-update-wrapper1').getElementsByClassName('checklist-data');
+			let elements2 = document.getElementById('checklist-update-wrapper2').getElementsByClassName('checklist-data');
+			let elements3 = document.getElementById('checklist-update-wrapper3').getElementsByClassName('checklist-data');
+			let elements4 = document.getElementById('checklist-update-wrapper4').getElementsByClassName('checklist-data');
+			let elements5 = document.getElementById('checklist-update-wrapper5').getElementsByClassName('checklist-data');
 	
 			for(var i=0; i<elements.length; i++) {
 				let element = elements[i];
@@ -583,11 +1436,93 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					checklistData[element.id] = element.value.replace(/(\n|\r\n)/g, '<br>');
 				}
 			}
+			dataArray.push(checklistData);
+			
+			if(pageNum >= 2) {
+				for(var j=0; j<elements2.length; j++) {
+					let element2 = elements2[j];
+						if(element2.type == 'checkbox') {
+							if(element2.checked == true) {
+								checklistData2[element2.id] = element2.value;
+							}
+						else {
+							checklistData2[element2.id] = '';
+							}
+						}
+						else {
+							checklistData2[element2.id] = element2.value;
+							}
+				}
+			dataArray.push(checklistData2);	
+			}
+			
+			if(pageNum >= 3) {
+				for(var k=0; k<elements3.length; k++) {
+					let element3 = elements3[k];
+						if(element3.type == 'checkbox') {
+							if(element3.checked == true) {
+								checklistData3[element3.id] = element3.value;
+							}
+						else {
+							checklistData3[element3.id] = '';
+							}
+						}
+						else {
+							checklistData3[element3.id] = element3.value;
+							}
+				}
+			dataArray.push(checklistData3);	
+			}
+			
+			if(pageNum >= 4) {
+				for(var l=0; l<elements4.length; l++) {
+					let element4 = elements4[l];
+						if(element4.type == 'checkbox') {
+							if(element4.checked == true) {
+								checklistData4[element4.id] = element4.value;
+							}
+						else {
+							checklistData4[element4.id] = '';
+							}
+						}
+						else {
+							checklistData4[element4.id] = element4.value;
+							}
+				}
+			dataArray.push(checklistData4);	
+			}
+			
+			if(pageNum >= 5) {
+				for(var m=0; m<elements5.length; m++) {
+					let element5 = elements5[m];
+						if(element5.type == 'checkbox') {
+							if(element5.checked == true) {
+								checklistData5[element5.id] = element5.value;
+							}
+						else {
+							checklistData5[element5.id] = '';
+							}
+						}
+						else {
+							checklistData5[element5.id] = element5.value;
+							}
+				}
+			dataArray.push(checklistData5);	
+			}
+			
 			
 			head.checklistId = checklistId;
 			head.revisionNo = revisionNo;
 			head.seqNo = seqNo;
-			head.checklistData = checklistData;
+			//head.checklistData = checklistData;
+			
+			if(pageNum >= 2) {
+				head.checklistData = dataArray;
+			}
+			else {
+				head.checklistData = checklistData;
+			}
+			
 			console.log(checklistData);
             var check = confirm('수정하시겠습니까?');
 			
@@ -600,12 +1535,31 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					  "&type=update",
 		        success: function (result) {
 					
-				var children = $('#checklist-update-wrapper').children();
-    		
+				var children = $('#checklist-update-wrapper1').children();
+    			var children2 = $('#checklist-update-wrapper2').children();
+				var children3 = $('#checklist-update-wrapper3').children();
+				var children4 = $('#checklist-update-wrapper4').children();
+				var children5 = $('#checklist-update-wrapper5').children();
+					
     			for(let i=1; i<children.length; i++) {
     				children[i].remove();
     			}
-    		
+    			
+				for(let j=1; j<children2.length; j++) {
+    				children2[j].remove();
+    			}
+
+				for(let k=1; k<children3.length; k++) {
+    				children3[k].remove();
+    			}
+
+				for(let l=1; l<children4.length; l++) {
+    				children4[l].remove();
+    			}
+					
+				for(let m=1; m<children5.length; m++) {
+    				children5[m].remove();
+    			}
 
 					$('#checklist-update-modal').modal('hide');
 					 parent.refreshMainTable();
@@ -616,21 +1570,60 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		});
 	};
 	
-	this.drawImage = async function(imageObject) {
-		this.ctx.drawImage(imageObject, 0, 0);
+	this.drawImage = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
+	}
+	this.drawImage2 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx2.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+	}
+	this.drawImage3 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx3.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+	}
+	this.drawImage4 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx4.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+	}
+	this.drawImage5 = async function(imageObject, startX, startY, imgWidth, imgHeight) {
+		this.ctx5.drawImage(imageObject, 0, 0 , this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
 	}
 	
-	this.makeTag = async function(cell) {
+	this.makeTag = async function(cell, pages) {
+		
+		var startX = "";
+		var startY = "";
+		var width = "";
+		var height = "";
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  ) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+		}
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+		} 
+		else {
+			startX = cell.childNodes[5].firstChild.textContent;
+			startY = cell.childNodes[6].firstChild.textContent;
+			width = cell.childNodes[7].firstChild.textContent;
+			height = cell.childNodes[8].firstChild.textContent;
+		}
+		
 		var id = cell.tagName;
 		var type = cell.childNodes[0].firstChild.textContent;
 		var format = cell.childNodes[1].firstChild.textContent;
 		var default_value = cell.childNodes[2].firstChild.textContent;
 		var min = cell.childNodes[3].firstChild.textContent;
 		var max = cell.childNodes[4].firstChild.textContent;
-		var startX = cell.childNodes[5].firstChild.textContent;
-		var startY = cell.childNodes[6].firstChild.textContent;
-		var width = cell.childNodes[7].firstChild.textContent;
-		var height = cell.childNodes[8].firstChild.textContent;
+		//var startX = cell.childNodes[5].firstChild.textContent;
+		//var startY = cell.childNodes[6].firstChild.textContent;
+		//var width = cell.childNodes[7].firstChild.textContent;
+		//var height = cell.childNodes[8].firstChild.textContent;
 		var readonly = "";
 		
 		var tagId = "#" + id;
@@ -678,16 +1671,24 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var today = year + "-" + month + "-" + day;
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
-
-		var data = this.checkData[id];
-			
+		
+		var data;
+		//var data = this.checkData[id];
+		
+		if(pageNum == 1) {
+		 	data = this.checkData[id];
+		}
+		else {
+			data = this.checkData[pages - 1][id];	
+		}
 		if (data == null || data == '') {
 				data = "";
 		}
+		/*
 		else {
 				data = this.checkData[id];
 		}
-		
+		*/
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
@@ -715,6 +1716,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		var opt3 = document.createElement("option");
 		var opt4 = document.createElement("option");
 		var opt5 = document.createElement("option");
+		var opt6 = document.createElement("option");
 
 		opt1.value = "O";
 		opt1.text = "O";
@@ -729,7 +1731,10 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 		opt4.text = "적합"; 
 
 		opt5.value = "부적합";
-		opt5.text = "부적합"; 
+		opt5.text = "부적합";
+		
+		opt6.value = "";
+		opt6.text = ""; 
 
 		var fileTag = "";
 		
@@ -756,10 +1761,15 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				tag.setAttribute("type", "date");
-
+				console.log(data);
+				console.log(default_value);
+				console.log(default_value == null);
+				console.log(default_value == 'null');
+				console.log(format);
 				if(format == 'yyyy-mm-dd') {
 				   tag.setAttribute("date-format", 'yyyy-mm-dd');
-                   if(default_value == null) {
+                   if(default_value == 'null') {
+					  
                       if(data == null || data == '') {
 						tag.value = "";
 					  }
@@ -794,7 +1804,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				}
 				else if (format == 'mm-dd') {
 				   tag.setAttribute("date-format", 'mm-dd');
-				   if (default_value == null) {
+				   if (default_value == 'null') {
                       if(data == null || data == '') {
 						tag.value = "";
 					  }
@@ -917,8 +1927,23 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					fileTag.setAttribute("type", "file");
 					fileTag.setAttribute("onchange", "changeIMG(this);");
 					formTag.append(fileTag);
-					document.getElementById("checklist-update-wrapper").appendChild(formTag);
-
+					
+					if(pages == 1) {
+						document.getElementById("checklist-update-wrapper1").appendChild(formTag);
+					}
+					else if(pages == 2) {
+						document.getElementById("checklist-update-wrapper2").appendChild(formTag);
+					}
+					else if(pages == 3) {
+						document.getElementById("checklist-update-wrapper3").appendChild(formTag);
+					}
+					else if(pages == 4) {
+						document.getElementById("checklist-update-wrapper4").appendChild(formTag);
+					}
+					else if(pages == 5) {
+						document.getElementById("checklist-update-wrapper5").appendChild(formTag);
+					}
+					
 					tag = document.createElement('canvas');
 					tag.classList.add("checklist-data");
 					tag.id = id;
@@ -928,7 +1953,22 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					tag.style.width = width;
 					tag.style.height = (heightNum - 30) + "px";
 					tag.value = data;
-					document.getElementById("checklist-update-wrapper").appendChild(tag);
+					
+					if(pages == 1) {
+						document.getElementById("checklist-update-wrapper1").appendChild(tag);
+					}
+					else if(pages == 2) {
+						document.getElementById("checklist-update-wrapper2").appendChild(tag);
+					}
+					else if(pages == 3) {
+						document.getElementById("checklist-update-wrapper3").appendChild(tag);
+					}
+					else if(pages == 4) {
+						document.getElementById("checklist-update-wrapper4").appendChild(tag);
+					}
+					else if(pages == 5) {
+						document.getElementById("checklist-update-wrapper5").appendChild(tag);
+					}
 					fn_Set_Image_File_View(data, id, width, tag.style.height);
 				}
 				else {
@@ -949,9 +1989,10 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 				if(format == 'OX') {
 					tag.add(opt1, null);
 					tag.add(opt3, null);
+					tag.add(opt6, null);
 
 					if(data == '' || data == null) {
-						if(default_value == null) {
+						if(default_value == 'null') {
 
 						}
 						else if(default_value == 'O') {
@@ -960,6 +2001,9 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 						else if(default_value == 'X') {
 							tag.value = 'X';
 
+						}
+						else if(default_value == '') {
+							tag.value = '';
 						}
 					}
 					else {
@@ -970,9 +2014,10 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 					tag.add(opt1, null);
 					tag.add(opt2, null);
 					tag.add(opt3, null);
+					tag.add(opt6, null);
 
 					if(data == '' || data == null) {
-						if(default_value == null) {
+						if(default_value == 'null') {
 						
 						}
 						else if(default_value == 'O') {
@@ -983,6 +2028,9 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 						}
 						else if(default_value == 'X') {
 						tag.value = 'X';
+						}
+						else if(default_value == '') {
+						tag.value = '';
 						}
 					}
 					else {
@@ -995,7 +2043,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 
 					if(data == '' || data == null) {
 
-						if(default_value == null) {
+						if(default_value == 'null') {
 						
 						}
 						else if(default_value == 'good') {
@@ -1026,14 +2074,29 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo) {
 			tag.style.width = width;
 			tag.style.height = height;
 			tag.style.fontSize = textSizeVal;
-			document.getElementById("checklist-update-wrapper").appendChild(tag);
+			
+			if(pages == 1) {
+				document.getElementById("checklist-update-wrapper1").appendChild(tag);
+			}
+			else if(pages == 2) {
+				document.getElementById("checklist-update-wrapper2").appendChild(tag);
+			}
+			else if(pages == 3) {
+				document.getElementById("checklist-update-wrapper3").appendChild(tag);
+			}
+			else if(pages == 4) {
+				document.getElementById("checklist-update-wrapper4").appendChild(tag);
+			}
+			else if(pages == 5) {
+				document.getElementById("checklist-update-wrapper5").appendChild(tag);
+			}
 		}
 		
 	};
 }
 
 
-function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
+function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 	this.checklistId = checklistId;
 	this.seqNo = seqNo;
 	this.revisionNo = revisionNo;
@@ -1044,21 +2107,103 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 	this.metaDataPath;
 	this.imagePath;
 	
+	this.metaDataPath2;
+	this.imagePath2;
+	
+	this.metaDataPath3;
+	this.imagePath3;
+	
+	this.metaDataPath4;
+	this.imagePath4;
+	
+	this.metaDataPath5;
+	this.imagePath5;
+	
 	this.modalWidth;
 	this.modalHeight;
 	this.modalWidthWithoutPxKeyword;
 	this.modalHeightWithoutPxKeyword;
 	
-	this.xmlDoc;
+	this.modalWidth2;
+	this.modalHeight2;
+	this.modalWidthWithoutPxKeyword2;
+	this.modalHeightWithoutPxKeyword2;
 	
+	this.modalWidth3;
+	this.modalHeight3;
+	this.modalWidthWithoutPxKeyword3;
+	this.modalHeightWithoutPxKeyword3;
+	
+	this.modalWidth4;
+	this.modalHeight4;
+	this.modalWidthWithoutPxKeyword4;
+	this.modalHeightWithoutPxKeyword4;
+	
+	this.modalWidth5;
+	this.modalHeight5;
+	this.modalWidthWithoutPxKeyword5;
+	this.modalHeightWithoutPxKeyword5;
+	
+	
+	this.xmlDoc;
 	this.ctx;
+	this.xmlDoc2;
+	this.ctx2;
+	this.xmlDoc3;
+	this.ctx3;
+	this.xmlDoc4;
+	this.ctx4;
+	this.xmlDoc5;
+	this.ctx5;
+	
+	var pageNum = page;
+	var canvas2;
+	var response2;
+	var metaData2;
+	var parser2;
+	
+	var canvas3;
+	var response3;
+	var metaData3;
+	var parser3;
+	
+	var canvas4;
+	var response4;
+	var metaData4;
+	var parser4;
+	
+	var canvas5;
+	var response5;
+	var metaData5;
+	var parser5;
+	
+	this.page = page;
+	var pageNum = page;
 	
 	this.setMetadataAndImagePath = async function() {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
-		this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+		//this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + 'metadata/' + checklistId + '_' + revisionNo + '.xml';
+		//this.imagePath = '/checklist/' + heneBizNo + 'images/' + checklistId + '_' + revisionNo + '.png';
+		
+		if(this.page == 1) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '.png';
+			}
+			
+		else if(this.page >= 2) {
+			this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 1 +'.xml';
+			this.imagePath = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 1 + '.png';
+			this.metaDataPath2 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 2 +'.xml';
+			this.imagePath2 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 2 + '.png';
+			this.metaDataPath3 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 3 +'.xml';
+			this.imagePath3 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 3 + '.png';
+			this.metaDataPath4 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 4 +'.xml';
+			this.imagePath4 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 4 + '.png';
+			this.metaDataPath5 = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + checklistId + '_' + revisionNo + '_' + 5 +'.xml';
+			this.imagePath5 = '/checklist/' + heneBizNo + '/images/' + checklistId + '_' + revisionNo + '_' + 5 + '.png';
+			}
 	}
 	
 	this.getChecklistData = async function() {
@@ -1101,11 +2246,148 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
-		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
-		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  )
+		{
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.3;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.3;
+		} 
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.8;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.8;
+		}
+		else {
+			this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+			this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		}
+		
+		//this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+		//this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
 		
 		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
 		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
+		
+		//if page length is more than 2page add additional modal setting
+		if(this.page >= 2) {
+			response2 = await fetch(this.metaDataPath2);
+	    	metaData2 = await response2.text();
+		    parser2 = new DOMParser();
+			this.xmlDoc2 = parser.parseFromString(metaData2, "text/xml");
+			
+			this.modalWidth2 = this.xmlDoc2.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight2 = this.xmlDoc2.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight2.replace('px', '')) < 1000 && Number(this.modalWidth2.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth2.replace('px', '')) < 800 || Number(this.modalHeight2.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword2 = Number(this.modalWidth2.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword2 = Number(this.modalHeight2.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword2 = this.modalWidth2.replace('px', '');
+				this.modalHeightWithoutPxKeyword2 = this.modalHeight2.replace('px', '');
+			}
+			
+			$('#checklist-select-footer').prepend('<button type="button" id="checklist-next-btn" class="btn btn-success" onclick="checklist_next(2);">다음페이지</button>');
+			$('#checklist-select-footer').prepend('<button type="button" id="checklist-prev-btn" class="btn btn-success" style="display:none;" onclick="checklist_prev(2);">이전페이지</button>');
+			
+			
+			
+		}
+		
+		if(this.page >= 3) {
+			response3 = await fetch(this.metaDataPath3);
+	    	metaData3 = await response3.text();
+		    parser3 = new DOMParser();
+			this.xmlDoc3 = parser.parseFromString(metaData3, "text/xml");
+			
+			this.modalWidth3 = this.xmlDoc3.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight3 = this.xmlDoc3.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight3.replace('px', '')) < 1000 && Number(this.modalWidth3.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth3.replace('px', '')) < 800 || Number(this.modalHeight3.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword3 = Number(this.modalWidth3.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword3 = Number(this.modalHeight3.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword3 = this.modalWidth3.replace('px', '');
+				this.modalHeightWithoutPxKeyword3 = this.modalHeight3.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 4) {
+			response4 = await fetch(this.metaDataPath4);
+	    	metaData4 = await response4.text();
+		    parser4 = new DOMParser();
+			this.xmlDoc4 = parser.parseFromString(metaData4, "text/xml");
+			
+			this.modalWidth4 = this.xmlDoc4.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight4 = this.xmlDoc4.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight4.replace('px', '')) < 1000 && Number(this.modalWidth4.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth4.replace('px', '')) < 800 || Number(this.modalHeight4.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword4 = Number(this.modalWidth4.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword4 = Number(this.modalHeight4.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword4 = this.modalWidth4.replace('px', '');
+				this.modalHeightWithoutPxKeyword4 = this.modalHeight4.replace('px', '');
+			}
+			
+		}
+		
+		if(this.page >= 5) {
+			response5 = await fetch(this.metaDataPath5);
+	    	metaData5 = await response5.text();
+		    parser5 = new DOMParser();
+			this.xmlDoc5 = parser.parseFromString(metaData5, "text/xml");
+			
+			this.modalWidth5 = this.xmlDoc5.getElementsByTagName("width")[0].innerHTML;
+			this.modalHeight5 = this.xmlDoc5.getElementsByTagName("height")[0].innerHTML;
+		
+			if(
+		   		(Number(this.modalWidth5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )|| 
+		   		(Number(this.modalHeight5.replace('px', '')) < 1000 && Number(this.modalWidth5.replace('px', '')) >= 800 )
+		  	)
+			{
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.3;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.3;
+			} 
+			else if(Number(this.modalWidth5.replace('px', '')) < 800 || Number(this.modalHeight5.replace('px', '')) < 800) {
+				this.modalWidthWithoutPxKeyword5 = Number(this.modalWidth5.replace('px', '')) * 1.8;
+				this.modalHeightWithoutPxKeyword5 = Number(this.modalHeight5.replace('px', '')) * 1.8;
+			}
+			else {
+				this.modalWidthWithoutPxKeyword5 = this.modalWidth5.replace('px', '');
+				this.modalHeightWithoutPxKeyword5 = this.modalHeight5.replace('px', '');
+			}
+			
+		}
+		
 	};
 	
 	this.openModal = async function() {
@@ -1130,25 +2412,156 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
 		bgImg.onload = function() {
-			that.drawImage(bgImg);
+			that.drawImage(bgImg, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 			
 			// display data
 			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
 			
 			for(var i=0; i<cellList.length; i++) {
 				var cell = cellList[i];
-				that.displayData(cell);
+				that.displayData(cell, 1);
 			};
 		};
+		
+		if(this.page >= 2) {
+			
+			var canvas2 = document.getElementById('checklist-select-canvas2');
+		
+			canvas2.width = this.modalWidthWithoutPxKeyword2;
+			canvas2.height = this.modalHeightWithoutPxKeyword2;
+		
+			this.ctx2 = canvas2.getContext('2d');
+		
+		
+			var bgImg2 = new Image();
+			bgImg2.src = this.imagePath2;
+			bgImg2.onload = function() {
+				that.drawImage2(bgImg2, 0, 0, this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+				
+				// display data page2 
+				var cellList2 = that.xmlDoc2.getElementsByTagName("cells")[0].childNodes;
+		
+				for(var i=0; i<cellList2.length; i++) {
+					var cell2 = cellList2[i];
+					that.displayData(cell2, 2);
+				};
+			
+				
+				};
+			
+			}
+		
+		if(this.page >= 3) {
+			
+			var canvas3 = document.getElementById('checklist-select-canvas3');
+		
+			canvas3.width = this.modalWidthWithoutPxKeyword3;
+			canvas3.height = this.modalHeightWithoutPxKeyword3;
+		
+			this.ctx3 = canvas3.getContext('2d');
+		
+		
+			var bgImg3 = new Image();
+			bgImg3.src = this.imagePath3;
+			bgImg3.onload = function() {
+				that.drawImage3(bgImg3, 0, 0, this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+				
+				// display data page3 
+				var cellList3 = that.xmlDoc3.getElementsByTagName("cells")[0].childNodes;
+		
+				for(var i=0; i<cellList3.length; i++) {
+					var cell3 = cellList3[i];
+					that.displayData(cell3, 3);
+				};
+			
+				
+				};
+			
+			}
+		
+		if(this.page >= 4) {
+			
+			var canvas4 = document.getElementById('checklist-select-canvas4');
+		
+			canvas4.width = this.modalWidthWithoutPxKeyword4;
+			canvas4.height = this.modalHeightWithoutPxKeyword4;
+		
+			this.ctx4 = canvas4.getContext('2d');
+		
+		
+			var bgImg4 = new Image();
+			bgImg4.src = this.imagePath4;
+			bgImg4.onload = function() {
+				that.drawImage4(bgImg4, 0, 0, this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+				
+				// display data page4
+				var cellList4 = that.xmlDoc4.getElementsByTagName("cells")[0].childNodes;
+		
+				for(var i=0; i<cellList4.length; i++) {
+					var cell4 = cellList4[i];
+					that.displayData(cell4, 4);
+				};
+			
+				
+				};
+			
+			}
+			
+		if(this.page >= 5) {
+			
+			var canvas5 = document.getElementById('checklist-select-canvas5');
+		
+			canvas5.width = this.modalWidthWithoutPxKeyword5;
+			canvas5.height = this.modalHeightWithoutPxKeyword5;
+		
+			this.ctx5 = canvas5.getContext('2d');
+		
+		
+			var bgImg5 = new Image();
+			bgImg5.src = this.imagePath5;
+			bgImg5.onload = function() {
+				that.drawImage5(bgImg5, 0, 0, this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
+				
+				// display data page5
+				var cellList5 = that.xmlDoc5.getElementsByTagName("cells")[0].childNodes;
+		
+				for(var i=0; i<cellList5.length; i++) {
+					var cell5 = cellList5[i];
+					that.displayData(cell5, 5);
+				};
+			
+				
+				};
+			
+			}
 		
 		// 점검표 출력
 		$('#checklist-print-btn').click(function() {
 			var dataUrl = document.getElementById("checklist-select-canvas").toDataURL();
     		var windowContent = '<!DOCTYPE html>';
-   	 		windowContent += '<html>'
+   	 		windowContent += '<html>';
     		windowContent += '<head><title>점검표 출력</title></head>';
-    		windowContent += '<body style="zoom:120%">'
+    		windowContent += '<body style="zoom:93%">';
    		 	windowContent += '<img src="' + dataUrl + '">';
+			
+			if(pageNum >= 2) {
+				var dataUrl2 = document.getElementById("checklist-select-canvas2").toDataURL();
+				windowContent += '<img src="' + dataUrl2 + '">';
+			}
+			if(pageNum >= 3) {
+				var dataUrl3 = document.getElementById("checklist-select-canvas3").toDataURL();
+				windowContent += '<img src="' + dataUrl3 + '">';
+			}
+			if(pageNum >= 4) {
+				var dataUrl4 = document.getElementById("checklist-select-canvas4").toDataURL();
+				windowContent += '<img src="' + dataUrl4 + '">';
+			}
+			if(pageNum >= 5) {
+				var dataUrl5 = document.getElementById("checklist-select-canvas5").toDataURL();
+				windowContent += '<img src="' + dataUrl5 + '">';
+			}
+			
+			
     		windowContent += '</body>';
     		windowContent += '</html>';
     		var printWin = window.open();
@@ -1165,90 +2578,301 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo) {
 	};
 	
 	this.drawImage = function(imageObject) {
-		this.ctx.drawImage(imageObject, 0, 0);
+		this.ctx.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 	}
 	
-	this.displayData = function(cell) {
+	this.drawImage2 = function(imageObject) {
+		this.ctx2.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword2, this.modalHeightWithoutPxKeyword2);
+	}
+	
+	this.drawImage3 = function(imageObject) {
+		this.ctx3.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword3, this.modalHeightWithoutPxKeyword3);
+	}
+	
+	this.drawImage4 = function(imageObject) {
+		this.ctx4.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword4, this.modalHeightWithoutPxKeyword4);
+	}
+	
+	this.drawImage5 = function(imageObject) {
+		this.ctx5.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword5, this.modalHeightWithoutPxKeyword5);
+	}
+	
+	
+	this.displayData = function(cell, pages) {
+		var startX = "";
+		var startY = "";
+		var width = "";
+		var height = "";
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  ) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+		}
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+		} 
+		else {
+			startX = cell.childNodes[5].firstChild.textContent;
+			startY = cell.childNodes[6].firstChild.textContent;
+			width = cell.childNodes[7].firstChild.textContent;
+			height = cell.childNodes[8].firstChild.textContent;
+		}
+		
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[5].textContent.replace('px', '');
-		var startY = cell.childNodes[6].textContent.replace('px', '');
-		var width = cell.childNodes[7].textContent.replace('px', '');
-		var height = cell.childNodes[8].textContent.replace('px', '');
+		//var startX = cell.childNodes[5].textContent.replace('px', '');
+		//var startY = cell.childNodes[6].textContent.replace('px', '');
+		//var width = cell.childNodes[7].textContent.replace('px', '');
+		//var height = cell.childNodes[8].textContent.replace('px', '');
 		
-		var data = this.checkData[id];
+		var data;
+		
+		if(this.page == 1) {
+		 	data = this.checkData[id];
+		}
+		else {
+			data = this.checkData[pages - 1][id];	
+		}
 			
 		if (data == null || data == '') {
-				data = "";
+			data = "";
 		}
+		/*
 		else {
 				data = this.checkData[id];
 		}
-
+		*/
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
 		var signApprover = this.checklistSignData.signApprover;
 		
-		var startXWrite = parseInt(startX) + 5;
+		var startXWrite = parseInt(startX) + 10;
 		var startYWrite = parseInt(startY) + 16;
 
-		var middleX = Number(startX) + (width / 2);
-		var middleY = Number(startY) + (height / 2);
+		var middleX = Number(startX.replace("px", "")) + (Number(width.replace("px", "")) / 2);
+		var middleY = Number(startY.replace("px", "")) + (Number(height.replace("px", "")) / 2);
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '15px serif';
 		
-		console.log(type);
-		console.log(format);
+		if(pages >= 2) {
+			this.ctx2.textAlign = "center";
+			this.ctx2.font = '15px serif';
+		}
+		if(pages >= 3) {
+			this.ctx3.textAlign = "center";
+			this.ctx3.font = '15px serif';
+		}
+		if(pages >= 4) {
+			this.ctx4.textAlign = "center";
+			this.ctx4.font = '15px serif';
+		}
+		if(pages >= 5) {
+			this.ctx5.textAlign = "center";
+			this.ctx5.font = '15px serif';
+		}
 		
 		switch(type) {
 			case "signature-writer":
 				if(signWriter != null) {
+					if(pages == 1) {
 					this.ctx.fillText(signWriter, middleX, middleY);
+					}
+					else if(pages == 2){
+					this.ctx2.fillText(signWriter, middleX, middleY);	
+					}
+					else if(pages == 3){
+					this.ctx3.fillText(signWriter, middleX, middleY);	
+					}
+					else if(pages == 4){
+					this.ctx4.fillText(signWriter, middleX, middleY);	
+					}
+					else if(pages == 5){
+					this.ctx5.fillText(signWriter, middleX, middleY);	
+					}
 				}
 				break;
 			case "signature-approver":
 				if(signApprover != null) {
+					if(pages == 1) {
 					this.ctx.fillText(signApprover, middleX, middleY);
+					}
+					else if(pages == 2){
+					this.ctx2.fillText(signApprover, middleX, middleY);	
+					}
+					else if(pages == 3){
+					this.ctx3.fillText(signApprover, middleX, middleY);	
+					}
+					else if(pages == 4){
+					this.ctx4.fillText(signApprover, middleX, middleY);	
+					}
+					else if(pages == 5){
+					this.ctx5.fillText(signApprover, middleX, middleY);	
+					}
 				}
 				break;
 			case "signature-checker":
 				if(signChecker != null) {
+					if(pages == 1) {
 					this.ctx.fillText(signChecker, middleX, middleY);
+					}
+					else if(pages == 2){
+					this.ctx2.fillText(signChecker, middleX, middleY);	
+					}
+					else if(pages == 3){
+					this.ctx3.fillText(signChecker, middleX, middleY);	
+					}
+					else if(pages == 4){
+					this.ctx4.fillText(signChecker, middleX, middleY);	
+					}
+					else if(pages == 5){
+					this.ctx5.fillText(signChecker, middleX, middleY);	
+					}
 				}
 				break;
 			case "radio button":
 				if(data === 'on') {
+					if(pages == 1) {
 					this.ctx.fillText("✔", middleX, middleY);
 					this.ctx.font = '20px serif';
+					}
+					else if(pages == 2){
+					this.ctx2.fillText("✔", middleX, middleY);
+					this.ctx2.font = '20px serif';	
+					}
+					else if(pages == 3){
+					this.ctx3.fillText("✔", middleX, middleY);
+					this.ctx3.font = '20px serif';	
+					}
+					else if(pages == 4){
+					this.ctx4.fillText("✔", middleX, middleY);
+					this.ctx4.font = '20px serif';	
+					}
+					else if(pages == 5){
+					this.ctx5.fillText("✔", middleX, middleY);
+					this.ctx5.font = '20px serif';	
+					}
 				}
 				break;
 			case "checkbox":
 				if(data === 'on') {
+					if(pages == 1) {
 					this.ctx.fillText("✔", middleX, middleY);
 					this.ctx.font = '20px serif';
+					}
+					else if(pages == 2){
+					this.ctx2.fillText("✔", middleX, middleY);
+					this.ctx2.font = '20px serif';
+					}
+					else if(pages == 3){
+					this.ctx3.fillText("✔", middleX, middleY);
+					this.ctx3.font = '20px serif';
+					}
+					else if(pages == 4){
+					this.ctx4.fillText("✔", middleX, middleY);
+					this.ctx4.font = '20px serif';
+					}
+					else if(pages == 5){
+					this.ctx5.fillText("✔", middleX, middleY);
+					this.ctx5.font = '20px serif';
+					}
+					
 				}
 				break;
 			case "textarea":
+				if(pages == 1) {
 				 this.ctx.textAlign = "left";
 				 wrapText(this.ctx, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				}
+				else if(pages == 2){
+				 this.ctx2.textAlign = "left";
+				 wrapText(this.ctx2, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				}
+				else if(pages == 3){
+				 this.ctx3.textAlign = "left";
+				 wrapText(this.ctx3, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				}
+				else if(pages == 4){
+				 this.ctx4.textAlign = "left";
+				 wrapText(this.ctx4, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				}
+				else if(pages == 5){
+				 this.ctx5.textAlign = "left";
+				 wrapText(this.ctx5, data.split('<br>').join('\r\n'), startXWrite, startYWrite, width, 20);
+				}
 				 //this.ctx.fillText(data, startXWrite, startYWrite);
 				break;
 			case "file":
 				if(format == 'image') {
+					if(pages == 1) {
+						console.log("image act");
 					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
+					}
+					else if(pages == 2) {
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas2', startX, startY, width, height);	
+					}
+					else if(pages == 3) {
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas3', startX, startY, width, height);	
+					}
+					else if(pages == 4) {
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas4', startX, startY, width, height);	
+					}
+					else if(pages == 5) {
+					fn_Set_Image_File_View2(data, 'checklist-select-canvas5', startX, startY, width, height);	
+					}
 				}
 				else {
 					 //this.ctx.fillText(data, startX, startY);
 				}
+				break;
+			case "date":
+				if(pages == 1) {
+					this.ctx.fillText(data, middleX, middleY);
+					}
+					else if(pages == 2) {
+					this.ctx2.fillText(data, middleX, middleY);	
+					}
+					else if(pages == 3) {
+					this.ctx3.fillText(data, middleX, middleY);	
+					}
+					else if(pages == 4) {
+					this.ctx4.fillText(data, middleX, middleY);	
+					}
+					else if(pages == 5) {
+					this.ctx5.fillText(data, middleX, middleY);	
+					}
 				break;	
 			default : 
-				this.ctx.fillText(data, startXWrite, middleY);
+				//this.ctx.fillText(data, startXWrite, startYWrite);
+					//console.log(middleX);
+					//console.log(middleY);
+				if(pages == 1) {
+				this.ctx.fillText(data, middleX, middleY);
+				}
+				else if(pages == 2) {
+				this.ctx2.fillText(data, middleX, middleY);	
+				}
+				else if(pages == 3) {
+				this.ctx3.fillText(data, middleX, middleY);	
+				}
+				else if(pages == 4) {
+				this.ctx4.fillText(data, middleX, middleY);	
+				}
+				else if(pages == 5) {
+				this.ctx5.fillText(data, middleX, middleY);	
+				}
 				break;
 		}
 	};
-}
+}zd
 
 
 function ChecklistSelectModalMetalDetector(createDate, sensorId) {
@@ -1278,7 +2902,7 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
 		// 점검표정보 테이블에서 checklistId와 점검표정보수정이력번호로 조회해서
 		// 이미지경로와 메타데이터파일경로를 구한다
-		this.metaDataPath = heneServerPath + '/checklist/' + heneBizNo + '/metadata/' + this.checklistId + '_' + this.revisionNo + '.xml';
+		this.metaDataPath = heneServerPath + '/checklist/'+ heneBizNo + '/metadata/' + this.checklistId + '_' + this.revisionNo + '.xml';
 		this.imagePath = '/checklist/' + heneBizNo + '/images/' + this.checklistId + '_' + this.revisionNo + '.png';
 	}
 	
@@ -1324,9 +2948,28 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		// set modal size
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
+		
+		
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  )
+		{
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.3;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.3;
+		} 
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			this.modalWidthWithoutPxKeyword = Number(this.modalWidth.replace('px', '')) * 1.8;
+			this.modalHeightWithoutPxKeyword = Number(this.modalHeight.replace('px', '')) * 1.8;
+		}
+		else {
+			this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
+			this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
+		}
+		/*
 		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
 		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		
+		*/
 		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
 		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
 	};
@@ -1384,7 +3027,7 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
 		bgImg.onload = async function() {
-			that.drawImage(bgImg);
+			that.drawImage(bgImg, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 			
 			// display data
 			var cellList = that.xmlDoc.getElementsByTagName("cells")[0].childNodes;
@@ -1472,7 +3115,7 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		};
 		
 		// 점검표 출력
-		$('#checklist-print-btn').click(function() {
+		$('#checklist-print-btn').off().click(function() {
 			var dataUrl = document.getElementById("checklist-select-canvas").toDataURL();
     		var windowContent = '<!DOCTYPE html>';
    	 		windowContent += '<html>'
@@ -1495,7 +3138,7 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 	};
 	
 	this.drawImage = function(imageObject) {
-		this.ctx.drawImage(imageObject, 0, 0);
+		this.ctx.drawImage(imageObject, 0, 0, this.modalWidthWithoutPxKeyword, this.modalHeightWithoutPxKeyword);
 	}
 	
 	this.judgeResult = function(testResults, info) {
@@ -1513,13 +3156,40 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 	}
 	
 	this.displayData = function(cell, data) {
+		
+		var startX = "";
+		var startY = "";
+		var width = "";
+		var height = "";
+		if(
+		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
+		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
+		  ) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.3 + "px";
+		}
+		else if(Number(this.modalWidth.replace('px', '')) < 800 || Number(this.modalHeight.replace('px', '')) < 800) {
+			startX = Number(cell.childNodes[5].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			startY = Number(cell.childNodes[6].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+			height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * 1.8 + "px";
+		} 
+		else {
+			startX = cell.childNodes[5].firstChild.textContent;
+			startY = cell.childNodes[6].firstChild.textContent;
+			width = cell.childNodes[7].firstChild.textContent;
+			height = cell.childNodes[8].firstChild.textContent;
+		}
+		
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
-		var startX = cell.childNodes[5].textContent.replace('px', '');
-		var startY = cell.childNodes[6].textContent.replace('px', '');
-		var width = cell.childNodes[7].textContent.replace('px', '');
-		var height = cell.childNodes[8].textContent.replace('px', '');
+		//var startX = cell.childNodes[5].textContent.replace('px', '');
+		//var startY = cell.childNodes[6].textContent.replace('px', '');
+		//var width = cell.childNodes[7].textContent.replace('px', '');
+		//var height = cell.childNodes[8].textContent.replace('px', '');
 		
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;

@@ -85,7 +85,31 @@
   	</script>
 </head>
 <style>
+ .swal-button-container {
+ 	float: right !important;
+ 		}
+ .content-wrapper {
+ 	margin-left : 0px;
+ 		}
+ 
+ .modal-dialog.modal-checklist {
+  text-align: center;
+}
 
+@media screen and (min-width: 768px) { 
+  .modal.modal-checklist:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog.modal-checklist {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle; 
+}
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 	<div class="wrapper">
@@ -338,17 +362,29 @@
     <!-- 점검표 등록용 모달창 -->
     <div class="modal fade" id="checklist-insert-modal" 
     	 data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
+	  <div class="modal-dialog modal-checklist" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 등록</h5>
 	      </div>
-	      <div class="modal-body">
-	      	<div id="checklist-insert-wrapper" style="position:relative;">
+	      <div id="modal-checklist-insert-canvas" class="modal-body">
+	      	<div id="checklist-insert-wrapper1" style="position:relative;">
 				<canvas id="checklist-insert-canvas"></canvas>
 			</div>
+			<div id="checklist-insert-wrapper2" style="position:relative; display:none;">
+				<canvas id="checklist-insert-canvas2"></canvas>
+			</div>
+			<div id="checklist-insert-wrapper3" style="position:relative; display:none;">
+				<canvas id="checklist-insert-canvas3"></canvas>
+			</div>
+			<div id="checklist-insert-wrapper4" style="position:relative; display:none;">
+				<canvas id="checklist-insert-canvas4"></canvas>
+			</div>
+			<div id="checklist-insert-wrapper5" style="position:relative; display:none;">
+				<canvas id="checklist-insert-canvas5"></canvas>
+			</div>
 	      </div>
-	      <div class="modal-footer">
+	      <div id="checklist-insert-footer" class="modal-footer">
 	        <button type="button" id="checklist-insert-btn" class="btn btn-primary">등록</button>
 	        <button type="button" id="checklist-insert-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
@@ -359,17 +395,29 @@
 	<!-- 점검표 수정용 모달창 -->
     <div class="modal fade" id="checklist-update-modal" 
     	 data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
+	  <div class="modal-dialog modal-checklist" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 수정</h5>
 	      </div>
-	      <div class="modal-body">
-	      	<div id="checklist-update-wrapper" style="position:relative;">
+	      <div id="modal-checklist-update-canvas" class="modal-body">
+	      	<div id="checklist-update-wrapper1" style="position:relative;">
 				<canvas id="checklist-update-canvas"></canvas>
 			</div>
+			<div id="checklist-update-wrapper2" style="position:relative; display:none;">
+				<canvas id="checklist-update-canvas2"></canvas>
+			</div>
+			<div id="checklist-update-wrapper3" style="position:relative; display:none;">
+				<canvas id="checklist-update-canvas3"></canvas>
+			</div>
+			<div id="checklist-update-wrapper4" style="position:relative; display:none;">
+				<canvas id="checklist-update-canvas4"></canvas>
+			</div>
+			<div id="checklist-update-wrapper5" style="position:relative; display:none;">
+				<canvas id="checklist-update-canvas5"></canvas>
+			</div>
 	      </div>
-	      <div class="modal-footer">
+	      <div id="checklist-update-footer" class="modal-footer">
 	        <button type="button" id="checklist-update-btn" class="btn btn-primary">수정</button>
 	        <button type="button" id="checklist-update-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>
@@ -380,17 +428,29 @@
 	<!-- 점검표 조회용 모달창 -->
     <div class="modal fade" id="checklist-select-modal" 
     	 data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
+	  <div class="modal-dialog modal-checklist" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">점검표 조회</h5>
 	      </div>
-	      <div class="modal-body">
-	      	<div id="checklist-select-wrapper" style="position:relative;">
+	      <div id="modal-checklist-select-canvas" class="modal-body">
+	      	<div id="checklist-select-wrapper1" style="position:relative;">
 				<canvas id="checklist-select-canvas"></canvas>
 			</div>
+			<div id="checklist-select-wrapper2" style="position:relative; display:none;">
+				<canvas id="checklist-select-canvas2"></canvas>
+			</div>
+			<div id="checklist-select-wrapper3" style="position:relative; display:none;">
+				<canvas id="checklist-select-canvas3"></canvas>
+			</div>
+			<div id="checklist-select-wrapper4" style="position:relative; display:none;">
+				<canvas id="checklist-select-canvas4"></canvas>
+			</div>
+			<div id="checklist-select-wrapper5" style="position:relative; display:none;">
+				<canvas id="checklist-select-canvas5"></canvas>
+			</div>
 	      </div>
-	      <div class="modal-footer">
+	      <div id="checklist-select-footer" class="modal-footer">
 	        <button type="button" id="checklist-print-btn" class="btn btn-primary">출력</button>
 	        <button type="button" id="checklist-select-btn-close" class="btn btn-secondary">닫기</button>
 	      </div>

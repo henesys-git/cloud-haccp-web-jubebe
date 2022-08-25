@@ -8,6 +8,7 @@ public class ChecklistInfo {
 	private String metaDataFilePath;
 	private int checkInterval;
 	private String signatureType;
+	private int pageCnt;
 	
 	public ChecklistInfo() {}
 	
@@ -15,13 +16,15 @@ public class ChecklistInfo {
 			int revisionNo, 
 			String checklistName, 
 			String imagePath,
-			String metaDataFilePath) {
+			String metaDataFilePath,
+			int pageCnt) {
 		super();
 		this.checklistId = checklistId;
 		this.revisionNo = revisionNo;
 		this.checklistName = checklistName;
 		this.imagePath = imagePath;
 		this.metaDataFilePath = metaDataFilePath;
+		this.pageCnt = pageCnt;
 	}
 
 	public ChecklistInfo(String checklistId, 
@@ -61,6 +64,9 @@ public class ChecklistInfo {
 	public String getSignatureType() {
 		return signatureType;
 	}
+	public int getPageCnt() {
+		return pageCnt;
+	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
 	}
@@ -82,7 +88,9 @@ public class ChecklistInfo {
 	public void setSignatureType(String signatureType) {
 		this.signatureType = signatureType;
 	}
-
+	public void setPageCnt(int pageCnt) {
+		this.pageCnt = pageCnt;
+	}
 	@Override
 	public String toString() {
 		return "ChecklistInfo [checklistId=" + checklistId + ", revisionNo=" + revisionNo + ", checklistName="
