@@ -8,10 +8,13 @@ public class Sensor {
 	private String protocolInfo;
 	private String packetInfo;
 	private String typeCode;
+	private String checklistId;
 	
 	public Sensor() {}
 	
-	public Sensor(String sensorId, String sensorName, String valueType, String ipAddress, String protocolInfo, String packetInfo, String typeCode) {
+	public Sensor(String sensorId, String sensorName, 
+				  String valueType, String ipAddress, String protocolInfo, 
+				  String packetInfo, String typeCode, String checklistId) {
 		super();
 		this.sensorId = sensorId;
 		this.sensorName = sensorName;
@@ -20,6 +23,7 @@ public class Sensor {
 		this.protocolInfo = protocolInfo;
 		this.packetInfo = packetInfo;
 		this.typeCode = typeCode;
+		this.checklistId = checklistId;
 	}
 	
 	public String getSensorId() {
@@ -43,6 +47,9 @@ public class Sensor {
 	public String getTypeCode() {
 		return typeCode;
 	}
+	public String getChecklistId() {
+		return checklistId;
+	}
 	public void setSensorId(String sensorId) {
 		this.sensorId = sensorId;
 	}
@@ -63,5 +70,8 @@ public class Sensor {
 	}
 	public void setTypeCode(String typeCode) {
 		this.typeCode = typeCode;
+	}
+	public void setChecklistId(String checklistId) {
+		this.checklistId = checklistId;
 	}
 }

@@ -9,7 +9,7 @@
 	String login_name = session.getAttribute("login_name").toString();
 	String bizNo = session.getAttribute("bizNo").toString();
 	
-	String checklistNum = "05", menuName = "";
+	String checklistNum = "", menuName = "";
 	
 	if(request.getParameter("checklistNum") != null) 
 		checklistNum = request.getParameter("checklistNum");
@@ -29,14 +29,12 @@
 <script type="text/javascript">
     
     var mainTable;
-    var startDate;
-    var endDate;
     
 	$(document).ready(function () {
 		
 		var date = new SetRangeDate("dateParent", "dateRange", 7);
-    	startDate = date.start.format('YYYY-MM-DD');
-       	endDate = date.end.format('YYYY-MM-DD');
+    	var startDate = date.start.format('YYYY-MM-DD');
+       	var endDate = date.end.format('YYYY-MM-DD');
 		
 		async function getHeadDataList(startDate, endDate) {
 			var fetchedList = $.ajax({
@@ -191,7 +189,7 @@
     		let createDate = selectedRow.createDate;
     		let sensorId = selectedRow.sensorId;
     		
-    		var modal = new ChecklistSelectModalMetalDetector(createDate, sensorId);
+    		var modal = new ChecklistSelectModalCCP(createDate, sensorId);
     		modal.openModal();
     	});
     	
@@ -241,15 +239,13 @@
     	});
     	
     	async function refreshMainTable() {
-    		startDate = date.start.format('YYYY-MM-DD');
-           	endDate = date.end.format('YYYY-MM-DD');
-           	console.log(startDate);
+           	var startDate = date.getStartDate();
+           	var endDate = date.getEndDate();
     		var list = await getHeadDataList(startDate, endDate);
     		mainTable.clear().rows.add(list).draw();
     	}
     	
     	$('#dateRange').change(function() {
-    		console.log('date changed');
     		refreshMainTable();
         });
     });

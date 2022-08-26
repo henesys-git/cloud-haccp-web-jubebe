@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
 import model.Sensor;
-import model.User;
 
 public class SensorDaoImpl implements SensorDao {
 	
@@ -107,10 +106,12 @@ public class SensorDaoImpl implements SensorDao {
 					.append("		ip_address,\n")
 					.append("		protocol_info,\n")
 					.append("		packet_info,\n")
-					.append("		type_code \n")
+					.append("		type_code,\n")
+					.append("		checklist_id\n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
+					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
@@ -132,6 +133,7 @@ public class SensorDaoImpl implements SensorDao {
 			ps.setString(6, sensor.getProtocolInfo());
 			ps.setString(7, sensor.getPacketInfo());
 			ps.setString(8, sensor.getTypeCode());
+			ps.setString(9, sensor.getChecklistId());
 			
 	        int i = ps.executeUpdate();
 
@@ -160,6 +162,7 @@ public class SensorDaoImpl implements SensorDao {
 					.append("	protocol_info='" + sensor.getProtocolInfo() + "',\n")
 					.append("	packet_info='" + sensor.getPacketInfo() + "',\n")
 					.append("	type_code='" + sensor.getTypeCode() + "' \n")
+					.append("	checklist_id='" + sensor.getChecklistId() + "' \n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND sensor_id='" + sensor.getSensorId() + "';\n")
 					.toString();
@@ -205,7 +208,6 @@ public class SensorDaoImpl implements SensorDao {
 	    return false;
 	}
 	
-	
 	private Sensor extractFromResultSet(ResultSet rs) throws SQLException {
 		
 		Sensor sensor = new Sensor();
@@ -217,19 +219,8 @@ public class SensorDaoImpl implements SensorDao {
 		sensor.setProtocolInfo(rs.getString("protocol_info"));
 		sensor.setPacketInfo(rs.getString("packet_info"));
 		sensor.setTypeCode(rs.getString("type_code"));
+		sensor.setChecklistId(rs.getString("checklist_id"));
 		
 	    return sensor;
-	    
-		/*
-		return new Sensor(
-					rs.getString("sensor_id"),
-					rs.getString("sensor_name"),
-					rs.getString("value_type"),
-					rs.getString("ip_address"),
-					rs.getString("protocol_info"),
-					rs.getString("packet_info"),
-					rs.getString("type_code")
-				);
-		*/
 	}
 }

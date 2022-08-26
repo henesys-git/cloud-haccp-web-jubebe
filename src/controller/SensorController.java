@@ -14,11 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import dao.SensorDaoImpl;
-import dao.UserDaoImpl;
 import model.Sensor;
-import model.User;
 import service.SensorService;
-import service.UserService;
 import utils.FormatTransformer;
 
 
@@ -89,8 +86,8 @@ public class SensorController extends HttpServlet {
 				req.getParameter("IP"),
 				req.getParameter("protocol"),
 				req.getParameter("packet"),
-				req.getParameter("typeCode")
-				
+				req.getParameter("typeCode"),
+				req.getParameter("checklistId")
 			);
 		
 		SensorService sensorService = new SensorService(new SensorDaoImpl(), tenantId);
@@ -117,8 +114,8 @@ public class SensorController extends HttpServlet {
 				req.getParameter("IP"),
 				req.getParameter("protocol"),
 				req.getParameter("packet"),
-				req.getParameter("typeCode")
-				
+				req.getParameter("typeCode"),
+				req.getParameter("checklistId")
 			);
 		
 		SensorService sensorService = new SensorService(new SensorDaoImpl(), tenantId);

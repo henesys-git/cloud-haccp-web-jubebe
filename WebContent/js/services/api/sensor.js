@@ -19,3 +19,13 @@ HENESYS_API.Sensor.prototype.getSensors = function () {
     
 	return sensors;
 }
+
+HENESYS_API.Sensor.prototype.getSensor = function (sensorId) {
+	return $.ajax({
+        type: "GET",
+        url: heneServerPath + "/sensor?id=" + sensorId,
+        success: function (result) {
+        	return result;
+        }
+	});
+}

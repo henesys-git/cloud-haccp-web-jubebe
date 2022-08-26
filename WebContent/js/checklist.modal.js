@@ -2872,20 +2872,20 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 				break;
 		}
 	};
-}zd
+}
 
 
-function ChecklistSelectModalMetalDetector(createDate, sensorId) {
+function ChecklistSelectModalCCP(createDate, sensorId) {
 	this.createDate = createDate;
-	this.sensorId = sensorId;	
+	this.sensorId = sensorId;
 	
-	this.checklistId = 'checklist05';
+	this.checklistId;
 	this.seqNo = 0;
 	this.revisionNo = '0';
 	
 	this.checklistData;
 	this.checkData;
-		
+	
 	this.metaDataPath;
 	this.imagePath;
 	
@@ -2897,6 +2897,12 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 	this.xmlDoc;
 	
 	this.ctx;
+	
+	this.setChecklistId = async function() {
+		var sensorApi = new HENESYS_API.Sensor();
+		var sensor = await sensorApi.getSensor(this.sensorId);
+		this.checklistId = sensor.checklistId;
+	}
 	
 	this.setMetadataAndImagePath = async function() {
 		// 점검표 데이터 테이블에서 cheklistId와 seqNo로 점검표정보수정이력번호를 구한 다음
@@ -2949,7 +2955,6 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		this.modalWidth = this.xmlDoc.getElementsByTagName("width")[0].innerHTML;
 		this.modalHeight = this.xmlDoc.getElementsByTagName("height")[0].innerHTML;
 		
-		
 		if(
 		   (Number(this.modalWidth.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )|| 
 		   (Number(this.modalHeight.replace('px', '')) < 1000 && Number(this.modalWidth.replace('px', '')) >= 800 )
@@ -2966,10 +2971,10 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 			this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
 			this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
 		}
-		/*
+		
 		this.modalWidthWithoutPxKeyword = this.modalWidth.replace('px', '');
 		this.modalHeightWithoutPxKeyword = this.modalHeight.replace('px', '');
-		*/
+		
 		var modalContent = document.querySelector('#checklist-select-modal .modal-content');
 		modalContent.style.width = Number(this.modalWidthWithoutPxKeyword) + Number(30) + 'px';
 	};
@@ -2977,11 +2982,11 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 	this.openModal = async function() {
 		let that = this;
 	
+		await this.setChecklistId();
 		await this.setMetadataAndImagePath();
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
 		this.checklistSignData = await this.getChecklistSignData();
-		console.log(this.checklistData);
 		
 		let info = {
 			"rowStartCell":"cell3",
@@ -2994,7 +2999,7 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		
 		let outer = new Array();
 		let row = new Object();
-		let sensorKey = this.checklistData[0].sensorKey;
+		let sensorKey;
 		
 		for(let i=0; i<this.checklistData.length; i++) {
 			if(sensorKey == this.checklistData[i].sensorKey) {
@@ -3038,21 +3043,21 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 			// draw signature
 			var ccpSign = new CCPSign();
 			var signInfo = await ccpSign.get(that.createDate, 'PC10');
-			console.log(signInfo);
 			
 			that.displayData(cellList[info.writerSignCell], '김치훈');
 			that.displayData(cellList[info.approverSignCell], '노찬울');
 			
-/*			if(signInfo.checkerName != null) {
+			/*			
+			if(signInfo.checkerName != null) {
 				that.displayData(cellList[info.approverSignCell], '노찬울');
-			}*/
+			}
+			*/
 			
 			var currentRow = 0;
 			var startFlag = false;
 			var cellPos = 0;
 			for(let i=0; i<cellList.length; i++) {
 				if(cellList[i].nodeName == info.rowStartCell) {
-					console.log('start flag to true');
 					startFlag = true;
 					cellPos = i;
 				}
@@ -3061,6 +3066,9 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 					continue;
 				} else {
 					var row = outer[currentRow];
+					if(!row) {
+						continue;
+					}
 					
 					for(let j=0; j<info.roworder.length; j++) {
 						var item = info.roworder[j];
@@ -3156,7 +3164,6 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 	}
 	
 	this.displayData = function(cell, data) {
-		
 		var startX = "";
 		var startY = "";
 		var width = "";
@@ -3186,10 +3193,10 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		var id = cell.nodeName;
 		var type = cell.childNodes[0].textContent;
 		var format = cell.childNodes[1].textContent;
-		//var startX = cell.childNodes[5].textContent.replace('px', '');
-		//var startY = cell.childNodes[6].textContent.replace('px', '');
-		//var width = cell.childNodes[7].textContent.replace('px', '');
-		//var height = cell.childNodes[8].textContent.replace('px', '');
+		var startX = cell.childNodes[5].textContent.replace('px', '');
+		var startY = cell.childNodes[6].textContent.replace('px', '');
+		var width = cell.childNodes[7].textContent.replace('px', '');
+		var height = cell.childNodes[8].textContent.replace('px', '');
 		
 		var signWriter = this.checklistSignData.signWriter;
 		var signChecker = this.checklistSignData.signChecker;
@@ -3204,13 +3211,13 @@ function ChecklistSelectModalMetalDetector(createDate, sensorId) {
 		if(!data) {
 			data = '';
 		}
-		
 		if(data == 1) {
 			data = 'O';
 		}
 		if(data == 0) {
 			data = 'X';
 		}
+		
 		this.ctx.fillText(data, middleX, middleY);
 	};
 }
