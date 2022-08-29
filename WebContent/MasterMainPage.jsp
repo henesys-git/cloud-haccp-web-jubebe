@@ -85,31 +85,32 @@
   	</script>
 </head>
 <style>
- .swal-button-container {
- 	float: right !important;
- 		}
- .content-wrapper {
- 	margin-left : 0px;
- 		}
- 
- .modal-dialog.modal-checklist {
-  text-align: center;
-}
+	.swal-button-container {
+ 		float: right !important;
+	}
+	
+ 	.content-wrapper {
+ 		margin-left : 0px;
+	}
+	
+ 	.modal-dialog.modal-checklist {
+  		text-align: center;
+	}
 
-@media screen and (min-width: 768px) { 
-  .modal.modal-checklist:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
-}
+	@media screen and (min-width: 768px) {
+		.modal.modal-checklist:before {
+		  	display: inline-block;
+		  	vertical-align: middle;
+			content: " ";
+			height: 100%;
+		}
+	}
 
-.modal-dialog.modal-checklist {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle; 
-}
+	.modal-dialog.modal-checklist {
+	  	display: inline-block;
+	  	text-align: left;
+	  	vertical-align: middle; 
+	}
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 	<div class="wrapper">

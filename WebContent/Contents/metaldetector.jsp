@@ -69,28 +69,32 @@
 	    async function initTable() {
 	    	var list = await getHeadDataList(startDate, endDate);
 	    	var list2 = await getSignColumnData();
-	    	
 	    	//서명 칼럼 index 들어갈 배열
 	    	var columnDefsKeys = new Array();
+	    	
+	    	console.log(list2);
 	    	
 	    	//html 고정th명(점검표아이디, 일련번호, 양식수정이력번호)
 	    	var fixedTh = new Array();
 	    	fixedTh[0] = "날짜";
 			fixedTh[1] = "센서아이디";
+			fixedTh[2] = "센서명";
 			
 			//db로부터 받아온 칼럼명
 			var fixedColumn = new Array();
 			fixedColumn[0] = "createDate";
 			fixedColumn[1] = "sensorId";
-	    	
+			fixedColumn[2] = "sensorName";
+
 			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
-			var columnKeys = [ 
-   				{data: fixedColumn[0] , defaultContent : ''}, 
-   			  	{data:fixedColumn[1] , defaultContent : ''}
+			var columnKeys = [
+   				{data: fixedColumn[0] , defaultContent : '' }, 
+   			  	{data: fixedColumn[1] , defaultContent : '' },
+   			  	{data: fixedColumn[2] , defaultContent : '' }
    			];
 			
 			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
-	    	for(var a = 0; a < 2; a++) {
+	    	for(var a = 0; a < 3; a++) {
 				$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
 	    	}
 	    	
@@ -105,21 +109,21 @@
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>작성자서명</th>");
-	    			columnDefsKeys[i] = (i+2);
+	    			columnDefsKeys[i] = (i + fixedColumn.length);
 	    		}
 	    		else if(list2[i].signatureType == "CHECK") {
 	    			column.data = "signChecker";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>확인자서명</th>");
-	    			columnDefsKeys[i] = (i+2);
+	    			columnDefsKeys[i] = (i + fixedColumn.length);
 	    		}
 	    		else if(list2[i].signatureType == "APPRV") {
 	    			column.data = "signApprover";
 	    			column.defaultContent = "";
 	    			columnKeys.push(column);
 	    			$("#ccpDataTable thead tr").append("<th>승인자서명</th>");
-	    			columnDefsKeys[i] = (i+2);
+	    			columnDefsKeys[i] = (i + fixedColumn.length);
 	    		}
 	    	}
 			
@@ -134,32 +138,18 @@
 					{
 						targets : columnDefsKeys,
 						createdCell : function(td, cellData, rowData, rowinx, col) {
+							console.log(cellData);
 							var colInfo = $('#ccpDataTable').DataTable().settings()[0].aoColumns[col];
-						    if(cellData == "" && colInfo.sTitle == "작성자서명") {
-						    	// $(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick="registSignInfo(this);">서명</button>');
-						    	$(td).append('<span>김치훈</span>');
+						    
+							if(cellData == "" && colInfo.sTitle == "작성자서명") {
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_writer" onclick="registSignInfo(this);">서명</button>');
 						    }
 						    else if(cellData == "" && colInfo.sTitle == "확인자서명") {
 						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_checker" onclick="registSignInfo(this);">서명</button>');
 						    }
 						    else if(cellData == "" && colInfo.sTitle == "승인자서명") {
-						    	if(rowinx >= 3) {
-							    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick="registSignInfo(this);">서명</button>');
-						    	} else {
-							    	$(td).append('<span>노찬울</span>');
-						    	}
+						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick="registSignInfo(this);">서명</button>');
 						    }
-						}
-					},
-					{
-						targets : 1,
-						createdCell : function(td, cellData, rowData, rowinx, col) {
-							if(rowinx < 3) {
-								$(td).text('1호 금속검출기');
-							} else {
-								$(td).text('2호 금속검출기');
-							}
-							
 						}
 					}
 				]

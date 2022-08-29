@@ -75,13 +75,16 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			String sql = new StringBuilder()
 					.append("SELECT \n")
-					.append("	CAST(create_time AS DATE) AS create_date,\n")
-					.append("	sensor_id\n")
-					.append("FROM data_metal\n")
-					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
-					.append("	AND CAST(create_time as date) between '" + startDate + "' and '" + endDate + "'\n")
-					.append("	AND process_code = 'PC10'\n")
-					.append("GROUP BY cast(create_time as date), sensor_id;\n")
+					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
+					.append("	A.sensor_id,\n")
+					.append("	B.sensor_name\n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("	AND CAST(A.create_time as date) between '" + startDate + "' and '" + endDate + "'\n")
+					.append("	AND A.process_code = 'PC10'\n")
+					.append("GROUP BY cast(A.create_time as date), A.sensor_id;\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -488,8 +491,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	private CCPTestDataHeadViewModel extractTestDataHeadFromResultSet(ResultSet rs) throws SQLException {
 		CCPTestDataHeadViewModel ccpData = new CCPTestDataHeadViewModel();
 		
-		ccpData.setSensorId(rs.getString("sensor_id"));
 		ccpData.setCreateDate(rs.getString("create_date"));
+		ccpData.setSensorId(rs.getString("sensor_id"));
+		ccpData.setSensorName(rs.getString("sensor_name"));
 		
 		return ccpData;
 	}

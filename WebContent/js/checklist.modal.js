@@ -3044,8 +3044,11 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			var ccpSign = new CCPSign();
 			var signInfo = await ccpSign.get(that.createDate, 'PC10');
 			
-			that.displayData(cellList[info.writerSignCell], '김치훈');
-			that.displayData(cellList[info.approverSignCell], '노찬울');
+			// 스마트haccp 점검 때문에 임시조치한 코드
+			// 삭제하고, ccp의 경우 서명을 어떻게 할지에 대한 전략 확립 필요 
+			// (20220829 최현수)
+			//that.displayData(cellList[info.writerSignCell], '김치훈');
+			//that.displayData(cellList[info.approverSignCell], '노찬울');
 			
 			/*			
 			if(signInfo.checkerName != null) {
