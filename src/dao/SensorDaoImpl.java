@@ -161,7 +161,7 @@ public class SensorDaoImpl implements SensorDao {
 					.append("	ip_address='" + sensor.getIpAddress() + "',\n")
 					.append("	protocol_info='" + sensor.getProtocolInfo() + "',\n")
 					.append("	packet_info='" + sensor.getPacketInfo() + "',\n")
-					.append("	type_code='" + sensor.getTypeCode() + "' \n")
+					.append("	type_code='" + sensor.getTypeCode() + "', \n")
 					.append("	checklist_id='" + sensor.getChecklistId() + "' \n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND sensor_id='" + sensor.getSensorId() + "';\n")
