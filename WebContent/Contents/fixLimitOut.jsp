@@ -46,8 +46,14 @@
 				  </label>
 				</div>
 				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="action" id="action4" value="직접입력">
+				  <input class="form-check-input" type="radio" name="action" id="action4" value="검수후 재포장">
 				  <label class="form-check-label" for="action4">
+				    검수후 재포장
+				  </label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="action" id="action-custom" value="직접입력">
+				  <label class="form-check-label" for="action-custom">
 				    직접입력
 				  </label>
 				  <input type="text" id="other-action-input">
@@ -76,7 +82,7 @@ $(document).ready(function () {
 	
 	// 직업입력에 입력 시 자동 체크
 	$("#other-action-input").keyup(function() {
-		$("#action4").prop("checked", true);
+		$("#action-custom").prop("checked", true);
   	});
 	
 	$('#saveBtn').off().on('click', function() {
