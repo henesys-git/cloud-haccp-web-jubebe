@@ -596,13 +596,60 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
+  <table id="TAB181" populated="true" UUID="9da0c728-49f5-4296-a297-a72df2900311" name="가열공정 데이터" objectType="TABLE" physicalName="data_temperature" >
+   <remarks></remarks>
+   <folder id="FOLTAB1811" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL182" populated="true" UUID="07f4fa8e-d470-4c8d-b9f9-9135d44cf72a" autoIncrement="false" autoIncrementSequenceName="data_temperature_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL183" populated="true" UUID="deea4e21-d8ec-4675-95ab-0427eefbc058" autoIncrement="false" autoIncrementSequenceName="data_temperature_sensor_key_seq" defaultValue="" name="센서키" nullable="0" physicalName="sensor_key" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks>&lt;묶음키&gt;
+센서ID_채번시간</remarks>
+    </column>
+    <column id="COL184" populated="true" UUID="7240b63d-5813-454b-a324-1d0d5653ab50" autoIncrement="false" autoIncrementSequenceName="data_temperature_create_time_seq" defaultValue="" name="생성시간" nullable="0" physicalName="create_time" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+     <remarks></remarks>
+    </column>
+    <column id="COL185" populated="true" UUID="487808cd-d19f-4e7e-8c64-c91fed27ddd4" autoIncrement="false" autoIncrementSequenceName="data_temperature_sensor_id_seq" defaultValue="" name="센서아이디" nullable="0" physicalName="sensor_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL186" populated="true" UUID="8eb65f8d-5fec-4279-9115-bbe7654cbd03" autoIncrement="false" autoIncrementSequenceName="data_temperature_sensor_value_seq" defaultValue="" name="센서값" nullable="0" physicalName="sensor_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL187" populated="true" UUID="04b3e302-94ca-43dd-8e45-7837b3d4c591" autoIncrement="false" autoIncrementSequenceName="data_temperature_improvement_action_seq" defaultValue="" name="개선조치" nullable="0" physicalName="improvement_action" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL188" populated="true" UUID="4dad69c4-b419-40f0-b029-9240fe3ab525" autoIncrement="false" autoIncrementSequenceName="data_temperature_user_id_seq" defaultValue="" name="사용자아이디" nullable="1" physicalName="user_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL189" populated="true" UUID="00459b03-d9bc-4aad-b707-5f4f17e2fcd3" autoIncrement="false" autoIncrementSequenceName="data_temperature_event_code_seq" defaultValue="" name="이벤트코드" nullable="1" physicalName="event_code" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL190" populated="true" UUID="965bcdcf-0d7c-490f-8d0d-0b758e8fb68d" autoIncrement="false" autoIncrementSequenceName="data_temperature_product_id_seq" defaultValue="" name="제품아이디" nullable="1" physicalName="product_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL191" populated="true" UUID="876d35a3-3f54-4d9c-9b08-71d02628e556" autoIncrement="false" autoIncrementSequenceName="data_temperature_process_code_seq" defaultValue="" name="공정 코드" nullable="0" physicalName="process_code" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks>세척공정, 금속검출테스트 등의 CCP 분류, 혹은 공정 분류를 나타내는 컬럼</remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB1813" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB1812" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB1814" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX192" populated="true" UUID="6cb7fbb7-1892-4664-9e4b-8149612ed652" clustered="false" name="data_temperature_pk" physicalName="data_metal_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC193" populated="true" UUID="c6a15259-a57c-4fab-80f6-437d66b40297" ascendingOrDescending="UNSPECIFIED" column-ref="COL182" name="테넌트아이디" physicalName="tenant_id" />
+     <index-column id="IDC194" populated="true" UUID="f5d56e1d-376c-47bf-b8de-02bd530ab1ef" ascendingOrDescending="UNSPECIFIED" column-ref="COL183" name="센서키" physicalName="sensor_key" />
+     <index-column id="IDC195" populated="true" UUID="754bb2fd-a784-44f9-ab7b-367292e97f05" ascendingOrDescending="UNSPECIFIED" column-ref="COL184" name="생성시간" physicalName="create_time" />
+    </index>
+   </folder>
+  </table>
   <relationships>
   </relationships>
  </target-database>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="0" viewportY="804" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="0" viewportY="705" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB8" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -615,13 +662,14 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB95" x="524" y="967" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB103" x="497" y="1508" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB113" x="831" y="1572" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB129" x="133" y="1964" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB137" x="137" y="2321" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB139" x="477" y="1968" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB129" x="138" y="2038" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB137" x="137" y="2568" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB139" x="470" y="2041" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB145" x="521" y="691" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB151" x="1158" y="1493" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB160" x="827" y="969" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB169" x="825" y="1082" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB181" x="834" y="1791" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
