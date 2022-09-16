@@ -13,14 +13,17 @@ import org.apache.log4j.Logger;
 
 import dao.AlarmInfoDaoImpl;
 import dao.AlarmMessageDaoImpl;
+import dao.CCPLimitDaoImpl;
 import dao.EventInfoDaoImpl;
 import model.AlarmInfo;
+import model.CCPLimit;
 import model.EventInfo;
 import model.LimitOutAlarmMessage;
 import service.AlarmInfoService;
 import service.AlarmMessageService;
 import service.AlarmService;
 import service.AlarmServiceSlack;
+import service.CCPLimitService;
 import service.EventInfoService;
 
 
@@ -45,17 +48,17 @@ public class OnPacketReceiveController extends HttpServlet {
 		}
 		
 		String deviceId = req.getParameter("deviceId");
-		String code = req.getParameter("code");
+		String eventCode = req.getParameter("eventCode");
+		String productId = req.getParameter("productId");
 		double value = Double.parseDouble(req.getParameter("value"));
 		
-		EventInfoService eventInfoService = new EventInfoService(new EventInfoDaoImpl(), bizNo);
-		EventInfo eventInfo = eventInfoService.getEventInfoByCode(code);
-		boolean isLimitOut = eventInfoService.isLimitOut(eventInfo, value);
-		eventInfo.setIsLimitOut(isLimitOut);
+		CCPLimitService ccpLimitService = new CCPLimitService(new CCPLimitDaoImpl(), bizNo);
+		CCPLimit ccpLimit = ccpLimitService.getCCPLimitByCode(eventCode, productId);
+		boolean isLimitOut = ccpLimitService.isLimitOut(ccpLimit, value);
 		
 		if(isLimitOut) {
 			AlarmMessageService alarmMsgService = new AlarmMessageService(new AlarmMessageDaoImpl());
-			LimitOutAlarmMessage limitOutAlarmMsg = alarmMsgService.getMessage(bizNo, code, deviceId);
+			LimitOutAlarmMessage limitOutAlarmMsg = alarmMsgService.getMessage(bizNo, eventCode, deviceId);
 			
 			String msg = new StringBuilder()
 					.append(":bell: «—∞Ë ¿Ã≈ª\n")
