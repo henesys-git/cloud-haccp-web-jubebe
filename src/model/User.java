@@ -16,9 +16,10 @@ public class User {
 		this.authority = authority;
 	}
 
-	public User(String userId, String authority) {
+	public User(String userId, String userName, String authority) {
 		super();
 		this.userId = userId;
+		this.userName = userName;
 		this.authority = authority;
 	}
 	

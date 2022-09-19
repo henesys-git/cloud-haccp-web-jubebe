@@ -8,7 +8,7 @@
 <script type="text/javascript">
 
 	var ccpMetalDataJspPage = {};
-    
+    var dataLength;
 	$(document).ready(function () {
     	
 		let date = new SetSingleDate2("", "#date", 0);
@@ -76,7 +76,9 @@
 	    
 	    async function initTable() {
 	    	var data = await getData();
-
+	    	
+	    	dataLength = data.length;
+	    	
 	    	var customOpts = {
 					data : data,
 					pageLength: 10,
@@ -162,7 +164,8 @@
 			var newData = await getData();
 
 			mainTable.clear().rows.add(newData).draw();
-    		
+			dataLength = newData.length;
+			
     		if(subTable) {
 	    		subTable.clear().draw();
 	    	}
@@ -221,6 +224,11 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
+    		
+    		if(dataLength < 1) {
+    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
+    			return false;
+    		}
     		
 	    	var ccpSign = new CCPSign();
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
