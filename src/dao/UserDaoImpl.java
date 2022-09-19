@@ -144,6 +144,7 @@ public class UserDaoImpl implements UserDao {
 			String sql = new StringBuilder()
 					.append("UPDATE user\n")
 					.append("SET\n")
+					.append("	user_name='" + user.getUserName() + "', \n")
 					.append("	authority='" + user.getAuthority() + "'\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND user_id='" + user.getUserId() + "';\n")

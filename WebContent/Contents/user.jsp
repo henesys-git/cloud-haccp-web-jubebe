@@ -208,7 +208,7 @@
 		});
 
 		// 수정
-		$('#update').click(function() {
+		$('#update').off().click(function() {
 			initModal();
 			
 			var row = mainTable.rows( '.selected' ).data();
@@ -242,6 +242,7 @@
 		            data: { 
 	            		"type" : "updateAuthority",
 	            		"id" : row[0].userId,
+	            		"name" : $('#user-name-update').val(),
 	            		"authority" : $('#authority-update').val()
 	            	},
 		            success: function (updateResult) {
@@ -417,7 +418,7 @@
 		</div>
       	<label for="basic-url">이름</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="user-name-update" disabled>
+		  <input type="text" class="form-control" id="user-name-update">
 		</div>
       	<label for="basic-url">권한</label>
 		<div class="input-group mb-3">

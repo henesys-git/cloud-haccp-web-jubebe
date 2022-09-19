@@ -36,7 +36,8 @@
 						{ data: "ipAddress", defaultContent: '' },
 						{ data: "protocolInfo", defaultContent: '' },
 						{ data: "packetInfo", defaultContent: '' },
-						{ data: "typeCode", defaultContent: '' }
+						{ data: "typeCode", defaultContent: '' },
+						{ data: "checklistId", defaultContent: '' }
 			        ]
 			}
 					
@@ -61,6 +62,7 @@
 	    	$('#sensor-protocol').val('');
 	    	$('#sensor-packet').val('');
 	    	$('#sensor-typeCode').val('');
+	    	$('#sensor-checklist').val('');
 	    };
 	    
 	 	// 등록
@@ -78,6 +80,7 @@
 				var protocol = $('#sensor-protocol').val();
 				var packet = $('#sensor-packet').val();
 				var typeCode = $('#sensor-typeCode').val();
+				var checklistId = $('#sensor-checklist').val();
 				
 				if(id === '') {
 					alert('센서 아이디를 입력해주세요');
@@ -103,7 +106,8 @@
 		            	"IP" : IP,
 		            	"protocol" : protocol,
 		            	"packet" : packet,
-		            	"typeCode" : typeCode
+		            	"typeCode" : typeCode,
+		            	"checklistId" : checklistId
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
@@ -139,6 +143,7 @@
 			$('#sensor-protocol').val(row[0].protocolInfo);
 			$('#sensor-packet').val(row[0].packetInfo);
 			$('#sensor-typeCode').val(row[0].typeCode);
+			$('#sensor-checklist').val(row[0].checklistId);
 			
 			$('#sensor-id').prop('disabled', true);
 			
@@ -171,7 +176,8 @@
 		            	"IP" : $('#sensor-IP').val(),
 		            	"protocol" : $('#sensor-protocol').val(),
 		            	"packet" : $('#sensor-packet').val(),
-		            	"typeCode" : $('#sensor-typeCode').val()
+		            	"typeCode" : $('#sensor-typeCode').val(),
+		            	"checklistId" : $('#sensor-checklist').val()
 		           	},
 		            success: function (updateResult) {
 		            	if(updateResult == 'true') {
@@ -281,6 +287,7 @@
 					    <th>프로토콜</th>
 					    <th>패킷</th>
 					    <th>타입 코드</th>
+					    <th>연관선행요건ID</th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">		
@@ -333,6 +340,10 @@
       	<label for="sensor-typeCode">타입코드</label>
 		<div class="input-group mb-3">
 		  <input type="text" class="form-control" id="sensor-typeCode">
+		</div>
+		<label for="sensor-checklist">연관선행요건ID</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="sensor-checklist">
 		</div>
       </div>
       <div class="modal-footer">  

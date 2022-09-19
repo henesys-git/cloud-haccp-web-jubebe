@@ -110,7 +110,8 @@ public class UserController extends HttpServlet {
 		String tenantId = (String) session.getAttribute("bizNo");
 		
 		User user = new User(
-						req.getParameter("id"), 
+						req.getParameter("id"),
+						req.getParameter("name"), 
 						req.getParameter("authority")
 					);
 		
