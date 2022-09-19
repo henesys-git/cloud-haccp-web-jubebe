@@ -802,7 +802,16 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 				tag.max = max;
 				tag.classList.add("checklist-data");
 				if(tag.format != null) {
+					//TODO: 필요한 코드인가?
 					tag.value = 0;
+				}
+				else if(tag.format == null) {
+					if(default_value == null) {
+						tag.value = '';
+					}
+					else {
+						tag.value = default_value;
+					} 
 				}
 				break;
 			case "checkbox":
