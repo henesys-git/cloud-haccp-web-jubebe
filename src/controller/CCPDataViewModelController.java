@@ -20,7 +20,6 @@ import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
-import viewmodel.CCPTestDataViewModel;
 
 @WebServlet("/ccpvm")
 public class CCPDataViewModelController extends HttpServlet {
@@ -51,11 +50,11 @@ public class CCPDataViewModelController extends HttpServlet {
 		
 		switch(method) {
 		case "head":
-			String ccpType = req.getParameter("ccpType");
+			sensorId = req.getParameter("sensorId");
 			date = req.getParameter("date");
 			processCode = req.getParameter("processCode");
 			
-			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(ccpType, date, date, processCode);
+			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(sensorId, date, date, processCode);
 			result = FormatTransformer.toJson(cvmHeadList);
 			
 			res.setContentType("application/json; charset=UTF-8");
@@ -103,8 +102,6 @@ public class CCPDataViewModelController extends HttpServlet {
 			String processCode2 = req.getParameter("processCode");
 			String toDate2 = req.getParameter("toDate");
 			String fromDate = req.getParameter("fromDate");
-			System.out.println("sensorId2 is ==========================");
-			System.out.println(sensorId2);
 			List<CCPDataDetailViewModel> cvmDetailList2 = ccpService.getMetalBreakAwayList(sensorKey2, sensorId2, processCode2, toDate2, fromDate);
 			result = FormatTransformer.toJson(cvmDetailList2);
 			
