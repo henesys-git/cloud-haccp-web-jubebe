@@ -20,15 +20,13 @@
 		
 		async function metalSensorList() {
 			var itemList = new ItemList();
-			var type_cd = "HM";
+			var type_cd = "HM";	// 가열기 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
-	    	
-	    	$("#md-type").prepend("<option value='HM%25'>전체</option>");
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
 	    		sensorName = sensorList[i].sensorName;
 	    		sensorId = sensorList[i].sensorId;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    };
 		
@@ -37,7 +35,7 @@
 		async function getData() {
 	    	var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	var ccpType = $("select[name=md-type]").val();
+	    	var sensorId = $("select[name=sensor-type]").val();
     		
 	        var fetchedData = $.ajax({
 	            type: "GET",
@@ -45,7 +43,7 @@
 	            data: "method=head" +
 	            	  "&date=" + selectedDate +
 	            	  "&processCode=" + processCode +
-	            	  "&ccpType=" + ccpType,
+	            	  "&sensorId=" + sensorId,
 	            success: function (result) {
 	            	return result;
 	            }
@@ -115,13 +113,7 @@
 				        	{
 					  			targets: [3],
 					  			render: function(td, cellData, rowData, row, col){
-					  				console.log(cellData);
-					  				if (rowData.sensorValue == '1') {
-					  					return '검출';
-					  				}
-					  				else {
-					  					return '비검출';
-					  				}
+					  				return rowData.sensorValue;
 					  			}
 					  		},
 				   			{
@@ -172,7 +164,7 @@
     		
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
+	    	
     		var ccpSign = new CCPSign();
     		var signInfo = await ccpSign.get(selectedDate, processCode);
     		
@@ -251,19 +243,20 @@
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
-				<label class="d-inline-block" for="md-type">종류:</label>
-				<select class="form-control w-auto d-inline-block" id="md-type" name="md-type">
+				<label class="d-inline-block" for="sensor-type">종류:</label>
+				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
+					<option value="HM%25">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC30" checked>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC35" disabled>테스트
 				    </label>
 				</div>
        	  	</div>

@@ -643,13 +643,47 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
+  <table id="TAB196" populated="true" UUID="3cd65f78-7e95-41e5-a486-0d77b8be5f03" name="이벤트_제품별_CCP한계기준" objectType="TABLE" physicalName="ccp_limit" >
+   <remarks>해당 이벤트와 제품에 해당하는 CCP 한계기준 최소값 최대값을 관리하는 테이블</remarks>
+   <folder id="FOLTAB1961" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL197" populated="true" UUID="859b5e71-aacd-4455-b77f-409efc367adf" autoIncrement="false" autoIncrementSequenceName="ccp_limit_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL198" populated="true" UUID="9eb33482-e268-495c-93a6-880183ab6368" autoIncrement="false" autoIncrementSequenceName="ccp_limit_event_code_seq" defaultValue="" name="이벤트코드" nullable="0" physicalName="event_code" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL199" populated="true" UUID="1c6ac8e7-b13f-47d9-a621-2b815b536a13" autoIncrement="false" autoIncrementSequenceName="ccp_limit_product_id_seq" defaultValue="" name="제품아이디" nullable="0" physicalName="product_id" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL200" populated="true" UUID="e9bba256-1f24-4712-87bf-47ea928a31a4" autoIncrement="false" autoIncrementSequenceName="ccp_limit_min_value_seq" defaultValue="" name="최소값" nullable="0" physicalName="min_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+     <remarks></remarks>
+    </column>
+    <column id="COL201" populated="true" UUID="aaa47275-c053-490b-80c2-a6e489a5708a" autoIncrement="false" autoIncrementSequenceName="ccp_limit_max_value_seq" defaultValue="" name="최대값" nullable="0" physicalName="max_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+     <remarks></remarks>
+    </column>
+    <column id="COL202" populated="true" UUID="48850910-fd1e-41d9-96fe-df7654abb572" autoIncrement="false" autoIncrementSequenceName="ccp_limit_value_unit_seq" defaultValue="" name="값단위" nullable="0" physicalName="value_unit" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB1963" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB1962" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB1964" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX203" populated="true" UUID="9ad7daea-1cad-4c92-aceb-65478136e8b6" clustered="false" name="ccp_limit_pk" physicalName="ccp_limit_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC204" populated="true" UUID="895b3a4c-edf9-484e-8d8f-acd607bd2241" ascendingOrDescending="UNSPECIFIED" column-ref="COL197" name="테넌트아이디" physicalName="tenant_id" />
+     <index-column id="IDC205" populated="true" UUID="d3147a8d-6023-436c-9cec-df5addff4be6" ascendingOrDescending="UNSPECIFIED" column-ref="COL198" name="이벤트코드" physicalName="event_code" />
+     <index-column id="IDC206" populated="true" UUID="d6307e0f-bacc-46c6-9b6c-4a5ce256c27d" ascendingOrDescending="UNSPECIFIED" column-ref="COL199" name="제품아이디" physicalName="product_id" />
+    </index>
+   </folder>
+  </table>
   <relationships>
   </relationships>
  </target-database>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="0" viewportY="705" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="0" viewportY="1193" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB8" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -670,6 +704,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB160" x="827" y="969" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB169" x="825" y="1082" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB181" x="834" y="1791" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB196" x="496" y="1756" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
