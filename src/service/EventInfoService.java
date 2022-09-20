@@ -55,15 +55,4 @@ public class EventInfoService {
 		
 		return event;
 	}
-	
-	public boolean isLimitOut(EventInfo event, double value) {
-		double min = event.getMinValue();
-		double max = event.getMaxValue();
-		
-		if( value < min || value > max ) {
-			return true;
-		}
-		
-		return false;
-	}
 }

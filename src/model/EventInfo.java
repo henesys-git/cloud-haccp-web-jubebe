@@ -6,7 +6,6 @@ public class EventInfo {
 	private String processName;
 	private double minValue;
 	private double maxValue;
-	private boolean isLimitOut;
 	
 	public String getEventCode() {
 		return eventCode;
@@ -28,10 +27,6 @@ public class EventInfo {
 		return maxValue;
 	}
 
-	public boolean getIsLimitOut() {
-		return isLimitOut;
-	}
-	
 	public void setEventCode(String eventCode) {
 		this.eventCode = eventCode;
 	}
@@ -52,10 +47,6 @@ public class EventInfo {
 		this.maxValue = maxValue;
 	}
 	
-	public void setIsLimitOut(boolean isLimitOut) {
-		this.isLimitOut = isLimitOut;
-	}
-
 	@Override
 	public String toString() {
 		return "EventInfo [eventCode=" + eventCode + ", eventName=" + eventName + ", processName=" + processName

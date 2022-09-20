@@ -19,19 +19,13 @@
 		async function metalSensorList() {
 	    	
 			var itemList = new ItemList();
-			var type_cd = "CD";
+			var type_cd = "CD";	// 금속검출기 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
-			console.log(sensorList);
-	    	console.log(sensorList.length);
-	    	
-	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
-
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
-	    		
 	    		sensorName = sensorList[i].sensorName;
 	    		sensorId = sensorList[i].sensorId;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    	
 	    };
@@ -41,8 +35,7 @@
 		async function getData() {
 	    	var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	//var ccpType = $("#md-type option:selected").val();
-	    	var ccpType = $("select[name=md-type]").val();
+	    	var sensorId = $("select[name=sensor-type]").val();
     		
 	        var fetchedData = $.ajax({
 	            type: "GET",
@@ -50,7 +43,7 @@
 	            data: "method=head" +
 	            	  "&date=" + selectedDate +
 	            	  "&processCode=" + processCode +
-	            	  "&ccpType=" + ccpType,
+	            	  "&sensorId=" + sensorId,
 	            success: function (result) {
 	            	return result;
 	            }
@@ -256,12 +249,9 @@
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
-				<label class="d-inline-block" for="md-type">종류:</label>
-				<select class="form-control w-auto d-inline-block" id="md-type" name="md-type">
-					<!-- <option value="CD%25">전체</option>
-			  		<option value="CD01">금속검출기1</option>
-			  		<option value="CD02">금속검출기2</option>
-			  		<option value="CD03">금속검출기3</option> -->
+				<label class="d-inline-block" for="sensor-type">종류:</label>
+				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
+					<option value="CD%25">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
