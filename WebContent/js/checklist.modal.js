@@ -2947,18 +2947,6 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	
 	this.getJsonData = async function() {
 		
-		function readJsonFile(file, callback) {
-	 		var rawFile = new XMLHttpRequest();
-    		rawFile.overrideMimeType("application/json");
-    		rawFile.open("GET", file, true);
-    		rawFile.onreadystatechange = function() {
-        		if (rawFile.readyState === 4 && rawFile.status == "200") {
-            		callback(rawFile.responseText);
-        		}
-    		}
-    	rawFile.send(null);
-		}
-		
 		let Json = readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/metaldetector.json" , async function(text){
     		var data = JSON.parse(text);
 			console.log(data);
@@ -3016,7 +3004,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
 		this.checklistSignData = await this.getChecklistSignData();
-		var aaa = await this.getJsonData();
+		this.jsonData = await this.getJsonData();
 		console.log(aaa);
 		console.log(jsonData);
 		console.log(jsonData + "." +heneBizNo);
@@ -3257,3 +3245,15 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		this.ctx.fillText(data, middleX, middleY);
 	};
 }
+
+function readJsonFile(file, callback) {
+	 		var rawFile = new XMLHttpRequest();
+    		rawFile.overrideMimeType("application/json");
+    		rawFile.open("GET", file, true);
+    		rawFile.onreadystatechange = function() {
+        		if (rawFile.readyState === 4 && rawFile.status == "200") {
+            		callback(rawFile.responseText);
+        		}
+    		}
+    	rawFile.send(null);
+		}
