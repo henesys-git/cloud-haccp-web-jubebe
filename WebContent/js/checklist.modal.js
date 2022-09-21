@@ -2894,9 +2894,10 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	
 	this.checklistData;
 	this.checkData;
-	//this.jsonData;
+	this.jsonData;
 	
 	var jsonData;
+	var jsonFileData;
 	
 	this.metaDataPath;
 	this.imagePath;
@@ -2925,12 +2926,24 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	}
 	
 	this.getChecklistData = async function() {
+		
+		var processCd = "";
+		
+		if(this.sensorId.includes('CD') == true) {
+			processCd = "PC10";
+		}
+		
+		//heating machine
+		else if(this.sensorId.includes('HM') == true) {
+			processCd = "PC30";
+		}
+		
 		let fetchedData = $.ajax({
 			type: "GET",
 	        url: heneServerPath + "/ccptestvm"
 	            	+ "?method=" + 'detail'
 	            	+ "&date=" + this.createDate
-	            	+ "&processCode=" + 'PC10'
+	            	+ "&processCode=" + processCd
 	            	+ "&sensorId=" + this.sensorId,
 	        success: function (data) {
 	        	return data;
@@ -2952,20 +2965,6 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		});
 		
 		return fetchedData;
-	}
-	
-	this.getJsonData = async function() {
-		
-		let Json = readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/metaldetector.json" , async function(text){
-    		var data = JSON.parse(text);
-			console.log(data);
-			jsonData = data;
-			console.log(jsonData);
-			
-			return jsonData;
-		});
-		console.log(Json);
-		return Json;
 	}
 	
 	this.setModal = async function() {
@@ -3013,11 +3012,31 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		await this.setModal();
 		this.checklistData = await this.getChecklistData();
 		this.checklistSignData = await this.getChecklistSignData();
-		this.jsonData = await this.getJsonData();
-		console.log(aaa);
-		console.log(jsonData);
-		console.log(jsonData + "." +heneBizNo);
 		
+		this.getJsonData = function() {
+		
+		var sensorFilePath = "";
+		
+		//metal detector
+		if(this.sensorId.includes('CD') == true) {
+			sensorFilePath = "/metadata/metaldetector.json";
+		}
+		
+		//heating machine
+		else if(this.sensorId.includes('HM') == true) {
+			sensorFilePath = "/metadata/heating.json";
+		}
+		
+		readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + sensorFilePath , function(text){
+    		jsonFileData = JSON.parse(text);
+			jsonData = jsonFileData;
+			
+			return jsonFileData;
+		});
+	}
+		
+		this.getJsonData();
+		/*
 		let info = {
 			"rowStartCell":"cell3",
 			"writerSignCell":0,
@@ -3025,6 +3044,16 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			"dateCell":2,
 			"normalSumValueWhenAddAllTestResult":"4", 
 			"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
+		}
+		*/
+		
+		let info = {
+			"rowStartCell":jsonData[heneBizNo].rowStartCell,
+			"writerSignCell":jsonData[heneBizNo].writerSignCell,
+			"approverSignCell":jsonData[heneBizNo].approverSignCell,
+			"dateCell":jsonData[heneBizNo].dateCell,
+			"normalSumValueWhenAddAllTestResult":jsonData[heneBizNo].normalSumValueWhenAddAllTestResult, 
+			"rowOrder": jsonData[heneBizNo].rowOrder
 		}
 		
 		let outer = new Array();
@@ -3103,8 +3132,8 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 						continue;
 					}
 					
-					for(let j=0; j<info.roworder.length; j++) {
-						var item = info.roworder[j];
+					for(let j=0; j<info.rowOrder.length; j++) {
+						var item = info.rowOrder[j];
 						
 						switch(item) {
 							case "prod":
@@ -3150,7 +3179,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 					}
 					
 					currentRow += 1;
-					i += info.roworder.length;
+					i += info.rowOrder.length;
 				}
 			}
 		};
@@ -3258,11 +3287,11 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 function readJsonFile(file, callback) {
 	 		var rawFile = new XMLHttpRequest();
     		rawFile.overrideMimeType("application/json");
-    		rawFile.open("GET", file, true);
+    		rawFile.open("GET", file, false);
     		rawFile.onreadystatechange = function() {
         		if (rawFile.readyState === 4 && rawFile.status == "200") {
             		callback(rawFile.responseText);
         		}
     		}
     	rawFile.send(null);
-		}
+}
