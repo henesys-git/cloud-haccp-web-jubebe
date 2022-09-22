@@ -155,12 +155,12 @@ public class CCPDataService {
 		return cvmList;
 	}
 
-	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(String startDate, String endDate) {
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(String startDate, String endDate, String processCode) {
 		List<CCPTestDataHeadViewModel> list = null;
 		
 		try {
 			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
-			list = ccpDataDao.getCCPTestDataHead(conn, startDate, endDate);
+			list = ccpDataDao.getCCPTestDataHead(conn, startDate, endDate, processCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

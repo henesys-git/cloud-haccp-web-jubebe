@@ -13,7 +13,7 @@ import viewmodel.CCPTestDataViewModel;
 
 public interface CCPDataDao {
 	public List<CCPData> getAllCCPData(Connection conn, String type, String startDate, String endDate);
-	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate);
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate, String processCode);
 	public List<CCPTestDataViewModel> getCCPTestData(Connection conn, String date, String processCode, String sensorId);
 	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
 	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey);

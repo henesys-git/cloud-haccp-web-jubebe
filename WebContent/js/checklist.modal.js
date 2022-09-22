@@ -2894,10 +2894,6 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	
 	this.checklistData;
 	this.checkData;
-	this.jsonData;
-	
-	var jsonData;
-	var jsonFileData;
 	
 	this.metaDataPath;
 	this.imagePath;
@@ -2910,6 +2906,9 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	this.xmlDoc;
 	
 	this.ctx;
+	this.jsonParameterNm;
+	this.jsonFileData;
+	var jsonData;
 	
 	this.setChecklistId = async function() {
 		var sensorApi = new HENESYS_API.Sensor();
@@ -3015,45 +3014,33 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		
 		this.getJsonData = function() {
 		
-		var sensorFilePath = "";
-		
 		//metal detector
 		if(this.sensorId.includes('CD') == true) {
-			sensorFilePath = "/metadata/metaldetector.json";
+			this.jsonParameterNm = "metaldetector";
 		}
 		
 		//heating machine
 		else if(this.sensorId.includes('HM') == true) {
-			sensorFilePath = "/metadata/heating.json";
+			this.jsonParameterNm = "heating";
 		}
 		
-		readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + sensorFilePath , function(text){
-    		jsonFileData = JSON.parse(text);
-			jsonData = jsonFileData;
+		readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
+    		this.jsonFileData = JSON.parse(text);
+			jsonData = this.jsonFileData;
 			
-			return jsonFileData;
+			return jsonData;
 		});
 	}
 		
 		this.getJsonData();
-		/*
+		console.log(jsonData);
 		let info = {
-			"rowStartCell":"cell3",
-			"writerSignCell":0,
-			"approverSignCell":1,
-			"dateCell":2,
-			"normalSumValueWhenAddAllTestResult":"4", 
-			"roworder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"]
-		}
-		*/
-		
-		let info = {
-			"rowStartCell":jsonData[heneBizNo].rowStartCell,
-			"writerSignCell":jsonData[heneBizNo].writerSignCell,
-			"approverSignCell":jsonData[heneBizNo].approverSignCell,
-			"dateCell":jsonData[heneBizNo].dateCell,
-			"normalSumValueWhenAddAllTestResult":jsonData[heneBizNo].normalSumValueWhenAddAllTestResult, 
-			"rowOrder": jsonData[heneBizNo].rowOrder
+			"rowStartCell" : jsonData[this.jsonParameterNm].rowStartCell,
+			"writerSignCell" : jsonData[this.jsonParameterNm].writerSignCell,
+			"approverSignCell" : jsonData[this.jsonParameterNm].approverSignCell,
+			"dateCell" : jsonData[this.jsonParameterNm].dateCell,
+			"normalSumValueWhenAddAllTestResult" : jsonData[this.jsonParameterNm].normalSumValueWhenAddAllTestResult, 
+			"rowOrder" : jsonData[this.jsonParameterNm].rowOrder
 		}
 		
 		let outer = new Array();
@@ -3165,6 +3152,79 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								var cell = cellList[cellPos];
 								that.displayData(cell, row.detail["MC50"]);
 								break;
+							//start temperature
+							case "HT10":
+								var cell = cellList[cellPos];
+								var temp; 
+								
+								if(row.detail["HT10"] != null) {
+									temp = row.detail["HT10"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								
+								that.displayData(cell, temp);
+								break;
+							case "HT20":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["HT20"]);
+								break;
+							//start time
+							case "HT30":
+								var cell = cellList[cellPos];
+								var time;
+								
+								if(row.detail["HT30"] != null) {
+									time = row.detail["HT30"].toString().substring(0, 5);
+								}
+								else {
+									time = "";
+								}
+								that.displayData(cell, time);
+								break;
+							//end time
+							case "HT40":
+								var cell = cellList[cellPos];
+								var time;
+								
+								if(row.detail["HT40"] != null) {
+									time = row.detail["HT40"].toString().substring(0, 5);
+								}
+								else {
+									time = "";
+								}
+								
+								that.displayData(cell, time);
+								break;
+							//end temperature
+							case "HT50":
+								var cell = cellList[cellPos];
+								var temp;
+								
+								if(row.detail["HT50"] != null) {
+									temp = row.detail["HT50"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								
+								that.displayData(cell, temp);
+								break;
+							//during time
+							case "HT60":
+								var cell = cellList[cellPos];
+								var time;
+								
+								if(row.detail["HT60"] != null) {
+									time = row.detail["HT60"].toString().substring(0, 1) + "시 " + row.detail["HT60"].toString().substring(2, 4) + "분 " + row.detail["HT60"].toString().substring(5, 7) +"초";
+								}
+								else {
+									time = "";
+								}
+								
+								that.displayData(cell, time);
+								break;
 							case "judge":
 								var cell = cellList[cellPos];
 
@@ -3269,7 +3329,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
-		
+		console.log(data);
 		if(!data) {
 			data = '';
 		}

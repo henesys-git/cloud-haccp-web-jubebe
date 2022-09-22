@@ -43,7 +43,7 @@
 		            	+ "?method=" + 'head'
 		            	+ "&startDate=" + startDate
 		            	+ "&endDate=" + endDate
-		            	+ "&processCode=PC10",
+		            	+ "&processCode=PC30",
 	            success: function (result) {
 	            	return result;
 	            }

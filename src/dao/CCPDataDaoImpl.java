@@ -68,7 +68,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate) {
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -83,7 +83,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
 					.append("	AND CAST(A.create_time as date) between '" + startDate + "' and '" + endDate + "'\n")
-					.append("	AND A.process_code = 'PC10'\n")
+					.append("	AND A.process_code = '" + processCode + "'\n")
 					.append("GROUP BY cast(A.create_time as date), A.sensor_id;\n")
 					.toString();
 			
