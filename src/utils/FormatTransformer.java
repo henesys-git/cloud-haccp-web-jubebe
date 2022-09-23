@@ -27,6 +27,22 @@ public class FormatTransformer {
 		return jsonArray.toString();
 	}
 	
+	public static JSONArray toJsonArray(List<?> list) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		JsonNode listNode = objectMapper.valueToTree(list);
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		try {
+			jsonArray = new JSONArray(listNode.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return jsonArray;
+	}
+	
 	public static String toJson(Object object) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonStr = "";
