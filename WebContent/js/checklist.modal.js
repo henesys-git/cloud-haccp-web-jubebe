@@ -3033,7 +3033,6 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	}
 		
 		this.getJsonData();
-		console.log(jsonData);
 		let info = {
 			"rowStartCell" : jsonData[this.jsonParameterNm].rowStartCell,
 			"writerSignCell" : jsonData[this.jsonParameterNm].writerSignCell,

@@ -152,12 +152,12 @@
 					<span style="color:black;"> <%=login_name%>님 환영합니다 </span>			
 				</li>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<li>
+				<!-- <li>
 					<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="pop_fn_WinUpdateUserPW_View()">
 						<i class="fa fa-wrench"></i>
 					</button>
 				</li>
-				&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp; -->
 				<li>
 					<button class="btn btn-secondary btn-circle btn-sm align-middle" onclick="logout(this)">
 						<i class="fa fa-sign-out-alt white"></i>
@@ -1314,10 +1314,10 @@
 		}
         
         function pop_fn_WinUpdateUserPW_View(){
-			var pageUrl = "<%=Config.this_SERVER_path%>/Contents/CommonView/UpdateUserInfo.jsp";
-			var pageTitle = "비밀번호 수정";
+			<%-- var pageUrl = "<%=Config.this_SERVER_path%>/Contents/CommonView/UpdateUserInfo.jsp";
+			var pageTitle = "비밀번호 수정"; --%>
 	       	
-	    	window.open("<%=Config.this_SERVER_path%>/Contents/CommonView/UpdateUserInfo.jsp",
+	    	window.open("<%=Config.this_SERVER_path%>/Contents/updateUserInfo.jsp",
 	    			"popup_window4", "height=550px, width=700px, scrollbars=no"); 
 		}
         

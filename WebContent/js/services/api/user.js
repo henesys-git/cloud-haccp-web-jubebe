@@ -19,3 +19,16 @@ HENESYS_API.User.prototype.getUsers = function () {
     
 	return users;
 }
+
+HENESYS_API.User.prototype.getSelectedUsers = function (loginID) {
+	console.log(loginID);
+ 	var users = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/user?id=" + loginID,
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return users;
+}

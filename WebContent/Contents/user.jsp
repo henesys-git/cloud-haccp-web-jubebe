@@ -9,6 +9,9 @@
 	.being-red{
 		color:red;
 	}
+	.being-black{
+		color:black;
+	}
 </style>
 
 <script type="text/javascript">
@@ -55,6 +58,8 @@
 	    	$('#authority').val('');
 	    	
 	    	$('#user-id').prop('disabled', false);
+	    	$('#id-check-msg').text('');
+	    	$('#pwd-check-msg').text('');
 	    };
 	     
 		initTable();
@@ -64,10 +69,10 @@
 			var pattern1 = /[0-9]/; // 숫자
 			var pattern2 = /[a-zA-Z]/; // 문자
 			var pattern3 = /[~!@#$%^&*()_+|<>?:{}]/; // 특수문자
-			
+			var pattern4 = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g; // 한글
 			var numtextyn = (pattern1.test(str) || pattern2.test(str));
-			if(!numtextyn || pattern3.test(str) || str.length > 16) {
-				alert("아이디는 16자리 이하 문자 또는 숫자로만 구성하여야 합니다.");
+			if(!numtextyn || pattern3.test(str) || pattern4.test(str) || str.length > 16) {
+				//alert("아이디는 16자리 이하 영문자 또는 숫자로만 구성하여야 합니다.");
 				return false;
 			} else {
 				return true;
@@ -90,6 +95,11 @@
 				return true;
 			}
 		}
+		
+		//id에 입력시 중복체크 전까지 체크값 0으로 초기화
+		$("#user-id").keyup(function(){
+			idCheckVal = 0;
+		})
 		
 		// 등록
 		$('#insert').click(function() {
@@ -192,10 +202,19 @@
 		            		$('#id-check-msg').text('이미 등록된 아이디입니다.');
 		            		$('#id-check-msg').attr('class', 'input-group mb-3 being-red');
 		            	} else {
-		            		alert('사용하실 수 있는 아이디입니다.');
-		            		idCheckVal = 1;
-		            		//$('#id-check-msg').text('아이디 중복체크 완료!');
-		            		$('#id-check-msg').attr('class', 'input-group mb-3');
+		            		if(CV_checkIdPattern($("#user-id").val()) != true) {
+		            			alert("아이디는 16자리 이하 영문자 또는 숫자로만 구성하여야 합니다.");
+		            			idCheckVal = 0;
+		            			$('#id-check-msg').text('유효한 아이디를 입력해 주세요.');
+		            			$('#id-check-msg').attr('class', 'input-group mb-3 being-red');
+		            		}
+		            		else {
+		            			alert('사용하실 수 있는 아이디입니다.');
+		            			idCheckVal = 1;
+		            			$('#id-check-msg').text('');
+		            			//$('#id-check-msg').text('아이디 중복체크 완료!');
+		            			$('#id-check-msg').attr('class', 'input-group mb-3');
+		            		}
 		            	}
 		            }
 		        });
@@ -290,6 +309,14 @@
 		});
     });
     
+	function fn_press_han(obj) {
+		//if(event.keycode == 8 || event.keycode == 9 || event.keycode == 37
+		 //  event.keycode == 39 || event.keycode == 46) {
+			//return;
+			obj.value = obj.value.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, "");
+		//}
+	}
+	
 </script>
 
 <!-- Content Header (Page header) -->
@@ -366,7 +393,7 @@
       <div class="modal-body">
       	<label for="basic-url">아이디</label>
 		<div class="input-group">
-		  <input type="text" class="form-control" id="user-id">
+		  <input type="text" class="form-control" id="user-id" onkeydown="fn_press_han(this);" style="ime-mode:disabled;">
 		  	  <div class="input-group-append">
 		  		<span class="input-group-button">
 		  			<button type = "button" class="btn btn-primary" id = "overlap-btn">중복체크</button>

@@ -613,13 +613,17 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 		var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
 					+ imageFile
 					+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
-		loadImages(imgSrc, context);
+		loadImages(imgSrc, context); console.log(imgSrc);
 		function loadImages(ImgPage1, context) {
 			var images;
 			images = new Image();
 			images.onload = function() {
-				context.clearRect(startX, startY, width, height);
-				context.drawImage(this, startX, startY, width, height);
+				context.clearRect(startX.replace("px", ""), startY.replace("px", ""), width.replace("px", ""), height.replace("px", ""));
+				context.drawImage(this, startX.replace("px", ""), startY.replace("px", ""), width.replace("px", ""), height.replace("px", ""));
+				console.log(startX);
+				console.log(startY);
+				console.log(width);
+				console.log(height);
 			};
 			images.onerror = function () {
 			};
