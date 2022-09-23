@@ -12,14 +12,14 @@ import org.apache.log4j.Logger;
 import mes.frame.database.JDBCConnectionPool;
 import shm.model.C0010;
 
-public class C0010DaoImpl implements C0010Dao {
+public class ShmC0010DaoImpl implements ShmCCPDataDao {
 	
 	private Statement stmt;
 	private ResultSet rs;
 	
-	static final Logger logger = Logger.getLogger(C0010DaoImpl.class.getName());
+	static final Logger logger = Logger.getLogger(ShmC0010DaoImpl.class.getName());
 	
-	public C0010DaoImpl() {
+	public ShmC0010DaoImpl() {
 	}
 	
 	@Override

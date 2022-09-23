@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import shm.dao.C0010DaoImpl;
+import shm.dao.ShmCCPDataDao;
 import shm.dao.CCPDataDaoImpl;
 import shm.service.ShmApiService;
 
@@ -31,24 +31,33 @@ public class ShmApiController extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		String tenantId = (String) session.getAttribute("bizNo");
-		String sensorKey = req.getParameter("sensorKey");
-		
-		ShmApiService service = new ShmApiService(new C0010DaoImpl(), new CCPDataDaoImpl(), tenantId);
-		JSONObject result = service.sendCCPDataToShm(sensorKey);
-
 		try {
+			HttpSession session = req.getSession();
+			String tenantId = (String) session.getAttribute("bizNo");
+			String sensorKey = req.getParameter("sensorKey");
+			String shmCcpType = req.getParameter("shmCcpType");
+			
+			Class<ShmCCPDataDao> c = (Class<ShmCCPDataDao>) Class.forName("shm.dao.Shm" + shmCcpType + "DaoImpl");
+			ShmCCPDataDao instance = c.newInstance();
+			logger.debug("[인증원 API] CCP 클래스 명: " + instance.getClass().getName());
+			
+			ShmApiService service = new ShmApiService(instance, new CCPDataDaoImpl(), tenantId);
+			JSONObject result = service.sendCCPDataToShm(sensorKey);
+	
 			if(result.get("code").toString().equals("200")) {
 				service.updateShmSentYn(sensorKey, "Y");
 			}
-		} catch (JSONException e) {
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			out.print(result);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (JSONException e2) {
+			e2.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		out.print(result);
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 

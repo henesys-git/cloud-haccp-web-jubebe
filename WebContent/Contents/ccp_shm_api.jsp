@@ -83,7 +83,8 @@
 						{ data: "createTime", defaultContent: '' },
 						{ data: "judge", defaultContent: '' },
 						{ data: "improvementCompletion", defaultContent: '' },
-						{ data: "shmSentYn", defaultContent: '' }
+						{ data: "shmSentYn", defaultContent: '' },
+						{ data: "shmCcpType", defaultContent: '' }
 			        ],
 			        columnDefs : [
 				  		{
@@ -96,6 +97,11 @@
 					  				return `<button class='btn btn-success send-btn'>인증원전송</button>`;
 				  				}
 				  			}
+				  		},
+				  		{
+				  			targets: 8,
+				  			visible: false,
+				  			searchable: false
 				  		}
 				    ],
 			}
@@ -213,16 +219,22 @@
 			e.stopPropagation();
 			
     		let sensorKey = mainTableSelectedRow.sensorKey;
+    		let shmCcpType = mainTableSelectedRow.shmCcpType;
     		
     		$.ajax({
                 type: "GET",
                 url: heneServerPath + '/shm',
-                data: { sensorKey: sensorKey },
+                data: { sensorKey: sensorKey, shmCcpType: shmCcpType },
                 success: function (rslt) {
-                	if(rslt.code == '200') {
+                	console.log(rslt);
+                	if(rslt.code == 200) {
                 		refreshMainTable();
+	                	alert(rslt.message);
+                	} else if(rslt.code == 500) {
+	                	alert(rslt.error);
+                	} else {
+                		alert('오류: 관리자에게 문의해주세요');
                 	}
-                	alert(rslt.message);
                 }
             });
     	});
@@ -255,18 +267,18 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="sensor-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="HM%25">전체</option>
+					<option value="%25">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC30" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="%25" checked>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC35" disabled>테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="%25" disabled>테스트
 				    </label>
 				</div>
        	  	</div>
@@ -321,6 +333,7 @@
 					    <th>적/부</th>
 					    <th>개선완료</th>
 					    <th>전송</th>
+					    <th>CCP코드(인증원)</th>
 					</tr>
 				</thead>
 				<tbody id="shmApiTableBody">

@@ -9,6 +9,7 @@ public class CCPDataHeadViewModel {
 	private String judge;
 	private String improvementCompletion;
 	private String shmSentYn;
+	private String shmCcpType;
 	
 	public String getSensorKey() {
 		return sensorKey;
@@ -34,6 +35,9 @@ public class CCPDataHeadViewModel {
 	public String getShmSentYn() {
 		return shmSentYn;
 	}
+	public String getShmCcpType() {
+		return shmCcpType;
+	}
 	public void setSensorKey(String sensorKey) {
 		this.sensorKey = sensorKey;
 	}
@@ -57,5 +61,8 @@ public class CCPDataHeadViewModel {
 	}
 	public void setShmSentYn(String shmSentYn) {
 		this.shmSentYn = shmSentYn;
+	}
+	public void setShmCcpType(String shmCcpType) {
+		this.shmCcpType = shmCcpType;
 	}
 }

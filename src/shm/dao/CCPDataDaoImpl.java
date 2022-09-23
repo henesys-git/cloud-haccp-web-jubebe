@@ -69,7 +69,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("			ELSE '¹Ì¿Ï·á'\n")
 					.append("			END\n")
 					.append("	) AS improvement_completion, \n")
-					.append("	A.shm_sent_yn\n")
+					.append("	A.shm_sent_yn,\n")
+					.append("	E.shm_ccp_type\n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
@@ -77,6 +78,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	ON A.process_code = C.code\n")
 					.append("INNER JOIN product D\n")
 					.append("	ON A.product_id = D.product_id\n")
+					.append("INNER JOIN event_info E\n")
+					.append("	ON A.process_code = E.parent_code\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
@@ -194,6 +197,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setJudge(rs.getString("judge"));
 		cvm.setImprovementCompletion(rs.getString("improvement_completion"));
 		cvm.setShmSentYn(rs.getString("shm_sent_yn"));
+		cvm.setShmCcpType(rs.getString("shm_ccp_type"));
 		
 		return cvm;
 	}

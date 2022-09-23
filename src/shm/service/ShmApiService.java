@@ -20,27 +20,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import mes.frame.database.JDBCConnectionPool;
-import shm.dao.C0010Dao;
+import shm.dao.ShmCCPDataDao;
 import shm.dao.CCPDataDao;
 import shm.model.C0010;
 import utils.FormatTransformer;
 
 public class ShmApiService {
 
-	private C0010Dao c0010Dao;
+	private ShmCCPDataDao shmCcpDataDao;
 	private CCPDataDao ccpDataDao;
 	private String bizNo;
 	private Connection conn;
 	
 	static final Logger logger = Logger.getLogger(ShmApiService.class.getName());
 	
-	public ShmApiService(C0010Dao c0010Dao, String bizNo) {
-		this.c0010Dao = c0010Dao;
+	public ShmApiService(ShmCCPDataDao shmCcpDataDao, String bizNo) {
+		this.shmCcpDataDao = shmCcpDataDao;
 		this.bizNo = bizNo;
 	}
 
-	public ShmApiService(C0010Dao c0010Dao, CCPDataDao ccpDataDao, String bizNo) {
-		this.c0010Dao = c0010Dao;
+	public ShmApiService(ShmCCPDataDao shmCcpDataDao, CCPDataDao ccpDataDao, String bizNo) {
+		this.shmCcpDataDao = shmCcpDataDao;
 		this.ccpDataDao = ccpDataDao;
 		this.bizNo = bizNo;
 	}
@@ -50,7 +50,7 @@ public class ShmApiService {
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			list = c0010Dao.getCCPData(conn, sensorKey);
+			list = shmCcpDataDao.getCCPData(conn, sensorKey);
 			JSONArray jsonArr = FormatTransformer.toJsonArray(list);
 			Map<String, JSONArray> map = new HashMap<>();
 			map.put("C0010", jsonArr);
@@ -66,10 +66,13 @@ public class ShmApiService {
 				HttpResponse res = httpclient.execute(httpPost);
 				
 				BufferedReader b = new BufferedReader(new InputStreamReader(res.getEntity().getContent(), "UTF-8"));
-				String resultStr = b.readLine();
+				String rsltStr = b.readLine();
 				b.close();
+				
+				JSONObject rsltObj = new JSONObject(rsltStr);
+				logger.debug("[인증원 API] 전송 결과: " + rsltObj.toString());
 
-				return new JSONObject(resultStr);
+				return rsltObj;
 	        } finally {
 	            httpclient.close();
 	        }
