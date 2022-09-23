@@ -24,6 +24,43 @@ public class ItemListDaoImpl implements ItemListDao {
 	
 	public ItemListDaoImpl() {
 	}
+	
+	@Override
+	public List<ItemList> getSensorList(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT  															\n")
+				.append("	sensor_id,  													\n")
+				.append("	sensor_name  													\n")
+				.append("FROM sensor														\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ItemList> list = new ArrayList<ItemList>();
+			
+			while(rs.next()) {
+				ItemList data = extractFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
 
 	@Override
 	public List<ItemList> getSensorList(Connection conn, String type_cd) {
@@ -32,12 +69,12 @@ public class ItemListDaoImpl implements ItemListDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT  		\n")
-				.append("sensor_id,  		\n")
-				.append("sensor_name  		\n")
-				.append("FROM sensor	\n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("AND type_code = '" + type_cd + "' \n")
+				.append("SELECT  															\n")
+				.append("	sensor_id,  													\n")
+				.append("	sensor_name  													\n")
+				.append("FROM sensor														\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+				.append("AND type_code = '" + type_cd + "' 									\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
