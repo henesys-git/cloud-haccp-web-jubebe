@@ -24,6 +24,21 @@ public class ItemListService {
 		this.bizNo = bizNo;
 	}
 	
+	public List<ItemList> getSensorList() {
+		List<ItemList> itemList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			itemList = itemListDao.getSensorList(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return itemList;
+	}
+	
 	public List<ItemList> getSensorList(String type_cd) {
 		List<ItemList> itemList = null;
 		

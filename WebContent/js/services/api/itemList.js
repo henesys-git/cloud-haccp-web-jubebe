@@ -4,6 +4,17 @@
 
 ItemList = function () {}
 
+ItemList.prototype.getSensorListAll = function () {
+	var itemLists = $.ajax({
+		type : "GET",
+		url: heneServerPath + "/itemList?type=sensorListAll",
+		success: function (result) {
+        	return result;
+        }
+	});
+	return itemLists;
+}
+
 ItemList.prototype.getSensorList = function (type_cd) {
 	var itemLists = $.ajax({
 		type : "GET",

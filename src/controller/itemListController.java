@@ -48,9 +48,12 @@ public class itemListController extends HttpServlet {
 		ItemListService itemListService = new ItemListService(new ItemListDaoImpl(), tenantId);
 		
 		String result = "";
-		System.out.println(type);
-		System.out.println(type_cd);
-		if(type.equals("sensorList")) {
+		
+		if(type.equals("sensorListAll")) {
+			List<ItemList> list = itemListService.getSensorList();
+			result = FormatTransformer.toJson(list);
+		}
+		else if(type.equals("sensorList")) {
 			List<ItemList> list = itemListService.getSensorList(type_cd);
 			result = FormatTransformer.toJson(list);
 		}

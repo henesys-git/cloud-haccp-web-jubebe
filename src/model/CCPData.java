@@ -10,6 +10,7 @@ public class CCPData {
 	private String userId;
 	private String eventCode;
 	private String productId;
+	private String shmSentYn;
 	
 	public String getSensorKey() {
 		return sensorKey;
@@ -38,6 +39,9 @@ public class CCPData {
 	public String getProductId() {
 		return productId;
 	}
+	public String getShmSentYn() {
+		return shmSentYn;
+	}
 	public void setSensorKey(String sensorKey) {
 		this.sensorKey = sensorKey;
 	}
@@ -64,5 +68,8 @@ public class CCPData {
 	}
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+	public void setShmSentYn(String shmSentYn) {
+		this.shmSentYn = shmSentYn;
 	}
 }
