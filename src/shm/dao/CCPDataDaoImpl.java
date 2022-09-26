@@ -26,7 +26,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(
 			Connection conn, String sensorId, 
 			String startDate, String endDate, 
-			String processCode) {
+			String testYN) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -74,7 +74,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
-					.append("LEFT JOIN common_code C\n")
+					.append("INNER JOIN common_code C\n")
 					.append("	ON A.process_code = C.code\n")
 					.append("INNER JOIN product D\n")
 					.append("	ON A.product_id = D.product_id\n")
@@ -83,8 +83,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
-					.append("  AND A.process_code LIKE '" + processCode	+ "'\n")
 					.append("  AND B.sensor_id LIKE '" + sensorId + "'\n")
+					.append("  AND C.code_type = '" + testYN + "'\n")
 					.append("GROUP BY sensor_key\n")
 					.toString();
 

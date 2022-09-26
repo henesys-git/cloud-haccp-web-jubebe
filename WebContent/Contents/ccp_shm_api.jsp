@@ -34,7 +34,7 @@
 	    
 		async function getData() {
 	    	var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var testYN = $("input[name='test-yn']:checked").val();
 	    	var sensorId = $("select[name=sensor-type]").val();
     		
 	        var fetchedData = $.ajax({
@@ -42,7 +42,7 @@
 	            url: "<%=Config.this_SERVER_path%>/shm/ccpvm",
 	            data: "method=head" +
 	            	  "&date=" + selectedDate +
-	            	  "&processCode=" + processCode +
+	            	  "&testYN=" + testYN +
 	            	  "&sensorId=" + sensorId,
 	            success: function (result) {
 	            	return result;
@@ -273,12 +273,12 @@
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="%25" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="CCP_OPERATE" disabled>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="%25" disabled>테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="CCP_TEST" checked>테스트
 				    </label>
 				</div>
        	  	</div>

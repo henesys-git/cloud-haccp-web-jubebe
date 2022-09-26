@@ -27,13 +27,13 @@ public class CCPDataService {
 			String sensorId, 
 			String startDate, 
 			String endDate, 
-			String processCode) {
+			String testYN) {
 		
 		List<CCPDataHeadViewModel> cvmList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(tenantId);
-			cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, sensorId, startDate, endDate, processCode);
+			cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, sensorId, startDate, endDate, testYN);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
