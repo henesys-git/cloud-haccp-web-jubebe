@@ -43,16 +43,16 @@ public class CCPDataViewModelController extends HttpServlet {
 		PrintWriter out;
 		
 		String date = "";
-		String processCode = "";
+		String testYN = "";
 		String sensorId = "";
 		
 		switch(method) {
 		case "head":
 			sensorId = req.getParameter("sensorId");
 			date = req.getParameter("date");
-			processCode = req.getParameter("processCode");
+			testYN = req.getParameter("testYN");
 			
-			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(sensorId, date, date, processCode);
+			List<CCPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(sensorId, date, date, testYN);
 			result = FormatTransformer.toJson(cvmHeadList);
 			
 			res.setContentType("application/json; charset=UTF-8");
