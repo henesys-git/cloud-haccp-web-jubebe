@@ -5,7 +5,7 @@
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
-		"normalSumValueWhenAddAllTestResult": "4"
+		"normalSumValueWhenAddAllTestResult": "6"
 	},
 	"heating": {
 		"rowStartCell":"cell4",
