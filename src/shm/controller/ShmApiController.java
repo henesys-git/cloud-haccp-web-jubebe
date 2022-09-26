@@ -1,4 +1,4 @@
-package shm;
+package shm.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
