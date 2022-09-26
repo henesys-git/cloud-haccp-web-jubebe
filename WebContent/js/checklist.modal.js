@@ -3147,9 +3147,25 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								var cell = cellList[cellPos];
 								that.displayData(cell, row.detail["MC40"]);
 								break;
+							case "MC41":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC41"]);
+								break;
+							case "MC42":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC42"]);
+								break;
 							case "MC50":
 								var cell = cellList[cellPos];
 								that.displayData(cell, row.detail["MC50"]);
+								break;
+							case "MC51":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC51"]);
+								break;
+							case "MC52":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["MC52"]);
 								break;
 							//start temperature
 							case "HT10":
