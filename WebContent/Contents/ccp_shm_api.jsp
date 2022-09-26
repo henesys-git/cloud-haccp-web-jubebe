@@ -218,6 +218,11 @@
 		$('#shmApiTable').off().on('click', '.send-btn', function(e) {
 			e.stopPropagation();
 			
+			if(mainTableSelectedRow.improvementCompletion === '미완료') {
+				alert('개선조치를 해주세요');
+				return;
+			}
+			
     		let sensorKey = mainTableSelectedRow.sensorKey;
     		let shmCcpType = mainTableSelectedRow.shmCcpType;
     		
@@ -241,7 +246,7 @@
     	
     	$('#send-all-btn').click(async function() {
     		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var testYN = $("input[name='test-yn']:checked").val();
     		
 	    	if(dataLength < 1) {
     			alert('전송할 데이터가 없습니다.');
