@@ -42,7 +42,7 @@ public class ShmApiController extends HttpServlet {
 			logger.debug("[인증원 API] CCP 클래스 명: " + instance.getClass().getName());
 			
 			ShmApiService service = new ShmApiService(instance, new CCPDataDaoImpl(), tenantId);
-			JSONObject result = service.sendCCPDataToShm(sensorKey);
+			JSONObject result = service.sendCCPDataToShm(sensorKey, shmCcpType);
 	
 			if(result.get("code").toString().equals("200")) {
 				service.updateShmSentYn(sensorKey, "Y");

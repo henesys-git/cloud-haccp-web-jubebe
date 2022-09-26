@@ -45,15 +45,18 @@ public class ShmApiService {
 		this.bizNo = bizNo;
 	}
 	
-	public JSONObject sendCCPDataToShm(String sensorKey) {
+	public JSONObject sendCCPDataToShm(String sensorKey, String shmCcpType) {
 		List<C0010> list = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			list = shmCcpDataDao.getCCPData(conn, sensorKey);
 			JSONArray jsonArr = FormatTransformer.toJsonArray(list);
+			jsonArr = removeImprvCommIfBreakYnIsN(jsonArr);
+			logger.debug("[인증원 API] 데이터: " + jsonArr.toString());
+			
 			Map<String, JSONArray> map = new HashMap<>();
-			map.put("C0010", jsonArr);
+			map.put(shmCcpType, jsonArr);
 			JSONObject obj = new JSONObject(map);
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -88,5 +91,23 @@ public class ShmApiService {
 	public void updateShmSentYn(String sensorKey, String yn) {
 		conn = JDBCConnectionPool.getTenantDB(bizNo);
 		ccpDataDao.updateShmSentYn(conn, sensorKey, yn);
+	}
+	
+	private JSONArray removeImprvCommIfBreakYnIsN(JSONArray arr) {
+		JSONArray newArr = new JSONArray();
+		
+		try {
+			for(int i = 0; i < arr.length(); i++) {
+				JSONObject obj = (JSONObject) arr.get(i);
+				if( obj.get("BREAK_YN").equals("N") ) {
+					obj.remove("IMPRV_COMM");
+				}
+				newArr.put(obj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return newArr;
 	}
 }
