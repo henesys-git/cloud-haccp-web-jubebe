@@ -3290,10 +3290,13 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		let sum = 0;
 
 		for (const key in testResults) {
+			console.log(Number(testResults[key]));
 			sum += Number(testResults[key]);
 		}
 		
 		if(sum == info.normalSumValueWhenAddAllTestResult) {
+			console.log(sum);
+			console.log(info.normalSumValueWhenAddAllTestResult);
 			return true;
 		}
 		
@@ -3344,7 +3347,6 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
-		console.log(data);
 		if(!data) {
 			data = '';
 		}
