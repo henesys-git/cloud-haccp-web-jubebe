@@ -670,8 +670,14 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		var today = year + "-" + month + "-" + day;
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
-		
-		var reductDay = month.replace("0", "") + "/" + day;
+
+		var reductDay;
+		if(month != 10) {
+			reductDay = month.replace("0", "") + "/" + day;
+		}
+		else {
+			reductDay = month + "/" + day;
+		}
 		
 		var maxLengthText = parseInt(parseInt(width) / 16.6); //한글 한 글자당 차지하는 px넓이 : 16.6px
 
@@ -685,10 +691,8 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		if(heightNum >= 20) {
 			textSizeVal = "16px"; //text input default font-size = 16px;
 		}
-
 		else {
 			textSizeVal = parseInt(height.replace("px", "") * 0.8) + "px"; //input 태그 높이에 따라 font-size 조절위함
-
 		}
 		
 		var opt1 = document.createElement("option");
@@ -743,7 +747,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 				if(format == 'yyyy-mm-dd') {
 				   tag.setAttribute("date-format", 'yyyy-mm-dd');
                    if(default_value == null) {
-                      tag.value = today;
+                      
 				   }
 				   else if(default_value == 'today') {
 					  tag.value = today;
@@ -773,6 +777,15 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 					  tag.value = reductDay;
 				   }
 				}
+				else if (format == 'yyyy') {
+					tag.setAttribute("date-format", 'yyyy');
+					if (default_value == null) {
+					
+				   	}
+				   	else if(default_value == 'thisyear') {
+					  	tag.value = year;
+				   	}
+				}
 				break;
 			case "time":
 				tag = document.createElement('input');
@@ -780,7 +793,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 				tag.setAttribute("type", "time");
 				
 				if(format == 'hh:mm:ss') {
-				 
+					
 				}
 				else if (format == 'hh') {
 				  
@@ -945,7 +958,6 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 					}
 					else if(default_value == 'bad') {
 						tag.value = '부적합';
-
 					}
 				}
 				break;
