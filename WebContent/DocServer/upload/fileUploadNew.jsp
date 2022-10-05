@@ -39,7 +39,7 @@
 	String realFolder = context.getRealPath(docPaths);
 	System.out.println("실제 서블릿 상 경로 : " + realFolder);
 	
-	MultipartRequest multi = new MultipartRequest(request, realFolder, 5*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
+	MultipartRequest multi = new MultipartRequest(request, realFolder, 20*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
 
 	Enumeration params = multi.getParameterNames();
 	
