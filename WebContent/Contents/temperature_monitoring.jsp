@@ -4,352 +4,253 @@
 <%@ page import="mes.client.guiComponents.*" %>
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
+<%@ page import="org.json.simple.*"%>
 
-<script type="text/javascript">
+<script src="<%=Config.this_SERVER_path%>/Lib/canvas-gauges-master/gauge.min.js"></script>
 
-	var ccpMetalDataJspPage = {};
-    var dataLength;
-	$(document).ready(function () {
-    	
-		let date = new SetSingleDate2("", "#date", 0);
-		let mainTable;
-		let subTable;
-		let mainTableSelectedRow;
-		
-		async function metalSensorList() {
-	    	
-			var itemList = new ItemList();
-			var type_cd = "CD";	// 금속검출기 코드 대분류
-			var sensorList = await itemList.getSensorList(type_cd);
-	    	
-	    	for(var i = 0; i < sensorList.length; i++) {
-	    		sensorName = sensorList[i].sensorName;
-	    		sensorId = sensorList[i].sensorId;
-	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
-	    	}
-	    	
-	    };
-		
-	    metalSensorList();
-	    
-		async function getData() {
-	    	var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	var sensorId = $("select[name=sensor-type]").val();
-    		
-	        var fetchedData = $.ajax({
+<style>
+    .main .content { text-align: center; }
+
+    .swal-overlay {
+        background-color: rgba(255,0,0,0.3);
+    }
+</style>
+
+<div class="main" onbeforeunload="clearInterval(onClock)">
+    <div class="wrap">
+        <div class="content" id="autonixTemp">
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+	let gaugeList;
+	let tempData;
+	
+    // 온도계 공통 옵션
+    var commonOpts = {
+    	    width: 300,
+    	    height: 300,
+    	    units: "°C",
+    	    minValue: -50,
+    	    maxValue: 50,
+    	    majorTicks: [ -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 ],
+    	    minorTicks: 2,
+    	    strokeTicks: true,
+    	    ticksAngle: 225,
+    	    startAngle: 67.5,
+    	    colorMajorTicks: "#ddd",
+    	    colorMinorTicks: "#ddd",
+    	    colorTitle: "#eee",
+    	    colorUnits: "#ccc",
+    	    colorNumbers: "#eee",
+    	    colorPlate: "#222",
+    	    borderShadowWidth: 0,
+    	    borders: true,
+    	    needleType: "arrow",
+    	    needleWidth: 2,
+    	    needleCircleSize: 7,
+    	    needleCircleOuter: true,
+    	    needleCircleInner: false,
+    	    animationDuration: 1500,
+    	    animationRule: "linear",
+    	    colorBorderOuter: "#333",
+    	    colorBorderOuterEnd: "#111",
+    	    colorBorderMiddle: "#222",
+    	    colorBorderMiddleEnd: "#111",
+    	    colorBorderInner: "#111",
+    	    colorBorderInnerEnd: "#333",
+    	    colorNeedleShadowDown: "#333",
+    	    colorNeedleCircleOuter: "#333",
+    	    colorNeedleCircleOuterEnd: "#111",
+    	    colorNeedleCircleInner: "#111",
+    	    colorNeedleCircleInnerEnd: "#222",
+    	    valueBoxBorderRadius: 0,
+    	    colorValueBoxRect: "#222",
+    	    colorValueBoxRectEnd: "#333"
+    };
+    
+    // 최초 온도값을 받아온 후 1시간 단위로 적정 온도가 지켜지는지 확인
+    $.ajax({
+        type: "GET",
+        url: heneServerPath + "/Contents/CommonView/select_json.jsp",
+        data: "pid=M707S010600E034",
+        success: function (data) {
+        	tempData = data;
+        	
+        	for(let i in data) {
+        		var censor_no = data[i][0];
+        		$('#autonixTemp').append('<canvas id="' + censor_no + '" class="test"></canvas>');
+        		gaugeBuilder(censor_no, commonOpts).draw();
+        	}
+        	
+        	gaugeList = document.gauges;
+            
+            for(var i = 0; i < gaugeList.length; i++) {
+            	var temperature = data[i][1];
+            	var location = data[i][2];
+            	var minValue = data[i][3];
+            	var maxValue = data[i][4];
+
+            	gaugeList[i].update({
+            		value: temperature,
+            		title: location,
+            		highlights: setHighlightsValue(minValue, maxValue)
+            	});
+            	
+            	gaugeList[i].minLimit = minValue;
+            	gaugeList[i].maxLimit = maxValue;
+            	
+                judgeTemp(i);
+            }
+            
+            checkAndUpdateTempOnScreen();
+        }
+    });
+
+    // Check and update temperature on screen
+    var checkAndUpdateTempOnScreen = function() {
+	    setInterval(function() {
+	        $.ajax({
 	            type: "GET",
-	            url: "<%=Config.this_SERVER_path%>/ccpvm",
-	            data: "method=head" +
-	            	  "&date=" + selectedDate +
-	            	  "&processCode=" + processCode +
-	            	  "&sensorId=" + sensorId,
-	            success: function (result) {
-	            	return result;
+	            url: heneServerPath + "/Contents/CommonView/select_json.jsp",
+	            data: "pid=M707S010600E034",
+	            success: function (data) {
+	                gaugeList = document.gauges;
+	                
+	                for(var i=0; i<gaugeList.length; i++) {
+	                    gaugeList[i].value = data[i][1];
+	                    //judgeTemp(i);
+	                }
 	            }
 	        });
+	    }, 1000*10*1);
+    }
+        
+    // Check temperature and change circle color as red or blue in the gauge
+    function judgeTemp(index) {
+    	var gauge = gaugeList[index];
+ 
+		// this will draw red or blue circle on a gauge plate depending on
+	    // current value
+	    gauge.on('beforeNeedle', function () {
+	    	var curTemp = Number(this.options.value);
+	    	var min = Number(this.minLimit);
+	    	var max = Number(this.maxLimit);
+	    	
+	        // getting canvas 2d drawing context
+	        var context = this.canvas.context;
+	 
+	        // we can use gauge context special 'max' property which represents
+	        // gauge radius in a real pixels and calculate size of relative pixel
+	        // for our drawing needs
+	        var pixel = context.max / 100;
+	
+	        // step out our circle center coordinate by 30% of its radius from
+	        // gauge center
+	        var centerX = 30 * pixel;
+	        // stay in center by Y-coordinate
+	        var centerY = 0;
+	        // use circle radius equal to 5%
+	        var radius = 5 * pixel;
+	        // save previous context state
+	        context.save();
+	
+	        // draw circle using canvas JS API
+	        context.beginPath();
+	        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+	
+	        var gradient = context.createRadialGradient(
+				            centerX, centerY, 0,
+				            centerX, centerY, radius);
+	        
+	        if(curTemp <= max && curTemp >= min) {
+	            gradient.addColorStop(0, '#aaf');
+	            gradient.addColorStop(0.82, '#00f');
+	            gradient.addColorStop(1, '#88a');
+	        } else {
+	            gradient.addColorStop(0, '#faa');
+	            gradient.addColorStop(0.82, '#f00');
+	            gradient.addColorStop(1, '#a88');
+	        }
+	        
+	        context.fillStyle = gradient;
+	        context.fill();
+	        context.closePath();
+	
+	        // restore previous context state to prevent break of
+	        // further drawings
+	        context.restore();
+		});
+	
+	    // redraw the gauge if it has been already drawn
+	    gauge.draw();
+	}
 
-	        return fetchedData;
-	    };
-	    
-	    async function getSubData(sensorKey) {
-	    	
-	        var fetchedData = $.ajax({
-			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "method=detail" +
-			            	  "&sensorKey=" + sensorKey,
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
-	    
-	    	return fetchedData;
-	    };
-	    
-	    async function initTable() {
-	    	var data = await getData();
-	    	
-	    	dataLength = data.length;
-	    	
-	    	var customOpts = {
-					data : data,
-					pageLength: 10,
-					columns: [
-						{ data: "sensorKey", defaultContent: '' },
-						{ data: "processName", defaultContent: '' },
-						{ data: "sensorName", defaultContent: '' },
-						{ data: "productName", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "judge", defaultContent: '' },
-						{ data: "improvementCompletion", defaultContent: '' }
-			        ]
-			}
-					
-			mainTable = $('#ccpDataTable').DataTable(
-				mergeOptions(heneMainTableOpts, customOpts)
-			);
-	    }
-	    
-	    ccpMetalDataJspPage.fillSubTable = async function () {
-	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
-	    	
-	    	if(subTable) {
-	    		// redraw
-	    		subTable.clear().rows.add(data).draw();
-	    	} else {
-	    		// initialize
-			    var option = {
-						data : data,
-						columns: [
-							{ data: "sensorName", defaultContent: '' },
-							{ data: "createTime", defaultContent: '' },
-							{ data: "event", defaultContent: '' },
-							{ data: "sensorValue", defaultContent: '' },
-							{ data: "judge", defaultContent: '' },
-							{ data: "improvementAction", defaultContent: '' }
-				        ],
-				        columnDefs : [
-				        	{
-					  			targets: [3],
-					  			render: function(td, cellData, rowData, row, col){
-					  				console.log(cellData);
-					  				if (rowData.sensorValue == '1') {
-					  					return '검출';
-					  				}
-					  				else {
-					  					return '비검출';
-					  				}
-					  			}
-					  		},
-				   			{
-					  			targets: [5],
-					  			render: function(td, cellData, rowData, row, col){
-					  				if (rowData.judge == '적합') {
-					  					return 'n/a';
-					  				} else {
-					  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-					  						return rowData.improvementAction;
-					  					} else {
-					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
-					  					}
-					  				}
-					  			}
-					  		}
-					    ],
-					    stateSave : true
-				}
-	    		
-				subTable = $('#ccpDataSubTable').DataTable(
-					mergeOptions(heneMainTableOpts, option)
-				);
-	    	}
-	    };
-	    
-	    ccpMetalDataJspPage.showSignBtn = function() {
-	    	$("#ccp-sign-btn").show();
-			$("#ccp-sign-text").text("");
-	    }
-	    
-		initTable();
-		
-		async function refreshMainTable() {
-			var newData = await getData();
-
-			mainTable.clear().rows.add(newData).draw();
-			dataLength = newData.length;
-			
-    		if(subTable) {
-	    		subTable.clear().draw();
-	    	}
-		}
+    function mergeOptions(obj1, obj2) {
+    	var newObj = new Object();
     	
-		// 조회 버튼 클릭 시
-    	$("#getDataBtn").click(async function() {
-    		refreshMainTable();
-    		
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
-    		var ccpSign = new CCPSign();
-    		var signInfo = await ccpSign.get(selectedDate, processCode);
-    		
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
-    	});
-    	
-    	$('#ccpDataTable tbody').on('click', 'tr', function () {
-    		
-    		if ( !$(this).hasClass('selected') ) {
-    			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpMetalDataJspPage.fillSubTable();
-            }
-    	});
-    	
-    	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
-    		
-    		let sensorKey = mainTableSelectedRow.sensorKey;
-			
-    		let subRow = subTable.row( $(this).closest('tr') ).data();
-    		let createTime = subRow.createTime;
-    		let selectedDate = date.getDate();
-	    	let processCode = $("input[name='test-yn']:checked").val();
-    		
-    		$.ajax({
-                type: "POST",
-                url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: {
-                	sensorKey: sensorKey,
-                	createTime: createTime,
-                	date: selectedDate,
-                	processCode: processCode
-                },
-                success: function (html) {
-                    $("#modalWrapper").html(html);
-                }
-            });
-    	});
-    	
-    	$('#ccp-sign-btn').click(async function() {
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
-    		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
-    			return false;
-    		}
-    		
-	    	var ccpSign = new CCPSign();
-    		var signUserName = await ccpSign.sign(selectedDate, processCode);
-    		
-    		if(signUserName) {
-    			alert('서명 완료되었습니다');
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signUserName);
-    		} else {
-    			alert('서명 실패, 관리자에게 문의해주세요');
-    		}
-    	});
-	    
-    });
+    	return Object.assign(newObj, obj1, obj2);
+    }
     
+    function setHighlightsValue(min, max) {
+    	var highlights = [
+    		{"from": -50, "to": min, "color": "rgba(255, 0, 0, .3)"},
+            {"from": min, "to": max, "color": "rgba(0, 0, 255, .3)"},
+            {"from": max, "to": 50, "color": "rgba(255, 0, 0, .3)"}	
+    	];
+    	
+    	return highlights;
+    }
+    
+    function gaugeBuilder(canvasId, additionalOption) {
+    	return new RadialGauge(
+					mergeOptions({ renderTo: canvasId }, additionalOption)
+	     	   );
+    }
+});
 </script>
+<link rel="stylesheet" href="Lib/canvas-gauges-master/fonts/fonts.css">
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-  	<div class="container-fluid">
-    	<div class="row mb-2">
-	      	<div class="col-sm-3">
-	        	<h1 class="m-0 text-dark">
-	        		금속검출관리
-	        	</h1>
-	      	</div>
-	      	<div class="col-md-3 form-group">
-				<label class="d-inline-block" for="sensor-type">종류:</label>
-				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="CD%25">전체</option>
-				</select>
-	      	</div>
-			<div class="col-md-3">
-		      	<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
-				    </label>
-				</div>
-				<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
-				    </label>
-				</div>
-       	  	</div>
-        	  
-			<div class="col-md-2 input-group">
-	         	  	<input type="text" class="form-control float-right" id="date">
-			</div>
-		
-			<div class="col-md-1">
-	   	  		<button type="submit" class="btn btn-success" id="getDataBtn">
-	   	  	    	<i class="fas fa-search"></i>
-	   	  	     	조회
-	   	  	  	</button>
-	   	  	</div>
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark" id="MenuTitle">여기에 메뉴 타이틀</h1>
+      </div>
+      <div class="col-sm-6">
+      	<div class="float-sm-right">
+      	</div>
+      </div>
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
-<!-- /.content-header -->
-
+<!-- /.content-header -->   
+ 
 <!-- Main content -->
 <div class="content">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
         <div class="card card-primary card-outline">
-          <div class="card-header row">
-       		<div class="col-md-6">
-	          	<h3 class="card-title">
-	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		금속검출 데이터 목록
-	          	</h3>
-	        </div>
-	        <div class="col-md-6">
-	        	<div class="float-right" id="ccp-sign-btn-wrapper">
-		          	<button class='btn btn-success' id="ccp-sign-btn">
-		          		<i class='fas fa-signature'></i>
-		          		서명
-		          	</button>
-		          	<div id="ccp-sign-text">
-		          	</div>
-	        	</div>
-	        </div>
+          <div class="card-header">
+          	<h3 class="card-title">
+          		<i class="fas fa-edit" id="InfoContentTitle"></i>
+          	</h3>
+          	<div class="card-tools">
+          	  <div id="digital-clock">
+          	  	
+          	  </div>
+          	</div>
           </div>
-          <div class="card-body">
-          	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataTable" style="width:100%">
-				<thead>
-					<tr>
-					    <th>묶음값</th>
-					    <th>공정</th>
-					    <th>센서명</th>
-					    <th>제품</th>
-					    <th>생성시간</th>
-					    <th>적/부</th>
-					    <th>개선완료</th>
-					</tr>
-				</thead>
-				<tbody id="ccpDataTableBody">
-				</tbody>
-			</table>
-          </div> 
-           
-         <div class="card-body">
-          	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataSubTable" style="width:100%">
-				<thead>
-					<tr>
-					    <th>센서명</th>
-					    <th>생성시간</th>
-					    <th>이벤트</th>
-					    <th>측정값</th>
-					    <th>적/부</th>
-					    <th>개선조치</th>
-					</tr>
-				</thead>
-				<tbody id="ccpDataSubTableBody">
-				</tbody>
-			</table>
-          </div>  
-         
+          <div class="card-body" id="MainInfo_List_contents"></div> 
         </div>
       </div>
-      <!-- /.col-md-6 -->
+      <!-- /.col-md-12 -->
     </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-<div id="modalWrapper"></div>

@@ -670,8 +670,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		var today = year + "-" + month + "-" + day;
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
-		
-		var reductDay = month.replace("0", "") + "/" + day;
+		var reductDay = month.toString().replace("0", "") + "/" + day;
 		
 		var maxLengthText = parseInt(parseInt(width) / 16.6); //한글 한 글자당 차지하는 px넓이 : 16.6px
 

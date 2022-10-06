@@ -219,7 +219,7 @@
 	    	var processCode = $("input[name='test-yn']:checked").val();
     		
     		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
+    			alert('해당 일자의 서명 처리할 온도 데이터가 없습니다.');
     			return false;
     		}
     		
@@ -245,7 +245,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		금속검출관리
+	        		온도데이터관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
@@ -292,7 +292,7 @@
        		<div class="col-md-6">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		금속검출 데이터 목록
+	          		온도 데이터 목록
 	          	</h3>
 	        </div>
 	        <div class="col-md-6">
@@ -306,7 +306,7 @@
 	        	</div>
 	        </div>
           </div>
-          <div class="card-body">
+        <!--   <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
 				   id="ccpDataTable" style="width:100%">
 				<thead>
@@ -323,11 +323,11 @@
 				<tbody id="ccpDataTableBody">
 				</tbody>
 			</table>
-          </div> 
+          </div>  -->
            
          <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataSubTable" style="width:100%">
+				   id="ccpDataTable" style="width:100%">
 				<thead>
 					<tr>
 					    <th>센서명</th>
