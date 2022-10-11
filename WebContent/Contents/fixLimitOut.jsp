@@ -104,8 +104,15 @@ $(document).ready(function () {
 			success: function (resultIfFixed) {
 	        	if(resultIfFixed == 'true') {
 					$('#improvementActionModal').modal('hide');
-					ccpMetalDataJspPage.fillSubTable();
-					ccpMetalDataJspPage.showSignBtn();
+					
+					//TODO: CCP별로 JspPage 다르게 하는 코드. 임시처리한거라 예외처리랑 등등 더 해야됨
+					if('<%=processCode%>' == 'PC30') {
+						ccpHeatingDataJspPage.fillSubTable();
+						ccpHeatingDataJspPage.showSignBtn();
+					} else {
+						ccpMetalDataJspPage.fillSubTable();
+						ccpMetalDataJspPage.showSignBtn();
+					}
 	        		alert('개선조치 완료 (서명 초기화)');
 	         	} else {
 	         		alert('개선조치 실패, 관리자 문의 필요');
