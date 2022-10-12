@@ -16,6 +16,7 @@ import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
 import viewmodel.CCPTestDataViewModel;
+import viewmodel.CPDataHeadViewModel;
 import viewmodel.CPDataMonitoringModel;
 
 public class CPDataService {
@@ -36,6 +37,26 @@ public class CPDataService {
 		this.ccpDataDao = ccpDataDao;
 		this.ccpSignDao = ccpSignDao;
 		this.tenantId = tenantId;
+	}
+	
+	public List<CPDataHeadViewModel> getCCPDataHeadViewModels(
+			String sensorId, 
+			String startDate, 
+			String endDate, 
+			String processCode) {
+		
+		List<CPDataHeadViewModel> cvmList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(tenantId);
+			cvmList = ccpDataDao.getAllCCPDataHeadViewModel(conn, sensorId, startDate, endDate, processCode);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
 	}
 	
 	public List<CPDataMonitoringModel> getCCPDataMonitoringModel() {

@@ -22,6 +22,7 @@ import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
+import viewmodel.CPDataHeadViewModel;
 import viewmodel.CPDataMonitoringModel;
 
 @WebServlet("/cpvm")
@@ -52,7 +53,19 @@ public class CPDataViewModelController extends HttpServlet {
 		String sensorId = "";
 		
 		switch(method) {
-		
+		case "head":
+			sensorId = req.getParameter("sensorId");
+			date = req.getParameter("date");
+			processCode = req.getParameter("processCode");
+			
+			List<CPDataHeadViewModel> cvmHeadList = ccpService.getCCPDataHeadViewModels(sensorId, date, date, processCode);
+			result = FormatTransformer.toJson(cvmHeadList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
 		case "monitoring":
 			List<CPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel();
 			result = FormatTransformer.toJson(cvmMonitoringList);

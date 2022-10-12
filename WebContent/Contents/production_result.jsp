@@ -245,7 +245,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		금속검출관리
+	        		생산실적
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
@@ -255,7 +255,7 @@
 				</select>
 	      	</div>
 			<div class="col-md-3">
-		      	<div class="form-check-inline">
+		      <!-- 	<div class="form-check-inline">
 				    <label class="form-check-label">
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
 				    </label>
@@ -264,7 +264,7 @@
 				    <label class="form-check-label">
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
 				    </label>
-				</div>
+				</div> -->
        	  	</div>
         	  
 			<div class="col-md-2 input-group">
@@ -292,7 +292,7 @@
        		<div class="col-md-6">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		금속검출 데이터 목록
+	          		생산실적 데이터 목록
 	          	</h3>
 	        </div>
 	        <div class="col-md-6">

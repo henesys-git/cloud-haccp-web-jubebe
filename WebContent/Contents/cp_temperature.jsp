@@ -19,7 +19,7 @@
 		async function metalSensorList() {
 	    	
 			var itemList = new ItemList();
-			var type_cd = "CD";	// 금속검출기 코드 대분류
+			var type_cd = "TM";	// 금속검출기 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
@@ -34,12 +34,12 @@
 	    
 		async function getData() {
 	    	var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var processCode = "TP10";
 	    	var sensorId = $("select[name=sensor-type]").val();
     		
 	        var fetchedData = $.ajax({
 	            type: "GET",
-	            url: "<%=Config.this_SERVER_path%>/ccpvm",
+	            url: "<%=Config.this_SERVER_path%>/cpvm",
 	            data: "method=head" +
 	            	  "&date=" + selectedDate +
 	            	  "&processCode=" + processCode +
@@ -52,21 +52,6 @@
 	        return fetchedData;
 	    };
 	    
-	    async function getSubData(sensorKey) {
-	    	
-	        var fetchedData = $.ajax({
-			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "method=detail" +
-			            	  "&sensorKey=" + sensorKey,
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
-	    
-	    	return fetchedData;
-	    };
-	    
 	    async function initTable() {
 	    	var data = await getData();
 	    	
@@ -77,20 +62,43 @@
 					pageLength: 10,
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
-						{ data: "processName", defaultContent: '' },
 						{ data: "sensorName", defaultContent: '' },
-						{ data: "productName", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
+						{ data: "event", defaultContent: '' },
+						{ data: "sensorValue", defaultContent: '' },
 						{ data: "judge", defaultContent: '' },
-						{ data: "improvementCompletion", defaultContent: '' }
-			        ]
+						{ data: "improvementAction", defaultContent: '' }
+					],
+					columnDefs : [
+			        	{
+			        		targets: [0],
+			        		'createdCell':  function (td) {
+			   	      			$(td).attr('style', 'display:none'); 
+			   	   			}
+			        	},
+			   			{
+				  			targets: [6],
+				  			render: function(td, cellData, rowData, row, col){
+				  				if (rowData.judge == '적합') {
+				  					return 'n/a';
+				  				} else {
+				  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
+				  						return rowData.improvementAction;
+				  					} else {
+				  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
+				  					}
+				  				}
+				  			}
+				  		}
+				    ],
+				    stateSave : true
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
-	    
+	    /*
 	    ccpMetalDataJspPage.fillSubTable = async function () {
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
@@ -145,6 +153,7 @@
 				);
 	    	}
 	    };
+	    */
 	    
 	    ccpMetalDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
@@ -158,10 +167,7 @@
 
 			mainTable.clear().rows.add(newData).draw();
 			dataLength = newData.length;
-			
-    		if(subTable) {
-	    		subTable.clear().draw();
-	    	}
+    		
 		}
     	
 		// 조회 버튼 클릭 시
@@ -169,7 +175,7 @@
     		refreshMainTable();
     		
     		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var processCode = "TP10";
     		
     		var ccpSign = new CCPSign();
     		var signInfo = await ccpSign.get(selectedDate, processCode);
@@ -181,7 +187,7 @@
     			ccpMetalDataJspPage.showSignBtn();
     		}
     	});
-    	
+    	/*
     	$('#ccpDataTable tbody').on('click', 'tr', function () {
     		
     		if ( !$(this).hasClass('selected') ) {
@@ -189,15 +195,15 @@
     			ccpMetalDataJspPage.fillSubTable();
             }
     	});
-    	
-    	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
+    	*/
+    	$('#ccpDataTableBody').off().on('click', 'button', function() {
     		
-    		let sensorKey = mainTableSelectedRow.sensorKey;
+    		let sensorKey = mainTable.row( $(this).closest('tr') ).data().sensorKey;
 			
-    		let subRow = subTable.row( $(this).closest('tr') ).data();
+    		let subRow = mainTable.row( $(this).closest('tr') ).data();
     		let createTime = subRow.createTime;
     		let selectedDate = date.getDate();
-	    	let processCode = $("input[name='test-yn']:checked").val();
+	    	let processCode = "TP10";
     		
     		$.ajax({
                 type: "POST",
@@ -251,11 +257,11 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="sensor-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="CD%25">전체</option>
+					<option value="">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
-		      	<div class="form-check-inline">
+		      	<!-- <div class="form-check-inline">
 				    <label class="form-check-label">
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
 				    </label>
@@ -264,7 +270,7 @@
 				    <label class="form-check-label">
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
 				    </label>
-				</div>
+				</div> -->
        	  	</div>
         	  
 			<div class="col-md-2 input-group">
@@ -330,6 +336,7 @@
 				   id="ccpDataTable" style="width:100%">
 				<thead>
 					<tr>
+						<th style = "display:none; width:0px;">센서key</th>
 					    <th>센서명</th>
 					    <th>생성시간</th>
 					    <th>이벤트</th>
@@ -338,7 +345,7 @@
 					    <th>개선조치</th>
 					</tr>
 				</thead>
-				<tbody id="ccpDataSubTableBody">
+				<tbody id="ccpDataTableBody">
 				</tbody>
 			</table>
           </div>  

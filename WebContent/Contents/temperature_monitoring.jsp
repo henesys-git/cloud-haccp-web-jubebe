@@ -16,19 +16,12 @@
     }
 </style>
 
-<div class="main" onbeforeunload="clearInterval(onClock)">
-    <div class="wrap">
-        <div class="content" id="autonixTemp">
-        </div>
-    </div>
-</div>
-
 <script>
 $(document).ready(function () {
 	
 	fn_MainInfo_List();
 	$("#InfoContentTitle").html("실시간 온도 현황판");
-    fn_MainSubMenuSelect("CCP모니터링");
+    fn_MainSubMenuSelect("온도모니터링");
 });
 
 function fn_MainInfo_List() {

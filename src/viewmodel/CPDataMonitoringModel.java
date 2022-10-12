@@ -2,13 +2,13 @@ package viewmodel;
 
 public class CPDataMonitoringModel {
 	private String sensorName;
-	private String ccpDate;
-	private String countAll;
-	private String countDetect;
+	private String sensorId;
 	private String sensorValue;
 	private String minValue;
 	private String maxValue;
-	private String 
+	private String sensorDate;
+	private String createTime;
+	 
 	
 	public String getSensorName() {
 		return sensorName;
@@ -16,23 +16,42 @@ public class CPDataMonitoringModel {
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
 	}
-	public String getCcpDate() {
-		return ccpDate;
+	public String getSensorId() {
+		return sensorId;
 	}
-	public void setCcpDate(String ccpDate) {
-		this.ccpDate = ccpDate;
+	public void setSensorId(String sensorId) {
+		this.sensorId = sensorId;
 	}
-	public String getCountAll() {
-		return countAll;
+	public String getSensorValue() {
+		return sensorValue;
 	}
-	public void setCountAll(String countAll) {
-		this.countAll = countAll;
+	public void setSensorValue(String sensorValue) {
+		this.sensorValue = sensorValue;
 	}
-	public String getCountDetect() {
-		return countDetect;
+	public String getMinValue() {
+		return minValue;
 	}
-	public void setCountDetect(String countDetect) {
-		this.countDetect = countDetect;
+	public void setMinValue(String minValue) {
+		this.minValue = minValue;
 	}
+	public String getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+	public String getSensorDate() {
+		return sensorDate;
+	}
+	public void setSensorDate(String sensorDate) {
+		this.sensorDate = sensorDate;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	
 	
 }
