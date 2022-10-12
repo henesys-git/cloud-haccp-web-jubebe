@@ -716,13 +716,43 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
+  <table id="TAB218" populated="true" UUID="dd6e48e5-2ba9-4a4f-90e4-3a48febf4f25" name="공지사항" objectType="TABLE" physicalName="notice" >
+   <remarks></remarks>
+   <folder id="FOLTAB2181" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL219" populated="true" UUID="88f6462f-af1b-4d3b-94cd-b4bfde38893f" autoIncrement="false" autoIncrementSequenceName="notice_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL220" populated="true" UUID="adfa6c34-3de1-44bb-907a-6b195464e25a" autoIncrement="false" autoIncrementSequenceName="notice_register_datetime_seq" defaultValue="" name="등록시간" nullable="0" physicalName="register_datetime" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+     <remarks></remarks>
+    </column>
+    <column id="COL221" populated="true" UUID="f2419c8e-404a-4279-90be-6bf2d5d55aaa" autoIncrement="false" autoIncrementSequenceName="notice_notice_title_seq" defaultValue="" name="제목" nullable="0" physicalName="notice_title" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL222" populated="true" UUID="076112d7-698a-4b3a-a868-79d3cff9b17b" autoIncrement="false" autoIncrementSequenceName="notice_notice_content_seq" defaultValue="" name="내용" nullable="0" physicalName="notice_content" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL223" populated="true" UUID="daae79d4-bb13-46c8-b769-9c31c84b5432" autoIncrement="false" autoIncrementSequenceName="notice_active_seq" defaultValue="" name="활성화" nullable="0" physicalName="active" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB2183" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB2182" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB2184" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX224" populated="true" UUID="655be7e4-0fe5-4e7d-9c1c-46741e4b7877" clustered="false" name="notice_pk" physicalName="notice_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC225" populated="true" UUID="635c80cb-b2f3-4466-88c3-c6fc05284ffc" ascendingOrDescending="UNSPECIFIED" column-ref="COL219" name="테넌트아이디" physicalName="tenant_id" />
+     <index-column id="IDC226" populated="true" UUID="6c0ef432-302c-46ff-bb9d-3184db215820" ascendingOrDescending="UNSPECIFIED" column-ref="COL220" name="등록시간" physicalName="register_datetime" />
+    </index>
+   </folder>
+  </table>
   <relationships>
   </relationships>
  </target-database>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="161" viewportY="1133" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="0" viewportY="1658" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB8" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -746,6 +776,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB198" x="496" y="1756" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB209" x="1458" y="1356" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB216" x="2813" y="1368" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB218" x="468" y="2225" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
