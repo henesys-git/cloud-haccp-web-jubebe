@@ -670,7 +670,6 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		var today = year + "-" + month + "-" + day;
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
-
 		var reductDay;
 		if(month != 10) {
 			reductDay = month.replace("0", "") + "/" + day;
@@ -747,7 +746,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 				if(format == 'yyyy-mm-dd') {
 				   tag.setAttribute("date-format", 'yyyy-mm-dd');
                    if(default_value == null) {
-                      
+                      tag.value = today;
 				   }
 				   else if(default_value == 'today') {
 					  tag.value = today;
@@ -793,7 +792,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 				tag.setAttribute("type", "time");
 				
 				if(format == 'hh:mm:ss') {
-					
+				
 				}
 				else if (format == 'hh') {
 				  

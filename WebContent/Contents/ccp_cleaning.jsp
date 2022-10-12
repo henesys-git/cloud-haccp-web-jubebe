@@ -19,7 +19,7 @@
 		async function metalSensorList() {
 	    	
 			var itemList = new ItemList();
-			var type_cd = "CD";	// 금속검출기 코드 대분류
+			var type_cd = "DI";	// 세척 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
@@ -219,7 +219,7 @@
 	    	var processCode = $("input[name='test-yn']:checked").val();
     		
     		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
+    			alert('해당 일자의 서명 처리할 세척공정 데이터가 없습니다.');
     			return false;
     		}
     		
@@ -245,7 +245,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		금속검출관리
+	        		세척공정관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
@@ -262,7 +262,7 @@
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC10" disabled>테스트
 				    </label>
 				</div>
        	  	</div>
@@ -292,7 +292,7 @@
        		<div class="col-md-6">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		금속검출 데이터 목록
+	          		세척공정 데이터 목록
 	          	</h3>
 	        </div>
 	        <div class="col-md-6">

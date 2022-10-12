@@ -213,7 +213,7 @@
 	    	var processCode = $("input[name='test-yn']:checked").val();
     		
 	    	if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
+    			alert('해당 일자의 서명 처리할 가열공정 데이터가 없습니다.');
     			return false;
     		}
 	    	
