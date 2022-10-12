@@ -53,7 +53,7 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', 1) AS meas_date,\n")
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', -1) AS meas_time,\n")
 					.append("	A.sensor_value AS meas_val,\n")
-					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, 'N', 'Y') as break_yn,\n")
+					.append("	IF(A.sensor_value <= L.max_value && A.sensor_value >= L.min_value, 'N', 'Y') as break_yn,\n")
 					.append("	A.improvement_action AS imprv_comm\n")
 					.append("FROM\n")
 					.append("	(\n")
