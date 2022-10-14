@@ -56,11 +56,25 @@
 	    	$('#notice-content').val('');
 	    };
 	    
+	    var ifActiveNoticeNotExist = function (table) {
+	    	var rows = table.rows().data();
+			
+			for(let i=0; i<rows.length; i++) {
+				var active = rows[i].active;
+				if(active == 'Y') {
+					return false;
+				}
+			}
+	    	
+	    	return true;
+	    }
+	    
 	 	// 조회
 		$('#display').click(function() {
-			var row = mainTable.rows( '.selected' ).data();
-			
-			// active 상태인 항목 없으면 alert 예외 처리
+			if(ifActiveNoticeNotExist(mainTable)) {
+				alert('활성화 된 공지사항이 없습니다.');
+				return false;
+			}
 			
 			window.open("/Contents/notice_display.jsp", 
 	 				'_blank', 
