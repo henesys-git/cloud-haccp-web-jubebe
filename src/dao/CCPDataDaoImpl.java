@@ -13,6 +13,7 @@ import mes.frame.database.JDBCConnectionPool;
 import model.CCPData;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataHeatingMonitoringModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
@@ -478,6 +479,91 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	@Override
+	public List<CCPDataHeatingMonitoringModel> getAllCCPDataHeatingMonitoringModel(
+			Connection conn, String sensorId, 
+			String startDate, String endDate, 
+			String processCode) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	A.sensor_key,\n")
+					.append("	C.code_name AS process_name,\n")
+					.append("	B.sensor_name,\n")
+					.append("	D.product_name,\n")
+					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
+					.append("	(\n")
+					.append("		SELECT CASE\n")
+					.append("			WHEN NOT EXISTS(\n")
+					.append("				SELECT *\n")
+					.append("				FROM data_metal aa\n")
+					.append("				INNER JOIN event_info bb\n")
+					.append("					ON aa.event_code = bb.event_code\n")
+					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("				  AND aa.sensor_key = A.sensor_key\n")
+					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
+					.append("			)\n")
+					.append("			THEN '적합'\n")
+					.append("			ELSE '부적합'\n")
+					.append("			END\n")
+					.append("	) AS judge,\n")
+					.append("	(\n")
+					.append("		SELECT CASE \n")
+					.append("			WHEN NOT EXISTS(\n")
+					.append("				SELECT *\n")
+					.append("				FROM data_metal aa\n")
+					.append("				INNER JOIN event_info bb\n")
+					.append("					ON aa.event_code = bb.event_code\n")
+					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("				  AND aa.sensor_key = A.sensor_key\n")
+					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
+					.append("			 	  AND aa.improvement_action is null \n")
+					.append("			)\n")
+					.append("			THEN '완료'\n")
+					.append("			ELSE '미완료'\n")
+					.append("			END\n")
+					.append("	) AS improvement_completion \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN common_code C\n")
+					.append("	ON A.process_code = C.code\n")
+					.append("INNER JOIN product D\n")
+					.append("	ON A.product_id = D.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
+					.append("  				   					  AND '" + endDate	+ "'\n")
+					.append("  AND A.process_code LIKE '" + processCode	+ "'\n")
+					.append("  AND B.sensor_id LIKE '" + sensorId + "'\n")
+					.append("GROUP BY sensor_key\n")
+					.toString();
+
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPDataHeatingMonitoringModel> cvmList = new ArrayList<CCPDataHeatingMonitoringModel>();
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringModel data = extractHeatingMonitoringModelFromResultSet(rs);
+				cvmList.add(data);
+			}
+			
+			return cvmList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private CCPData extractFromResultSet(ResultSet rs) throws SQLException {
 		CCPData ccpData = new CCPData();
 		
@@ -577,6 +663,23 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setJudge(rs.getString("judge"));
 		cvm.setImprovementAction(rs.getString("improvement_action"));
 		
+		return cvm;
+	}
+	
+	private CCPDataHeatingMonitoringModel extractHeatingMonitoringModelFromResultSet(ResultSet rs) 
+			throws SQLException {
+		CCPDataHeatingMonitoringModel cvm = new CCPDataHeatingMonitoringModel();
+
+		cvm.setSensorKey(rs.getString("sensor_key"));
+		cvm.setProcessName(rs.getString("process_name"));
+		cvm.setSensorName(rs.getString("sensor_name"));
+		cvm.setProductName(rs.getString("product_name"));
+		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
+		cvm.setCompleteTime(rs.getTimestamp("complete_time").toString());
+		cvm.setState(rs.getString("state").toString());
+		cvm.setJudge(rs.getString("judge"));
+		cvm.setImprovementCompletion(rs.getString("improvement_completion"));
+
 		return cvm;
 	}
 	
