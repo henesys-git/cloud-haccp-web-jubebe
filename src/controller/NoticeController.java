@@ -49,6 +49,10 @@ public class NoticeController extends HttpServlet {
 				List<Notice> list = noticeService.getAllNotice();
 				result = FormatTransformer.toJson(list);
 			}
+			else if(regDatetime.equals("active")) {
+				List<Notice> list = noticeService.getActiveNotice();
+				result = FormatTransformer.toJson(list);
+			}
 			else {
 				Notice notice = noticeService.getNotice(regDatetime);
 				result = FormatTransformer.toJson(notice);

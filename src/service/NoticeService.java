@@ -22,12 +22,12 @@ public class NoticeService {
     	this.tenantId = tenantId;
     }
     
-    public List<Notice> getAllNoticeByTenant() {
+    public List<Notice> getAllNotice() {
     	List<Notice> noticeList = null;
     	
     	try {
     		conn = JDBCConnectionPool.getTenantDB(tenantId);
-    		noticeList = noticeDao.getNoticeByTenant(conn);
+    		noticeList = noticeDao.getAllNotice(conn);
     	} catch(Exception e) {
     		logger.error(e.getMessage());
 		} finally {
@@ -37,12 +37,12 @@ public class NoticeService {
     	return noticeList;
     }
     
-    public List<Notice> getAllNotice() {
+    public List<Notice> getActiveNotice() {
     	List<Notice> noticeList = null;
     	
     	try {
     		conn = JDBCConnectionPool.getTenantDB(tenantId);
-    		noticeList = noticeDao.getAllNotice(conn);
+    		noticeList = noticeDao.getActiveNotice(conn);
     	} catch(Exception e) {
     		logger.error(e.getMessage());
 		} finally {

@@ -56,6 +56,19 @@
 	    	$('#notice-content').val('');
 	    };
 	    
+	 	// 조회
+		$('#display').click(function() {
+			var row = mainTable.rows( '.selected' ).data();
+			
+			// active 상태인 항목 없으면 alert 예외 처리
+			
+			window.open("/Contents/notice_display.jsp", 
+	 				'_blank', 
+	 				"top=5, left=0, width=1910, height=1070," + 
+	 				"fullscreen=yes, toolbars=no, status=no," + 
+	 				"scrollbars=no, resizable=yes, titlebar=no, location=no");
+		});
+	    
 	 	// 등록
 		$('#insert').click(function() {
 			initModal();
@@ -148,9 +161,9 @@
 					return false;
 				}
 				
-				var check = confirm('수정하시겠습니까?');
-				
-				if(check) {
+				if(!confirm('수정하시겠습니까?')) {
+					return false;
+				}
 				
 				$.ajax({
 		            type: "POST",
@@ -174,8 +187,6 @@
 		            	}
 		            }
 		        });
-				
-				}
 			});
 		});   
 	    
@@ -226,6 +237,9 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
       	<div class="float-sm-right">
+      	  <button type="button" class="btn btn-info" id="display">
+      	  	조회
+      	  </button>
       	  <button type="button" class="btn btn-info" id="insert">
       	  	등록
       	  </button>

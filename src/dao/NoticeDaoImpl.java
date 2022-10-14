@@ -24,37 +24,6 @@ public class NoticeDaoImpl implements NoticeDao {
 	
 	public NoticeDaoImpl() {
 	}
-
-	@Override
-	public List<Notice> getNoticeByTenant(Connection conn) {
-
-		try {
-			stmt = conn.createStatement();
-			
-			String sql = new StringBuilder()
-				.append("SELECT A.*						\n")
-				.append("FROM notice A					\n")
-				.append("WHERE B.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.toString();
-			
-			logger.debug("sql:\n" + sql);
-			
-			rs = stmt.executeQuery(sql);
-			
-			List<Notice> list = new ArrayList<Notice>();
-			
-			while(rs.next()) {
-				Notice notice = extractFromResultSet(rs);
-				list.add(notice);
-			}
-			
-			return list;
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-		
-		return null;
-	};
 	
 	@Override
 	public List<Notice> getAllNotice(Connection conn) {
@@ -65,6 +34,7 @@ public class NoticeDaoImpl implements NoticeDao {
 			String sql = new StringBuilder()
 				.append("SELECT *			\n")
 				.append("FROM notice		\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -106,6 +76,38 @@ public class NoticeDaoImpl implements NoticeDao {
 			if(rs.next()) {
 				return extractFromResultSet(rs);
 			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<Notice> getActiveNotice(Connection conn) {
+
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT *			\n")
+				.append("FROM notice		\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND active = 'Y'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Notice> list = new ArrayList<Notice>();
+			
+			while(rs.next()) {
+				Notice notice = extractFromResultSet(rs);
+				list.add(notice);
+			}
+			
+			return list;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
