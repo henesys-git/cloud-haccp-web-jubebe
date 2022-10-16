@@ -80,10 +80,10 @@ public class NoticeService {
 		return false;
 	}
 	
-	public boolean update(Notice notice, String regDatetimeOrg) {
+	public boolean update(Notice notice) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(tenantId);
-			return noticeDao.update(conn, notice, regDatetimeOrg);
+			return noticeDao.update(conn, notice);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

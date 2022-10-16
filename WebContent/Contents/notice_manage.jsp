@@ -14,13 +14,13 @@
 		async function getData() {
 	    	
 	        var fetchedData = $.ajax({
-			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/notice",
-			            data: "registerDatetime=all", 
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
+	            type: "GET",
+	            url: "<%=Config.this_SERVER_path%>/notice",
+	            data: "registerDatetime=all", 
+	            success: function (result) {
+	            	return result;
+	            }
+	        });
 	    
 	    	return fetchedData;
 	    };
@@ -45,10 +45,8 @@
 	    }
 	    
 	    async function refreshMainTable() {
-	    	var menu = new HENESYS_API.menu();
-	    	var menuList = await menu.getMenus();
-	    	
-    		mainTable.clear().rows.add(menuList).draw();
+	    	var data = await getData();
+    		mainTable.clear().rows.add(data).draw();
 		}
 	    
 	    var initModal = function () {
@@ -91,11 +89,9 @@
 			$('.modal-title').text('등록');
 			
 			$('#save').off().click(function() {
-				var title = $('#notice-title').val();
-				var content = $('#notice-content').val();
-				var registerDatetime = new HeneData().getDateTime();
-				
-				console.log(registerDatetime);
+				var title = $('#notice_title').val();
+				var content = $('#notice_content').val();
+				var registerDatetime = new HeneDate().getDateTime();
 				
 				if(title === '') {
 					alert('제목을 입력해주세요');
@@ -114,7 +110,7 @@
 		            	"registerDatetime" : registerDatetime, 
 		            	"noticeTitle" : title, 
 		            	"noticeContent" : content,
-		            	"active" : "N"
+		            	"active" : "Y"
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
@@ -133,45 +129,31 @@
 		$('#update').click(function() {
 			initModal();
 			
-			var row = mainTable.rows( '.selected' ).data();
+			var row = mainTable.rows( '.selected' ).data()[0];
+			console.log(row);
 			
-			if(row.length == 0) {
-				alert('수정할 센서정보를 선택해주세요.');
+			if(row === undefined) {
+				alert('수정할 공지사항을 선택해주세요.');
 				return false;
 			}
 			
 			$('#myModal').modal('show');
 			$('.modal-title').text('수정');
 			
-			$('#menu-id').val(row[0].menuId);
-			$('#menu-name').val(row[0].menuName);
-			$('#menu-level').val(row[0].menuLevel);
-			$('#menu-path').val(row[0].path);
-			$('#menu-parentId').val(row[0].parentMenuId);
-			
-			$('#menu-id').prop('disabled', true);
+			$('#notice_title').val(row.noticeTitle);
+			$('#notice_content').val(row.noticeContent);
 			
 			$('#save').off().click(function() {
 				
-				var name = $('#menu-name').val();
-				var level = $('#menu-level').val();
-				var path = $('#menu-path').val();
-				var parentId = $('#menu-parentId').val();
+				var title = $('#notice_title').val();
+				var content = $('#notice_content').val();
 				
-				if(name === '') {
-					alert('메뉴명을 입력해주세요');
+				if(title === '') {
+					alert('제목을 입력해주세요');
 					return false;
 				}
-				if(level === '') {
-					alert('메뉴 단계를 입력해주세요');
-					return false;
-				}
-				if(path === '') {
-					alert('메뉴 경로를 입력해주세요');
-					return false;
-				}
-				if(parentId === '') {
-					alert('상위 메뉴ID를 입력해주세요');
+				if(content === '') {
+					alert('내용을 입력해주세요');
 					return false;
 				}
 				
@@ -182,16 +164,14 @@
 				$.ajax({
 		            type: "POST",
 		            url: "<%=Config.this_SERVER_path%>/notice",
-		            data: { 
-	            		"type" : "update",
-	            		"id" : row[0].menuId,
-	            		"name" : $('#menu-name').val(), 
-	            		"level" : $('#menu-level').val(),
-		            	"path" : $('#menu-path').val(), 
-		            	"parentId" : $('#menu-parentId').val()
-		           	},
+		            data: {
+		            	"type" : "update",
+		            	"registerDatetime" : row.registerDatetime, 
+		            	"noticeTitle" : title, 
+		            	"noticeContent" : content,
+		            	"active" : row.active
+		            },
 		            success: function (updateResult) {
-		            	console.log(updateResult);
 		            	if(updateResult == 'true') {
 		            		alert('수정되었습니다.');
 		            		$('#myModal').modal('hide');
@@ -209,7 +189,7 @@
 			var row = mainTable.rows( '.selected' ).data();
 			
 			if(row.length == 0) {
-				alert('삭제할 센서정보를 선택해주세요.');
+				alert('삭제할 공지사항을 선택해주세요.');
 				return false;
 			}
 			
@@ -219,10 +199,9 @@
 		            url: "<%=Config.this_SERVER_path%>/notice",
 		            data: { 
 	            		"type" : "delete",
-	            		"id" : row[0].menuId 
+	            		"registerDatetime" : row[0].registerDatetime
 		            },
 		            success: function (deleteResult) {
-		            	console.log(deleteResult);
 		            	if(deleteResult == 'true') {
 		            		alert('삭제되었습니다.');
 		            		refreshMainTable();
@@ -251,7 +230,7 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
       	<div class="float-sm-right">
-      	  <button type="button" class="btn btn-info" id="display">
+      	  <button type="button" class="btn" id="display">
       	  	조회
       	  </button>
       	  <button type="button" class="btn btn-info" id="insert">
@@ -324,7 +303,7 @@
 		</div>
       	<label for="notice-content">내용</label>
 		<div class="input-group mb-3">
-		  <input type="text" class="form-control" id="notice_content">
+		  <textarea class="form-control" id="notice_content"></textarea>
 		</div>
       </div>
       <div class="modal-footer">  

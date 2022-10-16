@@ -117,11 +117,12 @@ public class NoticeDaoImpl implements NoticeDao {
 	
 	@Override
 	public boolean insert(Connection conn, Notice notice) {
-		String sql = "";
 		try {
-			sql = new StringBuilder()
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
-					.append("	menu (\n")
+					.append("	notice (\n")
 					.append("		tenant_id,\n")
 					.append("		register_datetime,\n")
 					.append("		notice_title,\n")
@@ -130,14 +131,23 @@ public class NoticeDaoImpl implements NoticeDao {
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append(" 		? \n")
+					.append("		'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
+					.append("		'" + notice.getRegisterDatetime() + "',\n")
+					.append("		'" + notice.getNoticeTitle() + "',\n")
+					.append("		'" + notice.getNoticeContent() + "',\n")
+					.append(" 		'" + notice.getActive() + "' \n")
 					.append("	);\n")
 					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			int i = stmt.executeUpdate(sql);
 
+	        if(i == 1) {
+	        	return true;
+	        }
+
+			/*
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
@@ -154,6 +164,7 @@ public class NoticeDaoImpl implements NoticeDao {
 	        }
 
 	        return true;
+	        */
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
 	    }
@@ -162,7 +173,7 @@ public class NoticeDaoImpl implements NoticeDao {
 	}
 	
 	@Override
-	public boolean update(Connection conn, Notice notice, String regDatetimeOrg) {
+	public boolean update(Connection conn, Notice notice) {
 		try {
 			stmt = conn.createStatement();
 
@@ -173,7 +184,7 @@ public class NoticeDaoImpl implements NoticeDao {
 					.append("	notice_content = '" + notice.getNoticeContent() + "',\n")
 					.append("	active = '" + notice.getActive() + "'			 \n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND register_datetime = '" + regDatetimeOrg + "'\n")
+					.append("  AND register_datetime = '" + notice.getRegisterDatetime() + "'\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);

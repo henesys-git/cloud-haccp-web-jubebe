@@ -87,7 +87,7 @@ public class NoticeController extends HttpServlet {
 		String tenantId = (String) session.getAttribute("bizNo");
 		
 		Notice notice = new Notice(
-				req.getParameter("regiterDatetime"), 
+				req.getParameter("registerDatetime"), 
 				req.getParameter("noticeTitle"),
 				req.getParameter("noticeContent"),
 				req.getParameter("active")
@@ -110,17 +110,17 @@ public class NoticeController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		String registerDatetimeOrg = req.getParameter("regiterDatetime");
-		
 		Notice notice = new Notice(
-				req.getParameter("regiterDatetime"), 
+				req.getParameter("registerDatetime"), 
 				req.getParameter("noticeTitle"),
 				req.getParameter("noticeContent"),
 				req.getParameter("active")
 			);
 		
+		logger.debug(notice.toString());
+		
 		NoticeService noticeService = new NoticeService(new NoticeDaoImpl(), tenantId);
-		Boolean updated = noticeService.update(notice, registerDatetimeOrg);
+		Boolean updated = noticeService.update(notice);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		
