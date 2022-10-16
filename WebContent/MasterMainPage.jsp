@@ -564,6 +564,7 @@
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.builder.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.common.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.sign.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/checklist.modal.util.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/checklist.modal.js"></script>
 	<!-- 숫자 관련 기능 -->
 	<script src="<%=Config.this_SERVER_path%>/js/hene.number.js"></script>
