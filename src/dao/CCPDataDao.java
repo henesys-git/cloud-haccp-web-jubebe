@@ -6,6 +6,7 @@ import java.util.List;
 import model.CCPData;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataHeatingMonitoringModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
@@ -21,4 +22,5 @@ public interface CCPDataDao {
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(Connection conn, String toDate, String sensorId);
 	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate);
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate);
+	public List<CCPDataHeatingMonitoringModel> getAllCCPDataHeatingMonitoringModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
 }

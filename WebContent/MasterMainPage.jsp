@@ -633,7 +633,7 @@
        	var ProgramID ="";
        	var REFRESHTIMEID=0;
        	var elem = document.getElementById("SubBody");
-		
+		var interVal;
 		// 이력번호 전역변수로 선언 함
 		var vHist_no = "";  //안쓰는듯
 		
@@ -912,6 +912,7 @@
 			}
            
 			clearTimeout(REFRESHTIMEID);
+			clearInterval(interVal);
         }
 		
 		

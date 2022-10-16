@@ -18,6 +18,7 @@ import service.CCPDataService;
 import utils.FormatTransformer;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataHeatingMonitoringModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 
@@ -110,7 +111,21 @@ public class CCPDataViewModelController extends HttpServlet {
 			
 			out.print(result);
 			break;
+		case "heating-monitoring":
+			sensorId = req.getParameter("sensorId");
+			date = req.getParameter("date");
+			processCode = req.getParameter("processCode");
+			
+			List<CCPDataHeatingMonitoringModel> cvmHeatingMonitoringList = ccpService.getCCPHeatingMonitoringModels(sensorId, date, date, processCode);
+			result = FormatTransformer.toJson(cvmHeatingMonitoringList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
 		}
+		
 		
 	}
 

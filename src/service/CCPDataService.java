@@ -11,6 +11,7 @@ import mes.frame.database.JDBCConnectionPool;
 import model.CCPData;
 import viewmodel.CCPDataDetailViewModel;
 import viewmodel.CCPDataHeadViewModel;
+import viewmodel.CCPDataHeatingMonitoringModel;
 import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
@@ -184,4 +185,25 @@ public class CCPDataService {
 		
 		return list;
 	}
+	
+	public List<CCPDataHeatingMonitoringModel> getCCPHeatingMonitoringModels(
+			String sensorId, 
+			String startDate, 
+			String endDate, 
+			String processCode) {
+		
+		List<CCPDataHeatingMonitoringModel> cvmList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(tenantId);
+			cvmList = ccpDataDao.getAllCCPDataHeatingMonitoringModel(conn, sensorId, startDate, endDate, processCode);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
+	}
+	
 }
