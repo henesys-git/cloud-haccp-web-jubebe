@@ -76,13 +76,35 @@
 					data : data,
 					pageLength: 10,
 					columns: [
-						
+						{ data: "sensorKey", defaultContent: '' },
 						{ data: "sensorName", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
 						{ data: "completeTime", defaultContent: '' },
 						{ data: "state", defaultContent: '' }
-			        ]
+			        ],
+			        columnDefs : [
+			        	{
+			        		targets: [0],
+			        		'createdCell':  function (td) {
+			   	      			$(td).attr('style', 'display:none'); 
+			   	   			}
+			        	},
+			   			{
+				  			targets: [6],
+				  			render: function(td, cellData, rowData, row, col){
+				  				if (rowData.judge == '적합') {
+				  					return 'n/a';
+				  				} else {
+				  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
+				  						return rowData.improvementAction;
+				  					} else {
+				  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
+				  					}
+				  				}
+				  			}
+				  		}
+				    ]
 			}
 					
 			mainTable = $('#ccpHeatingDataTable').DataTable(
@@ -237,6 +259,7 @@
 				   id="ccpHeatingDataTable" style="width:100%">
 				<thead>
 					<tr>
+						<th style = "display:none; width:0px;">센서key</th>
 					    <th>센서명</th>
 					    <th>제품</th>
 					    <th>생성시간</th>
