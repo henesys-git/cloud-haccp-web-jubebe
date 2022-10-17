@@ -57,7 +57,7 @@
 	        var fetchedData = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "method=detail" +
+			            data: "method=heating-monitoring-detail" +
 			            	  "&sensorKey=" + sensorKey,
 			            success: function (result) {
 			            	return result;
@@ -89,21 +89,7 @@
 			        		'createdCell':  function (td) {
 			   	      			$(td).attr('style', 'display:none'); 
 			   	   			}
-			        	},
-			   			{
-				  			targets: [6],
-				  			render: function(td, cellData, rowData, row, col){
-				  				if (rowData.judge == '적합') {
-				  					return 'n/a';
-				  				} else {
-				  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-				  						return rowData.improvementAction;
-				  					} else {
-				  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
-				  					}
-				  				}
-				  			}
-				  		}
+			        	}
 				    ]
 			}
 					
@@ -113,52 +99,69 @@
 	    }
 	    
 	    ccpHeatingDataJspPage.fillSubTable = async function () {
+	    	
+	    	//$("#ccpHeatingsubTable").children().remove();
+	    	
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
-	    	if(subTable) {
-	    		// redraw
-	    		subTable.clear().rows.add(data).draw();
-	    	} else {
-	    		// initialize
-			    var option = {
-						data : data,
-						columns: [
-							{ data: "sensorName", defaultContent: '' },
-							{ data: "createTime", defaultContent: '' },
-							{ data: "event", defaultContent: '' },
-							{ data: "sensorValue", defaultContent: '' },
-							{ data: "judge", defaultContent: '' },
-							{ data: "improvementAction", defaultContent: '' }
-				        ],
-				        columnDefs : [
-				        	{
-					  			targets: [3],
-					  			render: function(td, cellData, rowData, row, col){
-					  				return rowData.sensorValue;
-					  			}
-					  		},
-				   			{
-					  			targets: [5],
-					  			render: function(td, cellData, rowData, row, col){
-					  				if (rowData.judge == '적합') {
-					  					return 'n/a';
-					  				} else {
-					  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-					  						return rowData.improvementAction;
-					  					} else {
-					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
-					  					}
-					  				}
-					  			}
-					  		}
-					    ],
-					    stateSave : true
-				}
+	    	console.log(data);
+	    		// graph initialize
 	    		
-				subTable = $('#ccpHeatingDataSubTable').DataTable(
-					mergeOptions(heneMainTableOpts, option)
-				);
-	    	}
+	    		/* db data processing */
+	    		console.log(data);
+	    		console.log(data[0]);
+	    		var arr = data;
+	    		var censor_info = data;
+	    				
+	    		var customOptions = {
+	    				legend: { display: false },
+	    				scales: {
+	    			        yAxes: [{
+	    			            display: true,
+	    			            stacked: true,
+	    			            ticks: {
+	    			                min: -50,
+	    			                max: 50
+	    			            }
+	    			        }]
+	    			    }
+	    			};
+	    		
+	    		/*
+	    		// db에서 받은 데이터 [온도계 종류, 측정 시간, 온도값]의 이중 배열
+	    		// 이걸 온도계별로 시간 배열과 온도값 배열을 가지는 객체로 변환한다
+	    		var processData = function(arr, key) {
+	    		    var newObj = new Object();
+	    		    
+	    		    var temp = arr.filter(function(arr) {
+	    		    		return arr[0] == key;
+	    		        });
+	    		    newObj.time = temp.map(arr => arr[1]);
+	    		    newObj.value = temp.map(arr => arr[2]);
+
+	    		    return newObj;
+	    		}
+				*/
+				
+	    		for(var temp = 0; temp < censor_info.length; temp++){
+	    						
+	    			var tempVal = processData(arr, censor_info[temp][0]);
+	    			var tempCtx = $(''#ccpHeatingsubTable').get(0).getContext('2d');
+	    			
+	    			var chart = new Chart(tempCtx, { 
+	    				type: 'line',
+	    				data: {
+	    					labels: tempVal.time,
+	    					datasets: [{
+	    						data: tempVal.value,
+	    						fill: false,
+	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
+	    					}]
+	    				},
+	    				options: customOptions
+	    			})
+	    		}
+	    		
 	    };
 	    
 	    
@@ -170,9 +173,11 @@
 			mainTable.clear().rows.add(newData).draw();
 			dataLength = newData.length;
 			
+			/*
     		if(subTable) {
 	    		subTable.clear().draw();
 	    	}
+			*/
 		}
     	
 		// 조회 버튼 클릭 시
@@ -180,8 +185,8 @@
     		refreshMainTable();
     		
     		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	
+	    	var processCode = "PC30";
+	    	/*
     		var ccpSign = new CCPSign();
     		var signInfo = await ccpSign.get(selectedDate, processCode);
     		
@@ -191,6 +196,7 @@
     		} else {
     			ccpHeatingDataJspPage.showSignBtn();
     		}
+    		*/
     	});
     	
     	$('#ccpHeatingDataTable tbody').on('click', 'tr', function () {
@@ -273,7 +279,27 @@
           </div> 
            
          <div class="card-body" id = "ccpHeatingsubTable">
-          
+          	  <div class="col-md-4">
+	      	<!-- CHART NO.1 -->
+	        <div class="card card-success">
+	          <div class="card-header">
+	            <h3 class="card-title" id = "title"></h3>
+	
+	            <div class="card-tools">
+	              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+	              </button>
+	              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+	            </div>
+	          </div>
+	          <div class="card-body">
+	            <div class="chart">
+	              <canvas id="target" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+	            </div>
+	          </div>
+	          <!-- /.card-body -->
+	        </div>
+	        <!-- /.card -->
+	      </div>
          </div>  
          
         </div>
