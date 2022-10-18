@@ -567,27 +567,30 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	@Override
 	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel(
 			Connection conn, String sensorKey) {
+			
+		String sql = "";
 		
 		try {
 			stmt = conn.createStatement();
 			
-			String sql = new StringBuilder()
+			sql = new StringBuilder()
 					.append("SELECT\n")
 					.append("	 B.sensor_name,\n")
-					.append("	 EXTRACT(MINUTE FROM A.create_time) AS each_minute,\n")
-					.append("	 A.sensor_value \n")
+					.append("	 EXTRACT(MINUTE FROM A.create_time) - (SELECT EXTRACT(MINUTE FROM bb.create_time) FROM data_metal bb WHERE A.sensor_key = bb.sensor_key AND bb.event_code = 'HT10') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
-					.append("LEFT JOIN common_code C\n")
-					.append("	ON A.process_code = C.code\n")
-					.append("INNER JOIN product D\n")
-					.append("	ON A.product_id = D.product_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.product_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("AND A.sensor_key = '" + sensorKey + "'\n")
 					.append("  AND A.event_code IN ('HT10', 'HT50') \n")
 					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
-					.append("ORDER BY EXTRACT(HOUR FROM A.create_time) \n")
+					.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
@@ -736,6 +739,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setSensorName(rs.getString("sensor_name"));
 		cvm.setEachMinute(rs.getString("each_minute"));
 		cvm.setSensorValue(rs.getString("sensor_value"));
+		cvm.setMinValue(rs.getString("min_value"));
+		cvm.setMaxValue(rs.getString("max_value"));
 
 		return cvm;
 	}

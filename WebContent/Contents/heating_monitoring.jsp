@@ -100,11 +100,48 @@
 	    
 	    ccpHeatingDataJspPage.fillSubTable = async function () {
 	    	
-	    	//$("#ccpHeatingsubTable").children().remove();
+	    	$("#ccpHeatingsubTable").children().remove();
 	    	
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
-	    	
 	    	console.log(data);
+	    	console.log(data[0].sensorName);
+	    	
+	    	$("#ccpHeatingsubTable").append(
+	    	`
+	    	<div class="card-header row">
+       				<div class="col-md-6">
+	          			<h3 class="card-title">
+	          				<i class="fas fa-edit" id="InfoContentTitle"></i>
+	          				온도 데이터 그래프
+	          				</h3>
+	        		</div>
+	         	<div class="col-md-6">
+	        	</div>
+          	</div>
+	    	<div class="col-md-4">
+	        	<div class="card card-success">
+	          		<div class="card-header">
+	            		<h3 class="card-title" id = "title">`+data[0].sensorName+`</h3>
+	
+	            	<div class="card-tools">
+	              		<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+	              		</button>
+	              	<button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+	            	</div>
+	          		</div>
+	          	<div class="card-body">
+	            <div class="chart">
+	              <canvas id="target" style="min-height: 350px; height: 350px; max-height: 250px; max-width: 100%; width: 1000px;"></canvas>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    	`
+	    	);
+	    	
+	    	//document.getElementById('title').innerHTML(data[0].sensorName);
+	    	//$('#title').innerText(data.sensorName);
+	    	
 	    		// graph initialize
 	    		
 	    		/* db data processing */
@@ -116,50 +153,85 @@
 	    		var customOptions = {
 	    				legend: { display: false },
 	    				scales: {
+	    					xAxes: [{
+	    			            scaleLabel: {
+	    			            	stacked: true,
+	    			            	display: true,
+	    			                labelString: "경과시간(분)",
+	    			                fontColor: "black"
+	    			            }
+	    			        }],
 	    			        yAxes: [{
 	    			            display: true,
 	    			            stacked: true,
 	    			            ticks: {
-	    			                min: -50,
-	    			                max: 50
+	    			                min: 0,
+	    			                max: 200
+	    			            },
+	    			            scaleLabel: {
+	    			            	display: true,
+	    			                labelString: "온도(°C)",
+	    			                fontColor: "red"
 	    			            }
 	    			        }]
 	    			    }
 	    			};
 	    		
-	    		/*
+	    		
 	    		// db에서 받은 데이터 [온도계 종류, 측정 시간, 온도값]의 이중 배열
 	    		// 이걸 온도계별로 시간 배열과 온도값 배열을 가지는 객체로 변환한다
 	    		var processData = function(arr, key) {
 	    		    var newObj = new Object();
 	    		    
 	    		    var temp = arr.filter(function(arr) {
-	    		    		return arr[0] == key;
+	    		    		return arr.sensorName == key;
 	    		        });
-	    		    newObj.time = temp.map(arr => arr[1]);
-	    		    newObj.value = temp.map(arr => arr[2]);
+	    		    newObj.time = temp.map(arr => arr.eachMinute);
+	    		    newObj.value = temp.map(arr => arr.sensorValue);
+	    		    newObj.minValue = temp.map(arr => arr.minValue);
+	    		    newObj.maxValue = temp.map(arr => arr.maxValue);
 
 	    		    return newObj;
 	    		}
-				*/
 				
-	    		for(var temp = 0; temp < censor_info.length; temp++){
+				
+	    		for(var temp = 0; temp < 1; temp++){
 	    						
-	    			var tempVal = processData(arr, censor_info[temp][0]);
-	    			var tempCtx = $(''#ccpHeatingsubTable').get(0).getContext('2d');
-	    			
+	    			var tempVal = processData(arr, censor_info[temp].sensorName);
+	    			var tempCtx = $('#target').get(0).getContext('2d');
+	    			console.log(tempVal.minValue);
+	    			console.log(tempVal.maxValue);
 	    			var chart = new Chart(tempCtx, { 
 	    				type: 'line',
 	    				data: {
 	    					labels: tempVal.time,
-	    					datasets: [{
+	    					datasets: [
+	    					{	
+	    						label : "온도",
+	    						type : 'line',
 	    						data: tempVal.value,
 	    						fill: false,
 	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
-	    					}]
+	    					}/*,
+	    					{
+	    						label : "한계기준최소온도",
+	    						type : 'line',
+	    						data: tempVal.minValue,
+	    						fill: false,
+	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
+	    					},
+	    					{
+	    						label : "한계기준최대온도",
+	    						type : 'line',
+	    						data: tempVal.maxValue,
+	    						fill: false,
+	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
+	    					}*/
+	    					]
 	    				},
 	    				options: customOptions
-	    			})
+	    			});
+	    			
 	    		}
 	    		
 	    };
@@ -279,27 +351,7 @@
           </div> 
            
          <div class="card-body" id = "ccpHeatingsubTable">
-          	  <div class="col-md-4">
-	      	<!-- CHART NO.1 -->
-	        <div class="card card-success">
-	          <div class="card-header">
-	            <h3 class="card-title" id = "title"></h3>
-	
-	            <div class="card-tools">
-	              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-	              </button>
-	              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-	            </div>
-	          </div>
-	          <div class="card-body">
-	            <div class="chart">
-	              <canvas id="target" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-	            </div>
-	          </div>
-	          <!-- /.card-body -->
-	        </div>
-	        <!-- /.card -->
-	      </div>
+          	 
          </div>  
          
         </div>
