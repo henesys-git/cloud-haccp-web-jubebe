@@ -82,7 +82,7 @@ $(document).ready(function(){
         type: "GET",
         url: "<%=Config.this_SERVER_path%>/cpvm"
         	 + "?method=" + 'monitoring'
-        	 + "&processCode=TP10",
+        	 + "&processCode=PC60",
         success: function (data) {
         	tempData = data;
         	console.log(data);
@@ -128,7 +128,7 @@ $(document).ready(function(){
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/cpvm"
 	           	 + "?method=" + 'monitoring'
-	           	 + "&processCode=TP10",
+	           	 + "&processCode=PC60",
 	            success: function (data) {
 	                gaugeList = document.gauges;
 	                

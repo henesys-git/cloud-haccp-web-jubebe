@@ -19,7 +19,7 @@
 		async function metalSensorList() {
 	    	
 			var itemList = new ItemList();
-			var type_cd = "TM";	// 금속검출기 코드 대분류
+			var type_cd = "TP";	// 금속검출기 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
@@ -27,14 +27,13 @@
 	    		sensorId = sensorList[i].sensorId;
 	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
-	    	
 	    };
 		
 	    metalSensorList();
 	    
 		async function getData() {
 	    	var selectedDate = date.getDate();
-	    	var processCode = "TP10";
+	    	var processCode = "PC60";
 	    	var sensorId = $("select[name=sensor-type]").val();
     		
 	        var fetchedData = $.ajax({
@@ -98,62 +97,6 @@
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
 	    }
-	    /*
-	    ccpMetalDataJspPage.fillSubTable = async function () {
-	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
-	    	
-	    	if(subTable) {
-	    		// redraw
-	    		subTable.clear().rows.add(data).draw();
-	    	} else {
-	    		// initialize
-			    var option = {
-						data : data,
-						columns: [
-							{ data: "sensorName", defaultContent: '' },
-							{ data: "createTime", defaultContent: '' },
-							{ data: "event", defaultContent: '' },
-							{ data: "sensorValue", defaultContent: '' },
-							{ data: "judge", defaultContent: '' },
-							{ data: "improvementAction", defaultContent: '' }
-				        ],
-				        columnDefs : [
-				        	{
-					  			targets: [3],
-					  			render: function(td, cellData, rowData, row, col){
-					  				console.log(cellData);
-					  				if (rowData.sensorValue == '1') {
-					  					return '검출';
-					  				}
-					  				else {
-					  					return '비검출';
-					  				}
-					  			}
-					  		},
-				   			{
-					  			targets: [5],
-					  			render: function(td, cellData, rowData, row, col){
-					  				if (rowData.judge == '적합') {
-					  					return 'n/a';
-					  				} else {
-					  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-					  						return rowData.improvementAction;
-					  					} else {
-					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
-					  					}
-					  				}
-					  			}
-					  		}
-					    ],
-					    stateSave : true
-				}
-	    		
-				subTable = $('#ccpDataSubTable').DataTable(
-					mergeOptions(heneMainTableOpts, option)
-				);
-	    	}
-	    };
-	    */
 	    
 	    ccpMetalDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
@@ -175,7 +118,7 @@
     		refreshMainTable();
     		
     		var selectedDate = date.getDate();
-	    	var processCode = "TP10";
+	    	var processCode = "PC60";
     		
     		var ccpSign = new CCPSign();
     		var signInfo = await ccpSign.get(selectedDate, processCode);
@@ -203,7 +146,7 @@
     		let subRow = mainTable.row( $(this).closest('tr') ).data();
     		let createTime = subRow.createTime;
     		let selectedDate = date.getDate();
-	    	let processCode = "TP10";
+	    	let processCode = "PC60";
     		
     		$.ajax({
                 type: "POST",
@@ -261,16 +204,6 @@
 				</select>
 	      	</div>
 			<div class="col-md-3">
-		      	<!-- <div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
-				    </label>
-				</div>
-				<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
-				    </label>
-				</div> -->
        	  	</div>
         	  
 			<div class="col-md-2 input-group">
@@ -312,26 +245,8 @@
 	        	</div>
 	        </div>
           </div>
-        <!--   <div class="card-body">
-          	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataTable" style="width:100%">
-				<thead>
-					<tr>
-					    <th>묶음값</th>
-					    <th>공정</th>
-					    <th>센서명</th>
-					    <th>제품</th>
-					    <th>생성시간</th>
-					    <th>적/부</th>
-					    <th>개선완료</th>
-					</tr>
-				</thead>
-				<tbody id="ccpDataTableBody">
-				</tbody>
-			</table>
-          </div>  -->
            
-         <div class="card-body">
+		  <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
 				   id="ccpDataTable" style="width:100%">
 				<thead>
