@@ -7,19 +7,15 @@
 
 <script type="text/javascript">
 
-	var ccpMetalDataJspPage = {};
-    var dataLength;
 	$(document).ready(function () {
     	
 		let date = new SetSingleDate2("", "#date", 0);
 		let mainTable;
-		let subTable;
-		let mainTableSelectedRow;
 		
-		async function metalSensorList() {
+		async function packingSensorList() {
 	    	
 			var itemList = new ItemList();
-			var type_cd = "CD";	// 금속검출기 코드 대분류
+			var type_cd = "CH";	// 포장기 코드 대분류
 			var sensorList = await itemList.getSensorList(type_cd);
 	    	
 	    	for(var i = 0; i < sensorList.length; i++) {
@@ -27,23 +23,20 @@
 	    		sensorId = sensorList[i].sensorId;
 	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
-	    	
 	    };
 		
-	    metalSensorList();
+	    packingSensorList();
 	    
 		async function getData() {
 	    	var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	var sensorId = $("select[name=sensor-type]").val();
+	    	var processCode = "PC70";
     		
 	        var fetchedData = $.ajax({
 	            type: "GET",
-	            url: "<%=Config.this_SERVER_path%>/ccpvm",
-	            data: "method=head" +
+	            url: "<%=Config.this_SERVER_path%>/kpi",
+	            data: "method=production" +
 	            	  "&date=" + selectedDate +
-	            	  "&processCode=" + processCode +
-	            	  "&sensorId=" + sensorId,
+	            	  "&processCode=" + processCode,
 	            success: function (result) {
 	            	return result;
 	            }
@@ -52,189 +45,47 @@
 	        return fetchedData;
 	    };
 	    
-	    async function getSubData(sensorKey) {
-	    	
-	        var fetchedData = $.ajax({
-			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/ccpvm",
-			            data: "method=detail" +
-			            	  "&sensorKey=" + sensorKey,
-			            success: function (result) {
-			            	return result;
-			            }
-			        });
-	    
-	    	return fetchedData;
-	    };
-	    
 	    async function initTable() {
 	    	var data = await getData();
-	    	
-	    	dataLength = data.length;
 	    	
 	    	var customOpts = {
 					data : data,
 					pageLength: 10,
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
-						{ data: "processName", defaultContent: '' },
-						{ data: "sensorName", defaultContent: '' },
+						{ data: "startTime", defaultContent: '' },
+						{ data: "finishTime", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
-						{ data: "createTime", defaultContent: '' },
-						{ data: "judge", defaultContent: '' },
-						{ data: "improvementCompletion", defaultContent: '' }
-			        ]
+						{ data: "spentTime", defaultContent: '' },
+						{ data: "totalProduction", defaultContent: '' },
+						{ data: "productionPerMinute", defaultContent: '' }
+					],
+					columnDefs : [
+			   			{
+				  			targets: [4],
+				  			render: function(td, cellData, rowData, row, col) {
+				  				return rowData.spentTime + '분';
+				  			}
+				  		}
+				    ]
 			}
-					
-			mainTable = $('#ccpDataTable').DataTable(
+			
+			mainTable = $('#kpiProductionTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
-	    }
-	    
-	    ccpMetalDataJspPage.fillSubTable = async function () {
-	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
-	    	
-	    	if(subTable) {
-	    		// redraw
-	    		subTable.clear().rows.add(data).draw();
-	    	} else {
-	    		// initialize
-			    var option = {
-						data : data,
-						columns: [
-							{ data: "sensorName", defaultContent: '' },
-							{ data: "createTime", defaultContent: '' },
-							{ data: "event", defaultContent: '' },
-							{ data: "sensorValue", defaultContent: '' },
-							{ data: "judge", defaultContent: '' },
-							{ data: "improvementAction", defaultContent: '' }
-				        ],
-				        columnDefs : [
-				        	{
-					  			targets: [3],
-					  			render: function(td, cellData, rowData, row, col){
-					  				console.log(cellData);
-					  				if (rowData.sensorValue == '1') {
-					  					return '검출';
-					  				}
-					  				else {
-					  					return '비검출';
-					  				}
-					  			}
-					  		},
-				   			{
-					  			targets: [5],
-					  			render: function(td, cellData, rowData, row, col){
-					  				if (rowData.judge == '적합') {
-					  					return 'n/a';
-					  				} else {
-					  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
-					  						return rowData.improvementAction;
-					  					} else {
-					  						return `<button class='btn btn-success fix-btn'>개선조치</button>`;
-					  					}
-					  				}
-					  			}
-					  		}
-					    ],
-					    stateSave : true
-				}
-	    		
-				subTable = $('#ccpDataSubTable').DataTable(
-					mergeOptions(heneMainTableOpts, option)
-				);
-	    	}
-	    };
-	    
-	    ccpMetalDataJspPage.showSignBtn = function() {
-	    	$("#ccp-sign-btn").show();
-			$("#ccp-sign-text").text("");
 	    }
 	    
 		initTable();
 		
 		async function refreshMainTable() {
 			var newData = await getData();
-
 			mainTable.clear().rows.add(newData).draw();
-			dataLength = newData.length;
-			
-    		if(subTable) {
-	    		subTable.clear().draw();
-	    	}
 		}
     	
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
-    		
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
-    		var ccpSign = new CCPSign();
-    		var signInfo = await ccpSign.get(selectedDate, processCode);
-    		
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
     	});
-    	
-    	$('#ccpDataTable tbody').on('click', 'tr', function () {
-    		
-    		if ( !$(this).hasClass('selected') ) {
-    			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpMetalDataJspPage.fillSubTable();
-            }
-    	});
-    	
-    	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
-    		
-    		let sensorKey = mainTableSelectedRow.sensorKey;
-			
-    		let subRow = subTable.row( $(this).closest('tr') ).data();
-    		let createTime = subRow.createTime;
-    		let selectedDate = date.getDate();
-	    	let processCode = $("input[name='test-yn']:checked").val();
-    		
-    		$.ajax({
-                type: "POST",
-                url: heneServerPath + '/Contents/fixLimitOut.jsp',
-                data: {
-                	sensorKey: sensorKey,
-                	createTime: createTime,
-                	date: selectedDate,
-                	processCode: processCode
-                },
-                success: function (html) {
-                    $("#modalWrapper").html(html);
-                }
-            });
-    	});
-    	
-    	$('#ccp-sign-btn').click(async function() {
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
-    		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
-    			return false;
-    		}
-    		
-	    	var ccpSign = new CCPSign();
-    		var signUserName = await ccpSign.sign(selectedDate, processCode);
-    		
-    		if(signUserName) {
-    			alert('서명 완료되었습니다');
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signUserName);
-    		} else {
-    			alert('서명 실패, 관리자에게 문의해주세요');
-    		}
-    	});
-	    
     });
     
 </script>
@@ -245,26 +96,16 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-3">
 	        	<h1 class="m-0 text-dark">
-	        		생산실적
+	        		생산성
 	        	</h1>
 	      	</div>
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="sensor-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="CD%25">전체</option>
+					<option value="">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
-		      <!-- 	<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
-				    </label>
-				</div>
-				<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
-				    </label>
-				</div> -->
        	  	</div>
         	  
 			<div class="col-md-2 input-group">
@@ -289,56 +130,29 @@
       <div class="col-md-12">
         <div class="card card-primary card-outline">
           <div class="card-header row">
-       		<div class="col-md-6">
+       		<div class="col-md-12">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		생산실적 데이터 목록
+	          		생산성 KPI 목록
 	          	</h3>
 	        </div>
-	        <div class="col-md-6">
-	        	<div class="float-right" id="ccp-sign-btn-wrapper">
-		          	<button class='btn btn-success' id="ccp-sign-btn">
-		          		<i class='fas fa-signature'></i>
-		          		서명
-		          	</button>
-		          	<div id="ccp-sign-text">
-		          	</div>
-	        	</div>
-	        </div>
           </div>
-          <div class="card-body">
-          	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataTable" style="width:100%">
-				<thead>
-					<tr>
-					    <th>묶음값</th>
-					    <th>공정</th>
-					    <th>센서명</th>
-					    <th>제품</th>
-					    <th>생성시간</th>
-					    <th>적/부</th>
-					    <th>개선완료</th>
-					</tr>
-				</thead>
-				<tbody id="ccpDataTableBody">
-				</tbody>
-			</table>
-          </div> 
            
-         <div class="card-body">
+		  <div class="card-body">
           	<table class='table table-bordered nowrap table-hover' 
-				   id="ccpDataSubTable" style="width:100%">
+				   id="kpiProductionTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>센서명</th>
-					    <th>생성시간</th>
-					    <th>이벤트</th>
-					    <th>측정값</th>
-					    <th>적/부</th>
-					    <th>개선조치</th>
+						<th>채번키</th>
+					    <th>시작시간</th>
+					    <th>종료시간</th>
+					    <th>제품명</th>
+					    <th>소요시간</th>
+					    <th>총 생산량</th>
+					    <th>분당 생산량</th>
 					</tr>
 				</thead>
-				<tbody id="ccpDataSubTableBody">
+				<tbody id="kpiProductionTableBody">
 				</tbody>
 			</table>
           </div>  
@@ -351,5 +165,3 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-<div id="modalWrapper"></div>

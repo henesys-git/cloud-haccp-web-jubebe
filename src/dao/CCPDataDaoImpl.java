@@ -19,6 +19,7 @@ import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
 import viewmodel.CCPTestDataViewModel;
+import viewmodel.KPIProductionViewModel;
 
 public class CCPDataDaoImpl implements CCPDataDao {
 	
@@ -616,6 +617,53 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	@Override
+	public List<KPIProductionViewModel> getKPIProduction(Connection conn, String processCode, String toDate, String fromDate) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	A.sensor_key,\n")
+					.append("	MIN(A.create_time) AS start_time,\n")
+					.append("	MAX(A.create_time) AS finish_time,\n")
+					.append("	B.product_name,\n")
+					.append("	ROUND(TIMESTAMPDIFF(SECOND, MIN(A.create_time), MAX(A.create_time)) / 60, 2) AS spent_time,\n")
+					.append("	SUM(A.sensor_value) AS total_production,\n")
+					.append("	ROUND(SUM(A.sensor_value) / (TIMESTAMPDIFF(SECOND, MIN(A.create_time), MAX(A.create_time)) / 60), 2) AS production_per_minute \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN product B\n")
+					.append("	ON A.product_id = B.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND DATE_FORMAT(A.create_time, '%Y-%m-%d') BETWEEN '"+ toDate +"' \n")
+					.append("												   AND '"+ fromDate +"' \n")
+					.append("	AND A.process_code = '" + processCode	+ "'\n")
+					.append("GROUP BY sensor_key \n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<KPIProductionViewModel> list = new ArrayList<KPIProductionViewModel>();
+			
+			while(rs.next()) {
+				KPIProductionViewModel data = extractKPIProductionViewModelFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private CCPData extractFromResultSet(ResultSet rs) throws SQLException {
 		CCPData ccpData = new CCPData();
 		
@@ -745,4 +793,18 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return cvm;
 	}
 	
+	private KPIProductionViewModel extractKPIProductionViewModelFromResultSet(ResultSet rs) 
+			throws SQLException {
+		KPIProductionViewModel vm = new KPIProductionViewModel();
+		
+		vm.setSensorKey(rs.getString("sensor_key"));
+		vm.setStartTime(rs.getTimestamp("start_time").toString());
+		vm.setFinishTime(rs.getTimestamp("finish_time").toString());
+		vm.setProductName(rs.getString("product_name"));
+		vm.setSpentTime(rs.getString("spent_time"));
+		vm.setTotalProduction(rs.getString("total_production"));
+		vm.setProductionPerMinute(rs.getString("production_per_minute"));
+		
+		return vm;
+	}
 }

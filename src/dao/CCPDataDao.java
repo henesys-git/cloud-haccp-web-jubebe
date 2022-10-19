@@ -12,6 +12,7 @@ import viewmodel.CCPDataMonitoringModel;
 import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
 import viewmodel.CCPTestDataViewModel;
+import viewmodel.KPIProductionViewModel;
 
 public interface CCPDataDao {
 	public List<CCPData> getAllCCPData(Connection conn, String type, String startDate, String endDate);
@@ -25,5 +26,5 @@ public interface CCPDataDao {
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate);
 	public List<CCPDataHeatingMonitoringModel> getAllCCPDataHeatingMonitoringModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
 	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel(Connection conn, String sensorKey);
-
+	public List<KPIProductionViewModel> getKPIProduction(Connection conn, String processCode, String toDate, String fromDate);
 }
