@@ -29,12 +29,13 @@
     		}
     		
     		var toDay = year + "-" + month + "-" + day;
-    		
+    		var processCode = "PC15";
 	        var fetchedData = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
 			            data: "method=monitoring" +
-			            	  "&toDay=" + toDay,
+			            	  "&toDay=" + toDay + 
+			            	  "&processCode=" + processCode,
 			            success: function (result) {
 			            	return result;
 			            }

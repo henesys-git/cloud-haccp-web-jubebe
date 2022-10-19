@@ -13,6 +13,7 @@ import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
 import viewmodel.CCPTestDataViewModel;
 import viewmodel.KPIProductionViewModel;
+import viewmodel.KPIQualityViewModel;
 
 public interface CCPDataDao {
 	public List<CCPData> getAllCCPData(Connection conn, String type, String startDate, String endDate);
@@ -22,9 +23,10 @@ public interface CCPDataDao {
 	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey);
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvement);
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(Connection conn, String toDate, String sensorId);
-	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate);
+	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate, String processCode);
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate);
 	public List<CCPDataHeatingMonitoringModel> getAllCCPDataHeatingMonitoringModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
 	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel(Connection conn, String sensorKey);
 	public List<KPIProductionViewModel> getKPIProduction(Connection conn, String processCode, String toDate, String fromDate);
+	public List<KPIQualityViewModel> getKPIQuality(Connection conn, String processCode, String toDate, String fromDate, String sensorId);
 }

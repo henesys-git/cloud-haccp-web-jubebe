@@ -71,7 +71,8 @@
   	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-timepicker/jquery.timepicker.css">
   	<!-- datetimepicker -->
   	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datetimepicker/css/bootstrap-datetimepicker.css">
-  	
+  		<!-- Date Picker -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"></link>
   	<!-- Global Configuration -->
   	<script>
   		// server root path
@@ -602,7 +603,9 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/menu.js"></script>
 	<!-- documentData -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/DocumentData.js"></script>
-	
+	<!--bootstrap-datepicker -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>  
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ko.min.js" charset="UTF-8"></script>
     <script>
     	/* 2020 12 12 최현수 필요없는 전역변수 찾아서 다 없애야됨! */
 		var vOrderNo = "";

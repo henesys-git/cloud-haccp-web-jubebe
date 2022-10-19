@@ -17,6 +17,7 @@ import dao.CCPDataDaoImpl;
 import service.KPIService;
 import utils.FormatTransformer;
 import viewmodel.KPIProductionViewModel;
+import viewmodel.KPIQualityViewModel;
 
 @WebServlet("/kpi")
 public class KPIController extends HttpServlet {
@@ -43,6 +44,7 @@ public class KPIController extends HttpServlet {
 		
 		String date = "";
 		String processCode = "";
+		String sensorId = "";
 		
 		switch(method) {
 		case "production":
@@ -51,6 +53,19 @@ public class KPIController extends HttpServlet {
 			
 			List<KPIProductionViewModel> cvmHeadList = kpiService.getKPIProductionViewModels(processCode, date, date);
 			result = FormatTransformer.toJson(cvmHeadList);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			out = res.getWriter();
+			
+			out.print(result);
+			break;
+		case "quality":
+			date = req.getParameter("date");
+			processCode = req.getParameter("processCode");
+			sensorId = req.getParameter("sensorId");
+			
+			List<KPIQualityViewModel> cvmHeadList2 = kpiService.getKPIQualityViewModels(processCode, date, date, sensorId);
+			result = FormatTransformer.toJson(cvmHeadList2);
 			
 			res.setContentType("application/json; charset=UTF-8");
 			out = res.getWriter();
