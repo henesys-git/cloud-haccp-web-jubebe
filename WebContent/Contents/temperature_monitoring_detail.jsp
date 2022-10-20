@@ -5,7 +5,9 @@
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
 <%@ page import="org.json.simple.*"%>
-
+<% 
+	String bizNo = session.getAttribute("bizNo").toString();
+%>
 <script src="<%=Config.this_SERVER_path%>/Lib/canvas-gauges-master/gauge.min.js"></script>
 
 <style>
@@ -26,48 +28,7 @@
 <script>
 
 //온도계 공통 옵션
-var commonOpts = {
-	    width: 300,
-	    height: 300,
-	    units: "°C",
-	    minValue: -50,
-	    maxValue: 50,
-	    majorTicks: [ -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 ],
-	    minorTicks: 2,
-	    strokeTicks: true,
-	    ticksAngle: 225,
-	    startAngle: 67.5,
-	    colorMajorTicks: "#ddd",
-	    colorMinorTicks: "#ddd",
-	    colorTitle: "#eee",
-	    colorUnits: "#ccc",
-	    colorNumbers: "#eee",
-	    colorPlate: "#222",
-	    borderShadowWidth: 0,
-	    borders: true,
-	    needleType: "arrow",
-	    needleWidth: 2,
-	    needleCircleSize: 7,
-	    needleCircleOuter: true,
-	    needleCircleInner: false,
-	    animationDuration: 1500,
-	    animationRule: "linear",
-	    colorBorderOuter: "#333",
-	    colorBorderOuterEnd: "#111",
-	    colorBorderMiddle: "#222",
-	    colorBorderMiddleEnd: "#111",
-	    colorBorderInner: "#111",
-	    colorBorderInnerEnd: "#333",
-	    colorNeedleShadowDown: "#333",
-	    colorNeedleCircleOuter: "#333",
-	    colorNeedleCircleOuterEnd: "#111",
-	    colorNeedleCircleInner: "#111",
-	    colorNeedleCircleInnerEnd: "#222",
-	    valueBoxBorderRadius: 0,
-	    colorValueBoxRect: "#222",
-	    colorValueBoxRectEnd: "#333"
-};
-
+var commonOpts;
 var gaugeList;
 var tempData;
 
@@ -78,6 +39,95 @@ $(document).ready(function(){
     
     //async function getData() {
     
+   	//브리에잇일  경우
+    if ('<%=bizNo%>' == 'B37487014970')	 {
+    	commonOpts = {
+    			width: 300,
+    		    height: 300,
+    		    units: "°C",
+    		    minValue: 0,
+    		    maxValue: 200,
+    		    majorTicks: [ 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200 ],
+    		    minorTicks: 2,
+    		    strokeTicks: true,
+    		    ticksAngle: 225,
+    		    startAngle: 67.5,
+    		    colorMajorTicks: "#ddd",
+    		    colorMinorTicks: "#ddd",
+    		    colorTitle: "#eee",
+    		    colorUnits: "#ccc",
+    		    colorNumbers: "#eee",
+    		    colorPlate: "#222",
+    		    borderShadowWidth: 0,
+    		    borders: true,
+    		    needleType: "arrow",
+    		    needleWidth: 2,
+    		    needleCircleSize: 7,
+    		    needleCircleOuter: true,
+    		    needleCircleInner: false,
+    		    animationDuration: 1500,
+    		    animationRule: "linear",
+    		    colorBorderOuter: "#333",
+    		    colorBorderOuterEnd: "#111",
+    		    colorBorderMiddle: "#222",
+    		    colorBorderMiddleEnd: "#111",
+    		    colorBorderInner: "#111",
+    		    colorBorderInnerEnd: "#333",
+    		    colorNeedleShadowDown: "#333",
+    		    colorNeedleCircleOuter: "#333",
+    		    colorNeedleCircleOuterEnd: "#111",
+    		    colorNeedleCircleInner: "#111",
+    		    colorNeedleCircleInnerEnd: "#222",
+    		    valueBoxBorderRadius: 0,
+    		    colorValueBoxRect: "#222",
+    		    colorValueBoxRectEnd: "#333"
+    	}
+    }
+    
+    else {
+    	commonOpts = {
+    			width: 300,
+    		    height: 300,
+    		    units: "°C",
+    		    minValue: -50,
+    		    maxValue: 50,
+    		    majorTicks: [ -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 ],
+    		    minorTicks: 2,
+    		    strokeTicks: true,
+    		    ticksAngle: 225,
+    		    startAngle: 67.5,
+    		    colorMajorTicks: "#ddd",
+    		    colorMinorTicks: "#ddd",
+    		    colorTitle: "#eee",
+    		    colorUnits: "#ccc",
+    		    colorNumbers: "#eee",
+    		    colorPlate: "#222",
+    		    borderShadowWidth: 0,
+    		    borders: true,
+    		    needleType: "arrow",
+    		    needleWidth: 2,
+    		    needleCircleSize: 7,
+    		    needleCircleOuter: true,
+    		    needleCircleInner: false,
+    		    animationDuration: 1500,
+    		    animationRule: "linear",
+    		    colorBorderOuter: "#333",
+    		    colorBorderOuterEnd: "#111",
+    		    colorBorderMiddle: "#222",
+    		    colorBorderMiddleEnd: "#111",
+    		    colorBorderInner: "#111",
+    		    colorBorderInnerEnd: "#333",
+    		    colorNeedleShadowDown: "#333",
+    		    colorNeedleCircleOuter: "#333",
+    		    colorNeedleCircleOuterEnd: "#111",
+    		    colorNeedleCircleInner: "#111",
+    		    colorNeedleCircleInnerEnd: "#222",
+    		    valueBoxBorderRadius: 0,
+    		    colorValueBoxRect: "#222",
+    		    colorValueBoxRectEnd: "#333"
+    	}
+    }
+    	
     $.ajax({
         type: "GET",
         url: "<%=Config.this_SERVER_path%>/cpvm"
