@@ -21,14 +21,14 @@ public class AlarmMessageService {
 		this.alarmMessageDao = alarmMessageDao;
 	}
 	
-	public LimitOutAlarmMessage getMessage(String bizNo, String eventCode, String sensorId) {
+	public LimitOutAlarmMessage getMessage(String bizNo, String eventCode, String sensorId, String productId) {
 		LimitOutAlarmMessage limitOutAlarmMessage = null;
 		Sensor sensor = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			
-			limitOutAlarmMessage = alarmMessageDao.getLimitOutAlarmMessage(conn, eventCode);
+			limitOutAlarmMessage = alarmMessageDao.getLimitOutAlarmMessage(conn, eventCode, productId);
 			
 			// TODO getLimitOutAlarmMessage 메서드에 sensorName도 한꺼번에 가져와서 아래 두줄 없애야됨
 			SensorService sensorService = new SensorService(new SensorDaoImpl(), bizNo);

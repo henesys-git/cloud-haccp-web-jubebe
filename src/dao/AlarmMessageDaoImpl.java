@@ -28,7 +28,7 @@ public class AlarmMessageDaoImpl implements AlarmMessageDao {
 	 * */
 	
 	@Override
-	public LimitOutAlarmMessage getLimitOutAlarmMessage(Connection conn, String eventCode) {
+	public LimitOutAlarmMessage getLimitOutAlarmMessage(Connection conn, String eventCode, String productId) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -39,15 +39,18 @@ public class AlarmMessageDaoImpl implements AlarmMessageDao {
 					.append("	C.api_token,\n")
 					.append("	A.event_name,\n")
 					.append("	B.code_name as process_name,\n")
-					.append("	A.min_value,\n")
-					.append("	A.max_value\n")
+					.append("	D.min_value,\n")
+					.append("	D.max_value\n")
 					.append("FROM event_info A\n")
 					.append("INNER JOIN common_code B\n")
 					.append("	ON A.parent_code = B.code\n")
 					.append("INNER JOIN alarm_info C\n")
 					.append("	ON A.tenant_id = C.tenant_id\n")
+					.append("INNER JOIN ccp_limit D\n")
+					.append("	ON A.event_code = D.event_code\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND A.event_code = '" + eventCode + "'\n")
+					.append("  AND D.product_id = '" + productId + "'\n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
