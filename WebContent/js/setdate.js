@@ -316,6 +316,63 @@ function SetYearMonth(initDate, selector, adjustDate) {
 	});
 }
 
+function SetYear(initDate, selector, adjustDate) {
+	var booleanValue = true;
+	
+	if(initDate == "") {
+		var adjustDate = parseInt(adjustDate);
+		var defaultDate = new Date();
+		defaultDate.setDate(defaultDate.getDate() + adjustDate);		
+	} else if(initDate == 'empty') {
+		booleanValue = false;
+	} else {
+		var adjustDate = parseInt(adjustDate);
+		var defaultDate = new Date(initDate);
+		defaultDate.setDate(defaultDate.getDate() + adjustDate);
+	}
+	
+	$(selector).daterangepicker({
+	    "singleDatePicker": true,
+	    "autoApply": true,
+		"autoUpdateInput": booleanValue,
+	    "locale": {
+	        "format": "YYYY",
+	        "separator": " - ",
+	        "applyLabel": "적용",
+	        "cancelLabel": "닫기",
+	        "fromLabel": "From",
+	        "toLabel": "To",
+	        "customRangeLabel": "Custom",
+	        "weekLabel": "주",
+	        "daysOfWeek": [
+	            "일",
+	            "월",
+	            "화",
+	            "수",
+	            "목",
+	            "금",
+	            "토"
+	        ],
+	        "monthNames": [
+	            "1월",
+	            "2월",
+	            "3월",
+	            "4월",
+	            "5월",
+	            "6월",
+	            "7월",
+	            "8월",
+	            "9월",
+	            "10월",
+	            "11월",
+	            "12월"
+	        ],
+	        "firstDay": 1
+	    },
+	    "startDate": defaultDate
+	});
+}
+
 function HeneDate() {
 	
 	// 선택한 날짜에 해당하는 주의 월요일, 토요일 날짜를 가져온다

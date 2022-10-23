@@ -20,6 +20,7 @@ import viewmodel.CCPDataStatisticModel;
 import viewmodel.CCPTestDataHeadViewModel;
 import viewmodel.CCPTestDataViewModel;
 import viewmodel.KPIProductionViewModel;
+import viewmodel.KPIQualityViewModel;
 
 public class CCPDataDaoImpl implements CCPDataDao {
 	
@@ -369,7 +370,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate) {
+	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(Connection conn, String toDate, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -396,6 +397,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					//.append("	WHERE DATE_FORMAT(A.create_time, '%Y-%m-%d') = '2022-03-02' \n")
 					.append("	AND A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
 					.append("	AND A.sensor_id like '%' \n")
+					.append("	AND A.process_code = '" + processCode + "' \n")
 					.append("  	GROUP BY DATE_FORMAT(A.create_time, '%Y-%m-%d'), A2.sensor_id \n")
 					.toString();
 			
@@ -664,6 +666,49 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	@Override
+	public List<KPIQualityViewModel> getKPIQuality(Connection conn, String processCode, String toDate, String fromDate, String sensorId) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	DATE_FORMAT(A.create_time, '%Y-%m') AS data_month,\n")
+					.append("	(select count(*) from B16687005050.data_metal aa where process_code = '" + processCode	+ "' AND sensor_id like '%" + sensorId	+ "%' AND month(aa.create_time) = month(A.create_time)) AS total_count, \n")
+					.append("	(select count(*) from B16687005050.data_metal bb where process_code = '" + processCode	+ "' AND sensor_id like '%" + sensorId	+ "%' AND month(bb.create_time) = month(A.create_time) AND bb.sensor_value = 1) AS total_detection \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN product B\n")
+					.append("	ON A.product_id = B.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND YEAR(A.create_time) = '"+ toDate +"' \n")
+					.append("	AND A.process_code = '" + processCode	+ "'\n")
+					.append("	AND A.sensor_id like '%" + sensorId	+ "%' \n")
+					.append("GROUP BY MONTH(A.create_time) \n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<KPIQualityViewModel> list = new ArrayList<KPIQualityViewModel>();
+			
+			while(rs.next()) {
+				KPIQualityViewModel data = extractKPIQualityViewModelFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private CCPData extractFromResultSet(ResultSet rs) throws SQLException {
 		CCPData ccpData = new CCPData();
 		
@@ -804,6 +849,17 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		vm.setSpentTime(rs.getString("spent_time"));
 		vm.setTotalProduction(rs.getString("total_production"));
 		vm.setProductionPerMinute(rs.getString("production_per_minute"));
+		
+		return vm;
+	}
+	
+	private KPIQualityViewModel extractKPIQualityViewModelFromResultSet(ResultSet rs) 
+			throws SQLException {
+		KPIQualityViewModel vm = new KPIQualityViewModel();
+		
+		vm.setDataMonth(rs.getString("data_month"));
+		vm.setTotalCount(rs.getString("total_count"));
+		vm.setTotalDetection(rs.getString("total_detection"));
 		
 		return vm;
 	}

@@ -89,8 +89,9 @@ public class CCPDataViewModelController extends HttpServlet {
 			break;
 		case "monitoring":
 			String toDates = req.getParameter("toDay");
+			processCode = req.getParameter("processCode");
 			
-			List<CCPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel(toDates);
+			List<CCPDataMonitoringModel> cvmMonitoringList = ccpService.getCCPDataMonitoringModel(toDates, processCode);
 			result = FormatTransformer.toJson(cvmMonitoringList);
 			
 			res.setContentType("application/json; charset=UTF-8");

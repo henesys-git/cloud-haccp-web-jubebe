@@ -127,12 +127,12 @@ public class CCPDataService {
 		return cvmList;
 	}
 	
-	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(String toDate) {
+	public List<CCPDataMonitoringModel> getCCPDataMonitoringModel(String toDate, String processCode) {
 		List<CCPDataMonitoringModel> cvmList = null;
 		
 		try {
 			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
-			cvmList = ccpDataDao.getCCPDataMonitoringModel(conn, toDate);
+			cvmList = ccpDataDao.getCCPDataMonitoringModel(conn, toDate, processCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
