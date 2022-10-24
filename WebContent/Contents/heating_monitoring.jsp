@@ -6,7 +6,24 @@
 <%@ page import="mes.client.guiComponents.*" %>
 <%@ page import="mes.client.util.*" %>
 <%@ page import="mes.client.conf.*" %>
+<style>
+	.chartWrapper {
+ position: relative;
+}
 
+.chartWrapper > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.chartAreaWrapper {
+  min-width: 1000px;
+  overflow-x: scroll;
+}
+
+</style>
 <script type="text/javascript">
 
 	var ccpHeatingDataJspPage = {};
@@ -118,9 +135,9 @@
 	         	<div class="col-md-6">
 	        	</div>
           	</div>
-	    	<div class="col-md-4">
+	    	<div>
 	        	<div class="card card-success">
-	          		<div class="card-header">
+	          		<div class="card-header" style="min-width:1000px;"">
 	            		<h3 class="card-title" id = "title">`+data[0].sensorName+`</h3>
 	
 	            	<div class="card-tools">
@@ -129,9 +146,9 @@
 	              	<button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
 	            	</div>
 	          		</div>
-	          	<div class="card-body">
-	            <div class="chart">
-	              <canvas id="target" style="min-height: 350px; height: 350px; max-height: 250px; max-width: 100%; width: 1000px;"></canvas>
+	          	<div class="card-body" style="min-width:1000px;">
+	            <div class="chart chartAreaWrapper">
+	              <canvas id="target" style="min-height: 350px; height: 350px; max-height: 250px; min-width: 1000px;"></canvas>
 	            </div>
 	          </div>
 	        </div>
@@ -157,7 +174,7 @@
 	    			            scaleLabel: {
 	    			            	stacked: true,
 	    			            	display: true,
-	    			                labelString: "경과시간(분)",
+	    			                labelString: "측정시간",
 	    			                fontColor: "black"
 	    			            }
 	    			        }],
