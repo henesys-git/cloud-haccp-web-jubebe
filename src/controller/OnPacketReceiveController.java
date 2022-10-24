@@ -14,17 +14,14 @@ import org.apache.log4j.Logger;
 import dao.AlarmInfoDaoImpl;
 import dao.AlarmMessageDaoImpl;
 import dao.CCPLimitDaoImpl;
-import dao.EventInfoDaoImpl;
 import model.AlarmInfo;
 import model.CCPLimit;
-import model.EventInfo;
 import model.LimitOutAlarmMessage;
 import service.AlarmInfoService;
 import service.AlarmMessageService;
 import service.AlarmService;
 import service.AlarmServiceSlack;
 import service.CCPLimitService;
-import service.EventInfoService;
 
 
 @WebServlet("/rpi/value/judge")
@@ -54,11 +51,39 @@ public class OnPacketReceiveController extends HttpServlet {
 		
 		CCPLimitService ccpLimitService = new CCPLimitService(new CCPLimitDaoImpl(), bizNo);
 		CCPLimit ccpLimit = ccpLimitService.getCCPLimitByCode(eventCode, productId);
+		
+		if(ifError(ccpLimit)) {
+			String errMsg = new StringBuilder()
+					.append("\n")
+					.append("[OnPacketReceiveController] null in CCPLimit" + "\n")
+					.append("[OnPacketReceiveController] bizNo:" + bizNo + "\n")
+					.append("[OnPacketReceiveController] deviceId:" + deviceId + "\n")
+					.append("[OnPacketReceiveController] eventCode:" + eventCode + "\n")
+					.append("[OnPacketReceiveController] productId:" + productId + "\n")
+					.toString();
+			logger.error(errMsg);
+			return;
+		}
+		
 		boolean isLimitOut = ccpLimitService.isLimitOut(ccpLimit, value);
 		
 		if(isLimitOut) {
 			AlarmMessageService alarmMsgService = new AlarmMessageService(new AlarmMessageDaoImpl());
-			LimitOutAlarmMessage limitOutAlarmMsg = alarmMsgService.getMessage(bizNo, eventCode, deviceId);
+			LimitOutAlarmMessage limitOutAlarmMsg = alarmMsgService.getMessage(bizNo, eventCode, deviceId, productId);
+			
+			if(ifError(limitOutAlarmMsg)) {
+				String errMsg = new StringBuilder()
+						.append("\n")
+						.append("[OnPacketReceiveController] null in LimitOutAlarmMessage" + "\n")
+						.append("[OnPacketReceiveController] please check getLimitOutAlarmMessage()" + "\n")
+						.append("[OnPacketReceiveController] bizNo:" + bizNo + "\n")
+						.append("[OnPacketReceiveController] deviceId:" + deviceId + "\n")
+						.append("[OnPacketReceiveController] eventCode:" + eventCode + "\n")
+						.append("[OnPacketReceiveController] productId:" + productId + "\n")
+						.toString();
+				logger.error(errMsg);
+				return;
+			}
 			
 			String msg = new StringBuilder()
 					.append(":bell: «—∞Ë ¿Ã≈ª\n")
@@ -86,5 +111,21 @@ public class OnPacketReceiveController extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
 		logger.error("post request not supported");
+	}
+	
+	private boolean ifError(CCPLimit cl) {
+		if(cl.getEventCode() == null || cl.getProductId() == null) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean ifError(LimitOutAlarmMessage msg) {
+		if(msg.getEventName() == null || msg.getProcessName() == null) {
+			return true;
+		}
+		
+		return false;
 	}
 }

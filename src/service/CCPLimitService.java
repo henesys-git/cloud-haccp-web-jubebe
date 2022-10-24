@@ -60,7 +60,16 @@ public class CCPLimitService {
 		double min = ccpLimit.getMinValue();
 		double max = ccpLimit.getMaxValue();
 		
+		logger.info("=================");
+		logger.info("biz: " + this.bizNo);
+		logger.info(ccpLimit.toString());
+		logger.info("min: " + min);
+		logger.info("max: " + max);
+		logger.info("val: " + value);
+		
 		if( value < min || value > max ) {
+			logger.info("limit out: true");
+			logger.info("=================");
 			return true;
 		}
 		
