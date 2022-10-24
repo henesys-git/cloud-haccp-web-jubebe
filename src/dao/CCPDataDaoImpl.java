@@ -500,7 +500,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	B.sensor_name,\n")
 					.append("	D.product_name,\n")
 					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
-					.append("	IFNULL((SELECT DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time,\n")
+					.append("	IFNULL((SELECT DATE_FORMAT(cc.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time,\n")
 					.append("	(\n")
 					.append("		SELECT CASE \n")
 					.append("			WHEN NOT EXISTS(\n")
@@ -568,7 +568,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("create_time \n")
 					.append("FROM data_metal \n")
 					.append("WHERE sensor_key = '"+sensorKey +"' \n")
-					.append("AND event_code = 'HT10' \n")
+					.append("AND event_code = 'HT30' \n")
 					.toString();
 			
 			rs = stmt.executeQuery(sql);
@@ -576,6 +576,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			while(rs.next()) {
 				startTime = rs.getString("create_time");
 			}
+			
+			//stmt.close();
+			rs.close();
 			
 			sql = new StringBuilder()
 					.append("SELECT \n")
@@ -590,9 +593,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			while(rs.next()) {
 				endTime = rs.getString("create_time");
 			}
-			System.out.println(endTime == null);
-			System.out.println(endTime.equals(""));
-			System.out.println("endTime : " + endTime);
+			
+			//stmt.close();
+			rs.close();
 			
 			//해당 채번키의 종료시간 없으면 온도 데이터 쌓인 것 중 MAX 시간 가져옴
 			if(endTime.equals("")) {
@@ -609,6 +612,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				while(rs.next()) {
 					endTime = rs.getString("create_time");
 				}
+				
+				//stmt.close();
+				rs.close();
 				
 			}
 			
@@ -654,7 +660,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
 					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
 					.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
-					.append("LIMIT 30 \n")
+					//.append("LIMIT 30 \n")
 					.toString();
 					
 			logger.debug("sql:\n" + sql);
