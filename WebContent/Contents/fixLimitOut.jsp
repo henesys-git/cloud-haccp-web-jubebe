@@ -109,10 +109,13 @@ $(document).ready(function () {
 					if('<%=processCode%>' == 'PC30') {
 						ccpHeatingDataJspPage.fillSubTable();
 						ccpHeatingDataJspPage.showSignBtn();
-					} else {
+					} else if('<%=processCode%>' == 'PC10' || '<%=processCode%>' == 'PC15'){
 						ccpMetalDataJspPage.fillSubTable();
 						ccpMetalDataJspPage.showSignBtn();
+					} else {
+						ccpBreakawayJSPPage.refreshTable();
 					}
+					
 	        		alert('개선조치 완료 (서명 초기화)');
 	         	} else {
 	         		alert('개선조치 실패, 관리자 문의 필요');

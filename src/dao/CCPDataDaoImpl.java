@@ -441,7 +441,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
-					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, '利钦', '何利钦') as judge,\n")
+					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '利钦', '何利钦') as judge,\n")
 					.append("	A.improvement_action \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
@@ -455,9 +455,9 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	AND DATE_FORMAT(A.create_time, '%Y-%m-%d') BETWEEN '"+ toDate +"' \n")
 					.append("	AND '"+ fromDate +"' \n")
 					.append("	AND A.sensor_id LIKE '%" + sensorId + "%'\n")
-					.append("	AND A.process_code LIKE '" + processCode	+ "'\n")
-					.append("	AND (A.sensor_value > C.max_value \n")
-					.append("	OR A.sensor_value < C.min_value) \n")
+					.append("	AND A.process_code LIKE '%" + processCode	+ "%'\n")
+					.append("	AND (A.sensor_value > D.max_value \n")
+					.append("	OR A.sensor_value < D.min_value) \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);

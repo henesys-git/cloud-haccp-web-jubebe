@@ -94,6 +94,9 @@ public class CCPDataService {
 			conn.setAutoCommit(false);
 			
 			boolean fixed = ccpDataDao.fixLimitOut(conn, sensorKey, createTime, improvementAction);
+			
+			logger.debug("공정코드:");
+			logger.debug(processCode);
 			boolean deleted = ccpSignDao.delete(conn, date, processCode);
 			
 			if(fixed && deleted) {

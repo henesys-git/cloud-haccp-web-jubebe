@@ -14,11 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import dao.ItemListDaoImpl;
-import dao.ProductDaoImpl;
 import model.ItemList;
-import model.Product;
 import service.ItemListService;
-import service.ProductService;
 import utils.FormatTransformer;
 
 

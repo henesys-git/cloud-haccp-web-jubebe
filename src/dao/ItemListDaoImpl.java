@@ -108,11 +108,11 @@ public class ItemListDaoImpl implements ItemListDao {
 			
 			String sql = new StringBuilder()
 				.append("SELECT  		\n")
-				.append("code,  		\n")
-				.append("code_name  		\n")
+				.append("	code,  		\n")
+				.append("	code_name  		\n")
 				.append("FROM common_code	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("AND code like '" + type_cd + "%' \n")
+				.append("  AND code like '" + type_cd + "%' \n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
