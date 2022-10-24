@@ -218,7 +218,7 @@
 		$('#shmApiTable').off().on('click', '.send-btn', function(e) {
 			e.stopPropagation();
 			
-			if(mainTableSelectedRow.improvementCompletion === '미완료') {
+			if(mainTableSelectedRow.improvementCompletion == '미완료') {
 				alert('개선조치를 해주세요');
 				return;
 			}
