@@ -661,10 +661,10 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL201" populated="true" UUID="1c6ac8e7-b13f-47d9-a621-2b815b536a13" autoIncrement="false" autoIncrementSequenceName="ccp_limit_product_id_seq" defaultValue="" name="제품아이디" nullable="0" physicalName="product_id" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL202" populated="true" UUID="e9bba256-1f24-4712-87bf-47ea928a31a4" autoIncrement="false" autoIncrementSequenceName="ccp_limit_min_value_seq" defaultValue="" name="최소값" nullable="0" physicalName="min_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+    <column id="COL202" populated="true" UUID="e9bba256-1f24-4712-87bf-47ea928a31a4" autoIncrement="false" autoIncrementSequenceName="ccp_limit_min_value_seq" defaultValue="" name="최소값" nullable="0" physicalName="min_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL203" populated="true" UUID="aaa47275-c053-490b-80c2-a6e489a5708a" autoIncrement="false" autoIncrementSequenceName="ccp_limit_max_value_seq" defaultValue="" name="최대값" nullable="0" physicalName="max_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+    <column id="COL203" populated="true" UUID="aaa47275-c053-490b-80c2-a6e489a5708a" autoIncrement="false" autoIncrementSequenceName="ccp_limit_max_value_seq" defaultValue="" name="최대값" nullable="0" physicalName="max_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL204" populated="true" UUID="48850910-fd1e-41d9-96fe-df7654abb572" autoIncrement="false" autoIncrementSequenceName="ccp_limit_value_unit_seq" defaultValue="" name="값단위" nullable="0" physicalName="value_unit" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -752,7 +752,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="0" viewportY="1658" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="0" viewportY="1208" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB8" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
