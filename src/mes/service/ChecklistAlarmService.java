@@ -9,7 +9,6 @@ import dao.ChecklistAlarmDao;
 import mes.frame.database.JDBCConnectionPool;
 import mes.model.ChecklistAlarm;
 import mes.model.ChecklistSign;
-import model.ChecklistInfo;
 import service.ChecklistInfoService;
 
 public class ChecklistAlarmService {
@@ -25,14 +24,32 @@ public class ChecklistAlarmService {
 	}
 	
 	public List<ChecklistAlarm> select() {
-		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
-		List<ChecklistAlarm> clAlarm = clDao.select(conn);
+		List<ChecklistAlarm> clAlarm = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			clAlarm = clDao.select(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
 		return clAlarm;
 	}
 	
 	public List<ChecklistSign> select2() {
-		Connection conn = JDBCConnectionPool.getTenantDB(bizNo);
-		List<ChecklistSign> clSign = clDao.select2(conn);
+		List<ChecklistSign> clSign = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			clSign = clDao.select2(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+
 		return clSign;
 	}
 	

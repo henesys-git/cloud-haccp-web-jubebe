@@ -89,8 +89,14 @@ public class ShmApiService {
 	}
 	
 	public void updateShmSentYn(String sensorKey, String yn) {
-		conn = JDBCConnectionPool.getTenantDB(bizNo);
-		ccpDataDao.updateShmSentYn(conn, sensorKey, yn);
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			ccpDataDao.updateShmSentYn(conn, sensorKey, yn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
 	}
 	
 	private JSONArray removeImprvCommIfBreakYnIsN(JSONArray arr) {
