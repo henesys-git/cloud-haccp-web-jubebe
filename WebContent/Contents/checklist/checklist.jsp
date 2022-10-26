@@ -235,7 +235,7 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 			}
     		
     		let checklistId = selectedRow.checklistId;
-    		// TODO:제일 최신 포맷 수정이력번호 가져와야 함
+    		// TODO:기존에 등록된 포맷의 수정이력번호 가져와야 함
     		//let checklistFormatRevisionNo = 0;
     		let checklistRevisionNo = selectedRow.revisionNo;
     		let checklistSeqNo = selectedRow.seqNo;
