@@ -32,7 +32,7 @@ public class CCPLimitDaoImpl implements CCPLimitDao {
 			String sql = new StringBuilder()
 				.append("SELECT \n")
 				.append("	event_code,\n")
-				.append("	product_id,\n")
+				.append("	object_id,\n")
 				.append("	min_value,\n")
 				.append("	max_value,\n")
 				.append("	value_unit\n")
@@ -72,14 +72,14 @@ public class CCPLimitDaoImpl implements CCPLimitDao {
 			String sql = new StringBuilder()
 					.append("SELECT \n")
 					.append("	event_code,\n")
-					.append("	product_id,\n")
+					.append("	object_id,\n")
 					.append("	min_value,\n")
 					.append("	max_value,\n")
 					.append("	value_unit\n")
 					.append("FROM ccp_limit\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND event_code = '" + eventCode + "'\n")
-					.append("  AND product_id = '" + productId + "'\n")
+					.append("  AND object_id = '" + productId + "'\n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
@@ -107,7 +107,7 @@ public class CCPLimitDaoImpl implements CCPLimitDao {
 		CCPLimit ccpLimit = new CCPLimit();
 		
 		ccpLimit.setEventCode(rs.getString("event_code"));
-		ccpLimit.setProductId(rs.getString("product_id"));
+		ccpLimit.setProductId(rs.getString("object_id"));
 		ccpLimit.setMinValue(rs.getDouble("min_value"));
 		ccpLimit.setMaxValue(rs.getDouble("max_value"));
 		ccpLimit.setValueUnit(rs.getString("value_unit"));

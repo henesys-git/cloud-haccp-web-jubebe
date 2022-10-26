@@ -95,7 +95,7 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 					.append("	ON C.shm_critical_limit_type = F.code \n")
 					.append("INNER JOIN ccp_limit L\n")
 					.append("	ON A.event_code = L.event_code \n")
-					.append("	AND A.product_id = L.product_id \n")
+					.append("	AND A.product_id = L.object_id \n")
 					.append("INNER JOIN product P\n")
 					.append("	ON A.product_id = P.product_id\n")
 					.toString();
