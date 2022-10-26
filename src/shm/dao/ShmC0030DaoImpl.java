@@ -30,8 +30,8 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
-					.append("	'99999999' AS lcns_no,\n")
-					.append("	'ÀÎÁõ¿ø' AS company_nm,\n")
+					.append("	Q.shm_api_license_no AS lcns_no,\n")
+					.append("	Q.customer_name AS company_nm,\n")
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', 1) AS create_date,\n")
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', -1) AS create_time,\n")
 					.append("	C.shm_ccp_type AS rec_code,\n")
@@ -98,6 +98,8 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 					.append("	AND A.product_id = L.product_id \n")
 					.append("INNER JOIN product P\n")
 					.append("	ON A.product_id = P.product_id\n")
+					.append("INNER JOIN customer Q\n")
+					.append("	ON A.tenant_id = Q.tenant_id\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
