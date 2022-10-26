@@ -661,7 +661,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL201" populated="true" UUID="9eb33482-e268-495c-93a6-880183ab6368" autoIncrement="false" autoIncrementSequenceName="ccp_limit_event_code_seq" defaultValue="" name="이벤트코드" nullable="0" physicalName="event_code" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL202" populated="true" UUID="1c6ac8e7-b13f-47d9-a621-2b815b536a13" autoIncrement="false" autoIncrementSequenceName="ccp_limit_product_id_seq" defaultValue="" name="제품아이디" nullable="0" physicalName="product_id" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL202" populated="true" UUID="1c6ac8e7-b13f-47d9-a621-2b815b536a13" autoIncrement="false" autoIncrementSequenceName="ccp_limit_object_id_seq" defaultValue="" name="개체아이디" nullable="0" physicalName="object_id" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL203" populated="true" UUID="e9bba256-1f24-4712-87bf-47ea928a31a4" autoIncrement="false" autoIncrementSequenceName="ccp_limit_min_value_seq" defaultValue="" name="최소값" nullable="0" physicalName="min_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -682,7 +682,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <index id="IDX206" populated="true" UUID="9ad7daea-1cad-4c92-aceb-65478136e8b6" clustered="false" name="ccp_limit_pk" physicalName="ccp_limit_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC207" populated="true" UUID="895b3a4c-edf9-484e-8d8f-acd607bd2241" ascendingOrDescending="UNSPECIFIED" column-ref="COL200" name="테넌트아이디" physicalName="tenant_id" />
      <index-column id="IDC208" populated="true" UUID="d3147a8d-6023-436c-9cec-df5addff4be6" ascendingOrDescending="UNSPECIFIED" column-ref="COL201" name="이벤트코드" physicalName="event_code" />
-     <index-column id="IDC209" populated="true" UUID="d6307e0f-bacc-46c6-9b6c-4a5ce256c27d" ascendingOrDescending="UNSPECIFIED" column-ref="COL202" name="제품아이디" physicalName="product_id" />
+     <index-column id="IDC209" populated="true" UUID="d6307e0f-bacc-46c6-9b6c-4a5ce256c27d" ascendingOrDescending="UNSPECIFIED" column-ref="COL202" name="개체아이디" physicalName="object_id" />
     </index>
    </folder>
   </table>
@@ -755,7 +755,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="23" viewportY="564" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="306" viewportY="1504" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB9" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB18" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
