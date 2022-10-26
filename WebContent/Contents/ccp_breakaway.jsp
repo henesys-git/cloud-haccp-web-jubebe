@@ -6,55 +6,42 @@
 <%@ page import="mes.client.conf.*" %>
 
 <script type="text/javascript">
-
-	var ccpMetalDataJspPage = {};
+	
+	var ccpBreakawayJSPPage = {};
 	var startDate;
 	var endDate;
-	var mainTable;
 	
 	$(document).ready(function () {
-    	
+		var mainTable;
 		var date = new SetRangeDate("dateParent", "date", 30);
 	    
-		let mainTableSelectedRow;
-		
 		async function CCPList() {
-	    	
 			var itemList = new ItemList();
 			var type_cd = "PC";
 			var ccpList = await itemList.getCCPList(type_cd);
 	    	
-	    	$("#ccp_gubun").prepend("<option value='PC%25'>전체</option>");
-	    	
 	    	for(var i = 0; i < ccpList.length; i++) {
-	    		
 	    		ccpName = ccpList[i].sensorName;
 	    		ccp = ccpList[i].sensorId;
-	    		$("#ccp_gubun").append("<option value = '"+ccp+"'>"+ccpName+"</option>");
+	    		$("#ccp-type").append("<option value = '"+ccp+"'>"+ccpName+"</option>");
 	    	}
-	    	
 	    };
 	    
 	    CCPList();
 	    
-		async function metalSensorList() {
-	    	
+		async function getSensorList() {
 			var itemList = new ItemList();
-			var type_cd = "CD";
-			var sensorList = await itemList.getSensorList(type_cd);
-	    	
-	    	$("#md-type").prepend("<option value='CD%25'>전체</option>");
+			var sensorList = await itemList.getSensorListAll();
 
 	    	for(var i = 0; i < sensorList.length; i++) {
-	    		
 	    		sensorName = sensorList[i].sensorName;
 	    		sensorId = sensorList[i].sensorId;
-	    		$("#md-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
+	    		$("#sensor-type").append("<option value = '"+sensorId+"'>"+sensorName+"</option>");
 	    	}
 	    	
 	    };
 	    
-	    metalSensorList();
+	    getSensorList();
 		
 		async function getData() {
 			
@@ -62,16 +49,16 @@
 			startDate = dateVal.substr(0, 10);
 			endDate = dateVal.substr(13, 10);
 			
-	    	var processCode = $("input[name='test-yn']:checked").val();
-	    	var ccpType = $("#md-type option:selected").val();
-
+	    	var processCode = $("#ccp-type option:selected").val();
+	    	var sensorType = $("#sensor-type option:selected").val();
+			
 	    	var fetchedData = $.ajax({
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/ccpvm",
 	            data: "method=metal-breakaway" +
 	            	  "&toDate=" + startDate +
 	            	  "&fromDate=" + endDate +
-	            	  "&sensorId=" + ccpType +
+	            	  "&sensorId=" + sensorType +
 	            	  "&processCode=" + processCode,
 	            success: function (result) {
 	            	return result;
@@ -132,25 +119,17 @@
 
 	    	mainTable.draw();
 	    }
-	    
-	    ccpMetalDataJspPage.fillSubTable = async function () {
-			
-		};
-
-		ccpMetalDataJspPage.showSignBtn = function() {
-			refreshMainTable();
-		}
 
 	    initTable();
 	    
-		async function refreshMainTable() {
+	    ccpBreakawayJSPPage.refreshTable = async function () {
 			var newData = await getData();
 			mainTable.clear().rows.add(newData).draw();
 		}
-    	
+		
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(function() {
-    		refreshMainTable();
+    		ccpBreakawayJSPPage.refreshTable();
     	});
     	
     	//개선조치
@@ -162,7 +141,7 @@
     		var createTime = row.createTime;
     		
     		var selectedDate = createTime.toString().substr(0, 10);
-	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	var processCode = $("#ccp-type option:selected").val();
     		
     		$.ajax({
                 type: "POST",
@@ -192,33 +171,21 @@
 	        		CCP 이탈 데이터 관리
 	        	</h1>
 	      	</div>
-	      	<div class="col-md-2 form-group">
-				<label class="d-inline-block" for="md-type">CCP 타입:</label>
-				<select class="form-control w-auto d-inline-block" id="ccp_gubun">
+	      	<div class="col-md-3 form-group">
+				<label class="d-inline-block" for="ccp-type">CCP 타입:</label>
+				<select class="form-control w-auto d-inline-block" id="ccp-type">
+					<option value='%25'>전체</option>
 				</select>
 	      	</div>
-	      	<div class="col-md-2 form-group">
-				<label class="d-inline-block" for="md-type">센서명:</label>
-				<select class="form-control w-auto d-inline-block" id="md-type">
+	      	<div class="col-md-3 form-group">
+				<label class="d-inline-block" for="sensor-type">센서명:</label>
+				<select class="form-control w-auto d-inline-block" id="sensor-type">
+					<option value='%25'>전체</option>
 				</select>
 	      	</div>
-			<div class="col-md-2">
-		      	<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
-				    </label>
-				</div>
-				<div class="form-check-inline">
-				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10">테스트
-				    </label>
-				</div>
-       	  	</div>
-        	  
 			<div class="col-md-2 input-group" id = 'dateParent'>
 	         	  	<input type="text" class="form-control float-right" id="date">
 			</div>
-		
 			<div class="col-md-1">
 	   	  		<button type="submit" class="btn btn-success" id="getDataBtn">
 	   	  	    	<i class="fas fa-search"></i>

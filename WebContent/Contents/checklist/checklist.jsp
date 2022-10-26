@@ -202,7 +202,7 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
     	
     	$("#insert-btn").off().click(function() {
     		let checklistId = 'checklist' + '<%=checklistNum%>';
-    		// 제일 최신 포맷 수정이력번호 가져와야 함
+    		// TODO:제일 최신 포맷 수정이력번호 가져와야 함
     		let checklistFormatRevisionNo = 0;
     		let page = 2;
     		
@@ -235,7 +235,7 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 			}
     		
     		let checklistId = selectedRow.checklistId;
-    		// 제일 최신 포맷 수정이력번호 가져와야 함
+    		// TODO:기존에 등록된 포맷의 수정이력번호 가져와야 함
     		//let checklistFormatRevisionNo = 0;
     		let checklistRevisionNo = selectedRow.revisionNo;
     		let checklistSeqNo = selectedRow.seqNo;
