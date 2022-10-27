@@ -38,7 +38,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("	A.create_time,\n")
 					.append("	D.event_name as event,\n")
 					.append("	A.sensor_value,\n")
-					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, '利钦', '何利钦') as judge,\n")
+					.append("	IF((CAST(A.sensor_value AS DOUBLE) <= CAST(C.max_value AS DOUBLE)) && (CAST(A.sensor_value AS DOUBLE) >= CAST(C.min_value AS DOUBLE)), '利钦', '何利钦') as judge,\n")
 					.append("	A.improvement_action\n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
@@ -53,6 +53,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
 					.append("AND A.sensor_id like '%" + sensorId	+ "%'\n")
+					.append("ORDER BY A.create_time DESC \n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
@@ -105,7 +106,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("  AND i.type_code = 'TP'											\n")
 					.append("  AND a.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
 					.append("GROUP BY a.sensor_id \n")
-					.append("ORDER BY a.create_time DESC, a.sensor_id ASC		\n")
+					.append("ORDER BY a.sensor_id ASC, a.create_time DESC \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
