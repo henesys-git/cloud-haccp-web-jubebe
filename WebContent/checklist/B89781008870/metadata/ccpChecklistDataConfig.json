@@ -1,0 +1,18 @@
+{
+	"metaldetector": {
+		"rowStartCell":"cell4",
+		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC41", "MC42", "MC51", "MC52", "judge", "empty"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "6"
+	},
+	"heating": {
+		"rowStartCell":"cell4",
+		"rowOrder": ["prod", "empty", "HT30", "HT10", "HT40", "HT50", "HT60", "empty"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	}
+}
