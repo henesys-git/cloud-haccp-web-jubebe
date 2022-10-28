@@ -38,13 +38,13 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("	A.create_time,\n")
 					.append("	D.event_name as event,\n")
 					.append("	A.sensor_value,\n")
-					.append("	IF(A.sensor_value <= C.max_value && A.sensor_value >= C.min_value, '利钦', '何利钦') as judge,\n")
+					.append("	IF((CAST(A.sensor_value AS DOUBLE) <= CAST(C.max_value AS DOUBLE)) && (CAST(A.sensor_value AS DOUBLE) >= CAST(C.min_value AS DOUBLE)), '利钦', '何利钦') as judge,\n")
 					.append("	A.improvement_action\n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
-					.append("INNER JOIN temperature_limit C\n")
-					.append("	ON A.sensor_id = C.sensor_id\n")
+					.append("INNER JOIN ccp_limit C\n")
+					.append("	ON A.sensor_id = C.object_id\n")
 					.append("	AND A.event_code = C.event_code\n")
 					.append("LEFT JOIN event_info D\n")
 					.append("	ON A.event_code = D.event_code\n")
@@ -53,6 +53,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
 					.append("AND A.sensor_id like '%" + sensorId	+ "%'\n")
+					.append("ORDER BY A.create_time DESC \n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);
@@ -96,8 +97,8 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("FROM data_metal a									\n")
 					.append("INNER JOIN sensor i								\n")
 					.append("	ON a.sensor_id = i.sensor_id					\n")
-					.append("INNER JOIN temperature_limit t						\n")
-					.append("	ON a.sensor_id = t.sensor_id									\n")
+					.append("INNER JOIN ccp_limit t						\n")
+					.append("	ON a.sensor_id = t.object_id									\n")
 					.append("WHERE a.create_time = (SELECT MAX(create_time)						\n")
 					.append("					 	FROM data_metal a2							\n")
 					.append("						WHERE a.sensor_id = a2.sensor_id			\n")
@@ -105,7 +106,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("  AND i.type_code = 'TP'											\n")
 					.append("  AND a.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
 					.append("GROUP BY a.sensor_id \n")
-					.append("ORDER BY a.create_time DESC, a.sensor_id ASC		\n")
+					.append("ORDER BY a.sensor_id ASC, a.create_time DESC \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);

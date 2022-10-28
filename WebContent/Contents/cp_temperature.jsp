@@ -59,6 +59,8 @@
 	    	var customOpts = {
 					data : data,
 					pageLength: 10,
+					ordering : true,
+					order: [[2, 'desc']],
 					columns: [
 						{ data: "sensorKey", defaultContent: '' },
 						{ data: "sensorName", defaultContent: '' },
@@ -91,6 +93,7 @@
 				  		}
 				    ],
 				    stateSave : true
+				   
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(

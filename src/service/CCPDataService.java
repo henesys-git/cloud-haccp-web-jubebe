@@ -149,7 +149,7 @@ public class CCPDataService {
 		List<CCPDataDetailViewModel> cvmList = null;
 
 		try {
-			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
+			conn = JDBCConnectionPool.getTenantDB(tenantId);
 			cvmList = ccpDataDao.getMetalBreakAwayList(conn, sensorKey, sensorId, processCode, toDate, fromDate);
 		} catch(Exception e) {
 			logger.error(e.getMessage());

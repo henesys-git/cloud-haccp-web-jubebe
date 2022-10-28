@@ -50,7 +50,7 @@ public class AlarmMessageDaoImpl implements AlarmMessageDao {
 					.append("	ON A.event_code = D.event_code\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND A.event_code = '" + eventCode + "'\n")
-					.append("  AND D.product_id = '" + productId + "'\n")
+					.append("  AND D.object_id = '" + productId + "'\n")
 					.toString();
 
 			logger.debug("sql:\n" + sql);

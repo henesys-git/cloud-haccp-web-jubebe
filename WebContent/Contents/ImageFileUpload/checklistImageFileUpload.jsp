@@ -7,6 +7,7 @@
 <%@ page import="mes.client.common.*" %>
 <%@ page import="mes.frame.common.*" %>
 <%
+	String OS = System.getProperty("os.name").toLowerCase();
 	String realFolder = "";
 
 	// 해쉬테이블
@@ -15,6 +16,24 @@
 	// 업로드용 폴더 이름
 	String saveFolder =  "/images/checklist_file_img";
 	String encType = "utf-8";
+	String docPath = "";
+	/*
+	if (OS.indexOf("win") >= 0) {
+	    docPath = "C:/DocServer";
+	    
+	    File f = new File(docPath);
+	    if(!f.exists()) {
+	    	f.mkdir();
+	    }
+	} else {
+	    docPath = "/home/henesys/DocServer";
+	    
+	    File f = new File(docPath);
+	    if(!f.exists()) {
+	    	f.mkdir();
+	    }
+	}
+	*/
 	int max_content_length = 20 * 1024 * 1024; // 5MByte
 	// 서버에서(서블릿) 어디에 어느 폴더에서 서블릿으로 변환되나?
 	ServletContext context =  this.getServletContext();
@@ -33,6 +52,7 @@
 				request.getContentLength(),
 				request.getInputStream(),
 				realFolder,
+				//docPath,
 				(int)max_content_length,
 				encType);
 
@@ -66,7 +86,8 @@
 			if(multipart.getFile(name) != null) {
 				File file = multipart.getFile(name);	
 				String realFileName="";	
-				File renameFile = new File(realFolder + "/" + fileName);	
+				File renameFile = new File(realFolder + "/" + fileName);
+				//File renameFile = new File(docPath + "/" + fileName);
 				renameFile.delete();
 				boolean rnrtn = file.renameTo(renameFile);
 

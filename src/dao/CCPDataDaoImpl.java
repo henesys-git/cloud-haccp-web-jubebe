@@ -183,7 +183,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("				FROM data_metal aa\n")
 					.append("				INNER JOIN ccp_limit bb\n")
 					.append("					ON aa.event_code = bb.event_code\n")
-					.append("					AND aa.product_id = bb.product_id\n")
+					.append("					AND aa.product_id = bb.object_id\n")
 					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("				  AND aa.sensor_key = A.sensor_key\n")
 					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
@@ -199,7 +199,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("				FROM data_metal aa\n")
 					.append("				INNER JOIN ccp_limit bb\n")
 					.append("					ON aa.event_code = bb.event_code\n")
-					.append("					AND aa.product_id = bb.product_id\n")
+					.append("					AND aa.product_id = bb.object_id\n")
 					.append("				WHERE aa.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("				  AND aa.sensor_key = A.sensor_key\n")
 					.append("			 	  AND (aa.sensor_value > bb.max_value || aa.sensor_value < bb.min_value)\n")
@@ -268,7 +268,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	ON A.event_code = C.event_code\n")
 					.append("INNER JOIN ccp_limit D\n")
 					.append("	ON A.event_code = D.event_code\n")
-					.append("	AND A.product_id = D.product_id\n")
+					.append("	AND A.product_id = D.object_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND A.sensor_key = '" + sensorKey + "'\n")
 					.toString();
@@ -450,7 +450,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	ON A.event_code = C.event_code\n")
 					.append("INNER JOIN ccp_limit D\n")
 					.append("	ON A.event_code = D.event_code\n")
-					.append("	AND A.product_id = D.product_id\n")
+					.append("	AND A.product_id = D.object_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("	AND DATE_FORMAT(A.create_time, '%Y-%m-%d') BETWEEN '"+ toDate +"' \n")
 					.append("	AND '"+ fromDate +"' \n")
@@ -498,7 +498,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	B.sensor_name,\n")
 					.append("	D.product_name,\n")
 					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
-					.append("	IFNULL((SELECT DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time,\n")
+					.append("	IFNULL((SELECT DATE_FORMAT(cc.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time,\n")
 					.append("	(\n")
 					.append("		SELECT CASE \n")
 					.append("			WHEN NOT EXISTS(\n")
@@ -555,14 +555,73 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			Connection conn, String sensorKey) {
 			
 		String sql = "";
+		String startTime = "";
+		String endTime = "";
 		
 		try {
 			stmt = conn.createStatement();
 			
 			sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("create_time \n")
+					.append("FROM data_metal \n")
+					.append("WHERE sensor_key = '"+sensorKey +"' \n")
+					.append("AND event_code = 'HT30' \n")
+					.toString();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				startTime = rs.getString("create_time");
+			}
+			
+			//stmt.close();
+			rs.close();
+			
+			sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("create_time \n")
+					.append("FROM data_metal \n")
+					.append("WHERE sensor_key = '"+sensorKey +"' \n")
+					.append("AND event_code = 'HT40' \n")
+					.toString();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				endTime = rs.getString("create_time");
+			}
+			
+			//stmt.close();
+			rs.close();
+			
+			//해당 채번키의 종료시간 없으면 온도 데이터 쌓인 것 중 MAX 시간 가져옴
+			if(endTime.equals("")) {
+				sql = new StringBuilder()
+						.append("SELECT \n")
+						.append("MAX(create_time) AS create_time \n")
+						.append("FROM data_metal \n")
+						.append("WHERE process_code = 'PC60'\n")
+						.append("AND event_code = 'TP10'\n")
+						.toString();
+				
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next()) {
+					endTime = rs.getString("create_time");
+				}
+				
+				//stmt.close();
+				rs.close();
+				
+			}
+			
+			sql = new StringBuilder()
+					/*
 					.append("SELECT\n")
 					.append("	 B.sensor_name,\n")
-					.append("	 EXTRACT(MINUTE FROM A.create_time) - (SELECT EXTRACT(MINUTE FROM bb.create_time) FROM data_metal bb WHERE A.sensor_key = bb.sensor_key AND bb.event_code = 'HT10') AS each_minute,\n") //경과 시간
+					//.append("	 EXTRACT(MINUTE FROM A.create_time) - (SELECT EXTRACT(MINUTE FROM bb.create_time) FROM data_metal bb WHERE A.sensor_key = bb.sensor_key AND bb.event_code = 'HT10') AS each_minute,\n") //경과 시간
+					//.append("	 SELECT DATE_FORMAT(create_time, '%Y-%m-%d %H:%i') FROM data_metal bb where EXTRACT(MINUTE FROM A.create_time) - (SELECT EXTRACT(MINUTE FROM bb.create_time) FROM data_metal bb WHERE A.sensor_key = bb.sensor_key AND bb.event_code = 'HT10') AS each_minute,\n") //경과 시간
 					.append("	 A.sensor_value, \n")
 					.append("	 C.min_value, \n")
 					.append("	 C.max_value \n")
@@ -573,12 +632,35 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	ON A.event_code = C.event_code \n")
 					.append("	AND A.product_id = C.product_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("AND A.sensor_key = '" + sensorKey + "'\n")
-					.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
 					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
 					.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
 					.toString();
-
+					*/
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC60'\n")
+					.append("AND A.event_code = 'TP10'\n")
+					//.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
 			logger.debug("sql:\n" + sql);
 			
 			rs = stmt.executeQuery(sql);
