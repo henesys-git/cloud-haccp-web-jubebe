@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 
-	var ccpMetalDataJspPage = {};
+	var cpTemperatureJSPPage = {};
     var dataLength;
 	$(document).ready(function () {
     	
@@ -101,24 +101,23 @@
 			);
 	    }
 	    
-	    ccpMetalDataJspPage.showSignBtn = function() {
+	    cpTemperatureJSPPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
 	    }
 	    
 		initTable();
 		
-		async function refreshMainTable() {
+		cpTemperatureJSPPage.refreshTable = async function () {
 			var newData = await getData();
 
 			mainTable.clear().rows.add(newData).draw();
 			dataLength = newData.length;
-    		
 		}
     	
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
-    		refreshMainTable();
+    		cpTemperatureJSPPage.refreshTable();
     		
     		var selectedDate = date.getDate();
 	    	var processCode = "PC60";
@@ -130,19 +129,11 @@
     			$("#ccp-sign-btn").hide();
     			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
     		} else {
-    			ccpMetalDataJspPage.showSignBtn();
+    			cpTemperatureJSPPage.showSignBtn();
     		}
     	});
-    	/*
-    	$('#ccpDataTable tbody').on('click', 'tr', function () {
-    		
-    		if ( !$(this).hasClass('selected') ) {
-    			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpMetalDataJspPage.fillSubTable();
-            }
-    	});
-    	*/
-    	$('#ccpDataTableBody').off().on('click', 'button', function() {
+
+		$('#ccpDataTableBody').off().on('click', 'button', function() {
     		
     		let sensorKey = mainTable.row( $(this).closest('tr') ).data().sensorKey;
 			

@@ -112,6 +112,8 @@ $(document).ready(function () {
 					} else if('<%=processCode%>' == 'PC10' || '<%=processCode%>' == 'PC15'){
 						ccpMetalDataJspPage.fillSubTable();
 						ccpMetalDataJspPage.showSignBtn();
+					} else if('<%=processCode%>' == 'PC60') {
+						cpTemperatureJSPPage.refreshTable();
 					} else {
 						ccpBreakawayJSPPage.refreshTable();
 					}
