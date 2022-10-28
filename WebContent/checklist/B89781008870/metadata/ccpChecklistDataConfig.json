@@ -8,11 +8,11 @@
 		"normalSumValueWhenAddAllTestResult": "4"
 	},
 	"heating": {
-		"rowStartCell":"cell4",
-		"rowOrder": ["prod", "empty", "HT30", "HT10", "HT40", "HT50", "HT60", "empty"],
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "judge"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
-		"normalSumValueWhenAddAllTestResult": "4"
+		"normalSumValueWhenAddAllTestResult": "3"
 	}
 }
