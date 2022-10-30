@@ -7,6 +7,7 @@ public class CCPDataHeatingMonitoringModel {
 	private String createTime;
 	private String completeTime;
 	private String state;
+	private String sensorId;
 	
 	public String getSensorKey() {
 		return sensorKey;
@@ -46,5 +47,12 @@ public class CCPDataHeatingMonitoringModel {
 	public void setState(String state) {
 		this.state = state;
 	}
+	public String getSensorId() {
+		return sensorId;
+	}
+	public void setSensorId(String sensorId) {
+		this.sensorId = sensorId;
+	}
+	
 	
 }

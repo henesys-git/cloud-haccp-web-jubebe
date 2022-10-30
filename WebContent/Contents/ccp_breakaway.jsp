@@ -81,11 +81,12 @@
 					{ data: "event", defaultContent: '' },
 					{ data: "sensorValue", defaultContent: '' },
 					{ data: "judge", defaultContent: '' },
-					{ data: "improvementAction", defaultContent: '' }
+					{ data: "improvementAction", defaultContent: '' },
+					{ data: "sensorId", defaultContent: '' }
 		        ],
 		        columnDefs : [
 		        	{
-		        		targets: [0,5],
+		        		targets: [0,5,7],
 		        		'createdCell': function(td, cellData, rowData, row, col){
 		        			$(td).attr('style', 'display:none;');
 			  			}
@@ -93,10 +94,15 @@
 		        	{
 			  			targets: [4],
 			  			render: function(td, cellData, rowData, row, col){
-			  				if (rowData.sensorValue == '1') {
-			  					return '검출';
-			  				} else {
-			  					return '비검출';
+			  				if(rowData.sensorId.includes('CD') == true) {
+			  					if (rowData.sensorValue == '1') {
+			  						return '검출';
+			  					} else {
+			  						return '비검출';
+			  					}
+			  				}
+			  				else {
+			  					return rowData.sensorValue;
 			  				}
 			  			}
 			  		},
@@ -225,6 +231,7 @@
 					    <th>측정값</th>
 					    <th style = 'width:0px; display:none;'>적/부</th>
 					    <th>개선조치</th>
+					    <th style = 'width:0px; display:none;'>센서Id</th>
 					</tr>
 				</thead>
 				<tbody id="ccpDataTableBody">

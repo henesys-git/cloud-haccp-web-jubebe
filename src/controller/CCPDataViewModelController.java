@@ -128,8 +128,8 @@ public class CCPDataViewModelController extends HttpServlet {
 			break;
 		case "heating-monitoring-detail":
 			sensorKey = req.getParameter("sensorKey");
-			
-			List<CCPDataHeatingMonitoringGraphModel> cvmHeatingMonitoringGraphList = ccpService.getCCPHeatingMonitoringGraphModels(sensorKey);
+			sensorId = req.getParameter("sensorId");
+			List<CCPDataHeatingMonitoringGraphModel> cvmHeatingMonitoringGraphList = ccpService.getCCPHeatingMonitoringGraphModels(sensorKey, sensorId);
 			result = FormatTransformer.toJson(cvmHeatingMonitoringGraphList);
 			
 			res.setContentType("application/json; charset=UTF-8");

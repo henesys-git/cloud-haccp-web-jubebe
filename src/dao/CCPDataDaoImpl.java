@@ -442,7 +442,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
 					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') as judge,\n")
-					.append("	A.improvement_action \n")
+					.append("	A.improvement_action, \n")
+					.append("	A.sensor_id \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
@@ -458,6 +459,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	AND A.process_code LIKE '%" + processCode	+ "%'\n")
 					.append("	AND (A.sensor_value > D.max_value \n")
 					.append("	OR A.sensor_value < D.min_value) \n")
+					.append("	AND A.sensor_id NOT LIKE '%TP%' \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -511,7 +513,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("			THEN '미완료'\n")
 					.append("			ELSE '완료'\n")
 					.append("			END\n")
-					.append("	) AS state \n")
+					.append("	) AS state, \n")
+					.append("	A.sensor_id \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
@@ -552,7 +555,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	
 	@Override
 	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel(
-			Connection conn, String sensorKey) {
+			Connection conn, String sensorKey, String sensorId) {
 			
 		String sql = "";
 		String startTime = "";
@@ -654,6 +657,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
 					.append("AND A.process_code = 'PC60'\n")
 					.append("AND A.event_code = 'TP10'\n")
+					.append("AND A.sensor_id = '"+ sensorId+"' \n")
 					//.append("AND A.sensor_key = '" + sensorKey + "'\n")
 					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
 					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
@@ -872,6 +876,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setSensorValue(rs.getString("sensor_value"));
 		cvm.setJudge(rs.getString("judge"));
 		cvm.setImprovementAction(rs.getString("improvement_action"));
+		cvm.setSensorId(rs.getString("sensor_id"));
 		
 		return cvm;
 	}
@@ -886,7 +891,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setCompleteTime(rs.getString("complete_time").toString());
 		cvm.setState(rs.getString("state").toString());
-
+		cvm.setSensorId(rs.getString("sensor_id").toString());
 		return cvm;
 	}
 	

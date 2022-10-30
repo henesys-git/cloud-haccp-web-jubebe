@@ -69,13 +69,14 @@
 	        return fetchedData;
 	    };
 	    
-	    async function getSubData(sensorKey) {
+	    async function getSubData(sensorKey, sensorId) {
 	    	
 	        var fetchedData = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
 			            data: "method=heating-monitoring-detail" +
-			            	  "&sensorKey=" + sensorKey,
+			            	  "&sensorKey=" + sensorKey + 
+			            	  "&sensorId=" + sensorId,
 			            success: function (result) {
 			            	return result;
 			            }
@@ -98,11 +99,12 @@
 						{ data: "productName", defaultContent: '' },
 						{ data: "createTime", defaultContent: '' },
 						{ data: "completeTime", defaultContent: '' },
-						{ data: "state", defaultContent: '' }
+						{ data: "state", defaultContent: '' },
+						{ data: "sensorId", defaultContent: '' }
 			        ],
 			        columnDefs : [
 			        	{
-			        		targets: [0],
+			        		targets: [0,6],
 			        		'createdCell':  function (td) {
 			   	      			$(td).attr('style', 'display:none'); 
 			   	   			}
@@ -119,7 +121,10 @@
 	    	
 	    	$("#ccpHeatingsubTable").children().remove();
 	    	
-	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
+	    	var tpSensorId = "TP" + mainTableSelectedRow.sensorId.substr(2,3);
+	    	console.log(tpSensorId);
+	    	
+	    	var data = await getSubData(mainTableSelectedRow.sensorKey, tpSensorId);
 	    	console.log(data);
 	    	console.log(data[0].sensorName);
 	    	
@@ -360,6 +365,7 @@
 					    <th>생성시간</th>
 					    <th>완료시간</th>
 					    <th>상태</th>
+					    <th style = "display:none; width:0px;">센서ID</th>
 					</tr>
 				</thead>
 				<tbody id="ccpHeatingDataTableBody">

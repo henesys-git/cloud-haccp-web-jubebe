@@ -211,13 +211,14 @@ public class CCPDataService {
 	}
 	
 	public List<CCPDataHeatingMonitoringGraphModel> getCCPHeatingMonitoringGraphModels(
-			String sensorKey) {
+			String sensorKey,
+			String sensorId) {
 		
 		List<CCPDataHeatingMonitoringGraphModel> cvmList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(tenantId);
-			cvmList = ccpDataDao.getAllCCPDataHeatingMonitoringGraphModel(conn, sensorKey);
+			cvmList = ccpDataDao.getAllCCPDataHeatingMonitoringGraphModel(conn, sensorKey, sensorId);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
