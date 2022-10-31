@@ -26,8 +26,7 @@ CCPSign.prototype.sign = function (date, processCode) {
         data: "date=" + date +
         	  "&processCode=" + processCode,
         success: function (result) {
-        	return 
-        	result;
+        	return result;
         }
 	});
     
@@ -47,4 +46,18 @@ CCPSign.prototype.delete = function (date, processCode) {
 	});
     
 	return deleteResult;
+}
+
+// return: 서명자 이름
+CCPSign.prototype.show = async function (selectedDate, processCode) {
+	let oSign = await this.get(selectedDate, processCode);
+	
+	if(oSign.checkerName) {
+		$("#ccp-sign-btn").hide();
+		$("#ccp-sign-text").text("서명 완료: " + oSign.checkerName);
+		return oSign.checkerName;
+	} else {
+		$("#ccp-sign-btn").show();
+		$("#ccp-sign-text").text("");
+	}
 }
