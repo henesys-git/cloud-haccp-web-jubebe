@@ -16,7 +16,6 @@ public class CCPSignDaoImpl implements CCPSignDao {
 	static final Logger logger = Logger.getLogger(CCPSignDaoImpl.class.getName());
 	
 	private Statement stmt;
-	private PreparedStatement ps;
 	private ResultSet rs;
 	
 	public CCPSignDaoImpl() {}
@@ -90,6 +89,8 @@ public class CCPSignDaoImpl implements CCPSignDao {
 	@Override
 	public boolean sign(Connection conn, CCPSign ccpSign) {
 	    try {
+	    	stmt = conn.createStatement();
+	    	
 	    	String sql = new StringBuilder()
 	    			.append("INSERT INTO data_sign (\n")
 	    			.append("	tenant_id,\n")
@@ -98,29 +99,24 @@ public class CCPSignDaoImpl implements CCPSignDao {
 	    			.append("	checker_id\n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
-	    			.append("	?,\n")
-	    			.append("	?,\n")
-	    			.append("	?,\n")
-	    			.append("	?\n")
+	    			.append("	'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
+	    			.append("	'" + ccpSign.getSignDate() + "',\n")
+	    			.append("	'" + ccpSign.getProcessCode() + "',\n")
+	    			.append("	'" + ccpSign.getCheckerId() + "'\n")
 	    			.append(");\n")
 	    			.toString();
 	    	
-			ps = conn.prepareStatement(sql);
+	    	logger.debug("sql:\n" + sql);
 			
-			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, ccpSign.getSignDate());
-			ps.setString(3, ccpSign.getProcessCode());
-			ps.setString(4, ccpSign.getCheckerId());
-			
-	        int i = ps.executeUpdate();
+	        int i = stmt.executeUpdate(sql);
 
-	        if(i == 1) {
+	        if(i > -1) {
 	        	return true;
 	        }
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
 	    } finally {
-		    try { ps.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 
 	    return false;

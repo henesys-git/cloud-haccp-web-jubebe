@@ -9,6 +9,7 @@
 
 	var ccpMetalDataJspPage = {};
     var dataLength;
+    
 	$(document).ready(function () {
     	
 		let date = new SetSingleDate2("", "#date", 0);
@@ -89,6 +90,12 @@
 			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
+	    	
+	    	let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
+	    	
+	    	let ccpSign = new CCPSign();
+	    	ccpSign.show(selectedDate, processCode);
 	    }
 	    
 	    ccpMetalDataJspPage.fillSubTable = async function () {
@@ -168,18 +175,11 @@
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
     		
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
+    		let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
     		
-    		var ccpSign = new CCPSign();
-    		var signInfo = await ccpSign.get(selectedDate, processCode);
-    		
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
+	    	let ccpSign = new CCPSign();
+    		ccpSign.show(selectedDate, processCode);
     	});
     	
     	$('#ccpDataTable tbody').on('click', 'tr', function () {
@@ -223,7 +223,7 @@
     			return false;
     		}
     		
-	    	var ccpSign = new CCPSign();
+    		var ccpSign = new CCPSign();
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {
