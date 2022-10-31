@@ -9,6 +9,7 @@ public class CCPDataDetailViewModel {
 	private String judge;
 	private String improvementAction;
 	private String sensorKey;
+	private String sensorId;
 	
 	public String getSensorName() {
 		return sensorName;
@@ -52,5 +53,12 @@ public class CCPDataDetailViewModel {
 	public void setSensorKey(String sensorKey) {
 		this.sensorKey = sensorKey;
 	}
+	public String getSensorId() {
+		return sensorId;
+	}
+	public void setSensorId(String sensorId) {
+		this.sensorId = sensorId;
+	}
+	
 	
 }
