@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 
-	var ccpMetalDataJspPage = {};
+	var ccpCleaningJSPPage = {};
     var dataLength;
     
 	$(document).ready(function () {
@@ -98,7 +98,7 @@
 	    	ccpSign.show(selectedDate, processCode);
 	    }
 	    
-	    ccpMetalDataJspPage.fillSubTable = async function () {
+	    ccpCleaningJSPPage.fillSubTable = async function () {
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
 	    	if(subTable) {
@@ -153,7 +153,22 @@
 	    	}
 	    };
 	    
-	    ccpMetalDataJspPage.showSignBtn = function() {
+	    ccpCleaningJSPPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpCleaningJSPPage.improvementCompletionTd.html('완료');
+	    	}
+	    }
+	    
+	    ccpCleaningJSPPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
 	    }
@@ -186,8 +201,10 @@
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpMetalDataJspPage.fillSubTable();
+    			ccpCleaningJSPPage.fillSubTable();
             }
+    		
+    		ccpCleaningJSPPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
@@ -254,18 +271,18 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="sensor-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="CD%25">전체</option>
+					<option value="DI%25">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC45" checked>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10" disabled>테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC40" disabled>테스트
 				    </label>
 				</div>
        	  	</div>

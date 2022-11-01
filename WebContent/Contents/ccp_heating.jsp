@@ -147,6 +147,21 @@
 	    	}
 	    };
 	    
+	    ccpHeatingDataJspPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpHeatingDataJspPage.improvementCompletionTd.html('완료');
+	    	}
+	    }
+
 	    ccpHeatingDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
@@ -164,7 +179,7 @@
 	    		subTable.clear().draw();
 	    	}
 		}
-    	
+		
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
@@ -182,6 +197,8 @@
     			mainTableSelectedRow = mainTable.row( this ).data();
     			ccpHeatingDataJspPage.fillSubTable();
             }
+    		
+    		ccpHeatingDataJspPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpHeatingDataSubTableBody').off().on('click', 'button', function() {

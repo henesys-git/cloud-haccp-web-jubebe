@@ -101,19 +101,25 @@ $(document).ready(function () {
 	        	 "&improvementAction=" + improvementAction +
 	        	 "&date=" + '<%=date%>' + 
 	        	 "&processCode=" + '<%=processCode%>',
-			success: function (resultIfFixed) {
+			success: async function (resultIfFixed) {
 	        	if(resultIfFixed == 'true') {
 					$('#improvementActionModal').modal('hide');
 					
 					//TODO: CCP별로 JspPage 다르게 하는 코드. 임시처리한거라 예외처리랑 등등 더 해야됨
 					if('<%=processCode%>' == 'PC30') {
-						ccpHeatingDataJspPage.fillSubTable();
+						await ccpHeatingDataJspPage.fillSubTable();
 						ccpHeatingDataJspPage.showSignBtn();
+						ccpHeatingDataJspPage.changeMainTableValueIfAllFixed();
 					} else if('<%=processCode%>' == 'PC10' || '<%=processCode%>' == 'PC15'){
-						ccpMetalDataJspPage.fillSubTable();
+						await ccpMetalDataJspPage.fillSubTable();
 						ccpMetalDataJspPage.showSignBtn();
+						ccpMetalDataJspPage.changeMainTableValueIfAllFixed();
 					} else if('<%=processCode%>' == 'PC60') {
 						cpTemperatureJSPPage.refreshTable();
+					} else if('<%=processCode%>' == 'PC40' || '<%=processCode%>' == 'PC45') {
+						await ccpCleaningJSPPage.fillSubTable();
+						ccpCleaningJSPPage.showSignBtn();
+						ccpCleaningJSPPage.changeMainTableValueIfAllFixed();
 					} else {
 						ccpBreakawayJSPPage.refreshTable();
 					}

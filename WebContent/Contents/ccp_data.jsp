@@ -153,6 +153,21 @@
 	    	}
 	    };
 	    
+	    ccpMetalDataJspPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpMetalDataJspPage.improvementCompletionTd.html('완료');
+	    	}
+	    }
+	    
 	    ccpMetalDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
@@ -188,6 +203,8 @@
     			mainTableSelectedRow = mainTable.row( this ).data();
     			ccpMetalDataJspPage.fillSubTable();
             }
+    		
+    		ccpMetalDataJspPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
