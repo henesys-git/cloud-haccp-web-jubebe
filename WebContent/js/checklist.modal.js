@@ -558,8 +558,9 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		var weekDay = year2 + "-" + month2 + "-" + day2;
 		var monthDay = year3 + "-" + month2 + "-" + day3;
 		var reductDay;
+		
 		if(month != 10) {
-			reductDay = month.replace("0", "") + "/" + day;
+			reductDay = month.toString().replace("0", "") + "/" + day;
 		}
 		else {
 			reductDay = month + "/" + day;
@@ -3017,10 +3018,10 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
 		
-		if(data == 1 || data == 1.1) {
+		if(data == 1 || parseFloat(data) == 1.1) {
 			data = 'O';
 		}
-		else if(data == 0) {
+		else if(data == 0 || parseFloat(data) == 0.1) {
 			data = 'X';
 		}
 		else if(!data) {
