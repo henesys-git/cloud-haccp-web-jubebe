@@ -2769,6 +2769,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			var ccpSign = new CCPSign();
 			var signInfo = await ccpSign.get(that.createDate, 'PC10');
 			
+			//CCP 데이터 관리에서 서명된 정보로 표시되도록 일괄 적용
 			that.displayData(cellList[info.writerSignCell], signInfo.checkerName);
 			that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
 			
