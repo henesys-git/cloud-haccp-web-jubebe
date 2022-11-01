@@ -1,7 +1,7 @@
 {
 	"metaldetector": {
 		"rowStartCell":"cell3",
-		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"],
+		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty", "sign"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",

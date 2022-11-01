@@ -2769,6 +2769,9 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			var ccpSign = new CCPSign();
 			var signInfo = await ccpSign.get(that.createDate, 'PC10');
 			
+			that.displayData(cellList[info.writerSignCell], signInfo.checkerName);
+			that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
+			
 			// 스마트haccp 점검 때문에 임시조치한 코드
 			// 삭제하고, ccp의 경우 서명을 어떻게 할지에 대한 전략 확립 필요 
 			// (20220829 최현수)
@@ -2920,6 +2923,10 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								
 								that.displayData(cell, time);
 								break;
+							case "sign":
+								var cell = cellList[cellPos - 1];
+								that.displayData(cell, signInfo.checkerName);
+								break;
 							case "judge":
 								var cell = cellList[cellPos];
 
@@ -2979,12 +2986,12 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			console.log(info.normalSumValueWhenAddAllTestResult);
 			return true;
 		}
-		
+		console.log(sum);
 		return false;
 	}
 	
 	this.displayData = function(cell, data) {
-	
+		console.log("data= " + data);
 		var size = this.modalUtil.setTagSize(this, cell);
 		var startX = size.startX;
 		var startY = size.startY;
@@ -3008,14 +3015,15 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		
 		this.ctx.textAlign = "center";
 		this.ctx.font = '10px serif';
-		if(!data) {
-			data = '';
-		}
-		if(data == 1) {
+		
+		if(data == 1 || data == 1.1) {
 			data = 'O';
 		}
-		if(data == 0) {
+		else if(data == 0) {
 			data = 'X';
+		}
+		else if(!data) {
+			data = '';
 		}
 		
 		this.ctx.fillText(data, middleX, middleY);
