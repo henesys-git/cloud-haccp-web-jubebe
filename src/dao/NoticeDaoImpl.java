@@ -210,7 +210,7 @@ public class NoticeDaoImpl implements NoticeDao {
 			
 			sql = new StringBuilder()
 					.append("DELETE FROM notice\n")
-					.append("WHERE tenant_id = '" + registerDatetime + "';\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND register_datetime = '" + registerDatetime + "';\n")
 					.toString();
 			
@@ -218,7 +218,7 @@ public class NoticeDaoImpl implements NoticeDao {
 			
 			int i = stmt.executeUpdate(sql);
 
-			if(i < 0) {
+			if(i < 1) {
 	        	conn.rollback();
 	        	return false;
 	        }
