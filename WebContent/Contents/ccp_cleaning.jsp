@@ -9,6 +9,7 @@
 
 	var ccpMetalDataJspPage = {};
     var dataLength;
+    
 	$(document).ready(function () {
     	
 		let date = new SetSingleDate2("", "#date", 0);
@@ -89,6 +90,12 @@
 			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
+	    	
+	    	let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
+	    	
+	    	let ccpSign = new CCPSign();
+	    	ccpSign.show(selectedDate, processCode);
 	    }
 	    
 	    ccpMetalDataJspPage.fillSubTable = async function () {
@@ -171,15 +178,8 @@
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
     		
-    		var ccpSign = new CCPSign();
-    		var signInfo = await ccpSign.get(selectedDate, processCode);
-    		
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
+	    	let ccpSign = new CCPSign();
+    		ccpSign.show(selectedDate, processCode);
     	});
     	
     	$('#ccpDataTable tbody').on('click', 'tr', function () {
@@ -217,13 +217,16 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
+			let rows = mainTable.rows().data();
+	    	
+    		var ccpSign = new CCPSign();
     		
-    		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 세척공정 데이터가 없습니다.');
-    			return false;
-    		}
-    		
-	    	var ccpSign = new CCPSign();
+			var ifError = ccpSign.checkError(rows);
+	    	
+	    	if(ifError) {
+	    		return false;
+	    	}
+	    	
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {

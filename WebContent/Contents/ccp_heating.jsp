@@ -211,13 +211,16 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	let rows = mainTable.rows().data();
     		
-	    	if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 가열공정 데이터가 없습니다.');
-    			return false;
-    		}
-	    	
 	    	var ccpSign = new CCPSign();
+	    	
+	    	var ifError = ccpSign.checkError(rows);
+	    	
+	    	if(ifError) {
+	    		return false;
+	    	}
+	    	
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {
