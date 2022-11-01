@@ -44,7 +44,9 @@ function fn_MainInfo_List() {
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark" id="MenuTitle">여기에 메뉴 타이틀</h1>
+        <h1 class="m-0 text-dark">
+			온도 모니터링
+	    </h1>
       </div>
       <div class="col-sm-6">
       	<div class="float-sm-right">
