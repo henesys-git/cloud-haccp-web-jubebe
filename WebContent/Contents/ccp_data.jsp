@@ -153,6 +153,23 @@
 	    	}
 	    };
 	    
+	    ccpMetalDataJspPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpMetalDataJspPage.improvementCompletionTd.html('완료');
+		    	mainTableSelectedRow.improvementCompletion = '완료';
+		    	mainTable.draw();
+	    	}
+	    }
+	    
 	    ccpMetalDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
@@ -188,6 +205,8 @@
     			mainTableSelectedRow = mainTable.row( this ).data();
     			ccpMetalDataJspPage.fillSubTable();
             }
+    		
+    		ccpMetalDataJspPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
@@ -217,13 +236,16 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
-    		
-    		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 금속검출 데이터가 없습니다.');
-    			return false;
-    		}
-    		
+	    	let rows = mainTable.rows().data();
+	    	
     		var ccpSign = new CCPSign();
+    		
+			var ifError = ccpSign.checkError(rows);
+	    	
+	    	if(ifError) {
+	    		return false;
+	    	}
+    		
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {

@@ -61,3 +61,20 @@ CCPSign.prototype.show = async function (selectedDate, processCode) {
 		$("#ccp-sign-text").text("");
 	}
 }
+
+// return: 에러 여부 (true/false)
+CCPSign.prototype.checkError = function (rows) {
+	if(rows.length < 1) {
+		alert('해당 일자의 서명 처리할 가열공정 데이터가 없습니다.');
+		return true;
+	}
+	
+	for(var i=0; i<rows.length; i++) {
+		if(rows[i].improvementCompletion !== '완료') {
+			alert('개선조치를 먼저 완료해주세요');
+			return true;
+		}
+	}
+	
+	return false;
+}

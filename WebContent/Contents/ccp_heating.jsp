@@ -147,6 +147,23 @@
 	    	}
 	    };
 	    
+	    ccpHeatingDataJspPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpHeatingDataJspPage.improvementCompletionTd.html('완료');
+		    	mainTableSelectedRow.improvementCompletion = '완료';
+		    	mainTable.draw();
+	    	}
+	    }
+
 	    ccpHeatingDataJspPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
@@ -164,7 +181,7 @@
 	    		subTable.clear().draw();
 	    	}
 		}
-    	
+		
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
@@ -182,6 +199,8 @@
     			mainTableSelectedRow = mainTable.row( this ).data();
     			ccpHeatingDataJspPage.fillSubTable();
             }
+    		
+    		ccpHeatingDataJspPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpHeatingDataSubTableBody').off().on('click', 'button', function() {
@@ -211,13 +230,16 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	let rows = mainTable.rows().data();
     		
-	    	if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 가열공정 데이터가 없습니다.');
-    			return false;
-    		}
-	    	
 	    	var ccpSign = new CCPSign();
+	    	
+	    	var ifError = ccpSign.checkError(rows);
+	    	
+	    	if(ifError) {
+	    		return false;
+	    	}
+	    	
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {

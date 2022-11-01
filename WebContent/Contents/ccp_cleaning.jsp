@@ -7,8 +7,9 @@
 
 <script type="text/javascript">
 
-	var ccpMetalDataJspPage = {};
+	var ccpCleaningJSPPage = {};
     var dataLength;
+    
 	$(document).ready(function () {
     	
 		let date = new SetSingleDate2("", "#date", 0);
@@ -89,9 +90,15 @@
 			mainTable = $('#ccpDataTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
+	    	
+	    	let selectedDate = date.getDate();
+	    	let processCode = $("input[name='test-yn']:checked").val();
+	    	
+	    	let ccpSign = new CCPSign();
+	    	ccpSign.show(selectedDate, processCode);
 	    }
 	    
-	    ccpMetalDataJspPage.fillSubTable = async function () {
+	    ccpCleaningJSPPage.fillSubTable = async function () {
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey);
 	    	
 	    	if(subTable) {
@@ -146,7 +153,24 @@
 	    	}
 	    };
 	    
-	    ccpMetalDataJspPage.showSignBtn = function() {
+	    ccpCleaningJSPPage.changeMainTableValueIfAllFixed = function() {
+	    	var allFixed = true;
+	    	var rows = subTable.rows().data();
+	    	
+	    	for(var i=0; i<rows.length; i++) {
+	    		if(rows[i].judge == '부적합' && rows[i].improvementAction == null) {
+	    			allFixed = false;
+	    		}
+	    	}
+	    	
+	    	if(allFixed) {
+		    	ccpCleaningJSPPage.improvementCompletionTd.html('완료');
+		    	mainTableSelectedRow.improvementCompletion = '완료';
+		    	mainTable.draw();
+	    	}
+	    }
+	    
+	    ccpCleaningJSPPage.showSignBtn = function() {
 	    	$("#ccp-sign-btn").show();
 			$("#ccp-sign-text").text("");
 	    }
@@ -171,23 +195,18 @@
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
     		
-    		var ccpSign = new CCPSign();
-    		var signInfo = await ccpSign.get(selectedDate, processCode);
-    		
-    		if(signInfo.checkerName != null) {
-    			$("#ccp-sign-btn").hide();
-    			$("#ccp-sign-text").text("서명 완료: " + signInfo.checkerName);
-    		} else {
-    			ccpMetalDataJspPage.showSignBtn();
-    		}
+	    	let ccpSign = new CCPSign();
+    		ccpSign.show(selectedDate, processCode);
     	});
     	
     	$('#ccpDataTable tbody').on('click', 'tr', function () {
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			ccpMetalDataJspPage.fillSubTable();
+    			ccpCleaningJSPPage.fillSubTable();
             }
+    		
+    		ccpCleaningJSPPage.improvementCompletionTd = $(this).find("td").eq(6);
     	});
     	
     	$('#ccpDataSubTableBody').off().on('click', 'button', function() {
@@ -217,13 +236,16 @@
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
+			let rows = mainTable.rows().data();
+	    	
+    		var ccpSign = new CCPSign();
     		
-    		if(dataLength < 1) {
-    			alert('해당 일자의 서명 처리할 세척공정 데이터가 없습니다.');
-    			return false;
-    		}
-    		
-	    	var ccpSign = new CCPSign();
+			var ifError = ccpSign.checkError(rows);
+	    	
+	    	if(ifError) {
+	    		return false;
+	    	}
+	    	
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {
@@ -251,18 +273,18 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="sensor-type">종류:</label>
 				<select class="form-control w-auto d-inline-block" id="sensor-type" name="sensor-type">
-					<option value="CD%25">전체</option>
+					<option value="DI%25">전체</option>
 				</select>
 	      	</div>
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC15" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC45" checked>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC10" disabled>테스트
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC40" disabled>테스트
 				    </label>
 				</div>
        	  	</div>
