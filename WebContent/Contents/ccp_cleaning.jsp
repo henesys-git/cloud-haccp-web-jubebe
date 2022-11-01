@@ -165,6 +165,8 @@
 	    	
 	    	if(allFixed) {
 		    	ccpCleaningJSPPage.improvementCompletionTd.html('완료');
+		    	mainTableSelectedRow.improvementCompletion = '완료';
+		    	mainTable.draw();
 	    	}
 	    }
 	    
