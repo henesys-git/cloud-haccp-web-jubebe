@@ -2590,6 +2590,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	this.jsonParameterNm;
 	this.jsonFileData;
 	var jsonData;
+	var processCd = "";
 	
 	this.setChecklistId = async function() {
 		var sensorApi = new HENESYS_API.Sensor();
@@ -2607,7 +2608,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	
 	this.getChecklistData = async function() {
 		
-		var processCd = "";
+		
 		
 		if(this.sensorId.includes('CD') == true) {
 			processCd = "PC10";
@@ -2733,15 +2734,19 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 					row.detail = new Object();
 				}
 				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
+				row.detail[this.checklistData[i].eventCode + "_" + "minValue"] = this.checklistData[i].minValue;
+				row.detail[this.checklistData[i].eventCode + "_" + "maxValue"] = this.checklistData[i].maxValue;
 			} else {
 				row = new Object();
 				row.prod = this.checklistData[i].productName;
 				row.time = this.checklistData[i].createTime;
 				row.detail = new Object();
 				row.detail[this.checklistData[i].eventCode] = this.checklistData[i].sensorValue;
-				
+				row.detail[this.checklistData[i].eventCode + "_" + "minValue"] = this.checklistData[i].minValue;
+				row.detail[this.checklistData[i].eventCode + "_" + "maxValue"] = this.checklistData[i].maxValue;
 				outer.push(row);
-				sensorKey = this.checklistData[i].sensorKey
+				sensorKey = this.checklistData[i].sensorKey;
+				
 			}
 		}
 		
@@ -2789,6 +2794,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 			var currentRow = 0;
 			var startFlag = false;
 			var cellPos = 0;
+			var rightCount = 0;
 			for(let i=0; i<cellList.length; i++) {
 				if(cellList[i].nodeName == info.rowStartCell) {
 					startFlag = true;
@@ -2863,24 +2869,33 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								else {
 									temp = "";
 								}
-								
+								if(Number(row.detail["HT10"]) >= Number(row.detail["HT10_minValue"]) && Number(row.detail["HT10"]) <= Number(row.detail["HT10_maxValue"])) {
+									rightCount += 1;
+								}
 								that.displayData(cell, temp);
 								break;
 							case "HT20":
 								var cell = cellList[cellPos];
+								if(row.detail["HT20"] >= row.detail["HT20_minValue"] && row.detail["HT20"] <= row.detail["HT20_maxValue"]) {
+									rightCount += 1;
+								}
 								that.displayData(cell, row.detail["HT20"]);
 								break;
 							//start time
 							case "HT30":
 								var cell = cellList[cellPos];
 								var time;
-								
 								if(row.detail["HT30"] != null) {
 									time = row.detail["HT30"].toString().substring(0, 5);
 								}
 								else {
 									time = "";
 								}
+								
+								if(row.detail["HT30"] >= row.detail["HT30_minValue"] && row.detail["HT30"] <= row.detail["HT30_maxValue"]) {
+									rightCount += 1;
+								}
+								
 								that.displayData(cell, time);
 								break;
 							//end time
@@ -2893,6 +2908,10 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								}
 								else {
 									time = "";
+								}
+								
+								if(row.detail["HT40"] >= row.detail["HT40_minValue"] && row.detail["HT40"] <= row.detail["HT40_maxValue"]) {
+									rightCount += 1;
 								}
 								
 								that.displayData(cell, time);
@@ -2908,22 +2927,48 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								else {
 									temp = "";
 								}
-								
+								if(Number(row.detail["HT50"]) >= Number(row.detail["HT50_minValue"]) && Number(row.detail["HT50"]) <= Number(row.detail["HT50_maxValue"])) {
+									rightCount += 1;
+								}
 								that.displayData(cell, temp);
 								break;
 							//during time
 							case "HT60":
 								var cell = cellList[cellPos];
 								var time;
-								
 								if(row.detail["HT60"] != null) {
-									time = row.detail["HT60"].toString().substring(0, 1) + "시 " + row.detail["HT60"].toString().substring(2, 4) + "분 " + row.detail["HT60"].toString().substring(5, 7) +"초";
+									
+									if(row.detail["HT60"].length == 7) {
+										time = row.detail["HT60"].toString().substring(0, 1) + "시 " + row.detail["HT60"].toString().substring(2, 4) + "분 " + row.detail["HT60"].toString().substring(5, 7) +"초";
+									}
+									else {
+										time = row.detail["HT60"].toString().substring(0, 2) + "시 " + row.detail["HT60"].toString().substring(3, 5) + "분 " + row.detail["HT60"].toString().substring(6, 8) +"초";
+									}
+									
 								}
 								else {
 									time = "";
 								}
-								
+								if(row.detail["HT60"] >= row.detail["HT60_minValue"] && row.detail["HT60"] <= row.detail["HT60_maxValue"]) {
+									rightCount += 1;
+								}
 								that.displayData(cell, time);
+								break;
+							//product temperture
+							case "HT70":
+								var cell = cellList[cellPos];
+								var temp;
+								
+								if(row.detail["HT70"] != null) {
+									temp = row.detail["HT70"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								if(Number(row.detail["HT70"]) >= Number(row.detail["HT70_minValue"]) && Number(row.detail["HT70"]) <= Number(row.detail["HT70_maxValue"])) {
+									rightCount += 1;
+								}
+								that.displayData(cell, temp);
 								break;
 							case "sign":
 								var cell = cellList[cellPos - 1];
@@ -2931,12 +2976,23 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 								break;
 							case "judge":
 								var cell = cellList[cellPos];
-
-								if(that.judgeResult(row.detail, info)) {
-									that.displayData(cell, "적합");
-								} else {
-									that.displayData(cell, "부적합");
+								
+								if(processCd.toString().includes("PC30")) {
+									if(rightCount == info.normalSumValueWhenAddAllTestResult) {
+										that.displayData(cell, "적합");
+									}
+									else {
+										that.displayData(cell, "부적합");
+									}
 								}
+								else {
+									if(that.judgeResult(row.detail, info)) {
+										that.displayData(cell, "적합");
+									} else {
+										that.displayData(cell, "부적합");
+									}
+								}
+								
 						}
 						
 						cellPos += 1;
@@ -2944,6 +3000,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 					
 					currentRow += 1;
 					i += info.rowOrder.length;
+					rightCount = 0;
 				}
 			}
 		};

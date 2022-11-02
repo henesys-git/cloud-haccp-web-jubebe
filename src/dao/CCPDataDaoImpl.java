@@ -138,10 +138,15 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("   	WHEN A.event_code = 'MC30' && A.sensor_value = 1 THEN '1.1' \n")
 					//.append("   	WHEN A.event_code = 'MC30' && A.sensor_value = 0 THEN '0.1' \n")
 					.append("   	ELSE A.sensor_value \n")
-					.append("   END) AS sensor_value \n")
+					.append("   END) AS sensor_value, \n")
+					.append("   C.min_value, \n")
+					.append("   C.max_value \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN product B\n")
 					.append("  ON A.product_id = B.product_id\n")
+					.append("INNER JOIN ccp_limit C\n")
+					.append("  ON A.event_code = C.event_code \n")
+					.append("  AND A.product_id = C.object_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
 					.append("  AND CAST(create_time AS DATE) = '" + date + "' \n")
 					.append("  AND process_code = '" + processCode + "'\n")
@@ -825,6 +830,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		ccpData.setSensorValue(rs.getString("sensor_value"));
 		ccpData.setEventCode(rs.getString("event_code"));
 		ccpData.setProductName(rs.getString("product_name"));
+		ccpData.setMinValue(rs.getString("min_value"));
+		ccpData.setMaxValue(rs.getString("max_value"));
 		
 	    return ccpData;
 	}

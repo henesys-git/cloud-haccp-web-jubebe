@@ -13,6 +13,6 @@
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
-		"normalSumValueWhenAddAllTestResult": "3"
+		"normalSumValueWhenAddAllTestResult": "4"
 	}
 }
