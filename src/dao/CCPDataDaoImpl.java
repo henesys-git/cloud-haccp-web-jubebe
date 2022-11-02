@@ -136,7 +136,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					//.append("  IF(A.event_code = 'MC30' && A.sensor_value = 1, '1.1', A.sensor_value) AS sensor_value \n") //금속검출기의 제품의 경우 결과값 검출(1) 일때, 판정을 위해 쿼리 결과값 1.1로 세팅
 					.append("  (SELECT CASE \n")
 					.append("   	WHEN A.event_code = 'MC30' && A.sensor_value = 1 THEN '1.1' \n")
-					.append("   	WHEN A.event_code = 'MC30' && A.sensor_value = 0 THEN '0.1' \n")
+					//.append("   	WHEN A.event_code = 'MC30' && A.sensor_value = 0 THEN '0.1' \n")
 					.append("   	ELSE A.sensor_value \n")
 					.append("   END) AS sensor_value \n")
 					.append("FROM data_metal A\n")

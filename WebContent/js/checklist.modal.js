@@ -3021,7 +3021,7 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		if(data == 1 || parseFloat(data) == 1.1) {
 			data = 'O';
 		}
-		else if(data == 0 || parseFloat(data) == 0.1) {
+		else if(data == 0) {
 			data = 'X';
 		}
 		else if(!data) {
