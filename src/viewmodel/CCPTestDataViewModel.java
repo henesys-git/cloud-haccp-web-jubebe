@@ -6,6 +6,8 @@ public class CCPTestDataViewModel {
 	private String createTime;
 	private String eventCode;
 	private String sensorValue;
+	private String minValue;
+	private String maxValue;
 	
 	public String getProductName() {
 		return productName;
@@ -37,4 +39,17 @@ public class CCPTestDataViewModel {
 	public void setSensorValue(String sensorValue) {
 		this.sensorValue = sensorValue;
 	}
+	public String getMinValue() {
+		return minValue;
+	}
+	public void setMinValue(String minValue) {
+		this.minValue = minValue;
+	}
+	public String getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+	
 }
