@@ -3033,20 +3033,57 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 	}
 	
 	this.judgeResult = function(testResults, info) {
-		let sum = 0;
-
-		for (const key in testResults) {
-			console.log(Number(testResults[key]));
-			sum += Number(testResults[key]);
+		let outerObj = this.getInfoPerEventCode(testResults);
+		
+		let keys = Object.keys(outerObj);
+		for(let i=0; i<keys.length; i++) {
+			let event = outerObj[keys[i]];
+			if(event.val > event.max || event.val < event.min) {
+				return false;
+			}
 		}
 		
-		if(sum == info.normalSumValueWhenAddAllTestResult) {
-			console.log(sum);
-			console.log(info.normalSumValueWhenAddAllTestResult);
-			return true;
+		return true;
+	}
+	
+	this.getInfoPerEventCode = function(testResults) {
+		let outerObj = {};
+		
+		let keys = Object.keys(testResults);
+		for(let i=0; i<keys.length; i++) {
+			let splitedKey = keys[i].split('_');
+			let testType = splitedKey[0];
+			let newKey;
+			let newValue;
+			
+			if(splitedKey.length === 2) {
+				let info = splitedKey[1];
+				
+				if(info == 'minValue') {
+					newKey = 'min';
+					newValue = testResults[keys[i]];
+				} else if(info == 'maxValue') {
+					newKey = 'max';
+					newValue = testResults[keys[i]];
+				}
+			}
+			else {
+				newKey = 'val';
+				newValue = testResults[keys[i]];
+			}
+			
+			if(outerObj[testType]) {
+				outerObj[testType][newKey] = newValue;
+			} else {
+				outerObj[testType] = {};
+				outerObj[testType][newKey] = newValue;
+			}
 		}
-		console.log(sum);
-		return false;
+		
+		console.debug('Get info per event code:');
+		console.debug(outerObj);
+		
+		return outerObj;
 	}
 	
 	this.displayData = function(cell, data) {
