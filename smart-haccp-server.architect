@@ -755,13 +755,49 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
+  <table id="TAB230" populated="true" UUID="7b7830ca-6381-44cc-9d39-9c3400da4393" name="스마트공방 KPI 코드 목록" objectType="TABLE" physicalName="ssf_kpi_code" >
+   <remarks></remarks>
+   <folder id="FOLTAB2301" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL231" populated="true" UUID="3c9a7ed1-bf4d-4d5f-bb2d-41017fa33d16" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL232" populated="true" UUID="62b3ecb9-93c9-4d83-b091-6c7a61f9c906" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_process_code_seq" defaultValue="" name="공정코드" nullable="0" physicalName="process_code" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL233" populated="true" UUID="a9e7a4a4-e62b-4ba0-b61c-b117b3c3e982" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_kpi_fld_cd_seq" defaultValue="" name="성과지표분야코드" nullable="0" physicalName="kpi_fld_cd" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL234" populated="true" UUID="b2a34f1e-4bab-4b02-b149-a1c6e7ae7587" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_kpi_dtl_cd_seq" defaultValue="" name="세부성과지표코드" nullable="0" physicalName="kpi_dtl_cd" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL235" populated="true" UUID="9ad646c6-7d42-4ebd-ad95-5e42da2ba119" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_kpi_dtl_nm_seq" defaultValue="" name="세부성과지표명" nullable="0" physicalName="kpi_dtl_nm" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL236" populated="true" UUID="a96d4aba-f03f-4b4f-803c-8a1949ac1003" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_org_value_seq" defaultValue="" name="기존값" nullable="0" physicalName="org_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL237" populated="true" UUID="5e74c7a4-4dbd-42dd-84e8-e84a42ca9df4" autoIncrement="false" autoIncrementSequenceName="ssf_kpi_code_target_value_seq" defaultValue="" name="목표값" nullable="0" physicalName="target_value" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB2303" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB2302" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB2304" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX238" populated="true" UUID="e45b6b3a-595e-42d7-8953-7902dedd9868" clustered="false" name="ssf_kpi_code_pk" physicalName="ssf_kpi_code_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC239" populated="true" UUID="165801d2-1cc8-40ad-a8b7-54b8b9ff41b0" ascendingOrDescending="UNSPECIFIED" column-ref="COL231" name="테넌트아이디" physicalName="tenant_id" />
+     <index-column id="IDC240" populated="true" UUID="6373846a-69ab-4e3f-b937-0813792af6c7" ascendingOrDescending="UNSPECIFIED" column-ref="COL232" name="공정코드" physicalName="process_code" />
+    </index>
+   </folder>
+  </table>
   <relationships>
   </relationships>
  </target-database>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="0" viewportY="703" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="612" viewportY="915" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="121" y="696" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB10" x="136" y="1347" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB19" x="137" y="1487" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -786,6 +822,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB212" x="1458" y="1356" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB219" x="2813" y="1368" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB221" x="468" y="2225" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB230" x="1463" y="1481" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
