@@ -25,7 +25,6 @@ if ("serviceWorker" in navigator) {
   	});
 }
 
-
 async function checkSubscription() {
   	console.log("checkSubscription func start");
   

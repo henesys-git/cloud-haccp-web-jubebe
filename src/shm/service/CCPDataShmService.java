@@ -10,15 +10,15 @@ import mes.frame.database.JDBCConnectionPool;
 import shm.viewmodel.CCPDataDetailViewModel;
 import shm.viewmodel.CCPDataHeadViewModel;
 
-public class CCPDataService {
+public class CCPDataShmService {
 
 	private CCPDataDao ccpDataDao;
 	private String tenantId;
 	private Connection conn;
 	
-	static final Logger logger = Logger.getLogger(CCPDataService.class.getName());
+	static final Logger logger = Logger.getLogger(CCPDataShmService.class.getName());
 	
-	public CCPDataService(CCPDataDao ccpDataDao, String tenantId) {
+	public CCPDataShmService(CCPDataDao ccpDataDao, String tenantId) {
 		this.ccpDataDao = ccpDataDao;
 		this.tenantId = tenantId;
 	}

@@ -14,13 +14,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import shm.dao.CCPDataDaoImpl;
-import shm.service.CCPDataService;
+import shm.service.CCPDataShmService;
 import shm.viewmodel.CCPDataDetailViewModel;
 import shm.viewmodel.CCPDataHeadViewModel;
 import utils.FormatTransformer;
 
 @WebServlet("/shm/ccpvm")
-public class CCPDataViewModelController extends HttpServlet {
+public class CCPDataViewModelShmController extends HttpServlet {
 
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class CCPDataViewModelController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	static final Logger logger = 
-			Logger.getLogger(CCPDataViewModelController.class.getName());
+			Logger.getLogger(CCPDataViewModelShmController.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class CCPDataViewModelController extends HttpServlet {
 
 		String method = req.getParameter("method");
 		
-		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), bizNo);
+		CCPDataShmService ccpService = new CCPDataShmService(new CCPDataDaoImpl(), bizNo);
 		
 		String result;
 		PrintWriter out;
