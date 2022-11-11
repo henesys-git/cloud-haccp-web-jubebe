@@ -18,7 +18,6 @@
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/ssf/ccpvm",
 	            success: function (result) {
-	            	console.log(result);
 	            	return result;
 	            }
 	        });
@@ -33,6 +32,7 @@
 					data : data,
 					pageLength: 10,
 					columns: [
+						{ data: "sensorKey", defaultContent: '' },
 						{ data: "ssfKpiCertKey", defaultContent: '' },
 						{ data: "ocrDttm", defaultContent: '' },
 						{ data: "kpiFldCd", defaultContent: '' },
@@ -46,12 +46,12 @@
 			        ],
 			        columnDefs : [
 			        	{
-				  			targets: 0,
+				  			targets: [0, 1],
 				  			visible: false,
 				  			searchable: false
 				  		},
 				  		{
-				  			targets: 8,
+				  			targets: 9,
 				  			render: function(td, cellData, rowData, row, col) {
 				  				let d = rowData;
 				  				let achrt = 0;
@@ -67,11 +67,11 @@
 				  					}
 				  				}
 				  				
-				  				return achrt.toFixed(2) + '%';
+				  				return achrt.toFixed(2);
 				  			}
 				  		},
 				  		{
-				  			targets: 9,
+				  			targets: 10,
 				  			render: function(td, cellData, rowData, row, col){
 				  				if(rowData.ssfSentYn === 'Y') {
 				  					return '전송 완료';
@@ -112,25 +112,38 @@
 		$('#ssfApiTable').off().on('click', '.send-btn', function(e) {
 			e.stopPropagation();
 			
-			if(mainTableSelectedRow.improvementCompletion == '미완료') {
-				alert('개선조치를 해주세요');
-				return;
-			}
+
+			let tr = $(this).parents('tr')[0];
+			let row = mainTable.rows(tr).data()[0];
+			let sensorKey = row.sensorKey;
+
+			row.achrt = $(tr).find("td:eq(7)").text();
+			row.trsDttm = new HeneDate().getDateTime().replace(/[^0-9]/g, '');
+			row.ocrDttm = row.ocrDttm.replace(/[^0-9]/g, '').substring(0, 14);
+			delete row.sensorKey;
 			
-    		let sensorKey = mainTableSelectedRow.sensorKey;
-    		let ssfCcpType = mainTableSelectedRow.ssfCcpType;
-    		
+			// FOR TEST
+			row.kpiCertKey = '019b-eecc-6046-e28a';
+			// END
+			
+			let obj = {};
+			obj.KPILEVEL2 = [];
+			obj.KPILEVEL2.push(row);
+			
     		$.ajax({
                 type: "GET",
                 url: heneServerPath + '/ssf',
-                data: { sensorKey: sensorKey, ssfCcpType: ssfCcpType },
+                data: { 
+                	"data" : JSON.stringify(obj),
+                	"sensorKe" : row.sensorKey  
+                },
                 success: function (rslt) {
                 	console.log(rslt);
-                	if(rslt.code == 200) {
+                	if(rslt.okMsg) {
                 		refreshMainTable();
-	                	alert(rslt.message);
-                	} else if(rslt.code == 500) {
-	                	alert(rslt.error);
+	                	alert(rslt.okMsg);
+                	} else if(rslt.errMsg) {
+	                	alert(rslt.errMsg);
                 	} else {
                 		alert('오류: 관리자에게 문의해주세요');
                 	}
@@ -195,6 +208,7 @@
 				   id="ssfApiTable" style="width:100%">
 				<thead>
 					<tr>
+					    <th>센서키</th>
 					    <th>인증키</th>
 					    <th>발생일시</th>
 					    <th>성과지표분야코드</th>
@@ -203,7 +217,7 @@
 					    <th>기존값</th>
 					    <th>목표값</th>
 					    <th>측정값</th>
-					    <th>성취율</th>
+					    <th>성취율(%)</th>
 					    <th>전송여부</th>
 					</tr>
 				</thead>

@@ -30,6 +30,7 @@ public class SsfKPIDaoImpl implements SsfKPIDao {
 			
 			String sql = new StringBuilder()
 					.append("SELECT \n")
+					.append("	d.sensor_key,\n")
 					.append("	c.ssf_kpi_cert_key,\n")
 					.append("	MIN(d.create_time) AS ocr_dttm,\n")
 					.append("	s.kpi_fld_cd,\n")
@@ -51,6 +52,7 @@ public class SsfKPIDaoImpl implements SsfKPIDao {
 					.append("GROUP BY d.sensor_key\n")
 					.append("UNION ALL\n")
 					.append("SELECT\n")
+					.append("	d.sensor_key,\n")
 					.append("	c.ssf_kpi_cert_key,\n")
 					.append("	MIN(d.create_time) AS ocr_dttm,\n")
 					.append("	s.kpi_fld_cd,\n")
@@ -89,9 +91,38 @@ public class SsfKPIDaoImpl implements SsfKPIDao {
 		return null;
 	};
 	
+	@Override
+	public Boolean updateSsfSentYn(Connection conn, String sensorKey, String yn) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("UPDATE data_metal\n")
+					.append("SET ssf_sent_yn = '" + yn + "'\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND sensor_key = '" + sensorKey + "'\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+
+			int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return new Boolean(true);
+	        }
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return new Boolean(true);
+	}
+	
 	private SsfKpiLevel2 extractFromResultSet(ResultSet rs) throws SQLException {
 		SsfKpiLevel2 ssfKpiLevel2 = new SsfKpiLevel2();
 		
+		ssfKpiLevel2.setSensorKey(rs.getString("sensor_key"));
 		ssfKpiLevel2.setSsfKpiCertKey(rs.getString("ssf_kpi_cert_key"));
 		ssfKpiLevel2.setOcrDttm(rs.getString("ocr_dttm"));
 		ssfKpiLevel2.setKpiFldCd(rs.getString("kpi_fld_cd"));

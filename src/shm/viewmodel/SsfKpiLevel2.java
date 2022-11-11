@@ -1,6 +1,7 @@
 package shm.viewmodel;
 
 public class SsfKpiLevel2 {
+	private String sensorKey;
 	private String ssfKpiCertKey;
 	private String ocrDttm;
 	private String kpiFldCd;
@@ -11,6 +12,9 @@ public class SsfKpiLevel2 {
 	private String curValue;
 	private String ssfSentYn;
 	
+	public String getSensorKey() {
+		return sensorKey;
+	}
 	public String getSsfKpiCertKey() {
 		return ssfKpiCertKey;
 	}
@@ -34,6 +38,12 @@ public class SsfKpiLevel2 {
 	}
 	public String getCurValue() {
 		return curValue;
+	}
+	public String getSsfSentYn() {
+		return ssfSentYn;
+	}
+	public void setSensorKey(String sensorKey) {
+		this.sensorKey = sensorKey;
 	}
 	public void setSsfKpiCertKey(String ssfKpiCertKey) {
 		this.ssfKpiCertKey = ssfKpiCertKey;
@@ -59,17 +69,7 @@ public class SsfKpiLevel2 {
 	public void setCurValue(String curValue) {
 		this.curValue = curValue;
 	}
-	public String getSsfSentYn() {
-		return ssfSentYn;
-	}
 	public void setSsfSentYn(String ssfSentYn) {
 		this.ssfSentYn = ssfSentYn;
-	}
-	
-	@Override
-	public String toString() {
-		return "SsfKpiLevel2 [ssfKpiCertKey=" + ssfKpiCertKey + ", ocrDttm=" + ocrDttm + ", kpiFldCd=" + kpiFldCd
-				+ ", kpiDtlCd=" + kpiDtlCd + ", kpiDtlNm=" + kpiDtlNm + ", orgValue=" + orgValue + ", targetValue="
-				+ targetValue + ", curValue=" + curValue + ", ssfSentYn=" + ssfSentYn + "]";
 	}
 }
