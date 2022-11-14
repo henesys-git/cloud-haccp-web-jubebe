@@ -113,10 +113,6 @@
 			row.ocrDttm = row.ocrDttm.replace(/[^0-9]/g, '').substring(0, 14);
 			row.kpiCertKey = row.ssfKpiCertKey;
 			
-			// FOR TEST
-			row.kpiCertKey = '019b-eecc-6046-e28a';
-			// END
-			
 			let obj = {};
 			obj.KPILEVEL2 = [];
 			obj.KPILEVEL2.push(row);
