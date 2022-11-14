@@ -761,17 +761,15 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
-					.append("	DATE_FORMAT(A.create_time, '%Y-%m') AS data_month,\n")
-					.append("	(select count(*) from data_metal aa where process_code = '" + processCode	+ "' AND sensor_id like '%" + sensorId	+ "%' AND month(aa.create_time) = month(A.create_time)) AS total_count, \n")
-					.append("	(select count(*) from data_metal bb where process_code = '" + processCode	+ "' AND sensor_id like '%" + sensorId	+ "%' AND month(bb.create_time) = month(A.create_time) AND bb.sensor_value = 1) AS total_detection \n")
-					.append("FROM data_metal A\n")
-					.append("INNER JOIN product B\n")
-					.append("	ON A.product_id = B.product_id\n")
-					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("	AND YEAR(A.create_time) = '"+ toDate +"' \n")
-					.append("	AND A.process_code = '" + processCode	+ "'\n")
-					.append("	AND A.sensor_id like '%" + sensorId	+ "%' \n")
-					.append("GROUP BY MONTH(A.create_time) \n")
+					.append("	DATE_FORMAT(create_time, '%Y-%m') AS data_month,\n")
+					.append("	COUNT(*) AS total_count,\n")
+					.append("	COUNT(CASE WHEN sensor_value = 1 THEN 1 END) AS total_detection\n")
+					.append("FROM data_metal\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND YEAR(create_time) = '"+ toDate +"' \n")
+					.append("	AND process_code = '" + processCode	+ "'\n")
+					.append("	AND sensor_id LIKE '%" + sensorId	+ "%' \n")
+					.append("GROUP BY MONTH(create_time) \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
