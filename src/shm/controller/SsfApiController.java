@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import shm.dao.SsfKPIDaoImpl;
 import shm.service.SsfApiService;
 
 @WebServlet("/ssf")
@@ -42,8 +43,9 @@ public class SsfApiController extends HttpServlet {
 			String data = req.getParameter("data");
 			JSONObject json = new JSONObject(data);
 			
-			SsfApiService service = new SsfApiService(tenantId);
+			SsfApiService service = new SsfApiService(tenantId, new SsfKPIDaoImpl());
 			JSONObject result = service.sendKpiToSsf(json);
+
 			if(result.has("okMsg")) {
 				service.updateSsfSentYn(sensorKey, "Y");
 			}

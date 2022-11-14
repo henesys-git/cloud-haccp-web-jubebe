@@ -23,8 +23,9 @@ public class SsfApiService {
 	
 	static final Logger logger = Logger.getLogger(SsfApiService.class.getName());
 	
-	public SsfApiService(String bizNo) {
+	public SsfApiService(String bizNo, SsfKPIDao ssfKpiDao) {
 		this.bizNo = bizNo;
+		this.ssfKpiDao = ssfKpiDao;
 	}
 	
 	public JSONObject sendKpiToSsf(JSONObject jsonObj) {

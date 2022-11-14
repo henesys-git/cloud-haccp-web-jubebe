@@ -107,12 +107,11 @@
 
 			let tr = $(this).parents('tr')[0];
 			let row = mainTable.rows(tr).data()[0];
-			let sensorKey = row.sensorKey;
 
 			row.achrt = $(tr).find("td:eq(7)").text();
 			row.trsDttm = new HeneDate().getDateTime().replace(/[^0-9]/g, '');
 			row.ocrDttm = row.ocrDttm.replace(/[^0-9]/g, '').substring(0, 14);
-			delete row.sensorKey;
+			row.kpiCertKey = row.ssfKpiCertKey;
 			
 			// FOR TEST
 			row.kpiCertKey = '019b-eecc-6046-e28a';
@@ -127,10 +126,9 @@
                 url: heneServerPath + '/ssf',
                 data: { 
                 	"data" : JSON.stringify(obj),
-                	"sensorKe" : row.sensorKey  
+                	"sensorKey" : row.sensorKey  
                 },
                 success: function (rslt) {
-                	console.log(rslt);
                 	if(rslt.okMsg) {
                 		refreshMainTable();
 	                	alert(rslt.okMsg);
