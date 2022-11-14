@@ -93,25 +93,17 @@
 		
 		async function refreshMainTable() {
 			var newData = await getData();
-
 			mainTable.clear().rows.add(newData).draw();
-			
-    		if(subTable) {
-	    		subTable.clear().draw();
-	    	}
 		}
     	
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
     	});
     	
     	// 생산성본부 전송
 		$('#ssfApiTable').off().on('click', '.send-btn', function(e) {
 			e.stopPropagation();
-			
 
 			let tr = $(this).parents('tr')[0];
 			let row = mainTable.rows(tr).data()[0];
@@ -163,19 +155,19 @@
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-  	<div class="container-fluid">
-    	<div class="row mb-2">
-	      	<div class="col-sm-7">
-	        	<h1 class="m-0 text-dark">
-	        		생산성본부 KPI 연계 시스템
-	        	</h1>
-	      	</div>
-			<div class="col-md-1">
-	   	  		<button type="submit" class="btn btn-success" id="getDataBtn">
-	   	  	    	<i class="fas fa-search"></i>
-	   	  	     	조회
-	   	  	  	</button>
-	   	  	</div>
+  <div class="container-fluid">
+    <div class="row mb-2">
+	  <div class="col-sm-11">
+	    <h1 class="m-0 text-dark">
+	      생산성본부 KPI 연계 시스템
+	    </h1>
+	  </div>
+	  <div class="col-md-1">
+ 		<button type="submit" class="btn btn-success" id="getDataBtn">
+ 	    	<i class="fas fa-search"></i>
+ 	     	조회
+ 	  	</button>
+	  </div>
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
