@@ -2596,6 +2596,14 @@ function ChecklistSelectModalCCP(createDate, sensorId) {
 		var sensorApi = new HENESYS_API.Sensor();
 		var sensor = await sensorApi.getSensor(this.sensorId);
 		this.checklistId = sensor.checklistId;
+		
+		console.log(sensor.checklistId);
+		var text = "split";
+		console.log(text.split(",").length);
+		console.log(sensor.checklistId.toString().split(",").length);
+		if(sensor.checklistId.toString().split(",").length > 2) {
+			console.log("multi checklist image");
+		}
 	}
 	
 	this.setMetadataAndImagePath = async function() {
