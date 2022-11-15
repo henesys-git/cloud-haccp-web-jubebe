@@ -20,9 +20,8 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import shm.dao.ShmCCPDataDao;
-import shm.dao.CCPDataDaoImpl;
-import shm.service.ShmApiService;
+import shm.dao.SsfKPIDaoImpl;
+import shm.service.SsfApiService;
 
 @WebServlet("/ssf")
 public class SsfApiController extends HttpServlet {
@@ -41,28 +40,21 @@ public class SsfApiController extends HttpServlet {
 			HttpSession session = req.getSession();
 			String tenantId = (String) session.getAttribute("bizNo");
 			String sensorKey = req.getParameter("sensorKey");
-			String shmCcpType = req.getParameter("shmCcpType");
+			String data = req.getParameter("data");
+			JSONObject json = new JSONObject(data);
 			
-			Class<ShmCCPDataDao> c = (Class<ShmCCPDataDao>) Class.forName("shm.dao.Shm" + shmCcpType + "DaoImpl");
-			ShmCCPDataDao instance = c.newInstance();
-			logger.debug("[생산성본부 API] CCP 클래스 명: " + instance.getClass().getName());
-			
-			ShmApiService service = new ShmApiService(instance, new CCPDataDaoImpl(), tenantId);
-			JSONObject result = service.sendCCPDataToShm(sensorKey, shmCcpType);
-	
-			if(result.get("code").toString().equals("200")) {
-				service.updateShmSentYn(sensorKey, "Y");
+			SsfApiService service = new SsfApiService(tenantId, new SsfKPIDaoImpl());
+			JSONObject result = service.sendKpiToSsf(json);
+
+			if(result.has("okMsg")) {
+				service.updateSsfSentYn(sensorKey, "Y");
 			}
 			
 			res.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = res.getWriter();
 			out.print(result);
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
 		} catch (JSONException e2) {
 			e2.printStackTrace();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
 		}
 	}
 

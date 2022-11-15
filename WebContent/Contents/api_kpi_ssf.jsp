@@ -18,7 +18,6 @@
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/ssf/ccpvm",
 	            success: function (result) {
-	            	console.log(result);
 	            	return result;
 	            }
 	        });
@@ -33,6 +32,7 @@
 					data : data,
 					pageLength: 10,
 					columns: [
+						{ data: "sensorKey", defaultContent: '' },
 						{ data: "ssfKpiCertKey", defaultContent: '' },
 						{ data: "ocrDttm", defaultContent: '' },
 						{ data: "kpiFldCd", defaultContent: '' },
@@ -46,12 +46,12 @@
 			        ],
 			        columnDefs : [
 			        	{
-				  			targets: 0,
+				  			targets: [0, 1],
 				  			visible: false,
 				  			searchable: false
 				  		},
 				  		{
-				  			targets: 8,
+				  			targets: 9,
 				  			render: function(td, cellData, rowData, row, col) {
 				  				let d = rowData;
 				  				let achrt = 0;
@@ -67,11 +67,11 @@
 				  					}
 				  				}
 				  				
-				  				return achrt.toFixed(2) + '%';
+				  				return achrt.toFixed(2);
 				  			}
 				  		},
 				  		{
-				  			targets: 9,
+				  			targets: 10,
 				  			render: function(td, cellData, rowData, row, col){
 				  				if(rowData.ssfSentYn === 'Y') {
 				  					return '전송 완료';
@@ -93,44 +93,43 @@
 		
 		async function refreshMainTable() {
 			var newData = await getData();
-
 			mainTable.clear().rows.add(newData).draw();
-			
-    		if(subTable) {
-	    		subTable.clear().draw();
-	    	}
 		}
     	
 		// 조회 버튼 클릭 시
     	$("#getDataBtn").click(async function() {
     		refreshMainTable();
-    		var selectedDate = date.getDate();
-	    	var processCode = $("input[name='test-yn']:checked").val();
     	});
     	
     	// 생산성본부 전송
 		$('#ssfApiTable').off().on('click', '.send-btn', function(e) {
 			e.stopPropagation();
+
+			let tr = $(this).parents('tr')[0];
+			let row = mainTable.rows(tr).data()[0];
+
+			row.achrt = $(tr).find("td:eq(7)").text();
+			row.trsDttm = new HeneDate().getDateTime().replace(/[^0-9]/g, '');
+			row.ocrDttm = row.ocrDttm.replace(/[^0-9]/g, '').substring(0, 14);
+			row.kpiCertKey = row.ssfKpiCertKey;
 			
-			if(mainTableSelectedRow.improvementCompletion == '미완료') {
-				alert('개선조치를 해주세요');
-				return;
-			}
+			let obj = {};
+			obj.KPILEVEL2 = [];
+			obj.KPILEVEL2.push(row);
 			
-    		let sensorKey = mainTableSelectedRow.sensorKey;
-    		let ssfCcpType = mainTableSelectedRow.ssfCcpType;
-    		
     		$.ajax({
                 type: "GET",
                 url: heneServerPath + '/ssf',
-                data: { sensorKey: sensorKey, ssfCcpType: ssfCcpType },
+                data: { 
+                	"data" : JSON.stringify(obj),
+                	"sensorKey" : row.sensorKey  
+                },
                 success: function (rslt) {
-                	console.log(rslt);
-                	if(rslt.code == 200) {
+                	if(rslt.okMsg) {
                 		refreshMainTable();
-	                	alert(rslt.message);
-                	} else if(rslt.code == 500) {
-	                	alert(rslt.error);
+	                	alert(rslt.okMsg);
+                	} else if(rslt.errMsg) {
+	                	alert(rslt.errMsg);
                 	} else {
                 		alert('오류: 관리자에게 문의해주세요');
                 	}
@@ -150,19 +149,19 @@
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-  	<div class="container-fluid">
-    	<div class="row mb-2">
-	      	<div class="col-sm-7">
-	        	<h1 class="m-0 text-dark">
-	        		생산성본부 KPI 연계 시스템
-	        	</h1>
-	      	</div>
-			<div class="col-md-1">
-	   	  		<button type="submit" class="btn btn-success" id="getDataBtn">
-	   	  	    	<i class="fas fa-search"></i>
-	   	  	     	조회
-	   	  	  	</button>
-	   	  	</div>
+  <div class="container-fluid">
+    <div class="row mb-2">
+	  <div class="col-sm-11">
+	    <h1 class="m-0 text-dark">
+	      생산성본부 KPI 연계 시스템
+	    </h1>
+	  </div>
+	  <div class="col-md-1">
+ 		<button type="submit" class="btn btn-success" id="getDataBtn">
+ 	    	<i class="fas fa-search"></i>
+ 	     	조회
+ 	  	</button>
+	  </div>
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
@@ -195,6 +194,7 @@
 				   id="ssfApiTable" style="width:100%">
 				<thead>
 					<tr>
+					    <th>센서키</th>
 					    <th>인증키</th>
 					    <th>발생일시</th>
 					    <th>성과지표분야코드</th>
@@ -203,7 +203,7 @@
 					    <th>기존값</th>
 					    <th>목표값</th>
 					    <th>측정값</th>
-					    <th>성취율</th>
+					    <th>성취율(%)</th>
 					    <th>전송여부</th>
 					</tr>
 				</thead>
