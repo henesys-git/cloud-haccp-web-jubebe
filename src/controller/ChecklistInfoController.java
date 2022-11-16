@@ -38,6 +38,7 @@ public class ChecklistInfoController extends HttpServlet {
 		String bizNo = (String) session.getAttribute("bizNo");
 		
 		String id = req.getParameter("id");
+		String productId = req.getParameter("productId");
 		
 		ChecklistInfoService cldService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), bizNo);
 		
@@ -46,7 +47,12 @@ public class ChecklistInfoController extends HttpServlet {
 		if(id.equals("all")) {
 			List<ChecklistInfo> list = cldService.selectAll();
 			result = FormatTransformer.toJson(list);
-		} else {
+		} 
+		else if(id.equals("getChecklistNo")) {
+			ChecklistInfo clInfo = cldService.selectGetChecklistNo(productId);
+			result = FormatTransformer.toJson(clInfo);
+		}
+		else {
 			ChecklistInfo clInfo = cldService.select(id);
 			result = FormatTransformer.toJson(clInfo);
 		}

@@ -52,6 +52,41 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	}
 	
 	@Override
+	public ChecklistInfo selectGetChecklistNo(Connection conn, String prodCd) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT  \n")
+					.append("checklist_id  \n")
+					.append("FROM checklist_info\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND product_id like '%"+ prodCd +"%';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			ChecklistInfo clInfo = new ChecklistInfo();
+					
+			if(rs.next()) {
+				clInfo = extractFromResultSet3(rs);
+			}
+			
+			return clInfo;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	}
+	
+	@Override
 	public List<ChecklistInfo> selectAll(Connection conn) {
 		
 		try {
@@ -294,6 +329,14 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	    ChecklistInfo clInfo = new ChecklistInfo();
 	    
 	    clInfo.setPageCnt(rs.getInt("page_cnt"));
+	    
+	    return clInfo;
+	}
+	
+	private ChecklistInfo extractFromResultSet3(ResultSet rs) throws SQLException {
+	    ChecklistInfo clInfo = new ChecklistInfo();
+	    
+	    clInfo.setChecklistId(rs.getString("checklist_id"));
 	    
 	    return clInfo;
 	}

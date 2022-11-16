@@ -27,3 +27,15 @@ ChecklistInfo.prototype.getAll = function () {
     
 	return checklistInfoList;
 }
+
+ChecklistInfo.prototype.getChecklistId = function (id) {
+ 	var checklistInfo = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/checklist-info?id=getChecklistNo" + "&productId=" + id,
+        success: function (result) {
+        	return result;
+        }
+    });
+    
+	return checklistInfo;
+}

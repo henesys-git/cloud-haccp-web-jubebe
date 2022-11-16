@@ -9,6 +9,7 @@ public class ChecklistInfo {
 	private int checkInterval;
 	private String signatureType;
 	private int pageCnt;
+	private String productId;
 	
 	public ChecklistInfo() {}
 	
@@ -67,6 +68,9 @@ public class ChecklistInfo {
 	public int getPageCnt() {
 		return pageCnt;
 	}
+	public String getProductId() {
+		return productId;
+	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
 	}
@@ -91,6 +95,10 @@ public class ChecklistInfo {
 	public void setPageCnt(int pageCnt) {
 		this.pageCnt = pageCnt;
 	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
 	@Override
 	public String toString() {
 		return "ChecklistInfo [checklistId=" + checklistId + ", revisionNo=" + revisionNo + ", checklistName="

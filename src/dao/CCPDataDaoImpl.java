@@ -81,7 +81,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("SELECT \n")
 					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
 					.append("	A.sensor_id,\n")
-					.append("	B.sensor_name\n")
+					.append("	B.sensor_name,\n")
+					.append("	A.product_id \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
@@ -816,6 +817,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		ccpData.setCreateDate(rs.getString("create_date"));
 		ccpData.setSensorId(rs.getString("sensor_id"));
 		ccpData.setSensorName(rs.getString("sensor_name"));
+		ccpData.setProductId(rs.getString("product_id"));
 		
 		return ccpData;
 	}

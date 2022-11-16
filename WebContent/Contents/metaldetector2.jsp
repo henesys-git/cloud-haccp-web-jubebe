@@ -80,18 +80,21 @@
 	    	fixedTh[0] = "날짜";
 			fixedTh[1] = "센서아이디";
 			fixedTh[2] = "센서명";
+			fixedTh[3] = "제품코드";
 			
 			//db로부터 받아온 칼럼명
 			var fixedColumn = new Array();
 			fixedColumn[0] = "createDate";
 			fixedColumn[1] = "sensorId";
 			fixedColumn[2] = "sensorName";
+			fixedColumn[3] = "productId";
 
 			// 하단 datatable 고정영역 columns 변수 array로 만들기  (점검표아이디, 일련번호, 양식수정이력번호) 
 			var columnKeys = [
    				{data: fixedColumn[0] , defaultContent : '' }, 
    			  	{data: fixedColumn[1] , defaultContent : '' },
-   			  	{data: fixedColumn[2] , defaultContent : '' }
+   			  	{data: fixedColumn[2] , defaultContent : '' },
+   			 	{data: fixedColumn[3] , defaultContent : '' }
    			];
 			
 			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
@@ -99,6 +102,8 @@
 				$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
 	    	}
 	    	
+	    	$("#ccpDataTable thead tr").append("<th style = 'display:none;'>"+fixedTh[3]+"</th>");
+			
 			//점검표의 사인정보를 조회해온 데이터를 판단하여 동적으로 
 			//columnKeys 배열에 push하여 칼럼을 늘리고 html th 태그를 생성한다.
 	    	for(var i=0; i<list2.length; i++) {
@@ -152,6 +157,12 @@
 						    	$(td).append('<button type="button" class="btn btn-success checklist-sign" id="sign_approver" onclick="registSignInfo(this);">서명</button>');
 						    }
 						}
+					},
+					{
+						targets: [3],
+		        		'createdCell': function(td, cellData, rowData, row, col){
+		        			$(td).attr('style', 'display:none;');
+			  			}
 					}
 				]
 			}
@@ -179,8 +190,10 @@
     		
     		let createDate = selectedRow.createDate;
     		let sensorId = selectedRow.sensorId;
-    		
-    		var modal = new ChecklistSelectModalCCP(createDate, sensorId);
+    		let productId = selectedRow.productId;
+    		console.log(productId);
+    		console.log(selectedRow);
+    		var modal = new ChecklistSelectModalCCP(createDate, sensorId, productId);
     		modal.openModal();
     	});
     	

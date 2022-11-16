@@ -36,6 +36,21 @@ public class ChecklistInfoService {
 		return checklistInfoList;
 	}
 	
+	public ChecklistInfo selectGetChecklistNo(String prodCd) {
+		ChecklistInfo clInfo = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			clInfo = clDao.selectGetChecklistNo(conn, prodCd);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return clInfo;
+	}
+	
 	public ChecklistInfo select(String checklistId) {
 		ChecklistInfo clInfo = null;
 		
