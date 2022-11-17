@@ -200,8 +200,8 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		
 		this.ctx = canvas.getContext('2d');
 		
-		console.log(this.modalWidthWithoutPxKeyword);
-		console.log(this.modalHeightWithoutPxKeyword);
+		//console.log(this.modalWidthWithoutPxKeyword);
+		//console.log(this.modalHeightWithoutPxKeyword);
 		
 		var bgImg = new Image();
 		bgImg.src = this.imagePath;
@@ -431,9 +431,9 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 			}
 			
 			//console.log(checklistData);
-			console.log(dataArray);
-			console.log(head);
-			console.log(JSON.stringify(head));
+			//console.log(dataArray);
+			//console.log(head);
+			//console.log(JSON.stringify(head));
 			
 			if(confirm('등록하시겠습니까?')) {
 
@@ -443,7 +443,7 @@ function ChecklistInsertModal(checklistId, seqNo, page) {
 		        data: "data=" + JSON.stringify(head) +
 					  "&type=insert",
 		        success: function (result) {
-					console.log(result);
+					//console.log(result);
 					
 					var children = $('#checklist-insert-wrapper1').children();
 					var children2 = $('#checklist-insert-wrapper2').children();
@@ -1351,7 +1351,7 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo, page) {
 				head.checklistData = checklistData;
 			}
 			
-			console.log(checklistData);
+			//console.log(checklistData);
             var check = confirm('수정하시겠습니까?');
 			
 			if(check) {
@@ -1565,11 +1565,11 @@ function ChecklistUpdateModal(checklistId, revisionNo, seqNo, page) {
 				tag = document.createElement('input');
 				tag.classList.add("checklist-data");
 				tag.setAttribute("type", "date");
-				console.log(data);
-				console.log(default_value);
-				console.log(default_value == null);
-				console.log(default_value == 'null');
-				console.log(format);
+				//console.log(data);
+				//console.log(default_value);
+				//console.log(default_value == null);
+				//console.log(default_value == 'null');
+				//console.log(format);
 				if(format == 'yyyy-mm-dd') {
 				   tag.setAttribute("date-format", 'yyyy-mm-dd');
                    if(default_value == 'null') {
@@ -2501,20 +2501,20 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 			case "file":
 				if(format == 'image') {
 					if(pages == 1) {
-						console.log("image act");
+						//console.log("image act");
 					fn_Set_Image_File_View2(data, 'checklist-select-canvas', startX, startY, width, height);
 					}
 					else if(pages == 2) {
-					fn_Set_Image_File_View2(data, 'checklist-select-canvas2', startX, startY, width, height);	
+						fn_Set_Image_File_View2(data, 'checklist-select-canvas2', startX, startY, width, height);	
 					}
 					else if(pages == 3) {
-					fn_Set_Image_File_View2(data, 'checklist-select-canvas3', startX, startY, width, height);	
+						fn_Set_Image_File_View2(data, 'checklist-select-canvas3', startX, startY, width, height);	
 					}
 					else if(pages == 4) {
-					fn_Set_Image_File_View2(data, 'checklist-select-canvas4', startX, startY, width, height);	
+						fn_Set_Image_File_View2(data, 'checklist-select-canvas4', startX, startY, width, height);	
 					}
 					else if(pages == 5) {
-					fn_Set_Image_File_View2(data, 'checklist-select-canvas5', startX, startY, width, height);	
+						fn_Set_Image_File_View2(data, 'checklist-select-canvas5', startX, startY, width, height);	
 					}
 				}
 				else {
@@ -2524,38 +2524,38 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 			case "date":
 				if(pages == 1) {
 					this.ctx.fillText(data, middleX, middleY);
-					}
-					else if(pages == 2) {
+				}
+				else if(pages == 2) {
 					this.ctx2.fillText(data, middleX, middleY);	
-					}
-					else if(pages == 3) {
+				}
+				else if(pages == 3) {
 					this.ctx3.fillText(data, middleX, middleY);	
-					}
-					else if(pages == 4) {
+				}
+				else if(pages == 4) {
 					this.ctx4.fillText(data, middleX, middleY);	
-					}
-					else if(pages == 5) {
+				}
+				else if(pages == 5) {
 					this.ctx5.fillText(data, middleX, middleY);	
-					}
+				}
 				break;	
 			default : 
 				//this.ctx.fillText(data, startXWrite, startYWrite);
-					//console.log(middleX);
-					//console.log(middleY);
+				//console.log(middleX);
+				//console.log(middleY);
 				if(pages == 1) {
-				this.ctx.fillText(data, middleX, middleY);
+					this.ctx.fillText(data, middleX, middleY);
 				}
 				else if(pages == 2) {
-				this.ctx2.fillText(data, middleX, middleY);	
+					this.ctx2.fillText(data, middleX, middleY);	
 				}
 				else if(pages == 3) {
-				this.ctx3.fillText(data, middleX, middleY);	
+					this.ctx3.fillText(data, middleX, middleY);	
 				}
 				else if(pages == 4) {
-				this.ctx4.fillText(data, middleX, middleY);	
+					this.ctx4.fillText(data, middleX, middleY);	
 				}
 				else if(pages == 5) {
-				this.ctx5.fillText(data, middleX, middleY);	
+					this.ctx5.fillText(data, middleX, middleY);	
 				}
 				break;
 		}
@@ -2759,6 +2759,9 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 				
 			}
 		}
+		
+		console.debug('this.checklistData');
+		console.debug(this.checklistData);
 		
 		$("#checklist-select-modal").modal("show");
 		
@@ -3057,6 +3060,9 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	}
 	
 	this.getInfoPerEventCode = function(testResults) {
+		console.debug('test result:');
+		console.debug(testResults);
+		
 		let outerObj = {};
 		
 		let keys = Object.keys(testResults);
@@ -3097,7 +3103,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	}
 	
 	this.displayData = function(cell, data) {
-		console.log("data= " + data);
+		//console.log("data= " + data);
 		var size = this.modalUtil.setTagSize(this, cell);
 		var startX = size.startX;
 		var startY = size.startY;

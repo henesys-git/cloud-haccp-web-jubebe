@@ -56,8 +56,8 @@ function ChecklistModalUtil() {
 		result.width = Number(cell.childNodes[7].firstChild.textContent.replace("px", "")) * ratio + "px";
 		result.height = Number(cell.childNodes[8].firstChild.textContent.replace("px", "")) * ratio + "px";
 		
-		console.log(ratio);
-		console.log(result);
+		//console.log(ratio);
+		//console.log(result);
 		
 		return result;
 	}
