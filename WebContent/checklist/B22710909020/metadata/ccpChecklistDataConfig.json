@@ -1,0 +1,10 @@
+{
+	"metaldetector": {
+		"rowStartCell":"cell4",
+		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "sign"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	}
+}
