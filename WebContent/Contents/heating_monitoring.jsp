@@ -206,7 +206,7 @@
 	    		    var newObj = new Object();
 	    		    
 	    		    var temp = arr.filter(function(arr) {
-	    		    		return arr.sensorName == key;
+	    		    		return arr.sensorName.toString().substr(0,7) == key;
 	    		        });
 	    		    newObj.time = temp.map(arr => arr.eachMinute);
 	    		    newObj.value = temp.map(arr => arr.sensorValue);
