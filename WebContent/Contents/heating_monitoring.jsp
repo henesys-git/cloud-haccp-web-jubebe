@@ -212,8 +212,9 @@
 	    		    newObj.value = temp.map(arr => arr.sensorValue);
 	    		    newObj.minValue = temp.map(arr => arr.minValue);
 	    		    newObj.maxValue = temp.map(arr => arr.maxValue);
-
+	    		    console.log(newObj);
 	    		    return newObj;
+	    		   
 	    		}
 				
 				

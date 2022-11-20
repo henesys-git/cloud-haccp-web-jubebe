@@ -131,7 +131,8 @@ public class CCPDataViewModelController extends HttpServlet {
 			sensorId = req.getParameter("sensorId");
 			List<CCPDataHeatingMonitoringGraphModel> cvmHeatingMonitoringGraphList = ccpService.getCCPHeatingMonitoringGraphModels(sensorKey, sensorId);
 			result = FormatTransformer.toJson(cvmHeatingMonitoringGraphList);
-			
+			System.out.println("result############################");
+			System.out.println(result);
 			res.setContentType("application/json; charset=UTF-8");
 			out = res.getWriter();
 			
