@@ -695,6 +695,78 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				cvmList.add(data);
 			}
 			
+			rs.close();
+			
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT10'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data2 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(0, data2);
+			}
+			
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT50'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data3 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data3);
+			}
+			
+			
+			
 			return cvmList;
 			
 		} catch (SQLException ex) {
