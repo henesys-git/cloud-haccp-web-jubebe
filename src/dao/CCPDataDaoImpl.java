@@ -518,8 +518,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.sensor_key,\n")
 					.append("	B.sensor_name,\n")
 					.append("	D.product_name,\n")
-					.append("	DATE_FORMAT(A.create_time, \"%Y-%m-%d %H:%i\") AS create_time,\n")
-					.append("	IFNULL((SELECT DATE_FORMAT(cc.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time,\n")
+					.append("	IFNULL((SELECT DATE_FORMAT(cc.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT30'), '') AS create_time, \n")
+					.append("	IFNULL((SELECT DATE_FORMAT(cc.create_time, \"%Y-%m-%d %H:%i\") FROM data_metal cc WHERE A.sensor_key = cc.sensor_key AND cc.event_code = 'HT40'), '') AS complete_time, \n")
 					.append("	(\n")
 					.append("		SELECT CASE \n")
 					.append("			WHEN NOT EXISTS(\n")
@@ -675,8 +675,6 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				CCPDataHeatingMonitoringGraphModel data2 = extractHeatingMonitoringGraphModelFromResultSet(rs);
 				cvmList.add(data2);
 			}
-			System.out.println("cvmList2: ############");
-			System.out.println(cvmList);
 			
 			rs.close();
 			
@@ -736,13 +734,11 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				CCPDataHeatingMonitoringGraphModel data = extractHeatingMonitoringGraphModelFromResultSet(rs);
 				cvmList.add(data);
 			}
-			System.out.println("cvmList1: ############");
-			System.out.println(cvmList);
 			
 			rs.close();
 			
 			
-			
+			/*
 			//2분마다 추가되는 온도 데이터들 맨 뒤에 종료 시간 데이터 추가
 			sql = new StringBuilder()
 					.append("SELECT\n")
@@ -781,11 +777,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				cvmList.add(data3);
 			}
 			
-			
-			System.out.println("cvmList3: ############");
-			System.out.println(cvmList);
-			
 			rs.close();
+			*/
 			
 			return cvmList;
 			
@@ -853,6 +846,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 						.append("FROM data_metal \n")
 						.append("WHERE process_code = 'PC60'\n")
 						.append("AND event_code = 'TP10'\n")
+						.append("AND sensor_id = '"+sensorId +"' \n")
 						.toString();
 				
 				rs = stmt.executeQuery(sql);
@@ -883,7 +877,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
 					.append("AND A.process_code = 'PC30'\n")
-					.append("AND A.event_code = 'HT10'\n")
+					.append("AND A.event_code = 'HT15'\n")
 					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
 					.append("AND A.sensor_key = '" + sensorKey + "'\n")
 					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
@@ -943,7 +937,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			rs.close();
 			
 			
-			
+			/*
 			//2분마다 추가되는 온도 데이터들 맨 뒤에 종료 시간 데이터 추가
 			sql = new StringBuilder()
 					.append("SELECT\n")
@@ -961,7 +955,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
 					.append("AND A.process_code = 'PC30'\n")
-					.append("AND A.event_code = 'HT50'\n")
+					.append("AND A.event_code = 'HT55'\n")
 					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
 					.append("AND A.sensor_key = '" + sensorKey + "'\n")
 					.append("ORDER BY each_minute DESC \n")
@@ -982,6 +976,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			}
 			
 			rs.close();
+			*/
 			
 			return cvmList;
 			
@@ -1196,7 +1191,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setSensorKey(rs.getString("sensor_key"));
 		cvm.setSensorName(rs.getString("sensor_name"));
 		cvm.setProductName(rs.getString("product_name"));
-		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
+		cvm.setCreateTime(rs.getString("create_time").toString());
 		cvm.setCompleteTime(rs.getString("complete_time").toString());
 		cvm.setState(rs.getString("state").toString());
 		cvm.setSensorId(rs.getString("sensor_id").toString());
