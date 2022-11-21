@@ -638,6 +638,49 @@ public class CCPDataDaoImpl implements CCPDataDao {
 				
 			}
 			
+			//2분마다 추가되는 온도 데이터들 앞에 시작 시간 데이터 추가
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value, \n")
+					.append("	 A.tenant_id \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT10'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPDataHeatingMonitoringGraphModel> cvmList = new ArrayList<CCPDataHeatingMonitoringGraphModel>();
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data2 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data2);
+			}
+			System.out.println("cvmList2: ############");
+			System.out.println(cvmList);
+			
+			rs.close();
+			
+			//2분마다 추가되는 온도 데이터
 			sql = new StringBuilder()
 					/*
 					.append("SELECT\n")
@@ -665,13 +708,14 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
 					.append("	 A.sensor_value, \n")
 					.append("	 C.min_value, \n")
-					.append("	 C.max_value \n")
+					.append("	 C.max_value, \n")
+					.append("	 A.tenant_id \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("LEFT JOIN ccp_limit C\n")
 					.append("	ON A.event_code = C.event_code \n")
-					.append("	AND A.product_id = C.object_id \n")
+					.append("	AND A.sensor_id = C.object_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
 					.append("AND A.process_code = 'PC60'\n")
@@ -688,12 +732,256 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			rs = stmt.executeQuery(sql);
 			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data);
+			}
+			System.out.println("cvmList1: ############");
+			System.out.println(cvmList);
+			
+			rs.close();
+			
+			
+			
+			//2분마다 추가되는 온도 데이터들 맨 뒤에 종료 시간 데이터 추가
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value, \n")
+					.append("	 A.tenant_id \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT50'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					.append("ORDER BY each_minute DESC \n")
+					.append("LIMIT 1 \n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data3 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data3);
+			}
+			
+			
+			System.out.println("cvmList3: ############");
+			System.out.println(cvmList);
+			
+			rs.close();
+			
+			return cvmList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	
+	@Override
+	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel2(
+			Connection conn, String sensorKey, String sensorId) {
+			
+		String sql = "";
+		String startTime = "";
+		String endTime = "";
+		
+		try {
+			stmt = conn.createStatement();
+			
+			sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("create_time \n")
+					.append("FROM data_metal \n")
+					.append("WHERE sensor_key = '"+sensorKey +"' \n")
+					.append("AND event_code = 'HT30' \n")
+					.toString();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				startTime = rs.getString("create_time");
+			}
+			
+			//stmt.close();
+			rs.close();
+			
+			sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("create_time \n")
+					.append("FROM data_metal \n")
+					.append("WHERE sensor_key = '"+sensorKey +"' \n")
+					.append("AND event_code = 'HT40' \n")
+					.toString();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				endTime = rs.getString("create_time");
+			}
+			
+			//stmt.close();
+			rs.close();
+			
+			//해당 채번키의 종료시간 없으면 온도 데이터 쌓인 것 중 MAX 시간 가져옴
+			if(endTime.equals("")) {
+				sql = new StringBuilder()
+						.append("SELECT \n")
+						.append("MAX(create_time) AS create_time \n")
+						.append("FROM data_metal \n")
+						.append("WHERE process_code = 'PC60'\n")
+						.append("AND event_code = 'TP10'\n")
+						.toString();
+				
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next()) {
+					endTime = rs.getString("create_time");
+				}
+				
+				//stmt.close();
+				rs.close();
+				
+			}
+			
+			//2분마다 추가되는 온도 데이터들 앞에 시작 시간 데이터 추가
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT10'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
 			List<CCPDataHeatingMonitoringGraphModel> cvmList = new ArrayList<CCPDataHeatingMonitoringGraphModel>();
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data2 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data2);
+			}
+			
+			rs.close();
+			
+			//2분마다 추가되는 온도 데이터
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.sensor_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC60'\n")
+					.append("AND A.event_code = 'TP10'\n")
+					.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					//.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
 				CCPDataHeatingMonitoringGraphModel data = extractHeatingMonitoringGraphModelFromResultSet(rs);
 				cvmList.add(data);
 			}
+			
+			rs.close();
+			
+			
+			
+			//2분마다 추가되는 온도 데이터들 맨 뒤에 종료 시간 데이터 추가
+			sql = new StringBuilder()
+					.append("SELECT\n")
+					.append("	 B.sensor_name,\n")
+					.append("	 DATE_FORMAT(A.create_time, '%Y-%m-%d %H:%i') AS each_minute,\n") //경과 시간
+					.append("	 A.sensor_value, \n")
+					.append("	 C.min_value, \n")
+					.append("	 C.max_value \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("LEFT JOIN ccp_limit C\n")
+					.append("	ON A.event_code = C.event_code \n")
+					.append("	AND A.product_id = C.object_id \n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					//.append("AND A.create_time BETWEEN '"+ startTime +"' AND '"+endTime+"' \n")
+					.append("AND A.process_code = 'PC30'\n")
+					.append("AND A.event_code = 'HT50'\n")
+					//.append("AND A.sensor_id = '"+ sensorId+"' \n")
+					.append("AND A.sensor_key = '" + sensorKey + "'\n")
+					.append("ORDER BY each_minute DESC \n")
+					.append("LIMIT 1 \n")
+					//.append("  AND A.event_code IN ('HT10', 'HT50') \n")
+					//.append("GROUP BY EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("ORDER BY EXTRACT(HOUR FROM A.create_time), EXTRACT(MINUTE FROM A.create_time) \n")
+					//.append("LIMIT 30 \n")
+					.toString();
+					
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				CCPDataHeatingMonitoringGraphModel data3 = extractHeatingMonitoringGraphModelFromResultSet(rs);
+				cvmList.add(data3);
+			}
+			
+			rs.close();
 			
 			return cvmList;
 			
@@ -924,6 +1212,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setSensorValue(rs.getString("sensor_value"));
 		cvm.setMinValue(rs.getString("min_value"));
 		cvm.setMaxValue(rs.getString("max_value"));
+		cvm.setTenantId(rs.getString("tenant_id"));
 
 		return cvm;
 	}

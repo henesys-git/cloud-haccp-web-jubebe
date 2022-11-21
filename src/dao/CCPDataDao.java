@@ -27,6 +27,7 @@ public interface CCPDataDao {
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate);
 	public List<CCPDataHeatingMonitoringModel> getAllCCPDataHeatingMonitoringModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
 	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel(Connection conn, String sensorKey, String sensorId);
+	public List<CCPDataHeatingMonitoringGraphModel> getAllCCPDataHeatingMonitoringGraphModel2(Connection conn, String sensorKey, String sensorId);
 	public List<KPIProductionViewModel> getKPIProduction(Connection conn, String processCode, String toDate, String fromDate);
 	public List<KPIQualityViewModel> getKPIQuality(Connection conn, String processCode, String toDate, String fromDate, String sensorId);
 }
