@@ -2349,23 +2349,23 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 		var middleY = Number(startY.replace("px", "")) + (Number(height.replace("px", "")) / 2);
 		
 		this.ctx.textAlign = "center";
-		this.ctx.font = '15px serif';
+		this.ctx.font = '15px sans-serif';
 		
 		if(pages >= 2) {
 			this.ctx2.textAlign = "center";
-			this.ctx2.font = '15px serif';
+			this.ctx2.font = '15px sans-serif';
 		}
 		if(pages >= 3) {
 			this.ctx3.textAlign = "center";
-			this.ctx3.font = '15px serif';
+			this.ctx3.font = '15px sans-serif';
 		}
 		if(pages >= 4) {
 			this.ctx4.textAlign = "center";
-			this.ctx4.font = '15px serif';
+			this.ctx4.font = '15px sans-serif';
 		}
 		if(pages >= 5) {
 			this.ctx5.textAlign = "center";
-			this.ctx5.font = '15px serif';
+			this.ctx5.font = '15px sans-serif';
 		}
 		
 		switch(type) {
@@ -2430,23 +2430,23 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 				if(data === 'on') {
 					if(pages == 1) {
 					this.ctx.fillText("✔", middleX, middleY);
-					this.ctx.font = '20px serif';
+					this.ctx.font = '20px sans-serif';
 					}
 					else if(pages == 2){
 					this.ctx2.fillText("✔", middleX, middleY);
-					this.ctx2.font = '20px serif';	
+					this.ctx2.font = '20px sans-serif';	
 					}
 					else if(pages == 3){
 					this.ctx3.fillText("✔", middleX, middleY);
-					this.ctx3.font = '20px serif';	
+					this.ctx3.font = '20px sans-serif';	
 					}
 					else if(pages == 4){
 					this.ctx4.fillText("✔", middleX, middleY);
-					this.ctx4.font = '20px serif';	
+					this.ctx4.font = '20px sans-serif';	
 					}
 					else if(pages == 5){
 					this.ctx5.fillText("✔", middleX, middleY);
-					this.ctx5.font = '20px serif';	
+					this.ctx5.font = '20px sans-serif';	
 					}
 				}
 				break;
@@ -2454,23 +2454,23 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 				if(data === 'on') {
 					if(pages == 1) {
 					this.ctx.fillText("✔", middleX, middleY);
-					this.ctx.font = '20px serif';
+					this.ctx.font = '20px sans-serif';
 					}
 					else if(pages == 2){
 					this.ctx2.fillText("✔", middleX, middleY);
-					this.ctx2.font = '20px serif';
+					this.ctx2.font = '20px sans-serif';
 					}
 					else if(pages == 3){
 					this.ctx3.fillText("✔", middleX, middleY);
-					this.ctx3.font = '20px serif';
+					this.ctx3.font = '20px sans-serif';
 					}
 					else if(pages == 4){
 					this.ctx4.fillText("✔", middleX, middleY);
-					this.ctx4.font = '20px serif';
+					this.ctx4.font = '20px sans-serif';
 					}
 					else if(pages == 5){
 					this.ctx5.fillText("✔", middleX, middleY);
-					this.ctx5.font = '20px serif';
+					this.ctx5.font = '20px sans-serif';
 					}
 					
 				}
@@ -3126,7 +3126,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		var middleY = Number(startY) + (height / 2);
 		
 		this.ctx.textAlign = "center";
-		this.ctx.font = '10px serif';
+		this.ctx.font = '10px sans-serif';
 		
 		if(data == 1 || parseFloat(data) == 1.1) {
 			data = 'O';
