@@ -228,4 +228,22 @@ public class CCPDataService {
 		return cvmList;
 	}
 	
+	public List<CCPDataHeatingMonitoringGraphModel> getCCPHeatingMonitoringGraphModels2(
+			String sensorKey,
+			String sensorId) {
+		
+		List<CCPDataHeatingMonitoringGraphModel> cvmList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(tenantId);
+			cvmList = ccpDataDao.getAllCCPDataHeatingMonitoringGraphModel(conn, sensorKey, sensorId);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return cvmList;
+	}
+	
 }

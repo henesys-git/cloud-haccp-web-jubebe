@@ -6,6 +6,7 @@ public class CCPDataHeatingMonitoringGraphModel {
 	private String sensorValue;
 	private String minValue;
 	private String maxValue;
+	private String tenantId;
 	
 	public String getSensorName() {
 		return sensorName;
@@ -36,6 +37,12 @@ public class CCPDataHeatingMonitoringGraphModel {
 	}
 	public void setMaxValue(String maxValue) {
 		this.maxValue = maxValue;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 	
 	

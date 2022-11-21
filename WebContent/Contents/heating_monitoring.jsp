@@ -85,6 +85,25 @@
 	    	return fetchedData;
 	    };
 	    
+	    //하부 온도 있을 시에 sensorId "5x"으로 적용되고 있어서 맞게 받아오기 위함
+ 		async function getSubData2(sensorKey, sensorId) {
+	    	
+ 			var sensorId2 = "TP5" + sensorId.toString().substr(3,1);
+ 			
+	        var fetchedData = $.ajax({
+			            type: "GET",
+			            url: "<%=Config.this_SERVER_path%>/ccpvm",
+			            data: "method=heating-monitoring-detail" +
+			            	  "&sensorKey=" + sensorKey + 
+			            	  "&sensorId=" + sensorId2,
+			            success: function (result) {
+			            	return result;
+			            }
+			        });
+	    
+	    	return fetchedData;
+	    };
+	    
 	    async function initTable() {
 	    	var data = await getData();
 			
@@ -128,6 +147,10 @@
 	    	console.log(data);
 	    	console.log(data[0].sensorName);
 	    	
+	    	var data2 = await getSubData2(mainTableSelectedRow.sensorKey, tpSensorId);
+	    	console.log(data2);
+	    	console.log(data2[0].sensorName);
+	    	
 	    	$("#ccpHeatingsubTable").append(
 	    	`
 	    	<div class="card-header row">
@@ -167,17 +190,30 @@
 	    		// graph initialize
 	    		
 	    		/* db data processing */
-	    		console.log(data);
-	    		console.log(data[0]);
 	    		var arr = data;
 	    		var censor_info = data;
-	    				
+	    		
+	    		
+	    		//하단 온도 데이터 개수가 적을 경우 부족한 만큼 맞추기 위해 맨 끝 데이터 push
+	    		if(data.length > data2.length) {
+	    			
+	    			for(var i = 0; i < data.length - data2.length; i++) {
+	    				data2.push(data2[data2.length - 1]);
+	    			}
+	    			
+	    		}
+	    		console.log("비교@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+	    		console.log(data);
+	    		console.log(data2);
+	    		var arr2 = data2;
+	    		var censor_info2 = data2;
+	    		
 	    		var customOptions = {
 	    				legend: { display: false },
 	    				scales: {
 	    					xAxes: [{
 	    			            scaleLabel: {
-	    			            	stacked: true,
+	    			            	stacked: false,
 	    			            	display: true,
 	    			                labelString: "측정시간",
 	    			                fontColor: "black"
@@ -185,10 +221,10 @@
 	    			        }],
 	    			        yAxes: [{
 	    			            display: true,
-	    			            stacked: true,
+	    			            stacked: false,
 	    			            ticks: {
 	    			                min: 0,
-	    			                max: 200
+	    			                max: 300
 	    			            },
 	    			            scaleLabel: {
 	    			            	display: true,
@@ -196,7 +232,12 @@
 	    			                fontColor: "red"
 	    			            }
 	    			        }]
-	    			    }
+	    			    },
+	    			    tooltips:{
+	    			        mode: 'index',
+	    			        intersect: true,
+	    			        position: 'nearest'
+	    			 }
 	    			};
 	    		
 	    		
@@ -206,7 +247,7 @@
 	    		    var newObj = new Object();
 	    		    
 	    		    var temp = arr.filter(function(arr) {
-	    		    		return arr.sensorName.toString().substr(0,7) == key;
+	    		    		return arr.tenantId == key;
 	    		        });
 	    		    newObj.time = temp.map(arr => arr.eachMinute);
 	    		    newObj.value = temp.map(arr => arr.sensorValue);
@@ -220,7 +261,8 @@
 				
 	    		for(var temp = 0; temp < 1; temp++){
 	    						
-	    			var tempVal = processData(arr, censor_info[temp].sensorName);
+	    			var tempVal = processData(arr, censor_info[temp].tenantId);
+	    			var tempVal2 = processData(arr2, censor_info2[temp].tenantId);
 	    			var tempCtx = $('#target').get(0).getContext('2d');
 	    			console.log(tempVal.minValue);
 	    			console.log(tempVal.maxValue);
@@ -235,7 +277,15 @@
 	    						data: tempVal.value,
 	    						fill: false,
 	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
-	    					}/*,
+	    					},
+	    					{	
+	    						label : "온도2",
+	    						type : 'line',
+	    						data: tempVal2.value,
+	    						fill: false,
+	    						borderColor: "#"+ Math.round(Math.random() * 0xFFFFFF).toString(16)
+	    					}
+	    					/*,
 	    					{
 	    						label : "한계기준최소온도",
 	    						type : 'line',
