@@ -141,15 +141,10 @@
 	    	$("#ccpHeatingsubTable").children().remove();
 	    	
 	    	var tpSensorId = "TP" + mainTableSelectedRow.sensorId.substr(2,3);
-	    	console.log(tpSensorId);
 	    	
 	    	var data = await getSubData(mainTableSelectedRow.sensorKey, tpSensorId);
-	    	console.log(data);
-	    	console.log(data[0].sensorName);
 	    	
 	    	var data2 = await getSubData2(mainTableSelectedRow.sensorKey, tpSensorId);
-	    	console.log(data2);
-	    	console.log(data2[0].sensorName);
 	    	
 	    	$("#ccpHeatingsubTable").append(
 	    	`
@@ -192,19 +187,16 @@
 	    		/* db data processing */
 	    		var arr = data;
 	    		var censor_info = data;
-	    		
-	    		
+	    		var arrayLength = data.length - data2.length;
 	    		//하단 온도 데이터 개수가 적을 경우 부족한 만큼 맞추기 위해 맨 끝 데이터 push
 	    		if(data.length > data2.length) {
 	    			
-	    			for(var i = 0; i < data.length - data2.length; i++) {
+	    			for(let m = 0; m < arrayLength; m++) {
+	    				console.log(m);
 	    				data2.push(data2[data2.length - 1]);
 	    			}
 	    			
 	    		}
-	    		console.log("비교@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-	    		console.log(data);
-	    		console.log(data2);
 	    		var arr2 = data2;
 	    		var censor_info2 = data2;
 	    		
