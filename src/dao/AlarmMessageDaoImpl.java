@@ -81,8 +81,8 @@ public class AlarmMessageDaoImpl implements AlarmMessageDao {
 		cam.setApiToken(rs.getString("api_token"));
 		cam.setEventName(rs.getString("event_name"));
 		cam.setProcessName(rs.getString("process_name"));
-		cam.setMinValue(rs.getDouble("min_value"));
-		cam.setMaxValue(rs.getDouble("max_value"));
+		cam.setMinValue(rs.getString("min_value"));
+		cam.setMaxValue(rs.getString("max_value"));
 		
 	    return cam;
 	}

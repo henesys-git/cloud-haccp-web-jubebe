@@ -108,8 +108,8 @@ public class CCPLimitDaoImpl implements CCPLimitDao {
 		
 		ccpLimit.setEventCode(rs.getString("event_code"));
 		ccpLimit.setProductId(rs.getString("object_id"));
-		ccpLimit.setMinValue(rs.getDouble("min_value"));
-		ccpLimit.setMaxValue(rs.getDouble("max_value"));
+		ccpLimit.setMinValue(rs.getString("min_value"));
+		ccpLimit.setMaxValue(rs.getString("max_value"));
 		ccpLimit.setValueUnit(rs.getString("value_unit"));
 		
 	    return ccpLimit;

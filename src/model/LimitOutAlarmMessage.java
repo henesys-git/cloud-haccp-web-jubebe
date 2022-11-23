@@ -6,8 +6,8 @@ public class LimitOutAlarmMessage {
 	private String sensorName;
 	private String eventName;
 	private String processName;
-	private double minValue;
-	private double maxValue;
+	private String minValue;
+	private String maxValue;
 	
 	public String getChannelId() {
 		return channelId;
@@ -24,10 +24,10 @@ public class LimitOutAlarmMessage {
 	public String getProcessName() {
 		return processName;
 	}
-	public double getMinValue() {
+	public String getMinValue() {
 		return minValue;
 	}
-	public double getMaxValue() {
+	public String getMaxValue() {
 		return maxValue;
 	}
 	public void setChannelId(String channelId) {
@@ -45,10 +45,10 @@ public class LimitOutAlarmMessage {
 	public void setProcessName(String processName) {
 		this.processName = processName;
 	}
-	public void setMinValue(double minValue) {
+	public void setMinValue(String minValue) {
 		this.minValue = minValue;
 	}
-	public void setMaxValue(double maxValue) {
+	public void setMaxValue(String maxValue) {
 		this.maxValue = maxValue;
 	}
 	

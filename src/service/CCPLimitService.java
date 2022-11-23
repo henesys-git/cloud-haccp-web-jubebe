@@ -56,23 +56,39 @@ public class CCPLimitService {
 		return ccpLimit;
 	}
 	
-	public boolean isLimitOut(CCPLimit ccpLimit, double value) {
-		double min = ccpLimit.getMinValue();
-		double max = ccpLimit.getMaxValue();
+	public boolean isLimitOut(CCPLimit ccpLimit, String value) {
+		String min = ccpLimit.getMinValue();
+		String max = ccpLimit.getMaxValue();
 		
-		logger.info("=================");
+		logger.info("isLimitOut()");
 		logger.info("biz: " + this.bizNo);
 		logger.info(ccpLimit.toString());
 		logger.info("min: " + min);
 		logger.info("max: " + max);
 		logger.info("val: " + value);
 		
-		if( value < min || value > max ) {
-			logger.info("limit out: true");
-			logger.info("=================");
-			return true;
+		try {
+			double valueD = Double.parseDouble(value);
+			double minD = Double.parseDouble(min);
+			double maxD = Double.parseDouble(max);
+			
+			if( valueD < minD || valueD > maxD ) {
+				logger.info("limit out: true");
+				return true;
+			}
+		} catch(NumberFormatException e) {
+			if( value.compareTo(min) < 0 ) {
+				logger.info("limit out: true");
+				return true;
+			}
+			
+			if( value.compareTo(max) > 0 ) {
+				logger.info("limit out: true");
+				return true;
+			}
 		}
 		
+		logger.info("limit out: false");
 		return false;
 	}
 }

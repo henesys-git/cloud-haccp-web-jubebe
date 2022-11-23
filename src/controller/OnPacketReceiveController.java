@@ -47,7 +47,7 @@ public class OnPacketReceiveController extends HttpServlet {
 		String deviceId = req.getParameter("deviceId");
 		String eventCode = req.getParameter("eventCode");
 		String productId = req.getParameter("productId");
-		double value = Double.parseDouble(req.getParameter("value"));
+		String value = req.getParameter("value");
 		
 		CCPLimitService ccpLimitService = new CCPLimitService(new CCPLimitDaoImpl(), bizNo);
 		CCPLimit ccpLimit = ccpLimitService.getCCPLimitByCode(eventCode, productId);
@@ -93,7 +93,7 @@ public class OnPacketReceiveController extends HttpServlet {
 					.append("최소값:" + limitOutAlarmMsg.getMinValue() + "\n")
 					.append("최대값:" + limitOutAlarmMsg.getMaxValue() + "\n")
 					.append("이탈값:" + value + "\n\n")
-					.append("HACCP관리 -> 이탈데이터관리 메뉴에서 개선 조치를 해주세요 :slightly_smiling_face:")
+					.append("CCP이탈데이터관리 메뉴에서 개선 조치를 해주세요 :slightly_smiling_face:")
 					.toString();
 			
 			AlarmInfoService aiService = new AlarmInfoService(new AlarmInfoDaoImpl());
@@ -122,7 +122,11 @@ public class OnPacketReceiveController extends HttpServlet {
 	}
 	
 	private boolean ifError(LimitOutAlarmMessage msg) {
-		if(msg.getEventName() == null || msg.getProcessName() == null) {
+		try {
+			if(msg.getEventName() == null || msg.getProcessName() == null) {
+				return true;
+			}
+		} catch (NullPointerException e) {
 			return true;
 		}
 		

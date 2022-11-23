@@ -3,8 +3,8 @@ package model;
 public class CCPLimit {
 	private String eventCode;
 	private String productId;
-	private double minValue;
-	private double maxValue;
+	private String minValue;
+	private String maxValue;
 	private String valueUnit;
 	
 	public String getEventCode() {
@@ -13,10 +13,10 @@ public class CCPLimit {
 	public String getProductId() {
 		return productId;
 	}
-	public double getMinValue() {
+	public String getMinValue() {
 		return minValue;
 	}
-	public double getMaxValue() {
+	public String getMaxValue() {
 		return maxValue;
 	}
 	public String getValueUnit() {
@@ -28,10 +28,10 @@ public class CCPLimit {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
-	public void setMinValue(double minValue) {
+	public void setMinValue(String minValue) {
 		this.minValue = minValue;
 	}
-	public void setMaxValue(double maxValue) {
+	public void setMaxValue(String maxValue) {
 		this.maxValue = maxValue;
 	}
 	public void setValueUnit(String valueUnit) {
