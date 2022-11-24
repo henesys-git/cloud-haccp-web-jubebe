@@ -108,6 +108,7 @@
 	    		// initialize
 			    var option = {
 						data : data,
+						pageLength: 10,
 						columns: [
 							{ data: "sensorName", defaultContent: '' },
 							{ data: "createTime", defaultContent: '' },
