@@ -2618,8 +2618,6 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	
 	this.getChecklistData = async function() {
 		
-		
-		
 		if(this.sensorId.includes('CD') == true) {
 			processCd = "PC10";
 		}
@@ -2706,23 +2704,23 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		
 		this.getJsonData = function() {
 		
-		//metal detector
-		if(this.sensorId.includes('CD') == true) {
-			this.jsonParameterNm = "metaldetector";
-		}
-		
-		//heating machine
-		else if(this.sensorId.includes('HM') == true) {
-			this.jsonParameterNm = "heating";
-		}
-		
-		readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
-    		this.jsonFileData = JSON.parse(text);
-			jsonData = this.jsonFileData;
+			//metal detector
+			if(this.sensorId.includes('CD') == true) {
+				this.jsonParameterNm = "metaldetector";
+			}
 			
-			return jsonData;
-		});
-	}
+			//heating machine
+			else if(this.sensorId.includes('HM') == true) {
+				this.jsonParameterNm = "heating";
+			}
+			
+			readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
+	    		this.jsonFileData = JSON.parse(text);
+				jsonData = this.jsonFileData;
+				
+				return jsonData;
+			});
+		}
 		
 		this.getJsonData();
 		let info = {
@@ -2791,18 +2789,6 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 			//CCP 데이터 관리에서 서명된 정보로 표시되도록 일괄 적용
 			that.displayData(cellList[info.writerSignCell], signInfo.checkerName);
 			that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
-			
-			// 스마트haccp 점검 때문에 임시조치한 코드
-			// 삭제하고, ccp의 경우 서명을 어떻게 할지에 대한 전략 확립 필요 
-			// (20220829 최현수)
-			//that.displayData(cellList[info.writerSignCell], '김치훈');
-			//that.displayData(cellList[info.approverSignCell], '노찬울');
-			
-			/*			
-			if(signInfo.checkerName != null) {
-				that.displayData(cellList[info.approverSignCell], '노찬울');
-			}
-			*/
 			
 			var currentRow = 0;
 			var startFlag = false;
