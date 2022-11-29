@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +12,6 @@ import org.apache.log4j.Logger;
 import mes.frame.database.JDBCConnectionPool;
 import mes.model.ChecklistAlarm;
 import mes.model.ChecklistSign;
-import model.ChecklistInfo;
 
 public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 	static final Logger logger = 
