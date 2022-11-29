@@ -58,10 +58,10 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			
 			String sql = new StringBuilder()
 					.append("SELECT  \n")
-					.append("checklist_id  \n")
+					.append("	checklist_id  \n")
 					.append("FROM checklist_info\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND product_id like '%"+ prodCd +"%';\n")
+					.append("  AND product_id LIKE '%"+ prodCd +"%';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
