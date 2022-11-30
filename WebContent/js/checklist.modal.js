@@ -2625,13 +2625,16 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	
 	this.getChecklistData = async function() {
 		
-		if(this.sensorId.includes('CD') == true) {
+		if(this.sensorId.includes('CD')) {
 			processCd = "PC10";
 		}
-		
 		//heating machine
-		else if(this.sensorId.includes('HM') == true) {
+		else if(this.sensorId.includes('HM')) {
 			processCd = "PC30";
+		}
+		//cream machine
+		else if(this.sensorId.includes('CR')) {
+			processCd = "PC80";
 		}
 		
 		let fetchedData = $.ajax({
@@ -2712,13 +2715,19 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		this.getJsonData = function() {
 		
 			//metal detector
-			if(this.sensorId.includes('CD') == true) {
+			if(this.sensorId.includes('CD')) {
 				this.jsonParameterNm = "metaldetector";
 			}
-			
 			//heating machine
-			else if(this.sensorId.includes('HM') == true) {
+			else if(this.sensorId.includes('HM')) {
 				this.jsonParameterNm = "heating";
+			}
+			//cream machine
+			else if(this.sensorId.includes('CR')) {
+				this.jsonParameterNm = "cream";
+			}
+			else {
+				console.error('no info for this sensor id in ccpChecklistDataConfig file');
 			}
 			
 			readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
@@ -2974,6 +2983,56 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								if(Number(row.detail["HT70"]) >= Number(row.detail["HT70_minValue"]) && Number(row.detail["HT70"]) <= Number(row.detail["HT70_maxValue"])) {
 									rightCount += 1;
 								}
+								that.displayData(cell, temp);
+								break;
+							case "CR10":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR10"] != null) {
+									temp = row.detail["CR10"] + "°C";
+								}
+
+								that.displayData(cell, temp);
+								break;
+							case "CR20":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR20"] != null) {
+									temp = row.detail["CR20"] + "°C";
+								}
+
+								that.displayData(cell, temp);
+								break;
+							case "CR30":
+								var cell = cellList[cellPos];
+								var time = "";
+								
+								if(row.detail["CR30"] != null) {
+									time = row.detail["CR30"].toString().substring(0, 5);
+								}
+
+								that.displayData(cell, time);
+								break;
+							case "CR40":
+								var cell = cellList[cellPos];
+								var time = "";
+								
+								if(row.detail["CR40"] != null) {
+									time = row.detail["CR40"].toString().substring(0, 5);
+								}
+
+								that.displayData(cell, time);
+								break;
+							case "CR50":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR50"] != null) {
+									temp = row.detail["CR50"] + "°C";
+								}
+
 								that.displayData(cell, temp);
 								break;
 							case "sign":
