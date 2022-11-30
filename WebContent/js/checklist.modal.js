@@ -3155,7 +3155,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	}
 	
 	this.displayData = function(cell, data) {
-		//console.log("data= " + data);
+		console.debug('displayData data:' + data);
+		
 		var size = this.modalUtil.setTagSize(this, cell);
 		var startX = size.startX;
 		var startY = size.startY;
@@ -3183,7 +3184,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		if(data == 1 || parseFloat(data) == 1.1) {
 			data = 'O';
 		}
-		else if(data == 0) {
+		else if(data === 0 || data === '0') {
 			data = 'X';
 		}
 		else if(!data) {
