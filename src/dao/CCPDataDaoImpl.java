@@ -278,6 +278,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
+					.append("	D.min_value,\n")
+					.append("	D.max_value,\n")
 					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') as judge,\n")
 					.append("	A.improvement_action\n")
 					.append("FROM data_metal A\n")
@@ -403,13 +405,12 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	COUNT(*) AS all_count, \n")
 					.append("	IFNULL(COUNT(*) - (select count(*) \n")
 					.append("	FROM data_metal B \n")
-					.append("	INNER JOIN sensor C ON B.sensor_id = C.sensor_id \n")
 					.append("	LEFT JOIN event_info D ON B.event_code = D.event_code \n")
 					.append("	WHERE B.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
 					.append("	AND B.sensor_value <= D.max_value && B.sensor_value >= D.min_value \n")
 					.append("	AND DATE_FORMAT(B.create_time, '%Y-%m-%d') = '"+ toDate +"'			\n")
 					.append("	AND B.sensor_id like A.sensor_id||'%' \n")
-					.append("	GROUP BY DATE_FORMAT(B.create_time, '%Y-%m-%d'), C.sensor_id), 0) AS detect_count \n")
+					.append("	GROUP BY DATE_FORMAT(B.create_time, '%Y-%m-%d'), B.sensor_id), 0) AS detect_count \n")
 					.append("	FROM data_metal A \n")
 					.append("	INNER JOIN sensor A2 \n")
 					.append("	ON A.sensor_id = A2.sensor_id \n")
@@ -417,7 +418,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	AND A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
 					.append("	AND A.sensor_id like '%' \n")
 					.append("	AND A.process_code = '" + processCode + "' \n")
-					.append("  	GROUP BY DATE_FORMAT(A.create_time, '%Y-%m-%d'), A2.sensor_id \n")
+					.append("  	GROUP BY DATE_FORMAT(A.create_time, '%Y-%m-%d'), A.sensor_id \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -1141,6 +1142,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setEvent(rs.getString("event"));
 		cvm.setSensorValue(rs.getString("sensor_value"));
+		cvm.setMinValue(rs.getString("min_value"));
+		cvm.setMaxValue(rs.getString("max_value"));
 		cvm.setJudge(rs.getString("judge"));
 		cvm.setImprovementAction(rs.getString("improvement_action"));
 		

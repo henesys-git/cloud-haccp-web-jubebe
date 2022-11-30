@@ -114,6 +114,8 @@
 							{ data: "createTime", defaultContent: '' },
 							{ data: "event", defaultContent: '' },
 							{ data: "sensorValue", defaultContent: '' },
+							{ data: "minValue", defaultContent: '' },
+							{ data: "maxValue", defaultContent: '' },
 							{ data: "judge", defaultContent: '' },
 							{ data: "improvementAction", defaultContent: '' }
 				        ],
@@ -125,7 +127,7 @@
 					  			}
 					  		},
 				   			{
-					  			targets: [5],
+					  			targets: [7],
 					  			render: function(td, cellData, rowData, row, col){
 					  				if (rowData.judge == '적합') {
 					  					return 'n/a';
@@ -351,6 +353,8 @@
 					    <th>생성시간</th>
 					    <th>이벤트</th>
 					    <th>측정값</th>
+					    <th>최소값</th>
+					    <th>최대값</th>
 					    <th>적/부</th>
 					    <th>개선조치</th>
 					</tr>
