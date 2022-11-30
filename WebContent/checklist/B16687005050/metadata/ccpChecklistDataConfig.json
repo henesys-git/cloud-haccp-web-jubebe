@@ -14,5 +14,12 @@
 		"approverSignCell" : "1",
 		"dateCell" : "2",
 		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"cream": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "CR30", "", "CR10", "CR10", "CR40", "CR10", "judge"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2"
 	}
 }
