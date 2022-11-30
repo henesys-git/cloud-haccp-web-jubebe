@@ -3036,7 +3036,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								that.displayData(cell, temp);
 								break;
 							case "sign":
-								var cell = cellList[cellPos - 1];
+								var cell = cellList[cellPos];
 								that.displayData(cell, signInfo.checkerName);
 								break;
 							case "judge":
