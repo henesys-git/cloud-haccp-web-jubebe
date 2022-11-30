@@ -52,7 +52,7 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	}
 	
 	@Override
-	public ChecklistInfo selectGetChecklistNo(Connection conn, String prodCd) {
+	public ChecklistInfo selectChecklistNoByProdAndSensor(Connection conn, String prodCd, String sensorId) {
 		try {
 			stmt = conn.createStatement();
 			
@@ -61,7 +61,8 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 					.append("	checklist_id  \n")
 					.append("FROM checklist_info\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND product_id LIKE '%"+ prodCd +"%';\n")
+					.append("  AND product_id LIKE '%"+ prodCd +"%'\n")
+					.append("  AND sensor_id LIKE '%"+ sensorId +"%';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);

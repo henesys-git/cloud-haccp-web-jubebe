@@ -2594,6 +2594,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	var infoList;
 	this.productId = productId;
 	
+	/*
 	this.setChecklistId = async function() {
 		var sensorApi = new HENESYS_API.Sensor();
 		var sensor = await sensorApi.getSensor(this.sensorId);
@@ -2613,6 +2614,12 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		else {
 			this.checklistId = sensor.checklistId;
 		}
+	}
+	*/
+	this.setChecklistId = async function() {
+		var clInfo = new ChecklistInfo();
+    	infoList = await clInfo.getChecklistId(this.productId, this.sensorId);
+		this.checklistId = infoList.checklistId;
 	}
 	
 	this.setMetadataAndImagePath = async function() {
@@ -3036,7 +3043,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								that.displayData(cell, temp);
 								break;
 							case "sign":
-								var cell = cellList[cellPos - 1];
+								var cell = cellList[cellPos];
 								that.displayData(cell, signInfo.checkerName);
 								break;
 							case "judge":

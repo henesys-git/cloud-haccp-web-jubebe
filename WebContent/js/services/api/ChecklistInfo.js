@@ -28,10 +28,10 @@ ChecklistInfo.prototype.getAll = function () {
 	return checklistInfoList;
 }
 
-ChecklistInfo.prototype.getChecklistId = function (id) {
+ChecklistInfo.prototype.getChecklistId = function (prodId, sensorId) {
  	var checklistInfo = $.ajax({
         type: "GET",
-        url: heneServerPath + "/checklist-info?id=getChecklistNo" + "&productId=" + id,
+        url: heneServerPath + "/checklist-info?id=getChecklistNo" + "&productId=" + prodId + "&sensorId=" + sensorId,
         success: function (result) {
         	return result;
         }

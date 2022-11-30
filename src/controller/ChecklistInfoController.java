@@ -39,6 +39,7 @@ public class ChecklistInfoController extends HttpServlet {
 		
 		String id = req.getParameter("id");
 		String productId = req.getParameter("productId");
+		String sensorId = req.getParameter("sensorId");
 		
 		ChecklistInfoService cldService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), bizNo);
 		
@@ -49,7 +50,7 @@ public class ChecklistInfoController extends HttpServlet {
 			result = FormatTransformer.toJson(list);
 		} 
 		else if(id.equals("getChecklistNo")) {
-			ChecklistInfo clInfo = cldService.selectGetChecklistNo(productId);
+			ChecklistInfo clInfo = cldService.selectChecklistNoByProdAndSensor(productId, sensorId);
 			result = FormatTransformer.toJson(clInfo);
 		}
 		else {

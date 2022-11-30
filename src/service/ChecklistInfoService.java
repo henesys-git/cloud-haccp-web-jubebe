@@ -36,12 +36,12 @@ public class ChecklistInfoService {
 		return checklistInfoList;
 	}
 	
-	public ChecklistInfo selectGetChecklistNo(String prodCd) {
+	public ChecklistInfo selectChecklistNoByProdAndSensor(String prodCd, String sensorId) {
 		ChecklistInfo clInfo = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			clInfo = clDao.selectGetChecklistNo(conn, prodCd);
+			clInfo = clDao.selectChecklistNoByProdAndSensor(conn, prodCd, sensorId);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
