@@ -13,7 +13,7 @@
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
-		"normalSumValueWhenAddAllTestResult": "4"
+		"normalSumValueWhenAddAllTestResult": "5"
 	},
 	"cream": {
 		"rowStartCell":"cell3",
