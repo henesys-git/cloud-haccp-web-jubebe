@@ -76,6 +76,11 @@
    			  	{data: fixedColumn[2] , defaultContent : '' }
    			];
 			
+			// 고정영역 html th 태그 만들기(점검표아이디, 일련번호, 양식수정이력번호)
+	    	for(var a = 0; a < 3; a++) {
+				$("#ccpDataTable thead tr").append("<th>"+fixedTh[a]+"</th>");
+	    	}
+			
 		    var customOpts = {
 				data : list,
 				pageLength: 10,
