@@ -37,6 +37,36 @@ public class LimitService {
 		return limitList;
 	}
 	
+	public List<Limit> getLimitType1(String type) {
+		List<Limit> limitList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			limitList = limitDao.getLimitType1(conn, type);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return limitList;
+	}
+	
+	public List<Limit> getLimitType2(String type) {
+		List<Limit> limitList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			limitList = limitDao.getLimitType2(conn, type);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return limitList;
+	}
+	
 	public Limit getLimitById(String eventCode, String objectId) {
 		Limit limit = null;
 		

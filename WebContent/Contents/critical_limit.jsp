@@ -7,6 +7,9 @@
 
 <script type="text/javascript">
     
+    var type1;
+    var type2;
+    
 	$(document).ready(function () {
     	
 		let mainTable;
@@ -61,27 +64,13 @@
 		}   
 	    
 	    var initModal = function () {
-	    	$('#sensor-id').prop('disabled', false);
-	    	$('#sensor-id').val('');
-	    	$('#sensor-name').val('');
-	    	$('#sensor-valueType').val('');
-	    	$('#sensor-IP').val('');
-	    	$('#sensor-protocol').val('');
-	    	$('#sensor-packet').val('');
-	    	$('#sensor-typeCode').val('');
-	    	$('#sensor-checklist').val('');
-	    };
-	    
-	    var initModal2 = function () {
-	    	$('#sensor-id').prop('disabled', false);
-	    	$('#sensor-id').val('');
-	    	$('#sensor-name').val('');
-	    	$('#sensor-valueType').val('');
-	    	$('#sensor-IP').val('');
-	    	$('#sensor-protocol').val('');
-	    	$('#sensor-packet').val('');
-	    	$('#sensor-typeCode').val('');
-	    	$('#sensor-checklist').val('');
+	    	$('#limit-type').find("option:eq(0)").prop('selected', true);
+	    	$("#limit-type2 > option").remove();
+    		$("#limit-objectName > option").remove();
+    		
+	    	$('#limit-minValue').val('');
+	    	$('#limit-maxValue').val('');
+	    	$('#limit-valueUnit').val('');
 	    };
 	    
 	 	// 등록
@@ -133,7 +122,7 @@
 	 
 	 	// 수정
 		$('#update').click(function() {
-			initModal();
+			//initModal();
 			
 			var row = mainTable.rows( '.selected' ).data();
 			
@@ -239,6 +228,83 @@
     		var newData = await getData();
     		mainTable.clear().rows.add(newData).draw();
     	});
+    	
+    	$("#limit-type").on("change", async function(){
+    		type1 = $(this).val();
+    		console.log(type1);
+    		if(type1 == "") {
+				type1 = "";
+    		}
+	    	
+    		$("#limit-type2 > option").remove();
+    		$("#limit-objectName > option").remove();
+    		
+    		var limit = new HENESYS_API.Limit();
+	    	var limitList = await limit.getLimitType1(type1);
+    		
+	    	console.log(limitList);
+	    	console.log(limitList.length);
+    		
+	    	 for( var i = 0 ; i < limitList.length ; i++ ) {
+             	var code = limitList[i].eventCode;
+             	var name = limitList[i].eventName;
+	                $("#limit-type2").append("<option value = " + code + ">" + name + "</option>");
+             }
+	    	 
+	    	 //type2 = $("#limit-type2 option:selected").val();
+	    	 
+	    	 var limitList2 = await limit.getLimitType2(type1);
+	    	 console.log(limitList2);
+	    	 
+	    	 for( var j = 0 ; j < limitList2.length ; j++ ) {
+	             	var code2 = limitList2[j].objectId;
+	             	var name2 = limitList2[j].objectName;
+		                $("#limit-objectName").append("<option value = " + code2 + ">" + name2 + "</option>");
+	             }
+	    	 
+	    });
+    	<%-- 
+    	$("#limit-type").on("change", function(){
+    		type1 = $(this).val();
+    		
+    		if(type1 == "") {
+				type1 = "";
+    		}
+	    	
+    		
+    		
+	    	 $.ajax({
+	            type: "POST",
+	            url: "<%=Config.this_SERVER_path%>/Contents/Business/M909/S909S060200.jsp",
+	            data: "prodgubun_big=" + prod_gubun_b,
+	            success: function (html) {
+	                $("#Select_Product_Gubun_Code_Mid > option").remove();
+	                var changMidResult = html.split("|");
+	                for( var i = 0 ; i < changMidResult.length ; i++ ) {
+	                	var value = changMidResult[i].split(",")[0]
+	                	var name  = changMidResult[i].split(",")[1].trim();
+		                $("#Select_Product_Gubun_Code_Mid").append("<option value = " + value + ">" + name + "</option>");
+	                }
+	                
+	                prod_gubun_m = $("#Select_Product_Gubun_Code_Mid >option:eq(0)").val();
+	                
+	                if( $("#Select_Product_Gubun_Code_Big").val() == "ALL" ) {
+	                	$("#Select_Product_Gubun_Code_Mid").prepend("<option value = 'ALL'>전체</option>"); 
+	                	$("#Select_Product_Gubun_Code_Mid > option:eq(0)").prop("selected",true);
+	                	
+	                	$("#Select_Product_Gubun_Code_Mid").attr("disabled",true);
+	                	
+	                	prod_gubun_m = "";
+					} else if( prod_gubun_m == 'Empty_Value' ) {
+		            	$("#Select_Product_Gubun_Code_Mid").attr("disabled",true);
+	                } else {
+		            	$("#Select_Product_Gubun_Code_Mid").attr("disabled",false);
+	                }
+		                
+	    			fn_MainInfo_List();
+ 		    	}
+    		});
+	    }); --%>
     });
     
 </script>
@@ -322,6 +388,7 @@
       	<label for="limit-type">한계기준 등록 대분류</label>
 		<div class="input-group mb-3">
 		  <select class="form-control" id="limit-type">
+		  	<option value = "" selected>선택</option>
 		    <option value = "MC">금속검출</option>
 		    <option value = "HT">가열</option>
 		    <option value = "CR">크림공정</option>

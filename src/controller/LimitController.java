@@ -42,6 +42,7 @@ public class LimitController extends HttpServlet {
 		String id = req.getParameter("id");
 		String eventCode = req.getParameter("eventCode");
 		String objectId = req.getParameter("objectId");
+		String type = req.getParameter("type");
 		
 		LimitService limitService = new LimitService(new LimitDaoImpl(), bizNo);
 		
@@ -50,7 +51,16 @@ public class LimitController extends HttpServlet {
 		if(id.equals("all")) {
 			List<Limit> list = limitService.getAllLimit();
 			result = FormatTransformer.toJson(list);
-		} else {
+		} 
+		else if(id.equals("limitType1")) {
+			List<Limit> list = limitService.getLimitType1(type);
+			result = FormatTransformer.toJson(list);
+		}
+		else if(id.equals("limitType2")) {
+			List<Limit> list = limitService.getLimitType2(type);
+			result = FormatTransformer.toJson(list);
+		}
+		else {
 			Limit limit = limitService.getLimitById(eventCode, objectId);
 			result = FormatTransformer.toJson(limit);
 		}

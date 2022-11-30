@@ -73,6 +73,98 @@ public class LimitDaoImpl implements LimitDao {
 	};
 	
 	@Override
+	public List<Limit> getLimitType1(Connection conn, String type) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT  			\n")
+				.append("A.event_code,  	\n")
+				.append("A.event_name 		\n")
+				.append("FROM event_info A  				\n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND A.event_code like '%" + type + "%'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Limit> limitList = new ArrayList<Limit>();
+			
+			while(rs.next()) {
+				Limit data = extractFromResultSetType1(rs);
+				limitList.add(data);
+			}
+			
+			return limitList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<Limit> getLimitType2(Connection conn, String type) {
+		
+		String sql = "";
+		
+		try {
+			stmt = conn.createStatement();
+			
+			if(type.equals("TP")) {
+				
+				sql = new StringBuilder()
+						.append("SELECT  			\n")
+						.append("A.sensor_id AS object_id,  		\n")
+						.append("A.sensor_name AS object_name 		\n")
+						.append("FROM sensor A  				\n")
+						.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+						.append("  AND A.sensor_id like '%" + type + "%'\n")
+						.toString();
+			}
+			
+			else {
+				sql = new StringBuilder()
+						.append("SELECT  			\n")
+						.append("A.product_id AS object_id,  		\n")
+						.append("A.product_name AS object_name		\n")
+						.append("FROM product A  				\n")
+						.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+						.toString();
+			}
+			
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Limit> limitList = new ArrayList<Limit>();
+			
+			while(rs.next()) {
+				Limit data = extractFromResultSetType2(rs);
+				limitList.add(data);
+			}
+			
+			return limitList;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
 	public Limit getLimit(Connection conn, String eventCode, String objectId) {
 		
 		try {
@@ -125,16 +217,13 @@ public class LimitDaoImpl implements LimitDao {
 		try {
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
-					.append("	sensor (\n")
+					.append("	ccp_limit (\n")
 					.append("		tenant_id,\n")
-					.append("		sensor_id,\n")
-					.append("		sensor_name,\n")
-					.append("		value_type,\n")
-					.append("		ip_address,\n")
-					.append("		protocol_info,\n")
-					.append("		packet_info,\n")
-					.append("		type_code,\n")
-					.append("		checklist_id\n")
+					.append("		event_code,\n")
+					.append("		object_id,\n")
+					.append("		min_value,\n")
+					.append("		max_value,\n")
+					.append("		value_unit \n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
@@ -143,10 +232,7 @@ public class LimitDaoImpl implements LimitDao {
 					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?\n")
+					.append("		? \n")
 					.append("	);\n")
 					.toString();
 
@@ -154,6 +240,10 @@ public class LimitDaoImpl implements LimitDao {
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
 			ps.setString(2, limit.getEventCode());
+			ps.setString(3, limit.getObjectId());
+			ps.setString(4, limit.getMinValue());
+			ps.setString(5, limit.getMaxValue());
+			ps.setString(6, limit.getValueUnit());
 			
 	        int i = ps.executeUpdate();
 
@@ -240,4 +330,25 @@ public class LimitDaoImpl implements LimitDao {
 		
 	    return limit;
 	}
+	
+	private Limit extractFromResultSetType1(ResultSet rs) throws SQLException {
+		
+		Limit limit = new Limit();
+		
+		limit.setEventCode(rs.getString("event_code"));
+		limit.setEventName(rs.getString("event_name"));
+		
+	    return limit;
+	}
+	
+	private Limit extractFromResultSetType2(ResultSet rs) throws SQLException {
+		
+		Limit limit = new Limit();
+		
+		limit.setObjectId(rs.getString("object_id"));
+		limit.setObjectName(rs.getString("object_name"));
+		
+	    return limit;
+	}
+	
 }
