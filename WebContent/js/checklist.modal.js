@@ -2598,6 +2598,13 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		var sensorApi = new HENESYS_API.Sensor();
 		var sensor = await sensorApi.getSensor(this.sensorId);
 		
+		if(!sensor.checklistId) {
+			console.error('no checklist id in sensor table');
+			return;
+		}
+		
+		// 센서에 등록된 점검표 종류가 2개 이상일 시
+		// 제품별로 다시 조회하여 점검표 아이디 획득
 		if(sensor.checklistId.toString().split(",").length > 2) {
 			var clInfo = new ChecklistInfo();
 	    	infoList = await clInfo.getChecklistId(this.productId);
@@ -2618,13 +2625,16 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	
 	this.getChecklistData = async function() {
 		
-		if(this.sensorId.includes('CD') == true) {
+		if(this.sensorId.includes('CD')) {
 			processCd = "PC10";
 		}
-		
 		//heating machine
-		else if(this.sensorId.includes('HM') == true) {
+		else if(this.sensorId.includes('HM')) {
 			processCd = "PC30";
+		}
+		//cream machine
+		else if(this.sensorId.includes('CR')) {
+			processCd = "PC80";
 		}
 		
 		let fetchedData = $.ajax({
@@ -2705,13 +2715,19 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		this.getJsonData = function() {
 		
 			//metal detector
-			if(this.sensorId.includes('CD') == true) {
+			if(this.sensorId.includes('CD')) {
 				this.jsonParameterNm = "metaldetector";
 			}
-			
 			//heating machine
-			else if(this.sensorId.includes('HM') == true) {
+			else if(this.sensorId.includes('HM')) {
 				this.jsonParameterNm = "heating";
+			}
+			//cream machine
+			else if(this.sensorId.includes('CR')) {
+				this.jsonParameterNm = "cream";
+			}
+			else {
+				console.error('no info for this sensor id in ccpChecklistDataConfig file');
 			}
 			
 			readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
@@ -2969,6 +2985,56 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								}
 								that.displayData(cell, temp);
 								break;
+							case "CR10":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR10"] != null) {
+									temp = row.detail["CR10"] + "°C";
+								}
+
+								that.displayData(cell, temp);
+								break;
+							case "CR20":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR20"] != null) {
+									temp = row.detail["CR20"] + "°C";
+								}
+
+								that.displayData(cell, temp);
+								break;
+							case "CR30":
+								var cell = cellList[cellPos];
+								var time = "";
+								
+								if(row.detail["CR30"] != null) {
+									time = row.detail["CR30"].toString().substring(0, 5);
+								}
+
+								that.displayData(cell, time);
+								break;
+							case "CR40":
+								var cell = cellList[cellPos];
+								var time = "";
+								
+								if(row.detail["CR40"] != null) {
+									time = row.detail["CR40"].toString().substring(0, 5);
+								}
+
+								that.displayData(cell, time);
+								break;
+							case "CR50":
+								var cell = cellList[cellPos];
+								var temp = "";
+								
+								if(row.detail["CR50"] != null) {
+									temp = row.detail["CR50"] + "°C";
+								}
+
+								that.displayData(cell, temp);
+								break;
 							case "sign":
 								var cell = cellList[cellPos - 1];
 								that.displayData(cell, signInfo.checkerName);
@@ -3089,7 +3155,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	}
 	
 	this.displayData = function(cell, data) {
-		//console.log("data= " + data);
+		console.debug('displayData data:' + data);
+		
 		var size = this.modalUtil.setTagSize(this, cell);
 		var startX = size.startX;
 		var startY = size.startY;
@@ -3117,7 +3184,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		if(data == 1 || parseFloat(data) == 1.1) {
 			data = 'O';
 		}
-		else if(data == 0) {
+		else if(data === 0 || data === '0') {
 			data = 'X';
 		}
 		else if(!data) {
