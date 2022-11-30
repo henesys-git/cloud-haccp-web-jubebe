@@ -74,6 +74,7 @@
 	    	var customOpts = {
 				data: data,
 				pageLength: 10,
+				stateSave : true,
 				columns: [
 					{ data: "sensorKey", defaultContent: '' },
 					{ data: "sensorName", defaultContent: '' },
