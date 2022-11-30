@@ -2598,6 +2598,13 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		var sensorApi = new HENESYS_API.Sensor();
 		var sensor = await sensorApi.getSensor(this.sensorId);
 		
+		if(!sensor.checklistId) {
+			console.error('no checklist id in sensor table');
+			return;
+		}
+		
+		// 센서에 등록된 점검표 종류가 2개 이상일 시
+		// 제품별로 다시 조회하여 점검표 아이디 획득
 		if(sensor.checklistId.toString().split(",").length > 2) {
 			var clInfo = new ChecklistInfo();
 	    	infoList = await clInfo.getChecklistId(this.productId);
