@@ -72,7 +72,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	};
 	
 	@Override
-	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(Connection conn, String startDate, String endDate, String processCode) {
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHeadBySensorAndProd(
+			Connection conn, String startDate, String endDate, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
@@ -82,14 +83,116 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
 					.append("	A.sensor_id,\n")
 					.append("	B.sensor_name,\n")
-					.append("	A.product_id \n")
+					.append("	A.product_id, \n")
+					.append("	P.parent_id, \n")
+					.append("	(SELECT product_name FROM product P2 WHERE P.parent_id = P2.product_id) AS parent_name \n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("INNER JOIN product P\n")
+					.append("	ON A.product_id = P.product_id\n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
-					.append("	AND CAST(A.create_time as date) between '" + startDate + "' and '" + endDate + "'\n")
+					.append("	AND CAST(A.create_time as date) BETWEEN '" + startDate + "' AND '" + endDate + "'\n")
 					.append("	AND A.process_code = '" + processCode + "'\n")
-					.append("GROUP BY cast(A.create_time as date), A.sensor_id;\n")
+					.append("GROUP BY CAST(A.create_time as date), A.sensor_id, A.product_id;\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPTestDataHeadViewModel> list= new ArrayList<CCPTestDataHeadViewModel>();
+			
+			while(rs.next()) {
+				CCPTestDataHeadViewModel data = extractTestDataHeadFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) { /* Ignored */ }
+			try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHeadBySensor(
+			Connection conn, String startDate, String endDate, String processCode) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
+					.append("	A.sensor_id,\n")
+					.append("	B.sensor_name,\n")
+					.append("	A.product_id, \n")
+					.append("	P.parent_id, \n")
+					.append("	(SELECT product_name FROM product P2 WHERE P.parent_id = P2.product_id) AS parent_name \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("INNER JOIN product P\n")
+					.append("	ON A.product_id = P.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("	AND CAST(A.create_time as date) BETWEEN '" + startDate + "' AND '" + endDate + "'\n")
+					.append("	AND A.process_code = '" + processCode + "'\n")
+					.append("GROUP BY CAST(A.create_time as date), A.sensor_id;\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<CCPTestDataHeadViewModel> list= new ArrayList<CCPTestDataHeadViewModel>();
+			
+			while(rs.next()) {
+				CCPTestDataHeadViewModel data = extractTestDataHeadFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) { /* Ignored */ }
+			try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHeadByProd(
+			Connection conn, String startDate, String endDate, String processCode) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT \n")
+					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
+					.append("	A.sensor_id,\n")
+					.append("	B.sensor_name,\n")
+					.append("	A.product_id, \n")
+					.append("	P.parent_id, \n")
+					.append("	(SELECT product_name FROM product P2 WHERE P.parent_id = P2.product_id) AS parent_name \n")
+					.append("FROM data_metal A\n")
+					.append("INNER JOIN sensor B\n")
+					.append("	ON A.sensor_id = B.sensor_id\n")
+					.append("INNER JOIN product P\n")
+					.append("	ON A.product_id = P.product_id\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("	AND CAST(A.create_time as date) BETWEEN '" + startDate + "' AND '" + endDate + "'\n")
+					.append("	AND A.process_code = '" + processCode + "'\n")
+					.append("GROUP BY CAST(A.create_time as date), A.product_id;\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -1101,6 +1204,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		ccpData.setSensorId(rs.getString("sensor_id"));
 		ccpData.setSensorName(rs.getString("sensor_name"));
 		ccpData.setProductId(rs.getString("product_id"));
+		ccpData.setParentId(rs.getString("parent_id"));
+		ccpData.setParentName(rs.getString("parent_name"));
 		
 		return ccpData;
 	}

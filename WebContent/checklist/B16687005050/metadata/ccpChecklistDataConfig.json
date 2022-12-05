@@ -7,7 +7,7 @@
 		"dateCell" : "2",
 		"normalSumValueWhenAddAllTestResult": "4"
 	},
-	"heating": {
+	"checklist33": {
 		"rowStartCell":"cell3",
 		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge"],
 		"writerSignCell" : "0",

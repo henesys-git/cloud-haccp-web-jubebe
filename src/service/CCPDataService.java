@@ -145,7 +145,11 @@ public class CCPDataService {
 		return cvmList;
 	}
 
-	public List<CCPDataDetailViewModel> getMetalBreakAwayList(String sensorKey, String sensorId, String processCode, String toDate, String fromDate) {
+	public List<CCPDataDetailViewModel> getMetalBreakAwayList(String sensorKey, 
+															  String sensorId, 
+															  String processCode, 
+															  String toDate, 
+															  String fromDate) {
 		List<CCPDataDetailViewModel> cvmList = null;
 
 		try {
@@ -160,12 +164,26 @@ public class CCPDataService {
 		return cvmList;
 	}
 
-	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(String startDate, String endDate, String processCode) {
+	public List<CCPTestDataHeadViewModel> getCCPTestDataHead(String startDate, 
+															 String endDate, 
+															 String processCode,
+															 String formClassificationCriteria) {
 		List<CCPTestDataHeadViewModel> list = null;
 		
 		try {
 			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
-			list = ccpDataDao.getCCPTestDataHead(conn, startDate, endDate, processCode);
+			
+			switch(formClassificationCriteria) {
+				case "센서별제품그룹별":
+					list = ccpDataDao.getCCPTestDataHeadBySensorAndProd(conn, startDate, endDate, processCode);
+					break;
+				case "센서별":
+					list = ccpDataDao.getCCPTestDataHeadBySensor(conn, startDate, endDate, processCode);
+					break;
+				case "제품별":
+					list = ccpDataDao.getCCPTestDataHeadByProd(conn, startDate, endDate, processCode);
+					break;
+			}
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

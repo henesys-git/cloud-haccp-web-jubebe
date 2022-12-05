@@ -47,14 +47,16 @@ public class CCPTestDataViewModelController extends HttpServlet {
 		String endDate = "";
 		String processCode = "";
 		String sensorId = "";
+		String formClassificationCriteria = "";
 		
 		switch(method) {
 		case "head":
 			startDate = req.getParameter("startDate");
 			endDate = req.getParameter("endDate");
 			processCode = req.getParameter("processCode");
+			formClassificationCriteria = req.getParameter("formClassificationCriteria");
 			
-			List<CCPTestDataHeadViewModel> cvmHeadList = ccpService.getCCPTestDataHead(startDate, endDate, processCode);
+			List<CCPTestDataHeadViewModel> cvmHeadList = ccpService.getCCPTestDataHead(startDate, endDate, processCode, formClassificationCriteria);
 			result = FormatTransformer.toJson(cvmHeadList);
 			
 			res.setContentType("application/json; charset=UTF-8");

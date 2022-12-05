@@ -36,12 +36,25 @@ public class ChecklistInfoService {
 		return checklistInfoList;
 	}
 	
-	public ChecklistInfo selectChecklistNoByProdAndSensor(String prodCd, String sensorId) {
+	public ChecklistInfo selectChecklistNo(String formClassificationCriteria, 
+										   String prodCd, 
+										   String sensorId) {
 		ChecklistInfo clInfo = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			clInfo = clDao.selectChecklistNoByProdAndSensor(conn, prodCd, sensorId);
+			
+			switch(formClassificationCriteria) {
+			case "센서별제품그룹별":
+				clInfo = clDao.selectChecklistNoByProdAndSensor(conn, prodCd, sensorId);
+				break;
+			case "센서별":
+				clInfo = clDao.selectChecklistNoBySensor(conn, sensorId);
+				break;
+			case "제품그룹별":
+				clInfo = clDao.selectChecklistNoByProd(conn, sensorId);
+				break;
+			}
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -116,5 +129,20 @@ public class ChecklistInfoService {
 		}
 		
 		return false;
+	}
+	
+	public String getFormClassificationCriteria(String ccpType) {
+		String criteria = "";
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			criteria = clDao.getFormClassifiicationCriteria(conn, ccpType);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return criteria;
 	}
 }
