@@ -4,7 +4,9 @@
 	String sensorKey = "";
 	String createTime = "";
 	String date = "";
+	String date2 = "";
 	String processCode = "";
+	String limitOutParam = "";
 
 	if(request.getParameter("sensorKey") != null) {
 		sensorKey = request.getParameter("sensorKey").toString();
@@ -18,8 +20,16 @@
 		date = request.getParameter("date").toString();
 	}
 	
+	if(request.getParameter("date2") != null) {
+		date2 = request.getParameter("date2").toString();
+	}
+	
 	if(request.getParameter("processCode") != null) {
 		processCode = request.getParameter("processCode").toString();
+	}
+	
+	if(request.getParameter("limitOutParam") != null) {
+		limitOutParam = request.getParameter("limitOutParam").toString();
 	}
 %>
 
@@ -63,6 +73,9 @@
 				<button class="btn btn-primary" id="saveBtn">
 					저장
 				</button>
+				<button class="btn btn-primary" id="saveAllBtn">
+					저장
+				</button>
 				<button class="btn btn-light" id="closeBtn">
 					닫기
 				</button>
@@ -79,6 +92,13 @@ $(document).ready(function () {
 	$('#closeBtn').click(function() {
 		$('#improvementActionModal').modal('hide');
 	});
+	
+	if('<%=limitOutParam%>' == 'All') {
+		$('#saveBtn').attr('style', 'display:none;');
+	}
+	else {
+		$('#saveAllBtn').attr('style', 'display:none;');
+	}
 	
 	// 직업입력에 입력 시 자동 체크
 	$("#other-action-input").keyup(function() {
@@ -130,6 +150,43 @@ $(document).ready(function () {
 	         	}
 			}
 		});
+	});
+	
+	//CCP 이탈 데이터 관리 일괄 서명용
+	$('#saveAllBtn').off().on('click', function() {
+		
+		var check = confirm('개선조치 내용 일괄 입력을 하시겠습니까?\n조회한 일자의 개선조치 내용이 없는 데이터들에 일괄 적용됩니다.');
+		
+		if(check) {
+		
+		let improvementAction = $("input[name='action']:checked").val();
+		
+		if(improvementAction === "직접입력") {
+			improvementAction = $("#other-action-input").val();
+		}
+		
+		$.ajax({
+	    	type: "PUT",
+	        url: "/ccp" +
+	        	 "?method=All" +
+	        	 "&improvementAction=" + improvementAction +
+	        	 "&date=" + '<%=date%>' +
+	        	 "&date2=" + '<%=date2%>' + 
+	        	 "&processCode=" + '<%=processCode%>',
+			success: async function (resultIfFixed) {
+	        	if(resultIfFixed == 'true') {
+					$('#improvementActionModal').modal('hide');
+					
+						ccpBreakawayJSPPage.refreshTable();
+					
+	        		alert('개선조치 완료 (서명 초기화)');
+	         	} else {
+	         		alert('개선조치 실패, 관리자 문의 필요');
+	         	}
+			}
+		});
+		
+		}
 	});
 	
 });

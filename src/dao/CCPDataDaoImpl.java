@@ -347,6 +347,36 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	}
 	
 	@Override
+	public boolean fixLimitOutAll(Connection conn, String date, String date2, String improvementAction, String processCode) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("UPDATE data_metal\n")
+					.append("SET improvement_action = '" + improvementAction + "'\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND DATE_FORMAT(create_time, '%Y-%m-%d') BETWEEN '" + date + "'\n")
+					.append("	AND '" + date2 + "'\n")
+					.append("	AND process_code = '" + processCode + "'\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+
+			int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	@Override
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(Connection conn, String toDate, String sensorId) {
 		
 		try {

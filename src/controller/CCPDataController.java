@@ -43,15 +43,30 @@ public class CCPDataController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
+		String method = req.getParameter("method");
 		String sensorKey = req.getParameter("sensorKey");
 		String createTime = req.getParameter("createTime");
 		String improvementAction = req.getParameter("improvementAction");
 		String date = req.getParameter("date");
+		String date2 = req.getParameter("date2");
 		String processCode = req.getParameter("processCode");
+		String result = "";
 		
-		CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), new CCPSignDaoImpl(), tenantId);
-		Boolean fixed = ccpService.fixLimitOut(sensorKey, createTime, improvementAction, date, processCode);
-		String result = fixed.toString();
+		if(method.equals("All")) {
+			
+			CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), new CCPSignDaoImpl(), tenantId);
+			Boolean fixed = ccpService.fixLimitOutAll(improvementAction, date, date2, processCode);
+			result = fixed.toString();
+			
+		}
+		else {
+			
+			CCPDataService ccpService = new CCPDataService(new CCPDataDaoImpl(), new CCPSignDaoImpl(), tenantId);
+			Boolean fixed = ccpService.fixLimitOut(sensorKey, createTime, improvementAction, date, processCode);
+			result = fixed.toString();
+			
+		}
+		
 
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();

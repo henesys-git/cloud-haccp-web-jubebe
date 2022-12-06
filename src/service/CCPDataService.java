@@ -115,6 +115,34 @@ public class CCPDataService {
 		return false;
 	}
 	
+	public boolean fixLimitOutAll(String improvementAction, String date, String date2, String processCode) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(tenantId);
+			conn.setAutoCommit(false);
+			
+			boolean fixed = ccpDataDao.fixLimitOutAll(conn, date, date2, improvementAction, processCode);
+			
+			logger.debug("공정코드:");
+			logger.debug(processCode);
+			boolean deleted = ccpSignDao.delete(conn, date, processCode);
+			
+			if(fixed && deleted) {
+				conn.commit();
+				return true;
+			} else {
+				conn.rollback();
+				return false;
+			}
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(String toDate, String sensorId) {
 		List<CCPDataStatisticModel> cvmList = null;
 		
