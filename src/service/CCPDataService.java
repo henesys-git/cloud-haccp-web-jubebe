@@ -124,8 +124,7 @@ public class CCPDataService {
 			
 			logger.debug("공정코드:");
 			logger.debug(processCode);
-			boolean deleted = ccpSignDao.delete(conn, date, processCode);
-			
+			boolean deleted = ccpSignDao.deletePeriod(conn, date, date2, processCode);
 			if(fixed && deleted) {
 				conn.commit();
 				return true;

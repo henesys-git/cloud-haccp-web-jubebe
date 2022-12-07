@@ -19,7 +19,6 @@
 			var itemList = new ItemList();
 			var type_cd = "PC";
 			var ccpList = await itemList.getCCPList(type_cd);
-	    	
 	    	for(var i = 0; i < ccpList.length; i++) {
 	    		ccpName = ccpList[i].sensorName;
 	    		ccp = ccpList[i].sensorId;
@@ -51,7 +50,6 @@
 			
 	    	var processCode = $("#ccp-type option:selected").val();
 	    	var sensorType = $("#sensor-type option:selected").val();
-			
 	    	var fetchedData = $.ajax({
 	            type: "GET",
 	            url: "<%=Config.this_SERVER_path%>/ccpvm",
@@ -204,7 +202,8 @@
 	      	<div class="col-md-3 form-group">
 				<label class="d-inline-block" for="ccp-type">CCP 타입:</label>
 				<select class="form-control w-auto d-inline-block" id="ccp-type">
-					<option value='%25'>전체</option>
+					<!-- <option value='%25'>전체</option> -->
+					<option value=''>전체</option>
 				</select>
 	      	</div>
 	      	<div class="col-md-3 form-group">

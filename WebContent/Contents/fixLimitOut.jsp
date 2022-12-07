@@ -154,8 +154,7 @@ $(document).ready(function () {
 	
 	//CCP 이탈 데이터 관리 일괄 서명용
 	$('#saveAllBtn').off().on('click', function() {
-		
-		var check = confirm('개선조치 내용 일괄 입력을 하시겠습니까?\n조회한 일자의 개선조치 내용이 없는 데이터들에 일괄 적용됩니다.');
+		var check = confirm('개선조치 내용 일괄 입력을 하시겠습니까?\n이전화면의 선택된 공정 정보의\n조회한 일자의 개선조치 내용이 없는 데이터들에 일괄 적용됩니다.');
 		
 		if(check) {
 		

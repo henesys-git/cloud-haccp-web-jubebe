@@ -84,6 +84,35 @@ public class CCPSignDaoImpl implements CCPSignDao {
 		
 		return false;
 	}
+	
+	@Override
+	public boolean deletePeriod(Connection conn, String date, String date2, String processCode) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("DELETE FROM data_sign\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND sign_date BETWEEN '" + date + "'\n")
+					.append("	AND '" + date2 + "'\n")
+					.append("	AND process_code like '%" + processCode + "%'\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+
+			int i = stmt.executeUpdate(sql);
+
+	        if(i > -1) {
+	        	return true;
+	        }
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
 
 	@Override
 	public boolean sign(Connection conn, CCPSign ccpSign) {

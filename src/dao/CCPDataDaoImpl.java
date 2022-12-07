@@ -357,14 +357,15 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("	AND DATE_FORMAT(create_time, '%Y-%m-%d') BETWEEN '" + date + "'\n")
 					.append("	AND '" + date2 + "'\n")
-					.append("	AND process_code = '" + processCode + "'\n")
+					.append("	AND process_code like '%" + processCode + "%'\n")
+					.append("	AND improvement_action IS NULL \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
 
 			int i = stmt.executeUpdate(sql);
 
-	        if(i == 1) {
+	        if(i >= 1) {
 	        	return true;
 	        }
 		} catch (SQLException ex) {
