@@ -1,3 +1,11 @@
+<!-- 
+	- CCP(가열공정, 금속검출공정, 크림공정 등) 전용 점검표 화면 페이지
+	- 기존의 metaldetector.jsp, heating.jsp 등을 통합해서 이 jsp 파일 하나로 사용
+	- MasterMainPage.jsp의 fn_SubMain에서 db에서 받은 메뉴명을 기준으로
+	  공정코드(processCode)와 CCP 종류(ccpType)을 받아서 각 CCP별 필요한
+	  점검표 이미지와 메타데이터를 가져옴
+ -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*,java.util.*,javax.servlet.http.*"%>
 <%@ page import="mes.client.comm.*" %>
@@ -9,11 +17,15 @@
 	String login_name = session.getAttribute("login_name").toString();
 	String bizNo = session.getAttribute("bizNo").toString();
 	
-	String checklistNum = "", menuName = "";
+	String menuName = "";
+	String processCode = "";// PC10, PC20, etc...
+	String ccpType = "";	// heating, metaldetect, cream, etc..
 	
-	//TODO: 삭제
-	if(request.getParameter("checklistNum") != null) 
-		checklistNum = request.getParameter("checklistNum");
+	if(request.getParameter("processCode") != null) 
+		processCode = request.getParameter("processCode");
+	
+	if(request.getParameter("ccpType") != null) 
+		ccpType = request.getParameter("ccpType");
 	
 	if(request.getParameter("MenuTitle") != null) 
 		menuName = request.getParameter("MenuTitle");
@@ -45,7 +57,7 @@
 		            	+ "?method=" + 'head'
 		            	+ "&startDate=" + startDate
 		            	+ "&endDate=" + endDate
-		            	+ "&processCode=PC30"
+		            	+ "&processCode=<%=processCode%>"
 		            	+ "&formClassificationCriteria=" + formClassificationCriteria,
 	            success: function (result) {
 	            	return result;
@@ -58,7 +70,7 @@
 	    async function initTable() {
 
 	    	var clInfo = new ChecklistInfo();
-	    	formClassificationCriteria = await clInfo.getFormClassificationCriteria("heating");
+	    	formClassificationCriteria = await clInfo.getFormClassificationCriteria("<%=ccpType%>");
 	    	
 	    	if(!formClassificationCriteria) {
 	    		console.error('점검표 분류 기준 DB 테이블 정보 등록 필요');
