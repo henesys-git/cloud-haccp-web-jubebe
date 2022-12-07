@@ -1,5 +1,5 @@
 {
-	"metaldetector": {
+	"checklist26": {
 		"rowStartCell":"cell3",
 		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "sign"],
 		"writerSignCell" : "0",
@@ -7,7 +7,7 @@
 		"dateCell" : "2",
 		"normalSumValueWhenAddAllTestResult": "4"
 	},
-	"heating": {
+	"checklist25": {
 		"rowStartCell":"cell3",
 		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge"],
 		"writerSignCell" : "0",
@@ -15,7 +15,31 @@
 		"dateCell" : "2",
 		"normalSumValueWhenAddAllTestResult": "5"
 	},
-	"cream": {
+	"checklist27": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist28": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist29": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist26": {
 		"rowStartCell":"cell3",
 		"rowOrder": ["prod", "CR30", "", "CR10", "CR10", "CR40", "CR10", "judge"],
 		"writerSignCell" : "0",

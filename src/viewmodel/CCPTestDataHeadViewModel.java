@@ -5,6 +5,8 @@ public class CCPTestDataHeadViewModel {
 	private String sensorId;
 	private String sensorName;
 	private String productId;
+	private String parentId;
+	private String parentName;
 	
 	public String getCreateDate() {
 		return createDate;
@@ -29,6 +31,18 @@ public class CCPTestDataHeadViewModel {
 	}
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 	
 }

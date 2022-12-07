@@ -2563,9 +2563,14 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 }
 
 
-function ChecklistSelectModalCCP(createDate, sensorId, productId) {
+function ChecklistSelectModalCCP(createDate, 
+								 formClassificationCriteria, 
+								 sensorId, 
+								 productId) {
 	this.createDate = createDate;
+	this.formClassificationCriteria = formClassificationCriteria;
 	this.sensorId = sensorId;
+	this.productId = productId;
 	
 	this.checklistId;
 	this.seqNo = 0;
@@ -2589,30 +2594,18 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	this.ctx;
 	this.jsonParameterNm;
 	this.jsonFileData;
+	
 	var jsonData;
 	var processCd = "";
 	var infoList;
-	this.productId = productId;
 	
 	this.setChecklistId = async function() {
-		var sensorApi = new HENESYS_API.Sensor();
-		var sensor = await sensorApi.getSensor(this.sensorId);
-		
-		if(!sensor.checklistId) {
-			console.error('no checklist id in sensor table');
-			return;
-		}
-		
-		// 센서에 등록된 점검표 종류가 2개 이상일 시
-		// 제품별로 다시 조회하여 점검표 아이디 획득
-		if(sensor.checklistId.toString().split(",").length > 2) {
-			var clInfo = new ChecklistInfo();
-	    	infoList = await clInfo.getChecklistId(this.productId);
-			this.checklistId = infoList.checklistId;
-		}
-		else {
-			this.checklistId = sensor.checklistId;
-		}
+		console.debug('setChecklistId():')
+		console.debug('product id:' + this.productId);
+		console.debug('sensor id:' + this.sensorId);
+		var clInfo = new ChecklistInfo();
+    	infoList = await clInfo.getChecklistId(this.formClassificationCriteria, this.productId, this.sensorId);
+		this.checklistId = infoList.checklistId;
 	}
 	
 	this.setMetadataAndImagePath = async function() {
@@ -2713,7 +2706,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		this.checklistSignData = await this.getChecklistSignData();
 		
 		this.getJsonData = function() {
-		
+			/*
 			//metal detector
 			if(this.sensorId.includes('CD')) {
 				this.jsonParameterNm = "metaldetector";
@@ -2729,6 +2722,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 			else {
 				console.error('no info for this sensor id in ccpChecklistDataConfig file');
 			}
+			*/
+			this.jsonParameterNm = this.checklistId;
 			
 			readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
 	    		this.jsonFileData = JSON.parse(text);
@@ -2739,6 +2734,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		}
 		
 		this.getJsonData();
+		console.log(this.jsonParameterNm);
+		console.log(jsonData);
 		let info = {
 			"rowStartCell" : jsonData[this.jsonParameterNm].rowStartCell,
 			"writerSignCell" : jsonData[this.jsonParameterNm].writerSignCell,

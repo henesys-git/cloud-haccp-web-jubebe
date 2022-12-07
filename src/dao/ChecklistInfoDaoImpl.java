@@ -52,7 +52,42 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 	}
 	
 	@Override
-	public ChecklistInfo selectGetChecklistNo(Connection conn, String prodCd) {
+	public ChecklistInfo selectChecklistNoByProdAndSensor(Connection conn, String prodCd, String sensorId) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT  \n")
+					.append("	checklist_id  \n")
+					.append("FROM checklist_info\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND product_id LIKE '%"+ prodCd +"%'\n")
+					.append("  AND sensor_id LIKE '%"+ sensorId +"%';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			ChecklistInfo clInfo = new ChecklistInfo();
+					
+			if(rs.next()) {
+				clInfo = extractFromResultSet3(rs);
+			}
+			
+			return clInfo;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public ChecklistInfo selectChecklistNoByProd(Connection conn, String prodCd) {
 		try {
 			stmt = conn.createStatement();
 			
@@ -75,12 +110,75 @@ public class ChecklistInfoDaoImpl implements ChecklistInfoDao {
 			}
 			
 			return clInfo;
-			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
 		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
 		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public ChecklistInfo selectChecklistNoBySensor(Connection conn, String sensorId) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT  \n")
+					.append("	checklist_id  \n")
+					.append("FROM checklist_info\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND sensor_id LIKE '%"+ sensorId +"%';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			ChecklistInfo clInfo = new ChecklistInfo();
+			
+			if(rs.next()) {
+				clInfo = extractFromResultSet3(rs);
+			}
+			
+			return clInfo;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) { /* Ignored */ }
+			try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	}
+
+	@Override
+	public String getFormClassifiicationCriteria(Connection conn, String ccpType) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT  \n")
+					.append("	form_classification_criteria  \n")
+					.append("FROM checklist_form_classification\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND ccp_type = '" + ccpType + "';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				return rs.getString("form_classification_criteria");
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) { /* Ignored */ }
+			try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return null;

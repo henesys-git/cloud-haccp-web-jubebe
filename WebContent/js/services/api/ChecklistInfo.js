@@ -28,14 +28,29 @@ ChecklistInfo.prototype.getAll = function () {
 	return checklistInfoList;
 }
 
-ChecklistInfo.prototype.getChecklistId = function (id) {
+ChecklistInfo.prototype.getChecklistId = function (formClassificationCriteria, prodId, sensorId) {
  	var checklistInfo = $.ajax({
         type: "GET",
-        url: heneServerPath + "/checklist-info?id=getChecklistNo" + "&productId=" + id,
+        url: heneServerPath + "/checklist-info?id=getChecklistNo" 
+        					+ "&formClassificationCriteria=" + formClassificationCriteria 
+        					+ "&productId=" + prodId 
+        					+ "&sensorId=" + sensorId,
         success: function (result) {
         	return result;
         }
     });
     
 	return checklistInfo;
+}
+
+ChecklistInfo.prototype.getFormClassificationCriteria = function (ccpType) {
+ 	var criteria = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/checklist-info?id=getFormClassificationCriteria" + "&ccpType=" + ccpType,
+        success: function (result) {
+        	return result;
+        }
+    });
+    
+	return criteria;
 }

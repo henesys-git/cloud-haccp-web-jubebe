@@ -634,9 +634,9 @@
 		var vOrderDetailSeq="";
 		var vclass_jsp_page=""; //안쓰는듯
 		var vIP_addr = '<%=request.getRemoteAddr()%>';
-       	var MenuTitle ="";
+       	var MenuTitle = "";
        	var SubMenuTitle = "";
-       	var ProgramID ="";
+       	var ProgramID = "";
        	var REFRESHTIMEID=0;
        	var elem = document.getElementById("SubBody");
 		var interVal;
@@ -752,6 +752,14 @@
 		// 드랍다운 목록(submenu)에서 호출
         function fn_MainSubMenuSelected(obj, url, HeadmenuID, 
         								HeadmenuName, programId, SubmenuName) {
+			console.debug("fn_MainSubMenuSelected()");
+			console.debug(obj);
+			console.debug(url);
+			console.debug(HeadmenuID);
+			console.debug(HeadmenuName);
+			console.debug(programId);
+			console.debug(SubmenuName);
+			
 			var $mstr = $(obj);
 			var $mObj = $(obj);
 			
@@ -785,6 +793,7 @@
         }
         
         function fn_MainSubMenuSelect(obj) {
+        	console.debug("fn_MainSubMenuSelect()");
 			var mMenu="";
 			var mobl = obj.toString().trim();
 			
@@ -817,6 +826,7 @@
 
         //헤드메뉴에서 호출
         function fn_ContentMain(obj, urlPage, HeadmenuID, HeadmenuName, programId, mMenuTitle) {
+        	console.debug("fn_ContentMain()");
         	MenuTitle = HeadmenuName.toString();
 			ProgramID = programId;
 
@@ -843,80 +853,82 @@
                     $("#SubBody").children().remove();
                 },
                 success: function (html) {
-                        $("#SubBody").hide().html(html).fadeIn(100);
+                	$("#SubBody").hide().html(html).fadeIn(100);
                 }
             });
         }
         
         //SubBody에서 호출
         function fn_SubMain(urlPage, HeadmenuID, HeadmenuName, programId, mMenuTitle, SubmenuName) {
+        	console.debug("fn_SubMain()");
+        	console.debug("urlPage:" + urlPage);
+        	
         	MenuTitle = HeadmenuName.toString();
 			ProgramID = programId;
+			
 			if(SubmenuName == undefined || SubmenuName == null) {
-				SubMenuTitle = "" ;
+				SubMenuTitle = "";
 			} else {
 				SubMenuTitle = SubmenuName.toString();
 			}
 			
-			var checklistParam =  urlPage.substr(10, 9);
-			var checklistParam2 =  urlPage.substr(10, 10);
+			let ccpUrlPage = "/Contents/checklist_ccp_integrated.jsp";
+			
+			var checklistParam = urlPage.substr(10, 9);
+			var checklistParam2 = urlPage.substr(10, 10);
 			var checklistNum = urlPage.substr(29,2);
 			var checklistPath = urlPage.substr(0,29);
 			var documentNum = urlPage.substr(27,2);
 			var documentPath = urlPage.substr(0,27);
 			
-			//선행요건 메뉴일 경우 checklist번호를 parameter로 받아 function 진입
-			if(checklistParam == 'checklist' && checklistParam2 == 'checklist/') {
-
-				$.ajax({
-	                type: "POST",
-	                url: checklistPath + ".jsp?checklistNum=" + checklistNum,
-	                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
-	                beforeSend: function () {
-	                    $("#ContentPlaceHolder1").children().remove();
-	                },
-	                success: function (html) {
-	                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-	                }
-	            });
-				
-			}
+			console.debug("checklistParam:" + checklistParam);
+			console.debug("checklistParam2:" + checklistParam2);
+			console.debug("checklistNum:" + checklistNum);
+			console.debug("checklistPath:" + checklistPath);
+			console.debug("documentNum:" + documentNum);
+			console.debug("documentPath:" + documentPath);
 			
-			//문서등록 메뉴일 경우 document번호를 parameter로 받아 function 진입
-			else if(checklistParam == 'document/') {
-				$.ajax({
-	                type: "POST",
-	                url: documentPath + ".jsp?documentNum=" + documentNum,
-	                data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
-	                beforeSend: function () {
-	                    $("#ContentPlaceHolder1").children().remove();
-	                },
-	                success: function (html) {
-	                    $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-	                }
-	            });
+			let data = "HeadmenuID=" + HeadmenuID + 
+					   "&HeadmenuName=" + HeadmenuName + 
+					   "&MenuTitle=" + mMenuTitle + 
+					   "&programId=" + programId;
+			
+			//선행요건 메뉴일 경우 checklist 번호를 parameter로 받아 function 진입
+			if(checklistParam == 'checklist' && checklistParam2 == 'checklist/') {
+				data = data + "&checklistNum=" + checklistNum;
 			}
-            
-			//선행요건이나 문서 메뉴가 아닐 경우 기존 function으로 진입
-			else {
-				checklistParam = "";
-				documentParam = "";
-				checklistNum = "";
-				documentNum = "";
-				
-				$.ajax({
-		            type: "POST",
-		            url: urlPage,
-		            data: "HeadmenuID=" + HeadmenuID + "&HeadmenuName=" + HeadmenuName + "&MenuTitle=" + mMenuTitle + "&programId=" + programId,
-		            beforeSend: function () {
-		                $("#ContentPlaceHolder1").children().remove();
-		            },
-		            success: function (html) {
-		                $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
-		            }
-		        });	
+			//문서등록 메뉴일 경우 document 번호를 parameter로 받아 function 진입
+			else if(checklistParam == 'document/') {
+				data = data + "&documentNum=" + documentNum;
+			}
+			//가열공정 점검표
+			else if(urlPage === "/Contents/heating.jsp") {
+				data = data + "&processCode=PC30&ccpType=heating";
+				urlPage = ccpUrlPage;
+			}
+			//금속검출공정 점검표
+			else if(urlPage === "/Contents/metaldetector.jsp") {
+				data = data + "&processCode=PC10&ccpType=metaldetect";
+				urlPage = ccpUrlPage;
+			}
+			//크림공정 점검표
+			else if(urlPage === "/Contents/cream.jsp") {
+				data = data + "&processCode=PC80&ccpType=cream";
+				urlPage = ccpUrlPage;
 			}
            
+			$.ajax({
+	            type: "POST",
+	            url: urlPage,
+	            data: data,
+	            beforeSend: function () {
+	                $("#ContentPlaceHolder1").children().remove();
+	            },
+	            success: function (html) {
+	                $("#ContentPlaceHolder1").hide().html(html).fadeIn(100);
+	            }
+	        });	
+			
 			clearTimeout(REFRESHTIMEID);
 			clearInterval(interVal);
         }
