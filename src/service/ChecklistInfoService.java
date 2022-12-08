@@ -51,8 +51,12 @@ public class ChecklistInfoService {
 			case "센서별":
 				clInfo = clDao.selectChecklistNoBySensor(conn, sensorId);
 				break;
+			// 2022 12 08 최현수
+			// 현재 '제품그룹별'은 지원이 안됨
+			// checklist.modal.js에서 getChecklistData 메서드에서 
+			// sensor id로 process code를 가져오는데 제품그룹별로 할 시에는 sensor id를 못가져와서
 			case "제품그룹별":
-				clInfo = clDao.selectChecklistNoByProd(conn, sensorId);
+				clInfo = clDao.selectChecklistNoByProd(conn, prodCd);
 				break;
 			}
 		} catch(Exception e) {
