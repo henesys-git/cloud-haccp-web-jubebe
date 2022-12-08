@@ -21,5 +21,13 @@
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2"
+	},
+	"checklist34": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "HT30", "HT10", "HT50", "HT60", "HT70", "judge", "HT15", "HT55"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
 	}
 }
