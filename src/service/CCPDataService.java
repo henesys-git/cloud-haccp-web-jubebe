@@ -207,7 +207,7 @@ public class CCPDataService {
 				case "센서별":
 					list = ccpDataDao.getCCPTestDataHeadBySensor(conn, startDate, endDate, processCode);
 					break;
-				case "제품별":
+				case "제품그룹별":
 					list = ccpDataDao.getCCPTestDataHeadByProd(conn, startDate, endDate, processCode);
 					break;
 			}
