@@ -2630,6 +2630,10 @@ function ChecklistSelectModalCCP(createDate,
 			processCd = "PC80";
 		}
 		
+		console.debug('getChecklistData()');
+		console.debug(this.sensorId);
+		console.debug(processCd);
+		
 		let fetchedData = $.ajax({
 			type: "GET",
 	        url: heneServerPath + "/ccptestvm"
@@ -2823,6 +2827,9 @@ function ChecklistSelectModalCCP(createDate,
 					
 					for(let j=0; j<info.rowOrder.length; j++) {
 						var item = info.rowOrder[j];
+						console.debug("item: " + item);
+						console.debug("cell pos: ");
+						console.debug(cellList[cellPos]);
 						
 						switch(item) {
 							case "prod":
@@ -2886,6 +2893,21 @@ function ChecklistSelectModalCCP(createDate,
 								}
 								that.displayData(cell, temp);
 								break;
+							case "HT15":
+								var cell = cellList[cellPos];
+								var temp; 
+								
+								if(row.detail["HT15"] != null) {
+									temp = row.detail["HT15"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								if(Number(row.detail["HT15"]) >= Number(row.detail["HT15_minValue"]) && Number(row.detail["HT15"]) <= Number(row.detail["HT15_maxValue"])) {
+									rightCount += 1;
+								}
+								that.displayData(cell, temp);
+								break;
 							case "HT20":
 								var cell = cellList[cellPos];
 								if(row.detail["HT20"] >= row.detail["HT20_minValue"] && row.detail["HT20"] <= row.detail["HT20_maxValue"]) {
@@ -2928,7 +2950,6 @@ function ChecklistSelectModalCCP(createDate,
 								
 								that.displayData(cell, time);
 								break;
-							//end temperature
 							case "HT50":
 								var cell = cellList[cellPos];
 								var temp;
@@ -2944,6 +2965,22 @@ function ChecklistSelectModalCCP(createDate,
 								}
 								that.displayData(cell, temp);
 								break;
+							case "HT55":
+								var cell = cellList[cellPos];
+								var temp;
+								
+								if(row.detail["HT55"] != null) {
+									temp = row.detail["HT55"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								if(Number(row.detail["HT55"]) >= Number(row.detail["HT55_minValue"]) && Number(row.detail["HT55"]) <= Number(row.detail["HT55_maxValue"])) {
+									rightCount += 1;
+								}
+								that.displayData(cell, temp);
+								break;
+							//end temperature
 							//during time
 							case "HT60":
 								var cell = cellList[cellPos];
