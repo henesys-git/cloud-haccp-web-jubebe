@@ -6,7 +6,6 @@
 <%@ page import="org.json.simple.*"%>
 <%
 	Config.this_SERVER_path = request.getContextPath();
-	
 	String loginID, login_name, bizNo = "";
 	
 	if(session.getAttribute("login_id") != null){

@@ -516,12 +516,13 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 		var formId = cellId2[0]+"_form";
 		var canvas = document.getElementById(cellId2[0]);
 		console.log(canvas);
-		console.log();
+		console.log(image_file_name.split(".")[1]);
 		if( image_file_name.indexOf(".") ) { // 파일명 검사(파일이 선택됐는지) 및  확장자 검사(이미지파일-jpg,jpeg,png,gif 맞는지)
 			var aExt = image_file_name.split("."); // 파일명에서 확장자명 분리(aExt[1] : 파일 확장자)
 			if( aExt[1]!='jpg' && aExt[1]!='JPG' && aExt[1]!='JPEG' && aExt[1]!='jpeg' 
 				&& aExt[1]!='png' && aExt[1]!='PNG'  && aExt[1]!='gif' && aExt[1]!='GIF' ){
-				swal("선택한 파일은 지원하지 않는 파일형식입니다." + "\n" + "jpg, jpeg, png, gif 형식의 파일을 선택하세요!!!");
+				//swal("선택한 파일은 지원하지 않는 파일형식입니다." + "\n" + "jpg, jpeg, png, gif 형식의 파일을 선택하세요!!!");
+				alert("선택한 파일은 지원하지 않는 파일형식입니다." + "\n" + "jpg, jpeg, png, gif 형식의 파일을 선택하세요!!!");
 				return;
 			} else {
 				vPicImageFileName1 = "<%=bizNo%>_" + 'checklist' + '<%=checklistNum%>_' + cellId2[0] + "_" + Math.random() + "." + aExt[1] ; 
@@ -564,7 +565,8 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 				if(html.length>0 && canvasID != undefined){
 					var canvas = document.getElementById(canvasID);
 					var context = canvas.getContext('2d');
-					var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+					<%-- var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/" --%>
+					 var imgSrc = "checklist_img/"
 								+ image_save_name
 								+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
 					loadImages(imgSrc, context);
@@ -588,7 +590,8 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 	function fn_Set_Image_File_View(imageFile, canvasID, width, height){
 		var canvas = document.getElementById(canvasID);
 		var context = canvas.getContext('2d');
-		var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+		<%-- var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/" --%>
+		var imgSrc = "checklist_img/"
 					+ imageFile
 					+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
 		loadImages(imgSrc, context);
@@ -610,7 +613,8 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 	function fn_Set_Image_File_View2(imageFile, canvasID, startX, startY, width, height){
 		var canvas = document.getElementById(canvasID);
 		var context = canvas.getContext('2d');
-		var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/"
+		<%-- var imgSrc = "<%=Config.this_SERVER_path%>/images/checklist_file_img/" --%>
+		var imgSrc = "checklist_img/"
 					+ imageFile
 					+ "?v=" + Math.random() ; // 파일경로 + 저장한 파일명 + 랜덤숫자데이터(파일캐시 방지용)
 		loadImages(imgSrc, context); console.log(imgSrc);

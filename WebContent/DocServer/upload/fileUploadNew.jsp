@@ -20,14 +20,14 @@
 	ServletContext context =  this.getServletContext();
 	
 	if (OS.indexOf("win") >= 0) {
-	    docPath = "C:/DocServer";
+	    docPath = "C:/DocServer/file_upload";
 	    
 	    File f = new File(docPath);
 	    if(!f.exists()) {
 	    	f.mkdir();
 	    }
 	} else {
-	    docPath = "/home/henesys/DocServer";
+	    docPath = "/home/henesys/DocServer/file_upload";
 	    
 	    File f = new File(docPath);
 	    if(!f.exists()) {
@@ -39,7 +39,8 @@
 	String realFolder = context.getRealPath(docPaths);
 	System.out.println("실제 서블릿 상 경로 : " + realFolder);
 	
-	MultipartRequest multi = new MultipartRequest(request, realFolder, 20*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
+	//MultipartRequest multi = new MultipartRequest(request, realFolder, 20*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
+	MultipartRequest multi = new MultipartRequest(request, docPath, 20*1024*1024, "UTF-8", new DefaultFileRenamePolicy());
 
 	Enumeration params = multi.getParameterNames();
 	
@@ -59,7 +60,7 @@
 		String original = multi.getOriginalFileName(name);
 		String type = multi.getContentType(name);
 		File file = multi.getFile(name);
-		File renameFile = new File(realFolder + "/" + fileRealName); 	
+		File renameFile = new File(docPath + "/" + fileRealName); 	
 		renameFile.delete();
 		file.renameTo(renameFile);
 		

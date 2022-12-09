@@ -17,23 +17,23 @@
 	String saveFolder =  "/images/checklist_file_img";
 	String encType = "utf-8";
 	String docPath = "";
-	/*
+	
 	if (OS.indexOf("win") >= 0) {
-	    docPath = "C:/DocServer";
+	    docPath = "C:/DocServer/checklist_file_img";
 	    
 	    File f = new File(docPath);
 	    if(!f.exists()) {
 	    	f.mkdir();
 	    }
 	} else {
-	    docPath = "/home/henesys/DocServer";
+	    docPath = "/home/henesys/DocServer/checklist_file_img";
 	    
 	    File f = new File(docPath);
 	    if(!f.exists()) {
 	    	f.mkdir();
 	    }
 	}
-	*/
+	
 	int max_content_length = 20 * 1024 * 1024; // 5MByte
 	// 서버에서(서블릿) 어디에 어느 폴더에서 서블릿으로 변환되나?
 	ServletContext context =  this.getServletContext();
@@ -42,7 +42,7 @@
 	realFolder = context.getRealPath(saveFolder);
 	// 콘솔/브라우즈에 실제 경로를 출력
 	System.out.println("실제 서블릿 상 경로 : " + realFolder);
-
+	System.out.println("로컬 파일 저장 경로 : " + docPath);
 	// 파일을 받아와서 폴더에 업로드 하면 된다.
 	MultipartRequest multipart = null;
 
@@ -51,8 +51,8 @@
 				request.getContentType(),
 				request.getContentLength(),
 				request.getInputStream(),
-				realFolder,
-				//docPath,
+				//realFolder,
+				docPath,
 				(int)max_content_length,
 				encType);
 
@@ -86,8 +86,8 @@
 			if(multipart.getFile(name) != null) {
 				File file = multipart.getFile(name);	
 				String realFileName="";	
-				File renameFile = new File(realFolder + "/" + fileName);
-				//File renameFile = new File(docPath + "/" + fileName);
+				//File renameFile = new File(realFolder + "/" + fileName);
+				File renameFile = new File(docPath + "/" + fileName);
 				renameFile.delete();
 				boolean rnrtn = file.renameTo(renameFile);
 

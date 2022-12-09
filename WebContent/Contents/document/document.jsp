@@ -298,7 +298,8 @@
 	function docView(obj) {
 		var fileName = $(obj).closest('tr').children().eq(5).text().trim();
 		
-		var url = "<%=Config.this_SERVER_path%>" + "/DocServer/upload/files/" + fileName;
+		<%-- var url = "<%=Config.this_SERVER_path%>" + "/DocServer/upload/files/" + fileName; --%>
+		var url = "file_upload/" + fileName;
     	window.open(url);
 		
 	}
@@ -308,12 +309,16 @@
 		var fileNameSplit = fileName.split('.');
 		var aExt = fileNameSplit[fileNameSplit.length - 1];
 		console.log(aExt);
+		console.log("file_upload/"+ fileName);
 		if(aExt == "pdf" || aExt == "PDF"){
-			fn_CommonPopup("<%=Config.this_SERVER_path%>/pdfjs-dist/web/viewer.html?file=http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName , "", 1024, 950);
+			<%-- fn_CommonPopup("<%=Config.this_SERVER_path%>/pdfjs-dist/web/viewer.html?file=http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName , "", 1024, 950); --%>
+			fn_CommonPopup("<%=Config.this_SERVER_path%>/pdfjs-dist/web/viewer.html?file=http://<%=request.getServerName()%>:<%=request.getServerPort()%>/file_upload/" + fileName , "", 1024, 950);
 		} else if(aExt == "xls" || aExt == "XLS" || aExt == "xlsx" || aExt == "XLSX") {
-			window.open("http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName);
+			<%-- window.open("http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName); --%>
+			window.open("file_upload/" + fileName);
 		} else{
-			var url = "http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName;
+			<%-- var url = "http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=Config.this_SERVER_path%><%=Config.DOC_FILE_SAVEPATH%>/" + fileName; --%>
+			var url = "file_upload/" + fileName;
 			window.open(url);
 		}
 		<%-- 
