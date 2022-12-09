@@ -1,5 +1,21 @@
 {
-	"metaldetector": {
+	"checklist05": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist30": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"],
+		"writerSignCell" : "0",
+		"approverSignCell" : "1",
+		"dateCell" : "2",
+		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist31": {
 		"rowStartCell":"cell3",
 		"rowOrder": ["prod", "time", "MC10", "MC20", "MC30", "MC40", "MC50", "judge", "empty"],
 		"writerSignCell" : "0",

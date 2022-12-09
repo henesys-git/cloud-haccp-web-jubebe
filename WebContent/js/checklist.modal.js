@@ -2563,9 +2563,14 @@ function ChecklistSelectModal(checklistId, seqNo, revisionNo, page) {
 }
 
 
-function ChecklistSelectModalCCP(createDate, sensorId, productId) {
+function ChecklistSelectModalCCP(createDate, 
+								 formClassificationCriteria, 
+								 sensorId, 
+								 productId) {
 	this.createDate = createDate;
+	this.formClassificationCriteria = formClassificationCriteria;
 	this.sensorId = sensorId;
+	this.productId = productId;
 	
 	this.checklistId;
 	this.seqNo = 0;
@@ -2589,30 +2594,18 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 	this.ctx;
 	this.jsonParameterNm;
 	this.jsonFileData;
+	
 	var jsonData;
 	var processCd = "";
 	var infoList;
-	this.productId = productId;
 	
 	this.setChecklistId = async function() {
-		var sensorApi = new HENESYS_API.Sensor();
-		var sensor = await sensorApi.getSensor(this.sensorId);
-		
-		if(!sensor.checklistId) {
-			console.error('no checklist id in sensor table');
-			return;
-		}
-		
-		// 센서에 등록된 점검표 종류가 2개 이상일 시
-		// 제품별로 다시 조회하여 점검표 아이디 획득
-		if(sensor.checklistId.toString().split(",").length > 2) {
-			var clInfo = new ChecklistInfo();
-	    	infoList = await clInfo.getChecklistId(this.productId);
-			this.checklistId = infoList.checklistId;
-		}
-		else {
-			this.checklistId = sensor.checklistId;
-		}
+		console.debug('setChecklistId():')
+		console.debug('product id:' + this.productId);
+		console.debug('sensor id:' + this.sensorId);
+		var clInfo = new ChecklistInfo();
+    	infoList = await clInfo.getChecklistId(this.formClassificationCriteria, this.productId, this.sensorId);
+		this.checklistId = infoList.checklistId;
 	}
 	
 	this.setMetadataAndImagePath = async function() {
@@ -2636,6 +2629,10 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		else if(this.sensorId.includes('CR')) {
 			processCd = "PC80";
 		}
+		
+		console.debug('getChecklistData()');
+		console.debug(this.sensorId);
+		console.debug(processCd);
 		
 		let fetchedData = $.ajax({
 			type: "GET",
@@ -2713,7 +2710,7 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		this.checklistSignData = await this.getChecklistSignData();
 		
 		this.getJsonData = function() {
-		
+			/*
 			//metal detector
 			if(this.sensorId.includes('CD')) {
 				this.jsonParameterNm = "metaldetector";
@@ -2729,6 +2726,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 			else {
 				console.error('no info for this sensor id in ccpChecklistDataConfig file');
 			}
+			*/
+			this.jsonParameterNm = this.checklistId;
 			
 			readJsonFile(heneServerPath + "/checklist/"+ heneBizNo + "/metadata/ccpChecklistDataConfig.json" , function(text){
 	    		this.jsonFileData = JSON.parse(text);
@@ -2739,6 +2738,8 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 		}
 		
 		this.getJsonData();
+		console.log(this.jsonParameterNm);
+		console.log(jsonData);
 		let info = {
 			"rowStartCell" : jsonData[this.jsonParameterNm].rowStartCell,
 			"writerSignCell" : jsonData[this.jsonParameterNm].writerSignCell,
@@ -2826,6 +2827,9 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 					
 					for(let j=0; j<info.rowOrder.length; j++) {
 						var item = info.rowOrder[j];
+						console.debug("item: " + item);
+						console.debug("cell pos: ");
+						console.debug(cellList[cellPos]);
 						
 						switch(item) {
 							case "prod":
@@ -2889,6 +2893,21 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								}
 								that.displayData(cell, temp);
 								break;
+							case "HT15":
+								var cell = cellList[cellPos];
+								var temp; 
+								
+								if(row.detail["HT15"] != null) {
+									temp = row.detail["HT15"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								if(Number(row.detail["HT15"]) >= Number(row.detail["HT15_minValue"]) && Number(row.detail["HT15"]) <= Number(row.detail["HT15_maxValue"])) {
+									rightCount += 1;
+								}
+								that.displayData(cell, temp);
+								break;
 							case "HT20":
 								var cell = cellList[cellPos];
 								if(row.detail["HT20"] >= row.detail["HT20_minValue"] && row.detail["HT20"] <= row.detail["HT20_maxValue"]) {
@@ -2931,7 +2950,6 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								
 								that.displayData(cell, time);
 								break;
-							//end temperature
 							case "HT50":
 								var cell = cellList[cellPos];
 								var temp;
@@ -2947,6 +2965,22 @@ function ChecklistSelectModalCCP(createDate, sensorId, productId) {
 								}
 								that.displayData(cell, temp);
 								break;
+							case "HT55":
+								var cell = cellList[cellPos];
+								var temp;
+								
+								if(row.detail["HT55"] != null) {
+									temp = row.detail["HT55"] + "°C";
+								}
+								else {
+									temp = "";
+								}
+								if(Number(row.detail["HT55"]) >= Number(row.detail["HT55_minValue"]) && Number(row.detail["HT55"]) <= Number(row.detail["HT55_maxValue"])) {
+									rightCount += 1;
+								}
+								that.displayData(cell, temp);
+								break;
+							//end temperature
 							//during time
 							case "HT60":
 								var cell = cellList[cellPos];

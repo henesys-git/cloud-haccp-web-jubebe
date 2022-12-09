@@ -39,6 +39,9 @@ public class ChecklistInfoController extends HttpServlet {
 		
 		String id = req.getParameter("id");
 		String productId = req.getParameter("productId");
+		String sensorId = req.getParameter("sensorId");
+		String ccpType = req.getParameter("ccpType");
+		String formClassificationCriteria = req.getParameter("formClassificationCriteria");
 		
 		ChecklistInfoService cldService = new ChecklistInfoService(new ChecklistInfoDaoImpl(), bizNo);
 		
@@ -49,8 +52,15 @@ public class ChecklistInfoController extends HttpServlet {
 			result = FormatTransformer.toJson(list);
 		} 
 		else if(id.equals("getChecklistNo")) {
-			ChecklistInfo clInfo = cldService.selectGetChecklistNo(productId);
+			ChecklistInfo clInfo = cldService.selectChecklistNo(formClassificationCriteria, productId, sensorId);
 			result = FormatTransformer.toJson(clInfo);
+		}
+		else if(id.equals("getFormClassificationCriteria")) {
+			result = cldService.getFormClassificationCriteria(ccpType);
+			res.setContentType("plain/text; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			out.print(result);
+			return;
 		}
 		else {
 			ChecklistInfo clInfo = cldService.select(id);
@@ -59,7 +69,6 @@ public class ChecklistInfoController extends HttpServlet {
 		
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		
 		out.print(result);
 	}
 
