@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import dao.ProductDao;
 import mes.frame.database.JDBCConnectionPool;
 import model.Product;
+import viewmodel.ProductViewModel;
 
 public class ProductService {
 
@@ -89,5 +90,20 @@ public class ProductService {
 		}
 		
 		return false;
+	}
+	
+	public List<ProductViewModel> getAllProductsViewModel() {
+		List<ProductViewModel> productList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			productList = productDao.getAllProductsViewModel(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return productList;
 	}
 }

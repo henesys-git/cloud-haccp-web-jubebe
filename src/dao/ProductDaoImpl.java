@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
 import model.Product;
+import viewmodel.ProductViewModel;
 
 public class ProductDaoImpl implements ProductDao {
 	
@@ -183,10 +184,59 @@ public class ProductDaoImpl implements ProductDao {
 	    return false;
 	}
 	
+	@Override
+	public List<ProductViewModel> getAllProductsViewModel(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT  								\n")
+				.append("	p1.product_id, 						\n")
+				.append("	p2.product_name AS product_type, 	\n")
+				.append("	p1.product_name						\n")
+				.append("FROM product p1						\n")
+				.append("INNER JOIN product p2					\n")
+				.append("	ON p1.parent_id = p2.product_id		\n")
+				.append("WHERE p1.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND p1.product_level = 1			\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ProductViewModel> list = new ArrayList<ProductViewModel>();
+			
+			while(rs.next()) {
+				ProductViewModel data = extractViewModelFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private Product extractFromResultSet(ResultSet rs) throws SQLException {
 		return new Product(
 					rs.getString("product_id"),
 					rs.getString("product_name")
+				);
+	}
+
+	private ProductViewModel extractViewModelFromResultSet(ResultSet rs) throws SQLException {
+		return new ProductViewModel(
+				rs.getString("product_id"),
+				rs.getString("product_type"),
+				rs.getString("product_name")
 				);
 	}
 }

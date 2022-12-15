@@ -17,6 +17,7 @@ import dao.ProductDaoImpl;
 import model.Product;
 import service.ProductService;
 import utils.FormatTransformer;
+import viewmodel.ProductViewModel;
 
 
 @WebServlet("/product")
@@ -47,6 +48,9 @@ public class ProductController extends HttpServlet {
 		
 		if(id.equals("all")) {
 			List<Product> list = productService.getAllProducts();
+			result = FormatTransformer.toJson(list);
+		} else if(id.equals("allvm")) {
+			List<ProductViewModel> list = productService.getAllProductsViewModel();
 			result = FormatTransformer.toJson(list);
 		} else {
 			Product product = productService.getProductById(id);
