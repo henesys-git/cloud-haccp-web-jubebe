@@ -1,3 +1,10 @@
+
+<!-- 
+TODO
+더 이상 사용되지 않는 듯? 삭제하기
+ -->
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*,java.util.*,javax.servlet.http.*"%>
 <%@ page import="mes.client.comm.*" %>
