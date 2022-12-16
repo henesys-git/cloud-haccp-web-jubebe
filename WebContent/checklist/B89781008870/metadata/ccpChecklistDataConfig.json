@@ -9,7 +9,7 @@
 	},
 	"checklist25": {
 		"rowStartCell":"cell3",
-		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "HT70", "judge", "HT15", "HT55"],
+		"rowOrder": ["prod", "HT30", "HT10", "HT15", "HT60", "HT70", "judge", "HT40", "HT50", "HT55"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
@@ -17,7 +17,7 @@
 	},
 	"checklist27": {
 		"rowStartCell":"cell3",
-		"rowOrder": ["prod", "HT30", "HT20", "HT10", "HT50", "HT60", "HT70", "judge"],
+		"rowOrder": ["prod", "HT30", "HT10", "HT60", "HT70", "judge", "HT40", "HT50"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
@@ -33,7 +33,7 @@
 	},
 	"checklist29": {
 		"rowStartCell":"cell3",
-		"rowOrder": ["prod", "HT30", "HT50", "HT50", "HT60", "judge"],
+		"rowOrder": ["prod", "HT30", "HT10", "HT60", "HT70", "judge", "HT40", "HT50"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2",
@@ -41,7 +41,7 @@
 	},
 	"checklist26": {
 		"rowStartCell":"cell3",
-		"rowOrder": ["prod", "CR30", "", "CR10", "CR10", "CR40", "CR10", "judge"],
+		"rowOrder": ["prod", "CR30", "CR10", "CR20", "CR60", "CR50", "judge", "CR40"],
 		"writerSignCell" : "0",
 		"approverSignCell" : "1",
 		"dateCell" : "2"
