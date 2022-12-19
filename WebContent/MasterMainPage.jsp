@@ -871,7 +871,8 @@
 				SubMenuTitle = SubmenuName.toString();
 			}
 			
-			let ccpUrlPage = "/Contents/checklist_ccp_integrated.jsp";
+			let url = urlPage;
+			let ccpUrl = "/Contents/checklist_ccp_integrated.jsp";
 			
 			var checklistParam = urlPage.substr(10, 9);
 			var checklistParam2 = urlPage.substr(10, 10);
@@ -892,33 +893,36 @@
 					   "&MenuTitle=" + mMenuTitle + 
 					   "&programId=" + programId;
 			
+			
 			//선행요건 메뉴일 경우 checklist 번호를 parameter로 받아 function 진입
 			if(checklistParam == 'checklist' && checklistParam2 == 'checklist/') {
 				data = data + "&checklistNum=" + checklistNum;
+				url = checklistPath + ".jsp?checklistNum=" + checklistNum;
 			}
 			//문서등록 메뉴일 경우 document 번호를 parameter로 받아 function 진입
 			else if(checklistParam == 'document/') {
 				data = data + "&documentNum=" + documentNum;
+				url = documentPath + ".jsp?documentNum=" + documentNum;
 			}
 			//가열공정 점검표
 			else if(urlPage === "/Contents/heating.jsp") {
 				data = data + "&processCode=PC30&ccpType=heating";
-				urlPage = ccpUrlPage;
+				url = ccpUrl;
 			}
 			//금속검출공정 점검표
 			else if(urlPage === "/Contents/metaldetector.jsp") {
 				data = data + "&processCode=PC10&ccpType=metaldetect";
-				urlPage = ccpUrlPage;
+				url = ccpUrl;
 			}
 			//크림공정 점검표
 			else if(urlPage === "/Contents/cream.jsp") {
 				data = data + "&processCode=PC80&ccpType=cream";
-				urlPage = ccpUrlPage;
+				url = ccpUrl;
 			}
            
 			$.ajax({
 	            type: "POST",
-	            url: urlPage,
+	            url: url,
 	            data: data,
 	            beforeSend: function () {
 	                $("#ContentPlaceHolder1").children().remove();
