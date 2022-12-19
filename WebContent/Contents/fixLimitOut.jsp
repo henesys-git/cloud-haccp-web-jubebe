@@ -116,7 +116,8 @@ $(document).ready(function () {
 		$.ajax({
 	    	type: "PUT",
 	        url: "/ccp" + 
-	        	 "?sensorKey=" + '<%=sensorKey%>' + 
+	        	 "?method=notAll" + 
+	        	 "&sensorKey=" + '<%=sensorKey%>' + 
 	        	 "&createTime=" + '<%=createTime%>' + 
 	        	 "&improvementAction=" + improvementAction +
 	        	 "&date=" + '<%=date%>' + 
@@ -158,32 +159,32 @@ $(document).ready(function () {
 		
 		if(check) {
 		
-		let improvementAction = $("input[name='action']:checked").val();
-		
-		if(improvementAction === "직접입력") {
-			improvementAction = $("#other-action-input").val();
-		}
-		
-		$.ajax({
-	    	type: "PUT",
-	        url: "/ccp" +
-	        	 "?method=All" +
-	        	 "&improvementAction=" + improvementAction +
-	        	 "&date=" + '<%=date%>' +
-	        	 "&date2=" + '<%=date2%>' + 
-	        	 "&processCode=" + '<%=processCode%>',
-			success: async function (resultIfFixed) {
-	        	if(resultIfFixed == 'true') {
-					$('#improvementActionModal').modal('hide');
-					
-						ccpBreakawayJSPPage.refreshTable();
-					
-	        		alert('개선조치 완료 (서명 초기화)');
-	         	} else {
-	         		alert('개선조치 실패, 관리자 문의 필요');
-	         	}
+			let improvementAction = $("input[name='action']:checked").val();
+			
+			if(improvementAction === "직접입력") {
+				improvementAction = $("#other-action-input").val();
 			}
-		});
+			
+			$.ajax({
+		    	type: "PUT",
+		        url: "/ccp" +
+		        	 "?method=All" +
+		        	 "&improvementAction=" + improvementAction +
+		        	 "&date=" + '<%=date%>' +
+		        	 "&date2=" + '<%=date2%>' + 
+		        	 "&processCode=" + '<%=processCode%>',
+				success: async function (resultIfFixed) {
+		        	if(resultIfFixed == 'true') {
+						$('#improvementActionModal').modal('hide');
+						
+							ccpBreakawayJSPPage.refreshTable();
+						
+		        		alert('개선조치 완료 (서명 초기화)');
+		         	} else {
+		         		alert('개선조치 실패, 관리자 문의 필요');
+		         	}
+				}
+			});
 		
 		}
 	});
