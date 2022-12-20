@@ -606,6 +606,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/limit.js"></script>
 	<!-- raw material -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/rawmaterial.js"></script>
+	<!-- customer -->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/customer.js"></script>
 	<!--bootstrap-datepicker -->
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>  
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ko.min.js" charset="UTF-8"></script>

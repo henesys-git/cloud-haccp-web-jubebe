@@ -11,29 +11,29 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
-import model.Rawmaterial;
-import viewmodel.RawmaterialViewModel;
+import model.Customer;
+import viewmodel.CustomerViewModel;
 
-public class RawmaterialDaoImpl implements RawmaterialDao {
+public class CustomerDaoImpl implements CustomerDao {
 	
 	private Statement stmt;
 	private ResultSet rs;
 	
 	static final Logger logger = 
-			Logger.getLogger(RawmaterialDaoImpl.class.getName());
+			Logger.getLogger(CustomerDaoImpl.class.getName());
 	
-	public RawmaterialDaoImpl() {
+	public CustomerDaoImpl() {
 	}
 
 	@Override
-	public List<Rawmaterial> getAllRawmaterials(Connection conn) {
+	public List<Customer> getAllCustomers(Connection conn) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 			\n")
-				.append("FROM rawmaterial	\n")
+				.append("FROM mes_product_customer	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
@@ -41,10 +41,10 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 			
 			rs = stmt.executeQuery(sql);
 			
-			List<Rawmaterial> list = new ArrayList<Rawmaterial>();
+			List<Customer> list = new ArrayList<Customer>();
 			
 			while(rs.next()) {
-				Rawmaterial data = extractFromResultSet(rs);
+				Customer data = extractFromResultSet(rs);
 				list.add(data);
 			}
 			
@@ -61,29 +61,29 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 	};
 	
 	@Override
-	public Rawmaterial getRawmaterial(Connection conn, String rawmaterialId) {
+	public Customer getCustomer(Connection conn, String customerId) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT * 		\n")
-				.append("FROM product	\n")
+				.append("FROM mes_product_customer	\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("  AND rawmaterial_id = '" + rawmaterialId + "'\n")
+				.append("  AND customer_code = '" + customerId + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
 			
 			rs = stmt.executeQuery(sql);
 			
-			Rawmaterial rawmaterial = null;
+			Customer customer = null;
 			
 			if(rs.next()) {
-				rawmaterial = extractFromResultSet(rs);
+				customer = extractFromResultSet(rs);
 			}
 			
-			return rawmaterial;
+			return customer;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -95,14 +95,14 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 	};
 	
 	@Override
-	public boolean insert(Connection conn, Rawmaterial rawmaterial) {
+	public boolean insert(Connection conn, Customer customer) {
 		try {
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
-					.append("	rawmaterial (\n")
+					.append("	mes_product_customer (\n")
 					.append("		tenant_id,\n")
-					.append("		rawmaterial_id,\n")
-					.append("		rawmaterial_name\n")
+					.append("		customer_code,\n")
+					.append("		customer_name\n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
@@ -115,8 +115,8 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, rawmaterial.getRawmaterialId());
-			ps.setString(3, rawmaterial.getRawmaterialName());
+			ps.setString(2, customer.getCustomerId());
+			ps.setString(3, customer.getCustomerName());
 			
 	        int i = ps.executeUpdate();
 
@@ -132,15 +132,15 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 	}
 	
 	@Override
-	public boolean update(Connection conn, Rawmaterial rawmaterial) {
+	public boolean update(Connection conn, Customer customer) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("UPDATE rawmaterial\n")
-					.append("SET rawmaterial_name='" + rawmaterial.getRawmaterialName() + "'\n")
+					.append("UPDATE mes_product_customer\n")
+					.append("SET customer_name='" + customer.getCustomerName() + "'\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND rawmaterial_id='" + rawmaterial.getRawmaterialId() + "';\n")
+					.append("  AND customer_code='" + customer.getCustomerId() + "';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -159,14 +159,14 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 	}
 	
 	@Override
-	public boolean delete(Connection conn, String rawmaterialId) {
+	public boolean delete(Connection conn, String customerId) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("DELETE FROM rawmaterial\n")
+					.append("DELETE FROM mes_product_customer\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("	AND rawmaterial_id='" + rawmaterialId + "';\n")
+					.append("	AND customer_code='" + customerId + "';\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -185,31 +185,31 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 	}
 	
 	@Override
-	public List<RawmaterialViewModel> getAllRawmaterialsViewModels(Connection conn) {
+	public List<CustomerViewModel> getAllCustomerViewModels(Connection conn) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT  									\n")
-				.append("	r1.rawmaterial_id, 						\n")
-				.append("	r2.rawmaterial_name AS rawmaterial_type,\n")
-				.append("	r1.rawmaterial_name						\n")
-				.append("FROM rawmaterial r1						\n")
-				.append("INNER JOIN rawmaterial r2					\n")
-				.append("	ON r1.parent_id = r2.rawmaterial_id		\n")
-				.append("WHERE r1.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("	AND r1.level = 1				\n")
+				.append("	c1.customer_code, 						\n")
+				.append("	c2.customer_name AS customer_type,		\n")
+				.append("	c1.customer_name						\n")
+				.append("FROM mes_product_customer c1				\n")
+				.append("INNER JOIN mes_product_customer c2			\n")
+				.append("	ON c1.parent_id = c2.customer_code		\n")
+				.append("WHERE c1.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND c1.level = 1						\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
 			
 			rs = stmt.executeQuery(sql);
 			
-			List<RawmaterialViewModel> list = new ArrayList<RawmaterialViewModel>();
+			List<CustomerViewModel> list = new ArrayList<CustomerViewModel>();
 			
 			while(rs.next()) {
-				RawmaterialViewModel data = extractViewModelFromResultSet(rs);
+				CustomerViewModel data = extractViewModelFromResultSet(rs);
 				list.add(data);
 			}
 			
@@ -225,18 +225,18 @@ public class RawmaterialDaoImpl implements RawmaterialDao {
 		return null;
 	};
 	
-	private Rawmaterial extractFromResultSet(ResultSet rs) throws SQLException {
-		return new Rawmaterial(
-					rs.getString("rawmaterial_id"),
-					rs.getString("rawmaterial_name")
+	private Customer extractFromResultSet(ResultSet rs) throws SQLException {
+		return new Customer(
+					rs.getString("customer_code"),
+					rs.getString("customer_name")
 				);
 	}
 
-	private RawmaterialViewModel extractViewModelFromResultSet(ResultSet rs) throws SQLException {
-		return new RawmaterialViewModel(
-				rs.getString("rawmaterial_id"),
-				rs.getString("rawmaterial_type"),
-				rs.getString("rawmaterial_name")
+	private CustomerViewModel extractViewModelFromResultSet(ResultSet rs) throws SQLException {
+		return new CustomerViewModel(
+				rs.getString("customer_code"),
+				rs.getString("customer_type"),
+				rs.getString("customer_name")
 			);
 	}
 }

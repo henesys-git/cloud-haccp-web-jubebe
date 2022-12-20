@@ -14,23 +14,23 @@ public class RawmaterialViewModel {
 		this.rawmaterialName = rawmaterialName;
 	}
 	
-	public String getProductId() {
+	public String getRawmaterialId() {
 		return rawmaterialId;
 	}
-	public String getProductName() {
+	public String getRawmaterialName() {
 		return rawmaterialName;
 	}
-	public String getProductType() {
+	public String getRawmaterialType() {
 		return rawmaterialType;
 	}
 
-	public void setProductId(String rawmaterialId) {
+	public void setRawmaterialId(String rawmaterialId) {
 		this.rawmaterialId = rawmaterialId;
 	}
-	public void setProductName(String rawmaterialName) {
+	public void setRawmaterialName(String rawmaterialName) {
 		this.rawmaterialName = rawmaterialName;
 	}
-	public void setProductType(String rawmaterialType) {
+	public void setRawmaterialType(String rawmaterialType) {
 		this.rawmaterialType = rawmaterialType;
 	}
 
