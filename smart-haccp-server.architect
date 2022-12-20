@@ -996,7 +996,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL303" populated="true" UUID="5722be5a-a11a-4e30-b2aa-4163e1ad6148" autoIncrement="false" autoIncrementSequenceName="생산실적관리_생산실적관리(구:생산작업지시).탈피인원_seq" defaultValue="" name="작업인원" nullable="0" physicalName="worker_count" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL304" populated="true" UUID="e40d8159-e56f-4156-8097-4489606ab829" autoIncrement="false" autoIncrementSequenceName="mes_production_instruction_part_deduct_yn_seq" defaultValue="" name="부자재 차감여부" nullable="0" physicalName="part_deduct_yn" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL304" populated="true" UUID="e40d8159-e56f-4156-8097-4489606ab829" autoIncrement="false" autoIncrementSequenceName="mes_production_instruction_rawmaterial_deduct_yn_seq" defaultValue="" name="부자재 차감여부" nullable="0" physicalName="rawmaterial_deduct_yn" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL305" populated="true" UUID="9c533a6f-2b77-4cf9-b4e2-9e9a09bd7ef6" autoIncrement="false" autoIncrementSequenceName="mes_production_instruction_work_status_seq" defaultValue="" name="작업상태" nullable="0" physicalName="work_status" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1120,7 +1120,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL344" populated="true" UUID="4d31821f-37d9-4b6e-97fc-cfad2e01798d" autoIncrement="false" autoIncrementSequenceName="mes_product_storage_storage_no_seq" defaultValue="" name="창고번호" nullable="0" physicalName="storage_no" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL345" populated="true" UUID="75be29ee-743f-40c2-9524-71b6b97e66bd" autoIncrement="false" autoIncrementSequenceName="mes_product_storage_part_deduct_yn_seq" defaultValue="" name="부자재 차감여부" nullable="0" physicalName="part_deduct_yn" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL345" populated="true" UUID="75be29ee-743f-40c2-9524-71b6b97e66bd" autoIncrement="false" autoIncrementSequenceName="mes_product_storage_rawmaterial_deduct_yn_seq" defaultValue="" name="부자재 차감여부" nullable="0" physicalName="rawmaterial_deduct_yn" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1172,34 +1172,34 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
-  <table id="TAB361" populated="true" UUID="e7bd7fdf-b2e4-4c1d-895b-28f18f5eff9e" name="원부자재 재고 관리" objectType="TABLE" physicalName="mes_part_storage" >
+  <table id="TAB361" populated="true" UUID="e7bd7fdf-b2e4-4c1d-895b-28f18f5eff9e" name="원부자재 재고 관리" objectType="TABLE" physicalName="mes_rawmaterial_storage" >
    <remarks></remarks>
    <folder id="FOLTAB3611" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL362" populated="true" UUID="ac5a76d8-08f3-42b4-9877-306322f77a66" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_tenant_id_seq" defaultValue="" name="테넌트 아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL362" populated="true" UUID="ac5a76d8-08f3-42b4-9877-306322f77a66" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_tenant_id_seq" defaultValue="" name="테넌트 아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL363" populated="true" UUID="668551cf-0d2e-4d44-9ada-633b030a3c3d" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_part_stock_no_seq" defaultValue="" name="원부자재재고번호" nullable="0" physicalName="part_stock_no" precision="10" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL363" populated="true" UUID="668551cf-0d2e-4d44-9ada-633b030a3c3d" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_rawmaterial_stock_no_seq" defaultValue="" name="원부자재재고번호" nullable="0" physicalName="rawmaterial_stock_no" precision="10" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL364" populated="true" UUID="4fca5595-3ebc-498f-beeb-62f96f439365" autoIncrement="true" autoIncrementSequenceName="mes_part_storage_seq_no_seq" defaultValue="" name="재고일련번호(자동증가)" nullable="0" physicalName="seq_no" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL364" populated="true" UUID="4fca5595-3ebc-498f-beeb-62f96f439365" autoIncrement="true" autoIncrementSequenceName="mes_rawmaterial_storage_seq_no_seq" defaultValue="" name="재고일련번호(자동증가)" nullable="0" physicalName="seq_no" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL365" populated="true" UUID="d9a8d417-4e05-49ba-bbdb-edb367b8de2d" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_part_code_seq" defaultValue="" name="원부자재코드" nullable="0" physicalName="part_code" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL365" populated="true" UUID="d9a8d417-4e05-49ba-bbdb-edb367b8de2d" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_rawmaterial_id_seq" defaultValue="" name="원부자재코드" nullable="0" physicalName="rawmaterial_id" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL366" populated="true" UUID="8dc44747-8fe0-4b97-9470-9c1fbd376423" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_io_amt_seq" defaultValue="" name="입출고수량" nullable="0" physicalName="io_amt" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+    <column id="COL366" populated="true" UUID="8dc44747-8fe0-4b97-9470-9c1fbd376423" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_io_amt_seq" defaultValue="" name="입출고수량" nullable="0" physicalName="io_amt" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
      <remarks></remarks>
     </column>
-    <column id="COL367" populated="true" UUID="db4d2a89-d721-4a53-a806-11f3d9c85b28" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_io_datetime_seq" defaultValue="" name="입출고날짜시간" nullable="0" physicalName="io_datetime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL367" populated="true" UUID="db4d2a89-d721-4a53-a806-11f3d9c85b28" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_io_datetime_seq" defaultValue="" name="입출고날짜시간" nullable="0" physicalName="io_datetime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL368" populated="true" UUID="78899a4f-07a5-4a13-a1b0-75fdd42d3dab" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_where_to_use_seq" defaultValue="" name="사용처" nullable="0" physicalName="where_to_use" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL368" populated="true" UUID="78899a4f-07a5-4a13-a1b0-75fdd42d3dab" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_where_to_use_seq" defaultValue="" name="사용처" nullable="0" physicalName="where_to_use" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL369" populated="true" UUID="6dc47806-3d23-409e-b146-36d264c79cb4" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_storage_no_seq" defaultValue="" name="창고번호" nullable="0" physicalName="storage_no" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL369" populated="true" UUID="6dc47806-3d23-409e-b146-36d264c79cb4" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_storage_no_seq" defaultValue="" name="창고번호" nullable="0" physicalName="storage_no" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL370" populated="true" UUID="e0b5a0d0-512a-44e9-b2ff-37a48d4ad44c" autoIncrement="false" autoIncrementSequenceName="mes_part_storage_prod_stock_no_for_backtrace_seq" defaultValue="" name="역추적용 완제품재고번호" nullable="0" physicalName="prod_stock_no_for_backtrace" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL370" populated="true" UUID="e0b5a0d0-512a-44e9-b2ff-37a48d4ad44c" autoIncrement="false" autoIncrementSequenceName="mes_rawmaterial_storage_prod_stock_no_for_backtrace_seq" defaultValue="" name="역추적용 완제품재고번호" nullable="0" physicalName="prod_stock_no_for_backtrace" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1208,9 +1208,9 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <folder id="FOLTAB3612" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3614" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX371" populated="true" UUID="f925f33d-5877-4143-b484-4ca2f9962b08" clustered="false" name="mes_part_storage_pk" physicalName="mes_part_storage_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX371" populated="true" UUID="f925f33d-5877-4143-b484-4ca2f9962b08" clustered="false" name="mes_rawmaterial_storage_pk" physicalName="mes_part_storage_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC372" populated="true" UUID="db1cae64-4f46-4c5e-9ad6-9d7215ea7405" ascendingOrDescending="UNSPECIFIED" column-ref="COL362" name="테넌트 아이디" physicalName="tenant_id" />
-     <index-column id="IDC373" populated="true" UUID="8748b922-9d55-4862-942b-2e034913fd7b" ascendingOrDescending="UNSPECIFIED" column-ref="COL363" name="원부자재재고번호" physicalName="part_stock_no" />
+     <index-column id="IDC373" populated="true" UUID="8748b922-9d55-4862-942b-2e034913fd7b" ascendingOrDescending="UNSPECIFIED" column-ref="COL363" name="원부자재재고번호" physicalName="rawmaterial_stock_no" />
      <index-column id="IDC374" populated="true" UUID="fe0f7cb7-932f-483c-8004-e518e937da3e" ascendingOrDescending="UNSPECIFIED" column-ref="COL364" name="재고일련번호(자동증가)" physicalName="seq_no" />
     </index>
    </folder>
@@ -1239,16 +1239,22 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     </index>
    </folder>
   </table>
-  <table id="TAB382" populated="true" UUID="a246e3cb-dea0-4ceb-b5ad-2f87638749b8" name="원부자재 정보" objectType="TABLE" physicalName="part" >
+  <table id="TAB382" populated="true" UUID="a246e3cb-dea0-4ceb-b5ad-2f87638749b8" name="원부자재 정보" objectType="TABLE" physicalName="rawmaterial" >
    <remarks></remarks>
    <folder id="FOLTAB3821" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL383" populated="true" UUID="98536d28-36a9-4a8f-a2b8-41e4b1e19e13" autoIncrement="false" autoIncrementSequenceName="part_tenant_id_seq" defaultValue="" name="tenant_id" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL383" populated="true" UUID="98536d28-36a9-4a8f-a2b8-41e4b1e19e13" autoIncrement="false" autoIncrementSequenceName="part_tenant_id_seq" defaultValue="" name="테넌트 아이디" nullable="0" physicalName="테넌트 아이디" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL384" populated="true" UUID="7b127d65-180a-4230-8b11-c5909befe9a2" autoIncrement="false" autoIncrementSequenceName="part_part_code_seq" defaultValue="" name="원부자재코드" nullable="0" physicalName="part_code" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL384" populated="true" UUID="7b127d65-180a-4230-8b11-c5909befe9a2" autoIncrement="false" autoIncrementSequenceName="rawmaterial_rawmaterial_id_seq" defaultValue="" name="원부자재코드" nullable="0" physicalName="rawmaterial_id" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL385" populated="true" UUID="a9d9f5f4-1874-41d5-b7fc-b5f009bdced7" autoIncrement="false" autoIncrementSequenceName="part_part_name_seq" defaultValue="" name="원부자재명" nullable="0" physicalName="part_name" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL385" populated="true" UUID="a9d9f5f4-1874-41d5-b7fc-b5f009bdced7" autoIncrement="false" autoIncrementSequenceName="rawmaterial_rawmaterial_name_seq" defaultValue="" name="원부자재명" nullable="0" physicalName="rawmaterial_name" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL386" populated="true" UUID="178d2d0f-a786-48b3-afb0-737b944c514f" autoIncrement="false" autoIncrementSequenceName="rawmaterial_level_seq" defaultValue="" name="level" nullable="0" physicalName="level" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL387" populated="true" UUID="a8bc7a8a-793a-46f2-be33-2bd5238fb68e" autoIncrement="false" autoIncrementSequenceName="rawmaterial_parent_id_seq" defaultValue="" name="parent_id" nullable="0" physicalName="parent_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1257,73 +1263,73 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <folder id="FOLTAB3822" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3824" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX386" populated="true" UUID="1323d2b8-e618-4a99-b34b-d1e4bd498e48" clustered="false" name="part_pk" physicalName="mes_part_pk" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC387" populated="true" UUID="603fef7a-44d4-4d4f-983a-814fbaea8d4f" ascendingOrDescending="UNSPECIFIED" column-ref="COL383" name="tenant_id" physicalName="tenant_id" />
-     <index-column id="IDC388" populated="true" UUID="8abb805e-2d97-44ae-a5e8-e7dd58211cde" ascendingOrDescending="UNSPECIFIED" column-ref="COL384" name="원부자재코드" physicalName="part_code" />
+    <index id="IDX388" populated="true" UUID="1323d2b8-e618-4a99-b34b-d1e4bd498e48" clustered="false" name="rawmaterial_pk" physicalName="mes_part_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC389" populated="true" UUID="603fef7a-44d4-4d4f-983a-814fbaea8d4f" ascendingOrDescending="UNSPECIFIED" column-ref="COL383" name="테넌트 아이디" physicalName="테넌트 아이디" />
+     <index-column id="IDC390" populated="true" UUID="8abb805e-2d97-44ae-a5e8-e7dd58211cde" ascendingOrDescending="UNSPECIFIED" column-ref="COL384" name="원부자재코드" physicalName="rawmaterial_id" />
     </index>
    </folder>
   </table>
-  <table id="TAB389" populated="true" UUID="eca2f3a7-a30e-4451-a87c-00c9612c44ba" name="주문상세" objectType="TABLE" physicalName="mes_order_detail" >
+  <table id="TAB391" populated="true" UUID="eca2f3a7-a30e-4451-a87c-00c9612c44ba" name="주문상세" objectType="TABLE" physicalName="mes_order_detail" >
    <remarks></remarks>
-   <folder id="FOLTAB3891" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL390" populated="true" UUID="986474ce-51ed-4bd0-8652-fe2a223bb546" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_order_detail_no_seq" defaultValue="" name="주문상세번호" nullable="0" physicalName="order_detail_no" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+   <folder id="FOLTAB3911" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL392" populated="true" UUID="986474ce-51ed-4bd0-8652-fe2a223bb546" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_order_detail_no_seq" defaultValue="" name="주문상세번호" nullable="0" physicalName="order_detail_no" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL391" populated="true" UUID="558d0347-b763-4b95-9fa2-1a185f39cf28" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_product_id_seq" defaultValue="" name="완제품코드" nullable="0" physicalName="product_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL393" populated="true" UUID="558d0347-b763-4b95-9fa2-1a185f39cf28" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_product_id_seq" defaultValue="" name="완제품코드" nullable="0" physicalName="product_id" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL392" populated="true" UUID="42bd9e65-e19a-48ab-acf3-dc4ab26e6e85" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_주문수량_seq" defaultValue="" name="주문수량" nullable="0" physicalName="주문수량" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL394" populated="true" UUID="42bd9e65-e19a-48ab-acf3-dc4ab26e6e85" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_주문수량_seq" defaultValue="" name="주문수량" nullable="0" physicalName="주문수량" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL393" populated="true" UUID="a96f864c-956b-4998-8d6f-b52f2d47629b" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_chulha_yn_seq" defaultValue="" name="출하여부" nullable="0" physicalName="chulha_yn" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
+    <column id="COL395" populated="true" UUID="a96f864c-956b-4998-8d6f-b52f2d47629b" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_chulha_yn_seq" defaultValue="" name="출하여부" nullable="0" physicalName="chulha_yn" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks></remarks>
     </column>
-    <column id="COL394" populated="true" UUID="0825f347-38b0-4fb9-8d65-c3c682d4b185" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_order_no_seq" defaultValue="" name="주문번호" nullable="0" physicalName="order_no" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL396" populated="true" UUID="0825f347-38b0-4fb9-8d65-c3c682d4b185" autoIncrement="false" autoIncrementSequenceName="mes_order_detail_order_no_seq" defaultValue="" name="주문번호" nullable="0" physicalName="order_no" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
-    <folder id="FOLTAB3893" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    <folder id="FOLTAB3913" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
     </folder>
-    <folder id="FOLTAB3892" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    <folder id="FOLTAB3912" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
-    <folder id="FOLTAB3894" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX395" populated="true" UUID="ed9d3f0b-8d9a-411b-9fd4-83084f1c7c53" clustered="false" name="mes_order_detail_pk" physicalName="mes_order_detail_pk" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC396" populated="true" UUID="134e5be9-9385-408b-be0f-fb007f7ce225" ascendingOrDescending="UNSPECIFIED" column-ref="COL390" name="주문상세번호" physicalName="order_detail_no" />
+    <folder id="FOLTAB3914" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX397" populated="true" UUID="ed9d3f0b-8d9a-411b-9fd4-83084f1c7c53" clustered="false" name="mes_order_detail_pk" physicalName="mes_order_detail_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC398" populated="true" UUID="134e5be9-9385-408b-be0f-fb007f7ce225" ascendingOrDescending="UNSPECIFIED" column-ref="COL392" name="주문상세번호" physicalName="order_detail_no" />
     </index>
    </folder>
   </table>
   <relationships>
-   <relationship id="REL397" populated="true" UUID="629539d3-ff3a-44bc-8b59-063b3fcfd09e" deferrability="7" deleteRule="3" fk-table-ref="TAB259" fkCardinality="7" identifying="true" name="mes_order_mes_chulha_order_matching_fk" physicalName="mes_order_mes_chulha_order_matching_fk" pk-table-ref="TAB251" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP398" populated="true" UUID="12358f50-55dc-441a-9651-ec71316a381e" fk-column-ref="COL262" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL253" />
-    <column-mapping id="CMP399" populated="true" UUID="36efcff8-505b-44ee-9a8a-e2a4e34a3313" fk-column-ref="COL260" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL252" />
+   <relationship id="REL399" populated="true" UUID="629539d3-ff3a-44bc-8b59-063b3fcfd09e" deferrability="7" deleteRule="3" fk-table-ref="TAB259" fkCardinality="7" identifying="true" name="mes_order_mes_chulha_order_matching_fk" physicalName="mes_order_mes_chulha_order_matching_fk" pk-table-ref="TAB251" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP400" populated="true" UUID="12358f50-55dc-441a-9651-ec71316a381e" fk-column-ref="COL262" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL253" />
+    <column-mapping id="CMP401" populated="true" UUID="36efcff8-505b-44ee-9a8a-e2a4e34a3313" fk-column-ref="COL260" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL252" />
    </relationship>
-   <relationship id="REL400" populated="true" UUID="73aa6cef-a116-4e15-9413-7466b5c4a6ee" deferrability="7" deleteRule="3" fk-table-ref="TAB259" fkCardinality="7" identifying="true" name="mes_chulha_info_mes_chulha_order_matching_fk" physicalName="mes_chulha_info_mes_chulha_order_matching_fk" pk-table-ref="TAB267" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP401" populated="true" UUID="520104d6-b723-4a0d-b6b3-06bfa6332512" fk-column-ref="COL261" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
-    <column-mapping id="CMP402" populated="true" UUID="02d0b1bc-2ce9-4560-94a8-2c80fd8a81d6" fk-column-ref="COL260" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
+   <relationship id="REL402" populated="true" UUID="73aa6cef-a116-4e15-9413-7466b5c4a6ee" deferrability="7" deleteRule="3" fk-table-ref="TAB259" fkCardinality="7" identifying="true" name="mes_chulha_info_mes_chulha_order_matching_fk" physicalName="mes_chulha_info_mes_chulha_order_matching_fk" pk-table-ref="TAB267" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP403" populated="true" UUID="520104d6-b723-4a0d-b6b3-06bfa6332512" fk-column-ref="COL261" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
+    <column-mapping id="CMP404" populated="true" UUID="02d0b1bc-2ce9-4560-94a8-2c80fd8a81d6" fk-column-ref="COL260" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
    </relationship>
-   <relationship id="REL403" populated="true" UUID="0815254c-b76a-456f-b316-6439a2384ee9" deferrability="7" deleteRule="3" fk-table-ref="TAB311" fkCardinality="7" identifying="true" name="mes_chulha_info_완제품 출하_상세_fk" physicalName="mes_chulha_info_완제품_출하_상세_fk" pk-table-ref="TAB267" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP404" populated="true" UUID="0486b104-69d3-457d-81af-64065adafd1d" fk-column-ref="COL314" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
-    <column-mapping id="CMP405" populated="true" UUID="4cf2ec20-26a6-4354-87c3-5df539a556a5" fk-column-ref="COL312" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
+   <relationship id="REL405" populated="true" UUID="0815254c-b76a-456f-b316-6439a2384ee9" deferrability="7" deleteRule="3" fk-table-ref="TAB311" fkCardinality="7" identifying="true" name="mes_chulha_info_완제품 출하_상세_fk" physicalName="mes_chulha_info_완제품 출하_상세_fk" pk-table-ref="TAB267" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP406" populated="true" UUID="0486b104-69d3-457d-81af-64065adafd1d" fk-column-ref="COL314" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
+    <column-mapping id="CMP407" populated="true" UUID="4cf2ec20-26a6-4354-87c3-5df539a556a5" fk-column-ref="COL312" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
    </relationship>
-   <relationship id="REL406" populated="true" UUID="8ff958f8-3d7c-43f0-b89a-5fb0eed3a5bb" deferrability="7" deleteRule="3" fk-table-ref="TAB294" fkCardinality="7" identifying="true" name="생산계획_생산실적관리_fk" physicalName="생산계획_생산실적관리_fk" pk-table-ref="TAB275" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP407" populated="true" UUID="8e4bcc8e-b5dc-4e57-b24f-717e8d6c4ea1" fk-column-ref="COL296" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL277" />
-    <column-mapping id="CMP408" populated="true" UUID="1bf9a364-e6d6-4dc9-a85c-c354555ebc27" fk-column-ref="COL295" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL276" />
+   <relationship id="REL408" populated="true" UUID="8ff958f8-3d7c-43f0-b89a-5fb0eed3a5bb" deferrability="7" deleteRule="3" fk-table-ref="TAB294" fkCardinality="7" identifying="true" name="생산계획_생산실적관리_fk" physicalName="생산계획_생산실적관리_fk" pk-table-ref="TAB275" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP409" populated="true" UUID="8e4bcc8e-b5dc-4e57-b24f-717e8d6c4ea1" fk-column-ref="COL296" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL277" />
+    <column-mapping id="CMP410" populated="true" UUID="1bf9a364-e6d6-4dc9-a85c-c354555ebc27" fk-column-ref="COL295" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL276" />
    </relationship>
-   <relationship id="REL409" populated="true" UUID="d072297d-454b-4495-848f-aa74ea2fde40" deferrability="7" deleteRule="3" fk-table-ref="TAB294" fkCardinality="3" identifying="true" name="생산라인관리_생산실적관리_fk" physicalName="생산라인관리_생산실적관리_fk" pk-table-ref="TAB287" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP410" populated="true" UUID="ef9c3406-210a-462c-a408-4357666f757a" fk-column-ref="COL297" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL289" />
-    <column-mapping id="CMP411" populated="true" UUID="65097a04-71ad-44c0-bd8c-c8232c461594" fk-column-ref="COL295" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL288" />
+   <relationship id="REL411" populated="true" UUID="d072297d-454b-4495-848f-aa74ea2fde40" deferrability="7" deleteRule="3" fk-table-ref="TAB294" fkCardinality="3" identifying="true" name="생산라인관리_생산실적관리_fk" physicalName="생산라인관리_생산실적관리_fk" pk-table-ref="TAB287" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP412" populated="true" UUID="ef9c3406-210a-462c-a408-4357666f757a" fk-column-ref="COL297" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL289" />
+    <column-mapping id="CMP413" populated="true" UUID="65097a04-71ad-44c0-bd8c-c8232c461594" fk-column-ref="COL295" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL288" />
    </relationship>
-   <relationship id="REL412" populated="true" UUID="ce4aa2d2-0e6c-4dfd-acb2-6ff1075521c0" deferrability="7" deleteRule="3" fk-table-ref="TAB322" fkCardinality="7" identifying="true" name="완제품 출하_상세_재고출하매칭테이블_fk" physicalName="완제품_출하_상세_재고출하매칭테이블_fk" pk-table-ref="TAB311" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP413" populated="true" UUID="fddc346a-aa39-4366-a183-a82d88cd551b" fk-column-ref="COL325" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL313" />
-    <column-mapping id="CMP414" populated="true" UUID="05826d27-17da-44d5-b313-3089d5d3cfd5" fk-column-ref="COL324" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL314" />
-    <column-mapping id="CMP415" populated="true" UUID="653a2c38-75ad-42de-97de-5ce85d2df9f5" fk-column-ref="COL323" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL312" />
+   <relationship id="REL414" populated="true" UUID="ce4aa2d2-0e6c-4dfd-acb2-6ff1075521c0" deferrability="7" deleteRule="3" fk-table-ref="TAB322" fkCardinality="7" identifying="true" name="완제품 출하_상세_재고출하매칭테이블_fk" physicalName="완제품 출하_상세_재고출하매칭테이블_fk" pk-table-ref="TAB311" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP415" populated="true" UUID="fddc346a-aa39-4366-a183-a82d88cd551b" fk-column-ref="COL325" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL313" />
+    <column-mapping id="CMP416" populated="true" UUID="05826d27-17da-44d5-b313-3089d5d3cfd5" fk-column-ref="COL324" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL314" />
+    <column-mapping id="CMP417" populated="true" UUID="653a2c38-75ad-42de-97de-5ce85d2df9f5" fk-column-ref="COL323" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL312" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.9999999999999996" viewportX="25" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.9999999999999996" viewportX="895" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="false" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="126" y="1336" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB10" x="140" y="1988" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB19" x="142" y="2128" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -1363,13 +1369,13 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB361" x="1516" y="232" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB375" x="113" y="406" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB382" x="1523" y="54" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB389" x="425" y="568" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-link relationship-ref="REL397" pkConnection="0.4496124031007752" fkConnection="0.49429657794676807" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
-  <table-link relationship-ref="REL400" pkConnection="0.52" fkConnection="0.4533333333333333" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL406" pkConnection="0.6518518518518519" fkConnection="0.5111111111111111" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL409" pkConnection="0.7" fkConnection="0.3111111111111111" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL403" pkConnection="0.5733333333333334" fkConnection="0.43333333333333335" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL412" pkConnection="0.49523809523809526" fkConnection="0.49523809523809526" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-pane table-ref="TAB391" x="425" y="568" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL399" pkConnection="0.4496124031007752" fkConnection="0.49429657794676807" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL402" pkConnection="0.52" fkConnection="0.4533333333333333" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL408" pkConnection="0.6518518518518519" fkConnection="0.5111111111111111" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL411" pkConnection="0.7" fkConnection="0.3111111111111111" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL405" pkConnection="0.5733333333333334" fkConnection="0.43333333333333335" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL414" pkConnection="0.49523809523809526" fkConnection="0.49523809523809526" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
