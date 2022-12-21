@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
 
 import dao.ProductDao;
 import mes.frame.database.JDBCConnectionPool;
@@ -70,10 +71,10 @@ public class OrderService {
 		return order;
 	}
 	
-	public boolean insert(Order order) {
+	public boolean insert(Order order, JSONArray param) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return orderDao.insert(conn, order);
+			return orderDao.insert(conn, order, param);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

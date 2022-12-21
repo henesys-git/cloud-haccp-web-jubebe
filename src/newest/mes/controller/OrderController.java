@@ -12,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import dao.ProductDaoImpl;
+import mes.client.util.OrderNumberGeneratorForCloudMES;
 import model.Product;
 import newest.mes.dao.OrderDaoImpl;
 import newest.mes.model.Order;
@@ -89,14 +93,34 @@ public class OrderController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		Order order = new Order();
+		JSONParser parser = new JSONParser();  
+		JSONObject json;
+		JSONArray jsonArray;
 		
-		OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
-		Boolean inserted = orderService.insert(order);
+		String orderDate = req.getParameter("orderDate");
+		String custCode = req.getParameter("custCode");
+		String orderData = req.getParameter("orderData");
 		
-		res.setContentType("html/text; charset=UTF-8");
+		OrderNumberGeneratorForCloudMES generator = new OrderNumberGeneratorForCloudMES();
+		
+		String orderNo = generator.generateOdrNum();
+		
 		
 		try {
+			json = (JSONObject) parser.parse(orderData);
+			
+			JSONArray param = (JSONArray) json.get("param");
+			
+			Order order = new Order();
+			order.setOrderNo(orderNo);
+			order.setOrderDate(orderDate);
+			order.setCustomerCode(custCode);
+			
+			OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
+			Boolean inserted = orderService.insert(order, param);
+			
+			res.setContentType("html/text; charset=UTF-8");
+			
 			PrintWriter out = res.getWriter();
 			out.print(inserted.toString());
 		} catch(Exception e) {
