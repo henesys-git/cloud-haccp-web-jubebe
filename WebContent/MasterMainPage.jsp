@@ -606,6 +606,7 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/limit.js"></script>
 	<!-- MES -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/order.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productStorage.js"></script>
 	<!-- raw material -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/rawmaterial.js"></script>
 	<!-- customer -->
