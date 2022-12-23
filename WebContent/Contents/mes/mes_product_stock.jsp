@@ -151,6 +151,7 @@
                 	productStockNo: row.productStockNo,
                 	productId: row.productId,
                 	productName: row.productName,
+                	ioAmt: row.ioAmt,
                 	ipgoOnly: "N"
                 },
                 success: function (html) {
