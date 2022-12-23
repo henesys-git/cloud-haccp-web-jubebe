@@ -8,18 +8,23 @@
 <script type="text/javascript">
     
 	var dataJspPage = {};
-    
+	var order_table_info;
+	var order_table_RowCount = 0;
+	var orderTable;  //주문정보 테이블
+	
 	$(document).ready(function () {
 		
 		let date = new SetSingleDate2("", "#order_date", 0);
-		let mainTable;
-		let subTable;
+		let mainTable; //메인테이블
+		let subTable;  //서브테이블
+		let customerTable; //팝업 고객사정보 테이블
 		let mainTableSelectedRow;
+		let customerTableSelectedRow;
 		
 	    async function initTable() {
 	    	var orders = new Order();
 	    	var ordersList = await orders.getOrders();
-	    	
+	    	console.log(ordersList);
 		    var customOpts = {
 					data : ordersList,
 					pageLength: 10,
@@ -84,43 +89,97 @@
     		if(subTable) {
 	    		subTable.clear().draw();
 	    	}
+    		
 		}
 	    
 	    var initModal = function () {
 	    	$('#product-id').prop('disabled', false);
 	    	$('#product-id').val('');
 	    	$('#product-name').val('');
+	    	
+	    	orderTable.clear().draw();
+	    	orderTable.columns.adjust().draw();
 	    };
 	     
 		initTable();
+		initOrderTable();
 		
 		// 등록
 		$('#insert').click(function() {
 			initModal();
 			
+			
+			
 			$('#myModal').modal('show');
-			$('.modal-title').text('등록');
+			$('.modal-title').text('주문정보등록');
 			
 			$('#save').off().click(function() {
-				var id = $('#product-id').val();
-				var name = $('#product-name').val();
+				var orderDate = $('#order_date').val();
+				var custCode = $('#customer_code').val();
 				
-				if(id === '') {
-					alert('제품아이디를 입력해주세요');
+				var jArray = new Array();
+				
+				if(orderDate === '') {
+					alert('주문일자를 선택해주세요');
 					return false;
 				}
-				if(name === '') {
-					alert('제품명을 입력해주세요');
+				if(custCode === '') {
+					alert('고객사 정보를 선택해주세요');
 					return false;
 				}
 				
+				order_table_info = orderTable.page.info();
+			    order_table_RowCount = order_table_info.recordsTotal;
+				console.log(order_table_RowCount);
+				
+				for(var i = 0; i < order_table_RowCount; i++) {
+		        	
+		    		var trInput = $($("#order_input_table_tbody tr")[i]).find(":input");
+		    		
+		    		console.log(trInput.eq(0).val());
+		    		console.log(trInput.eq(1).val());
+		    		console.log(trInput.eq(2).val());
+		    		console.log(trInput.eq(3).val());
+		    		
+		    		if(trInput.eq(2).val() == '') { 
+		    			heneSwal.warning("제품을 검색하여 선택하세요");
+		    			return false;
+		    		}
+		    		if(trInput.eq(3).val() == '') {
+		    			
+		    			heneSwal.warning("주문할 수량을 입력하여 주세요");
+		    			return false;
+		    		}
+		    		
+		    		var dataJson = new Object();
+		    		
+		    		dataJson.product_id 	= trInput.eq(2).val();
+		    		dataJson.order_count 	= trInput.eq(3).val();
+					
+					jArray.push(dataJson);
+		        }
+				
+				var dataJsonMulti = new Object();
+				dataJsonMulti.param = jArray;
+				
+				console.log(orderDate);
+				console.log(custCode);
+				console.log(dataJsonMulti);
+				
+				var JSONparam = JSON.stringify(dataJsonMulti);
+				
+				var check = confirm('주문정보를 등록하시겠습니까?');
+				
+				if(check) {
+					
 				$.ajax({
 		            type: "POST",
 		            url: "<%=Config.this_SERVER_path%>/mes-order",
 		            data: {
 		            	"type" : "insert",
-		            	"id" : id, 
-		            	"name" : name 
+		            	"orderDate" : orderDate, 
+		            	"custCode" : custCode,
+		            	"orderData" : JSONparam
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
@@ -132,6 +191,9 @@
 		            	}
 		            }
 		        });
+				
+				}
+				
 			});
 		});
 
@@ -215,8 +277,211 @@
             }
     		
     	});
+		
+		$('#customer_name').click(function() {
+			
+			$('#myModal2').modal('show');
+			$('.modal-title2').text('고객사 정보 조회');
+			
+			initCustomerTable();
+			
+			$('#customerTable tbody').on('click', 'tr', function () {
+	    		
+				if ( !$(this).hasClass('selected') ) {
+	    			customerTableSelectedRow = customerTable.row( this ).data();
+	    			
+	    			$('#customer_name').val(customerTableSelectedRow.customerName);
+	    			$('#customer_code').val(customerTableSelectedRow.customerId);
+	    			
+	    			$('#myModal2').modal('hide');
+	            }
+				
+				
+	    		
+	    	});
+			
+		});
+		
+		
+		// 고객사 팝업 테이블 초기화
+		 async function initCustomerTable() {
+		    	var customers = new Customer();
+		    	var customersList = await customers.getCustomers();
+		    	
+			    var customOpts = {
+						data : customersList,
+						pageLength: 10,
+						columns: [
+							{ data: "customerId", defaultContent: '' },
+							{ data: "customerName", defaultContent: '' }
+				        ],
+				        columnDefs : [
+				        	{
+					  			targets: [0],
+					  			'createdCell' : function(td, cellData, rowData, rowinx, col) {
+									$(td).attr('style', 'display:none;');
+								}
+					  		}
+					    ]
+				}
+						
+			    customerTable = $('#customerTable').DataTable(
+					mergeOptions(heneMainTableOpts, customOpts)
+				);
+		 }
+		
+		 $("#btn_plus").click(function(){ 
+		    	fn_plus_body();
+		 }); 	
+		
+		 $("#btn_mius").click(function(){ 
+		    	fn_minus_body(); 
+		 }); 
+		 
+		 
+		// 하단 주문정보 추가 팝업 테이블 초기화
+		 async function initOrderTable() {
+		    	
+			 var customOpts = {
+			   	   		paging : false,
+			   	    	searching : false,
+			   	    	ordering : false,
+			   	    	keys : false,
+			   	    	autoWidth : false,
+			   	    	createdRow : "",
+			   	    	columnDefs : [
+							{ "className": "dt-head-center", "targets": "_all" },
+							{ "width": "10%", "targets": 0 }
+						]
+			    	};
+						
+				orderTable = $('#order_input_table').DataTable(
+					mergeOptions(heneMainTableOpts, customOpts)
+				);
+				
+		 }
+		
+		//주문정보 테이블 행 추가
+		 function fn_plus_body() {
+			
+				// 주문 품목 추가때마다 순번 매기기
+		        order_table_info = orderTable.page.info();
+		        order_table_RowCount = order_table_info.recordsTotal;	
+				
+		        console.log(order_table_RowCount);
+		        
+		    	orderTable.row.add([
+		    		" <input type='text' class='form-control' id='txt_detail_seq'readonly />",
+		    		" <input type='text' class='form-control prodAdd' id='txt_ProductName"+order_table_RowCount+"' readonly placeholder='Click here' onclick='prodAdd(this);'/>"+
+		    		" <input type='hidden' class='form-control' id='txt_ProductCode"+order_table_RowCount+"'/>",
+		    		//" <input type='text' class='form-control' id='txt_Productcode' readonly />",
+					" <input type='number' class='form-control' id='txt_order_count"+order_table_RowCount+"' min='1' max='9999'/>",
+		    		"<button class='btn btn-info btn-sm' onclick = 'fn_minus_body();'>"+
+					"<i class='fas fa-minus'></i>" +
+					"</button>"
+		        ]).draw();
+		    	
+			    // 숫자만
+			    $("input:text[numberOnly]").on("keyup", function() {
+			        $(this).val($(this).val().replace(/[^0-9]/g,""));
+			    });
+			    
+			    // 주문 품목 추가때마다 순번 매기기
+		        order_table_info = orderTable.page.info();
+		        order_table_RowCount = order_table_info.recordsTotal;
+		        
+				var trInput = $($("#order_input_table_tbody tr")[order_table_RowCount - 1]).find(":input");
+				trInput.eq(0).val(order_table_RowCount);
+		 }
+		
+		// 제품정보 팝업 테이블 초기화
+		 async function initProductTable() {
+		    	var products = new Product();
+		    	var productsList = await products.getProducts();
+		    	
+			    var customOpts = {
+						data : productsList,
+						pageLength: 10,
+						columns: [
+							{ data: "productId", defaultContent: '' },
+							{ data: "productName", defaultContent: '' }
+				        ],
+				        columnDefs : [
+				        	{
+					  			targets: [0],
+					  			'createdCell' : function(td, cellData, rowData, rowinx, col) {
+									$(td).attr('style', 'display:none;');
+								}
+					  		}
+					    ]
+				}
+						
+			    productTable = $('#productTable').DataTable(
+					mergeOptions(heneMainTableOpts, customOpts)
+				);
+		 }
+		
+		//주문정보 테이블 제품명 클릭시
+		 $('input[name=prodAdd]').on("click", function() {
+				
+			 	var trNum = $(this).closest('tr').prevAll().length;
+			 	console.log(trNum);
+			 
+				$('#myModal3').modal('show');
+				$('.modal-title3').text('제품 정보 조회');
+				
+				initProductTable();
+				
+				
+				$('#productTable tbody').on('click', 'tr', function () {
+		    		
+					if ( !$(this).hasClass('selected') ) {
+		    			productTableSelectedRow = productTable.row( this ).data();
+		    			
+		    			$('#txt_ProductName' + trNum).val(productTableSelectedRow.productName);
+		    			$('#txt_ProductCode' + trNum).val(prodcutTableSelectedRow.productId);
+		    			
+		    			$('#myModal3').modal('hide');
+		            }
+					
+		    	});
+				
+			});
+		
+		 setTimeout(function(){
+		 	$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+		 }, 1000);
     });
-    
+	
+	//주문정보 테이블 행 제거
+	 function fn_minus_body() {
+	    	
+	        orderTable.row(order_table_RowCount - 1).remove().draw();
+
+	        order_table_info = orderTable.page.info();
+	        order_table_RowCount = order_table_info.recordsTotal;
+	 }
+	
+	//제품명 input 클릭시
+	 function prodAdd(obj) {
+			
+			var trNum = $(obj).closest('tr').prevAll().length;
+		 	console.log(trNum);
+		 
+		 	$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/mes/mes_order_popup.jsp',
+                data: {
+                	trNum: trNum,
+                },
+                success: function (html) {
+                    $("#modalWrapper").html(html);
+                }
+            });
+			
+		}
+	
+	
 </script>
 
 <!-- Content Header (Page header) -->
@@ -331,14 +596,13 @@
 	            			<!-- <button id="btn_mius" class="btn btn-info btn-sm">
 						<i class="fas fa-minus"></i>
 					</button> -->
-				</th>
-			</tr>
-		</thead>
-		<tbody id="order_tbody">
-		</tbody>
-	</table>
-</div>
-		
+						</th>
+					</tr>
+				</thead>
+				<tbody id="order_input_table_tbody">
+				</tbody>
+			</table>
+		</div>
       </div> 
       <div class="modal-footer">  
         <button type="button" class="btn btn-primary" id="save">저장</button>  
@@ -348,3 +612,32 @@
       
   </div>  
 </div>
+
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"  aria-hidden="true">
+    	<div class="modal-dialog modal-dialog-scrollable">
+    		<div class="modal-content">
+        		<div class="modal-header">
+        			<h4 class="modal-title2"></h4>
+          		</div>
+          		<div class="modal-body">
+          			<table class='table table-bordered nowrap table-hover' 
+				   	id="customerTable" style="width:100%">
+					<thead>
+						<tr>
+					    	<th style = "display:none; width:0%;">고객사코드</th>
+					    	<th>고객사명</th>
+						</tr>
+					</thead>
+					<tbody id="customerTableBody">		
+					</tbody>
+			</table>
+        		</div>
+		        <div class="modal-footer">
+        			 <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+		        </div>
+        	</div>
+      	</div>
+ </div>
+ 
+<div id = "modalWrapper"></div>
