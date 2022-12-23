@@ -5,24 +5,24 @@
 <%@ page import="mes.frame.util.*" %>
 
 <!-- 
-완제품 재고 관리
+원부재료 재고 관리
  -->
 <%
-	String productStockNo = "";
-	String productId = "";
-	String productName = "";
+	String rawmaterialStockNo = "";
+	String rawmaterialId = "";
+	String rawmaterialName = "";
 	String ipgoOnly = "";
 	
-	if(request.getParameter("productStockNo") != null) {
-		productStockNo = request.getParameter("productStockNo");
+	if(request.getParameter("rawmaterialStockNo") != null) {
+		rawmaterialStockNo = request.getParameter("rawmaterialStockNo");
 	}
 
-	if(request.getParameter("productId") != null) {
-		productId = request.getParameter("productId");
+	if(request.getParameter("rawmaterialId") != null) {
+		rawmaterialId = request.getParameter("rawmaterialId");
 	}
 
-	if(request.getParameter("productName") != null) {
-		productName = request.getParameter("productName");
+	if(request.getParameter("rawmaterialName") != null) {
+		rawmaterialName = request.getParameter("rawmaterialName");
 	}
 
 	if(request.getParameter("ipgoOnly") != null) {
@@ -48,11 +48,11 @@
         
         <div class="form-group row">
 			<div class="col-sm-3">재고번호</div>
-			<div class="col-sm-9" id="productStockNo"></div>
+			<div class="col-sm-9" id="rawmaterialStockNo"></div>
 		</div>
         <div class="form-group row">
-			<div class="col-sm-3">완제품명</div>
-			<div class="col-sm-9" id="productName"></div>
+			<div class="col-sm-3">원부재료명</div>
+			<div class="col-sm-9" id="rawmaterialName"></div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-3" id="ipgoChulgoDateText">입고일자</div>
@@ -105,7 +105,7 @@
 	
 	$(document).ready(function () {
 		
-		$('#productName').text('<%=productName%>');
+		$('#rawmaterialName').text('<%=rawmaterialName%>');
 		let ipgoChulgo;
 		
 		$('#ipgoChulgoSelectModal').on('show.bs.modal', function () {
@@ -114,8 +114,8 @@
 			
 			$('#selectIpgo').off().on('click', function() {
 				ipgoChulgo = "ipgo";
-				$('#productStockNo').text('<%=productStockNo%>');
-				$('#ipgoChulgoTitle').text('완제품 입고');
+				$('#rawmaterialStockNo').text('<%=rawmaterialStockNo%>');
+				$('#ipgoChulgoTitle').text('원부재료 입고');
 				$('#ipgoChulgoText').text('입고수량');
 				$('#ipgoChulgoDateText').text('입고일자');
 				$('#ipgoChulgoSelectModal').modal('hide');
@@ -124,8 +124,8 @@
 			
 			$('#selectChulgo').off().on('click', function() {
 				ipgoChulgo = "chulgo";
-				$('#productStockNo').text('<%=productStockNo%>');
-				$('#ipgoChulgoTitle').text('완제품 출고');
+				$('#rawmaterialStockNo').text('<%=rawmaterialStockNo%>');
+				$('#ipgoChulgoTitle').text('원부재료 출고');
 				$('#ipgoChulgoText').text('출고수량');
 				$('#ipgoChulgoDateText').text('출고일자');
 				$('#ipgoChulgoSelectModal').modal('hide');
@@ -136,8 +136,8 @@
 		if('<%=ipgoOnly%>' == 'Y') {
 			ipgoChulgo = "ipgo";
 			$('#ipgoChulgoDate').datepicker("setDate", new Date());
-			$('#productStockNo').text('자동 생성');
-			$('#ipgoChulgoTitle').text('완제품 입고');
+			$('#rawmaterialStockNo').text('자동 생성');
+			$('#ipgoChulgoTitle').text('원부재료 입고');
 			$('#ipgoChulgoText').text('입고수량');
 			$('#ipgoChulgoDateText').text('입고일자');
 			$('#ipgoChulgoMainModal').modal('show');
@@ -152,11 +152,11 @@
 			}
 			
 			let obj = {};
-			obj.productId = "<%=productId%>";
+			obj.rawmaterialId = "<%=rawmaterialId%>";
 			obj.ioDatetime = $('#ipgoChulgoDate').val()
 							+ " " 
 							+ new HeneDate().getTime();
-			obj.productStockNo = "<%=productStockNo%>";
+			obj.rawmaterialStockNo = "<%=rawmaterialStockNo%>";
 			
 			if(ipgoChulgo == 'chulgo') {
 				obj.ioAmt = Number( $('#ioAmt').val() ) * -1;
@@ -164,15 +164,15 @@
 				obj.ioAmt = Number( $('#ioAmt').val() );
 			}
 			
-			var productStorage = new ProductStorage();
-			var result = await productStorage.ipgoChulgo(obj);
+			var rawmaterialStorage = new RawmaterialStorage();
+			var result = await rawmaterialStorage.ipgoChulgo(obj);
 			
 			if(result) {
-				alert('완제품 입출고 완료되었습니다.');
+				alert('원부재료 입출고 완료되었습니다.');
 				$('#ipgoChulgoMainModal').modal('hide');
-				productStockJspPage.fillSubTable("<%=productId%>");
+				rawmaterialStockJspPage.fillSubTable("<%=rawmaterialId%>");
 			} else {
-				alert('완제품 입출고 실패, 관리자에게 문의해주세요.');
+				alert('원부재료 입출고 실패, 관리자에게 문의해주세요.');
 			}
 		});
 		

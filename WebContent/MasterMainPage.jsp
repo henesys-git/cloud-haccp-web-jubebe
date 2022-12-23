@@ -607,6 +607,7 @@
 	<!-- MES -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/order.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productStorage.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/rawmaterialStorage.js"></script>
 	<!-- raw material -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/rawmaterial.js"></script>
 	<!-- customer -->

@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 
-	var productStockJspPage = {};
+	var rawmaterialStockJspPage = {};
     var dataLength;
     
 	$(document).ready(function () {
@@ -17,8 +17,8 @@
 		let mainTableSelectedRow;
 	    
 	    async function initTable() {
-	    	var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByProductId();
+	    	var rawmaterialStorage = new RawmaterialStorage();
+	    	var stocks = await rawmaterialStorage.getStockGroupByRawmaterialId();
 
 	    	//TODO: 삭제?
 	    	dataLength = stocks.length;
@@ -27,8 +27,8 @@
 					data : stocks,
 					pageLength: 10,
 					columns: [
-						{ data: "productId", defaultContent: '' },
-						{ data: "productName", defaultContent: '' },
+						{ data: "rawmaterialId", defaultContent: '' },
+						{ data: "rawmaterialName", defaultContent: '' },
 						{ data: "ioAmt", defaultContent: '' }
 			        ]
 			}
@@ -38,9 +38,9 @@
 			);
 	    }
 	    
-	    productStockJspPage.fillSubTable = async function (productId) {
-	    	var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByStockNo(productId);
+	    rawmaterialStockJspPage.fillSubTable = async function (rawmaterialId) {
+	    	var rawmaterialStorage = new RawmaterialStorage();
+	    	var stocks = await rawmaterialStorage.getStockGroupByStockNo(rawmaterialId);
 	    	
 	    	if(subTable) {
 	    		// redraw
@@ -51,25 +51,23 @@
 						data : stocks,
 						pageLength: 10,
 						columns: [
-							{ data: "productStockNo", defaultContent: '' },
-							{ data: "productId", defaultContent: '' },
-							{ data: "productName", defaultContent: '' },
+							{ data: "rawmaterialStockNo", defaultContent: '' },
+							{ data: "rawmaterialId", defaultContent: '' },
+							{ data: "rawmaterialName", defaultContent: '' },
 							{ data: "ioAmt", defaultContent: '' },
-							{ data: "lotno", defaultContent: '' },
-							{ data: "expirationDate", defaultContent: '' },
 							{ data: "storageName", defaultContent: '' },
 							{ data: "stockManage", defaultContent: '' },
 							{ data: "history", defaultContent: '' }
 				        ],
 				        columnDefs : [
 				   			{
-					  			targets: [7],
+					  			targets: [5],
 					  			render: function(td, cellData, rowData, row, col){
 			  						return `<button class='btn btn-success stock-btn'>재고입출고</button>`;
 					  			}
 					  		},
 				   			{
-					  			targets: [8],
+					  			targets: [6],
 					  			render: function(td, cellData, rowData, row, col){
 			  						return `<button class='btn btn-success history-btn'>조회</button>`;
 					  			}
@@ -86,8 +84,8 @@
 		initTable();
 		
 		async function refreshMainTable() {
-			var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByProductId();
+			var rawmaterialStorage = new RawmaterialStorage();
+	    	var stocks = await rawmaterialStorage.getStockGroupByRawmaterialId();
 
 			mainTable.clear().rows.add(stocks).draw();
 			dataLength = newData.length;
@@ -101,7 +99,7 @@
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			productStockJspPage.fillSubTable(mainTableSelectedRow.productId);
+    			rawmaterialStockJspPage.fillSubTable(mainTableSelectedRow.rawmaterialId);
             }
     	});
     	
@@ -116,10 +114,10 @@
 			
 			$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_manage.jsp',
+                url: heneServerPath + '/Contents/mes/mes_rawmaterial_stock_manage.jsp',
                 data: {
-                	productId: row[0].productId,
-                	productName: row[0].productName,
+                	rawmaterialId: row[0].rawmaterialId,
+                	rawmaterialName: row[0].rawmaterialName,
                 	ipgoOnly: "Y"
                 },
                 success: function (html) {
@@ -146,11 +144,11 @@
     		
 	    	$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_manage.jsp',
+                url: heneServerPath + '/Contents/mes/mes_rawmaterial_stock_manage.jsp',
                 data: {
-                	productStockNo: row.productStockNo,
-                	productId: row.productId,
-                	productName: row.productName,
+                	rawmaterialStockNo: row.rawmaterialStockNo,
+                	rawmaterialId: row.rawmaterialId,
+                	rawmaterialName: row.rawmaterialName,
                 	ipgoOnly: "N"
                 },
                 success: function (html) {
@@ -167,9 +165,9 @@
     		
 	    	$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_history.jsp',
+                url: heneServerPath + '/Contents/mes/mes_rawmaterial_stock_history.jsp',
                 data: {
-                	productStockNo: row.productStockNo
+                	rawmaterialStockNo: row.rawmaterialStockNo
                 },
                 success: function (html) {
                     $("#modalWrapper").html(html);
@@ -185,7 +183,7 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-6">
 	        	<h1 class="m-0 text-dark">
-	        		완제품 관리
+	        		원부재료 관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-sm-6">
@@ -210,7 +208,7 @@
        		<div class="col-md-12">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		완제품 재고
+	          		원부재료 재고
 	          	</h3> 
 	        </div>
           </div>
@@ -219,8 +217,8 @@
 				   id="mainTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>완제품아이디</th>
-					    <th>완제품명</th>
+					    <th>원부재료아이디</th>
+					    <th>원부재료명</th>
 					    <th>현재재고</th>
 					</tr>
 				</thead>
@@ -235,11 +233,9 @@
 				<thead>
 					<tr>
 					    <th>재고번호</th>
-					    <th>완제품아이디</th>
-					    <th>완제품명</th>
+					    <th>원부재료아이디</th>
+					    <th>원부재료명</th>
 					    <th>재고</th>
-					    <th>LOT번호</th>
-					    <th>유통기한</th>
 					    <th>저장창고</th>
 					    <th>재고관리</th>
 					    <th>이력</th>

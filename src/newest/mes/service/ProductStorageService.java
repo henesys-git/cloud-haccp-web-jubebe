@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import mes.frame.database.JDBCConnectionPool;
 import newest.mes.dao.ProductStorageDao;
 import newest.mes.model.ProductStorage;
-import utils.ProductStockNoGenerator;
+import utils.StockNoGenerator;
 
 public class ProductStorageService {
 
@@ -75,7 +75,7 @@ public class ProductStorageService {
 		try {
 			ProductStorage storage = new ProductStorage();
 			if(productStockNo.equals("")) {
-				storage.setProductStockNo(ProductStockNoGenerator.generate());
+				storage.setProductStockNo(StockNoGenerator.generate());
 			} else {
 				storage.setProductStockNo(productStockNo);
 			}
