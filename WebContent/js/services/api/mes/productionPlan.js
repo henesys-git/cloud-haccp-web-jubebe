@@ -2,9 +2,9 @@
  * 
  */
  
-Order = function () {}
+ProductionPlan = function () {}
 
-Order.prototype.getOrderById = function () {
+ProductionPlan.prototype.getOrderById = function () {
  	var order = $.ajax({
         type: "GET",
         url: heneServerPath + "/mes-order",
@@ -16,32 +16,19 @@ Order.prototype.getOrderById = function () {
 	return order;
 }
 
-Order.prototype.getOrders = function () {
- 	var orders = $.ajax({
+ProductionPlan.prototype.getProductionPlans = function () {
+ 	var plans = $.ajax({
         type: "GET",
-        url: heneServerPath + "/mes-order?id=all",
+        url: heneServerPath + "/mes-productionPlan?id=all",
         success: function (result) {
         	return result;
         }
 	});
     
-	return orders;
+	return plans;
 }
 
-Order.prototype.getOrderInfos = function () {
- 	var orders = $.ajax({
-        type: "GET",
-        url: heneServerPath + "/mes-order?id=info",
-        success: function (result) {
-        	return result;
-        }
-	});
-    
-	return orders;
-}
-
-
-Order.prototype.getOrderDetails = function (orderNo) {
+ProductionPlan.prototype.getOrderDetails = function (orderNo) {
  	var orders = $.ajax({
         type: "GET",
         url: heneServerPath + "/mes-order?id=detail" + "&orderNo=" + orderNo,

@@ -8,6 +8,8 @@ public class Order {
 	private String productId;
 	private String orderCount;
 	private String chulhaYn;
+	private String customerName;
+	private String productName;
 	
 	public Order() {}
 	
@@ -66,6 +68,23 @@ public class Order {
 	public void setChulhaYn(String chulhaYn) {
 		this.chulhaYn = chulhaYn;
 	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	
 	
 	
 }

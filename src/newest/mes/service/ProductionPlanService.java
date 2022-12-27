@@ -10,65 +10,37 @@ import dao.ProductDao;
 import mes.frame.database.JDBCConnectionPool;
 import model.Product;
 import newest.mes.dao.OrderDao;
+import newest.mes.dao.ProductionPlanDao;
 import newest.mes.model.Order;
+import newest.mes.model.ProductionPlan;
 import viewmodel.ProductViewModel;
 
-public class OrderService {
+public class ProductionPlanService {
 
-	private OrderDao orderDao;
+	private ProductionPlanDao planDao;
 	private String bizNo;
 	private Connection conn;
 	
-	static final Logger logger = Logger.getLogger(OrderService.class.getName());
+	static final Logger logger = Logger.getLogger(ProductionPlanService.class.getName());
 
-	public OrderService(OrderDao orderDao, String bizNo) {
-		this.orderDao = orderDao;
+	public ProductionPlanService(ProductionPlanDao planDao, String bizNo) {
+		this.planDao = planDao;
 		this.bizNo = bizNo;
 	}
 	
-	public List<Order> getAllOrders() {
-		List<Order> orderList = null;
+	public List<ProductionPlan> getAllPlans() {
+		List<ProductionPlan> planList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			orderList = orderDao.getAllOrders(conn);
+			planList = planDao.getAllPlans(conn);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return orderList;
-	}
-	
-	public List<Order> getOrderDetails(String orderNo) {
-		List<Order> orderList = null;
-		
-		try {
-			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			orderList = orderDao.getOrderDetails(conn, orderNo);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		} finally {
-		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
-		}
-		
-		return orderList;
-	}
-	
-	public List<Order> getOrderInfos() {
-		List<Order> orderList = null;
-		
-		try {
-			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			orderList = orderDao.getOrderInfos(conn);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		} finally {
-		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
-		}
-		
-		return orderList;
+		return planList;
 	}
 	
 	public Order getOrderById(String id) {
@@ -76,7 +48,7 @@ public class OrderService {
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			order = orderDao.getOrder(conn, id);
+			order = planDao.getOrder(conn, id);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -86,10 +58,10 @@ public class OrderService {
 		return order;
 	}
 	
-	public boolean insert(Order order, JSONArray param) {
+	public boolean insert(ProductionPlan plan) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return orderDao.insert(conn, order, param);
+			return planDao.insert(conn, plan);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -99,10 +71,10 @@ public class OrderService {
 		return false;
 	}
 	
-	public boolean update(Order order) {
+	public boolean update(ProductionPlan plan) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return orderDao.update(conn, order);
+			return planDao.update(conn, plan);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -112,10 +84,10 @@ public class OrderService {
 		return false;
 	}
 	
-	public boolean delete(String orderNo) {
+	public boolean delete(String planNo) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return orderDao.delete(conn, orderNo);
+			return planDao.delete(conn, planNo);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

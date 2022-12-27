@@ -10,6 +10,7 @@ import newest.mes.model.Order;
 public interface OrderDao {
 	public List<Order> getAllOrders(Connection conn);
 	public List<Order> getOrderDetails(Connection conn, String orderNo);
+	public List<Order> getOrderInfos(Connection conn);
 	public Order getOrder(Connection conn, String id);
 	public boolean insert(Connection conn, Order order, JSONArray param);
 	public boolean update(Connection conn, Order order);

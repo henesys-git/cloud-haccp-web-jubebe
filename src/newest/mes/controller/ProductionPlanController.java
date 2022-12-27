@@ -20,15 +20,18 @@ import dao.ProductDaoImpl;
 import mes.client.util.NumberGeneratorForCloudMES;
 import model.Product;
 import newest.mes.dao.OrderDaoImpl;
+import newest.mes.dao.ProductionPlanDaoImpl;
 import newest.mes.model.Order;
+import newest.mes.model.ProductionPlan;
 import newest.mes.service.OrderService;
+import newest.mes.service.ProductionPlanService;
 import service.ProductService;
 import utils.FormatTransformer;
 import viewmodel.ProductViewModel;
 
 
-@WebServlet("/mes-order")
-public class OrderController extends HttpServlet {
+@WebServlet("/mes-productionPlan")
+public class ProductionPlanController extends HttpServlet {
 	
 	/**
 	 * 
@@ -36,7 +39,7 @@ public class OrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	static final Logger logger = 
-			Logger.getLogger(OrderController.class.getName());
+			Logger.getLogger(ProductionPlanController.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
@@ -48,26 +51,18 @@ public class OrderController extends HttpServlet {
 		}
 		
 		String id = req.getParameter("id");
-		String orderNo = req.getParameter("orderNo");
+		String planNo = req.getParameter("planNo");
 		
-		OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
+		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
 		
 		String result = "";
 		
 		if(id.equals("all")) {
-			List<Order> list = orderService.getAllOrders();
+			List<ProductionPlan> list = planService.getAllPlans();
 			result = FormatTransformer.toJson(list);
 		}
-		else if(id.equals("detail")) {
-			List<Order> list = orderService.getOrderDetails(orderNo);
-			result = FormatTransformer.toJson(list);
-		}
-		else if(id.equals("info")) {
-			List<Order> list = orderService.getOrderInfos();
-			result = FormatTransformer.toJson(list);
-		} 
 		else {
-			Order order = orderService.getOrderById(id);
+			Order order = planService.getOrderById(id);
 			result = FormatTransformer.toJson(order);
 		}
 		
@@ -97,31 +92,28 @@ public class OrderController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		JSONParser parser = new JSONParser();  
-		JSONObject json;
-		JSONArray jsonArray;
-		
-		String orderDate = req.getParameter("orderDate");
-		String custCode = req.getParameter("custCode");
-		String orderData = req.getParameter("orderData");
+		String planDate = req.getParameter("planDate");
+		String custCode = req.getParameter("customerCode");
+		String productId = req.getParameter("productId");
+		String orderNo = req.getParameter("orderNo");
+		String planCount = req.getParameter("planCount");
 		
 		NumberGeneratorForCloudMES generator = new NumberGeneratorForCloudMES();
 		
-		String orderNo = generator.generateOdrNum();
+		String planNo = generator.generatePlanNum();
 		
 		
 		try {
-			json = (JSONObject) parser.parse(orderData);
+			ProductionPlan plan = new ProductionPlan();
+			plan.setOrderNo(orderNo);
+			plan.setPlanNo(planNo);
+			plan.setPlanDate(planDate);
+			plan.setCustomerCode(custCode);
+			plan.setProductId(productId);
+			plan.setPlanCount(planCount);
 			
-			JSONArray param = (JSONArray) json.get("param");
-			
-			Order order = new Order();
-			order.setOrderNo(orderNo);
-			order.setOrderDate(orderDate);
-			order.setCustomerCode(custCode);
-			
-			OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
-			Boolean inserted = orderService.insert(order, param);
+			ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
+			Boolean inserted = planService.insert(plan);
 			
 			res.setContentType("html/text; charset=UTF-8");
 			
@@ -136,10 +128,20 @@ public class OrderController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		Order order = new Order();
+		ProductionPlan plan = new ProductionPlan();
 		
-		OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
-		Boolean updated = orderService.update(order);
+		String planCount = req.getParameter("planCount");
+		String planNo = req.getParameter("planNo");
+		String productId = req.getParameter("productId");
+		String planDate = req.getParameter("planDate");
+		
+		plan.setPlanCount(planCount);
+		plan.setPlanNo(planNo);
+		plan.setProductId(productId);
+		plan.setPlanDate(planDate);
+		
+		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
+		Boolean updated = planService.update(plan);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		
@@ -155,10 +157,10 @@ public class OrderController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		String orderNo = req.getParameter("id");
+		String planNo = req.getParameter("id");
 		
-		OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
-		Boolean deleted = orderService.delete(orderNo);
+		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
+		Boolean deleted = planService.delete(planNo);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		

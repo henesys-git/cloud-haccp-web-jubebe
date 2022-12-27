@@ -31,8 +31,17 @@
 					columns: [
 						{ data: "orderNo", defaultContent: '' },
 						{ data: "orderDate", defaultContent: '' },
-						{ data: "customerCode", defaultContent: '' }
-			        ]
+						{ data: "customerCode", defaultContent: '' },
+						{ data: "customerName", defaultContent: '' }
+			        ],
+			        columnDefs : [
+			        	{
+					  			targets: [2],
+					  			createdCell:  function (td) {
+				          			$(td).attr('style', 'width:0px; display: none;'); 
+				       			}
+				  		}
+				    ]
 			}
 					
 			mainTable = $('#orderTable').DataTable(
@@ -54,12 +63,19 @@
 						pageLength: 10,
 						columns: [
 							{ data: "productId", defaultContent: '' },
+							{ data: "productName", defaultContent: '' },
 							{ data: "orderCount", defaultContent: '' },
 							{ data: "chulhaYn", defaultContent: '' }
 				        ],
 				        columnDefs : [
 				        	{
-					  			targets: [2],
+					  			targets: [0],
+					  			createdCell:  function (td) {
+				          			$(td).attr('style', 'width:0px; display: none;'); 
+				       			}
+				  			},
+				        	{
+					  			targets: [3],
 					  			render: function(td, cellData, rowData, row, col){
 					  				console.log(cellData);
 					  				if (rowData.chulhaYn == 'Y') {
@@ -530,7 +546,8 @@
 					<tr>
 					    <th>주문번호</th>
 					    <th>주문일자</th>
-					    <th>고객사</th>
+					    <th style = 'display:none; width:0px;'>고객사</th>
+					    <th>고객사명</th>
 					</tr>
 				</thead>
 				<tbody id="orderTableBody">		
@@ -543,7 +560,8 @@
 				   id="orderTableDetail" style="width:100%">
 				<thead>
 					<tr>
-					    <th>제품아이디</th>
+						<th style = 'display:none; width:0px;'>제품아이디</th>
+					    <th>제품명</th>
 					    <th>주문수량</th>
 					    <th>출하여부</th>
 					</tr>

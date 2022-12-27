@@ -35,9 +35,15 @@ public class OrderDaoImpl implements OrderDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT * 		\n")
-				.append("FROM mes_order	\n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("SELECT  		\n")
+				.append("A.order_no,  		\n")
+				.append("A.order_date,  		\n")
+				.append("A.customer_code,  		\n")
+				.append("B.customer_name  		\n")
+				.append("FROM mes_order A \n")
+				.append("INNER JOIN mes_product_customer B \n")
+				.append("ON A.customer_code = B.customer_code \n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -70,9 +76,15 @@ public class OrderDaoImpl implements OrderDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT * 		\n")
-				.append("FROM mes_order_detail \n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("SELECT  		\n")
+				.append("A.product_id,  		\n")
+				.append("B.product_name,  		\n")
+				.append("A.order_count,  		\n")
+				.append("A.chulha_yn  		\n")
+				.append("FROM mes_order_detail A\n")
+				.append("INNER JOIN product B \n")
+				.append("ON A.product_id = B.product_id \n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.append("and order_no = '" + orderNo + "'\n")
 				.toString();
 			
@@ -87,6 +99,58 @@ public class OrderDaoImpl implements OrderDao {
 				list.add(data);
 			}
 			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<Order> getOrderInfos(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT 		\n")
+				.append("A.order_no,		\n")
+				.append("A.customer_code,		\n")
+				.append("D.customer_name,		\n")
+				.append("B.product_id,		\n")
+				.append("E.product_name,		\n")
+				.append("B.order_count	\n")
+				.append("FROM mes_order	A\n")
+				.append("INNER JOIN mes_order_detail B\n")
+				.append("ON A.order_no = B.order_no \n")
+				.append("LEFT JOIN mes_production_plan C\n")
+				.append("ON B.order_no = C.order_no \n")
+				.append("AND B.product_id = C.product_id \n")
+				.append("INNER JOIN mes_product_customer D\n")
+				.append("ON A.customer_code = D.customer_code \n")
+				.append("INNER JOIN product E\n")
+				.append("ON B.product_id = E.product_id \n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("AND C.order_yn IS NULL \n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Order> list = new ArrayList<Order>();
+			
+			while(rs.next()) {
+				Order data = extractFromResultInfoSet(rs);
+				list.add(data);
+			}
+			
+			System.out.println(list);
 			return list;
 			
 		} catch (SQLException ex) {
@@ -300,7 +364,7 @@ public class OrderDaoImpl implements OrderDao {
 		order.setOrderNo(rs.getString("order_no"));
 		order.setOrderDate(rs.getString("order_date"));
 		order.setCustomerCode(rs.getString("customer_code"));
-		
+		order.setCustomerName(rs.getString("customer_name"));
 		return order;
 	}
 	
@@ -309,8 +373,23 @@ public class OrderDaoImpl implements OrderDao {
 		Order order = new Order();
 		
 		order.setProductId(rs.getString("product_id"));
+		order.setProductName(rs.getString("product_name"));
 		order.setOrderCount(rs.getString("order_count"));
 		order.setChulhaYn(rs.getString("chulha_yn"));
+		
+		return order;
+	}
+	
+	private Order extractFromResultInfoSet(ResultSet rs) throws SQLException {
+		
+		Order order = new Order();
+		
+		order.setOrderNo(rs.getString("order_no"));
+		order.setCustomerCode(rs.getString("customer_code"));
+		order.setProductId(rs.getString("product_id"));
+		order.setOrderCount(rs.getString("order_count"));
+		order.setCustomerName(rs.getString("customer_name"));
+		order.setProductName(rs.getString("product_name"));
 		
 		return order;
 	}
