@@ -52,3 +52,27 @@ Order.prototype.getOrderDetails = function (orderNo) {
     
 	return orders;
 }
+
+Order.prototype.getOrdersNoChulhaYet = function () {
+ 	var orders = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/mes-order?id=allNoChulhaYet",
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return orders;
+}
+
+Order.prototype.getOrderDetailsNoChulhaYet = function (orderNo) {
+ 	var orders = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/mes-order?id=detailNoChulhaYet" + "&orderNo=" + orderNo,
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return orders;
+}

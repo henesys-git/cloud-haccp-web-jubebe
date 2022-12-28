@@ -149,6 +149,7 @@
                 	rawmaterialStockNo: row.rawmaterialStockNo,
                 	rawmaterialId: row.rawmaterialId,
                 	rawmaterialName: row.rawmaterialName,
+                	ioAmt: row.ioAmt,
                 	ipgoOnly: "N"
                 },
                 success: function (html) {

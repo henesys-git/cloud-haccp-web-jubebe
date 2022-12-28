@@ -8,6 +8,7 @@ import newest.mes.model.ProductStorage;
 public interface ProductStorageDao {
 	public List<ProductStorage> getStockGroupByProductId(Connection conn);
 	public List<ProductStorage> getStockGroupByStockNo(Connection conn, String StockNo);
+	public List<ProductStorage> getStockGroupByStockNoSortByIoDatetime(Connection conn, String StockNo);
 	public List<ProductStorage> getStock(Connection conn, String stockNo);
 	public boolean ipgoChulgo(Connection conn, ProductStorage productStorage);
 	public boolean insert(Connection conn, ProductStorage productStorage);

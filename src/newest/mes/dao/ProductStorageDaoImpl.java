@@ -31,15 +31,15 @@ public class ProductStorageDaoImpl implements ProductStorageDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT								\n")
-				.append("	S.product_id,					\n")
-				.append("	P.product_name,					\n")
-				.append("	SUM(S.io_amt) AS io_amt			\n")
-				.append("FROM mes_product_storage S			\n")
-				.append("INNER JOIN product P				\n")
-				.append("	ON S.product_id = P.product_id	\n")
-				.append("WHERE S.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("GROUP BY S.product_id				\n")
+				.append("SELECT										\n")
+				.append("	P.product_id,							\n")
+				.append("	P.product_name,							\n")
+				.append("	IFNULL(SUM(S.io_amt), 0) AS io_amt		\n")
+				.append("FROM product P								\n")
+				.append("LEFT JOIN mes_product_storage S			\n")
+				.append("	ON P.product_id = S.product_id			\n")
+				.append("WHERE P.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("GROUP BY P.product_id						\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -72,22 +72,73 @@ public class ProductStorageDaoImpl implements ProductStorageDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("SELECT								\n")
-					.append("	S.product_stock_no,				\n")
-					.append("	S.product_id,					\n")
-					.append("	P.product_name,					\n")
-					.append("	SUM(S.io_amt) AS io_amt,		\n")
-					.append("	S.lotno,						\n")
-					.append("	S.expiration_date,				\n")
-					.append("	ST.storage_name					\n")
-					.append("FROM mes_product_storage S			\n")
-					.append("INNER JOIN product P				\n")
-					.append("	ON S.product_id = P.product_id	\n")
-					.append("LEFT JOIN mes_storage ST			\n")
-					.append("	ON ST.storage_no = S.storage_no	\n")
-					.append("WHERE S.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("	AND S.product_id = '" + productId + "'\n")
+					.append("SELECT									\n")
+					.append("	S.product_stock_no,					\n")
+					.append("	P.product_id,						\n")
+					.append("	P.product_name,						\n")
+					.append("	S.io_datetime,						\n")
+					.append("	IFNULL(SUM(S.io_amt), 0) AS io_amt,	\n")
+					.append("	S.lotno,							\n")
+					.append("	S.expiration_date,					\n")
+					.append("	ST.storage_name						\n")
+					.append("FROM product P							\n")
+					.append("LEFT JOIN mes_product_storage S		\n")
+					.append("	ON P.product_id = S.product_id		\n")
+					.append("LEFT JOIN mes_storage ST				\n")
+					.append("	ON ST.storage_no = S.storage_no		\n")
+					.append("WHERE P.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND P.product_id = '" + productId + "'\n")
 					.append("GROUP BY S.product_stock_no		\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ProductStorage> list = new ArrayList<ProductStorage>();
+			
+			while(rs.next()) {
+				ProductStorage data = extractFromResultSet2(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<ProductStorage> getStockGroupByStockNoSortByIoDatetime(Connection conn, String productId) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("SELECT									\n")
+					.append("	S.product_stock_no,					\n")
+					.append("	P.product_id,						\n")
+					.append("	P.product_name,						\n")
+					.append("	S.io_datetime,						\n")
+					.append("	IFNULL(SUM(S.io_amt), 0) AS io_amt,	\n")
+					.append("	S.lotno,							\n")
+					.append("	S.expiration_date,					\n")
+					.append("	ST.storage_name						\n")
+					.append("FROM product P							\n")
+					.append("LEFT JOIN mes_product_storage S		\n")
+					.append("	ON P.product_id = S.product_id		\n")
+					.append("LEFT JOIN mes_storage ST				\n")
+					.append("	ON ST.storage_no = S.storage_no		\n")
+					.append("WHERE P.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("	AND P.product_id = '" + productId + "'\n")
+					.append("GROUP BY S.product_stock_no			\n")
+					.append("ORDER BY S.io_datetime ASC;			\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -357,6 +408,7 @@ public class ProductStorageDaoImpl implements ProductStorageDao {
 		productStorage.setProductStockNo(rs.getString("product_stock_no"));
 		productStorage.setProductId(rs.getString("product_id"));
 		productStorage.setProductName(rs.getString("product_name"));
+		productStorage.setIoDatetime(rs.getString("io_datetime"));
 		productStorage.setIoAmt(rs.getInt("io_amt"));
 		productStorage.setLotno(rs.getString("lotno"));
 		productStorage.setExpirationDate(rs.getString("expiration_date"));

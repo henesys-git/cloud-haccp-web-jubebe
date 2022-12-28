@@ -68,35 +68,34 @@ public class OrderService {
 		return orderList;
 	}
 	
-	public List<Order> getOrderDetailsNoChulhaYet(String orderNo) {
-		List<Order> orderList = null;
-		
-		try {
-			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			orderList = orderDao.getOrderDetailsNoChulhaYet(conn, orderNo);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		} finally {
-			try { conn.close(); } catch (Exception e) { /* Ignored */ }
-		}
-		
-		return orderList;
-	}
-
+<<<<<<< HEAD
 	public List<Order> getOrderInfos() {
+=======
+	public List<Order> getOrderDetailsNoChulhaYet(String orderNo) {
+>>>>>>> mes
 		List<Order> orderList = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
+<<<<<<< HEAD
 			orderList = orderDao.getOrderInfos(conn);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+=======
+			orderList = orderDao.getOrderDetailsNoChulhaYet(conn, orderNo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			try { conn.close(); } catch (Exception e) { /* Ignored */ }
+>>>>>>> mes
 		}
 		
 		return orderList;
-	}	public Order getOrderById(String id) {
+	}
+	
+	public Order getOrderById(String id) {
 		Order order = null;
 		
 		try {

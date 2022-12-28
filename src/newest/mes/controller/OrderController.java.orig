@@ -16,9 +16,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+<<<<<<< HEAD
 import dao.ProductDaoImpl;
 import mes.client.util.NumberGeneratorForCloudMES;
-import model.Product;import newest.mes.dao.OrderDaoImpl;
+import model.Product;
+=======
+>>>>>>> mes
+import newest.mes.dao.OrderDaoImpl;
 import newest.mes.model.Order;
 import newest.mes.service.OrderService;
 import utils.FormatTransformer;
@@ -59,6 +63,12 @@ public class OrderController extends HttpServlet {
 			List<Order> list = orderService.getOrderDetails(orderNo);
 			result = FormatTransformer.toJson(list);
 		}
+<<<<<<< HEAD
+		else if(id.equals("info")) {
+			List<Order> list = orderService.getOrderInfos();
+			result = FormatTransformer.toJson(list);
+		} 
+=======
 		else if(id.equals("allNoChulhaYet")) {
 			List<Order> list = orderService.getAllOrdersNoChulhaYet();
 			result = FormatTransformer.toJson(list);
@@ -66,10 +76,9 @@ public class OrderController extends HttpServlet {
 		else if(id.equals("detailNoChulhaYet")) {
 			List<Order> list = orderService.getOrderDetailsNoChulhaYet(orderNo);
 			result = FormatTransformer.toJson(list);
-		}		else if(id.equals("info")) {
-			List<Order> list = orderService.getOrderInfos();
-			result = FormatTransformer.toJson(list);
-		} 		else {
+		}
+>>>>>>> mes
+		else {
 			Order order = orderService.getOrderById(id);
 			result = FormatTransformer.toJson(order);
 		}

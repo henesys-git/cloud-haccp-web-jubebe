@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 
-	var productStockJspPage = {};
+	var chulhaJspPage = {};
     var dataLength;
     
 	$(document).ready(function () {
@@ -17,19 +17,16 @@
 		let mainTableSelectedRow;
 	    
 	    async function initTable() {
-	    	var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByProductId();
-
-	    	//TODO: 삭제?
-	    	dataLength = stocks.length;
+	    	var chulhaInfo = new ChulhaInfo();
+	    	var chulhaData = await chulhaInfo.getChulhaInfo();
 	    	
 	    	var customOpts = {
-					data : stocks,
+					data : chulhaData,
 					pageLength: 5,
 					columns: [
-						{ data: "productId", defaultContent: '' },
-						{ data: "productName", defaultContent: '' },
-						{ data: "ioAmt", defaultContent: '' }
+						{ data: "chulhaNo", defaultContent: '' },
+						{ data: "chulhaDate", defaultContent: '' },
+						{ data: "customerName", defaultContent: '' }
 			        ]
 			}
 					
@@ -38,44 +35,37 @@
 			);
 	    }
 	    
-	    productStockJspPage.fillSubTable = async function (productId) {
-	    	var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByStockNo(productId);
-			// 재고번호가 없는건 실제 재고 테이블에 없는 데이터이다.
-	    	stocks = stocks.filter((obj) => {
-	    		return obj.productStockNo != null;
-	    	});
+	    chulhaJspPage.fillSubTable = async function (chulhaNo) {
+	    	var chulhaInfo = new ChulhaInfo();
+	    	var chulhaDetailData = await chulhaInfo.getChulhaInfoDetail(chulhaNo);
 	    	
 	    	if(subTable) {
 	    		// redraw
-	    		subTable.clear().rows.add(stocks).draw();
+	    		subTable.clear().rows.add(chulhaDetailData).draw();
 	    	} else {
 	    		// initialize
 			    var option = {
-						data : stocks,
+						data : chulhaDetailData,
 						pageLength: 10,
 						columns: [
-							{ data: "productStockNo", defaultContent: '' },
+							{ data: "chulhaNo", defaultContent: '' },
 							{ data: "productId", defaultContent: '' },
 							{ data: "productName", defaultContent: '' },
-							{ data: "ioAmt", defaultContent: '' },
-							{ data: "lotno", defaultContent: '' },
-							{ data: "expirationDate", defaultContent: '' },
-							{ data: "storageName", defaultContent: '' },
-							{ data: "stockManage", defaultContent: '' },
-							{ data: "history", defaultContent: '' }
+							{ data: "chulhaCount", defaultContent: '' },
+							{ data: "returnCount", defaultContent: '' },
+							{ data: "returnType", defaultContent: '' }
 				        ],
 				        columnDefs : [
 				   			{
-					  			targets: [7],
-					  			render: function(td, cellData, rowData, row, col){
-			  						return `<button class='btn btn-success stock-btn'>재고입출고</button>`;
-					  			}
-					  		},
-				   			{
-					  			targets: [8],
-					  			render: function(td, cellData, rowData, row, col){
-			  						return `<button class='btn btn-success history-btn'>조회</button>`;
+					  			targets: [5],
+					  			render: function(td, cellData, rowData, row, col) {
+					  				if(rowData.returnType == '' || 
+					  				   rowData.returnType == null ||
+					  				   rowData.returnType == 'null') {
+				  						return `<button class='btn btn-success return-btn'>반품</button>`;
+					  				} else {
+					  					return rowData.returnType;
+					  				}
 					  			}
 					  		}
 					    ]
@@ -89,12 +79,11 @@
 	    
 		initTable();
 		
-		async function refreshMainTable() {
-			var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByProductId();
+		chulhaJspPage.refreshMainTable = async function () {
+			var chulhaInfo = new ChulhaInfo();
+	    	var chulhaData = await chulhaInfo.getChulhaInfo();
 
-			mainTable.clear().rows.add(stocks).draw();
-			dataLength = newData.length;
+			mainTable.clear().rows.add(chulhaData).draw();
 			
     		if(subTable) {
 	    		subTable.clear().draw();
@@ -105,41 +94,26 @@
     		
     		if ( !$(this).hasClass('selected') ) {
     			mainTableSelectedRow = mainTable.row( this ).data();
-    			productStockJspPage.fillSubTable(mainTableSelectedRow.productId);
+    			chulhaJspPage.fillSubTable(mainTableSelectedRow.chulhaNo);
             }
     	});
     	
-    	// 수기 신규 입고
+    	// 출하 등록
 		$('#ipchulgoBtn').click(function() {
 			var row = mainTable.rows( '.selected' ).data();
 			
-			if(row.length == 0) {
-				alert('입출고 관리할 제품을 선택해주세요.');
-				return false;
-			}
-			
 			$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_manage.jsp',
-                data: {
-                	productId: row[0].productId,
-                	productName: row[0].productName,
-                	ipgoOnly: "Y"
-                },
+                url: heneServerPath + '/Contents/mes/shipment_insert.jsp',
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }
             });
 		});
     	
-    	
     	$('#subTableBody').off().on('click', 'button', function() {
-    		if( $(this).hasClass("stock-btn") ) {
+    		if( $(this).hasClass("return-btn") ) {
     			editCurrentStock(this);
-    		}
-    		
-    		if( $(this).hasClass("history-btn") ) {
-    			displayStockHistory(this);
     		}
     	});
     
@@ -148,9 +122,11 @@
     		var tr = $(that).parents('tr')[0];
 			var row = subTable.rows(tr).data()[0];
     		
+			alert('아직 지원하지 않는 기능입니다.');
 	    	$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_manage.jsp',
+                url: heneServerPath + '/Contents/mes/shipment_return.jsp',
+                /*
                 data: {
                 	productStockNo: row.productStockNo,
                 	productId: row.productId,
@@ -158,24 +134,7 @@
                 	ioAmt: row.ioAmt,
                 	ipgoOnly: "N"
                 },
-                success: function (html) {
-                    $("#modalWrapper").html(html);
-                }
-            });
-    	}
-    	
-    	// 재고 이력 조회
-    	function displayStockHistory(that) {
-    		
-    		var tr = $(that).parents('tr')[0];
-			var row = subTable.rows(tr).data()[0];
-    		
-	    	$.ajax({
-                type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_history.jsp',
-                data: {
-                	productStockNo: row.productStockNo
-                },
+                */
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }
@@ -190,13 +149,13 @@
     	<div class="row mb-2">
 	      	<div class="col-sm-6">
 	        	<h1 class="m-0 text-dark">
-	        		완제품 관리
+	        		출하 관리
 	        	</h1>
 	      	</div>
 	      	<div class="col-sm-6">
       			<div class="float-sm-right">
 					<button type="button" class="btn btn-info" id="ipchulgoBtn">
-						직접 입고 등록
+						출하 등록
 					</button>
 				</div>
       		</div><!-- /.col -->
@@ -215,7 +174,7 @@
        		<div class="col-md-12">
 	          	<h3 class="card-title">
 	          		<i class="fas fa-edit" id="InfoContentTitle"></i>
-	          		완제품 재고
+	          		출하 목록
 	          	</h3> 
 	        </div>
           </div>
@@ -224,9 +183,9 @@
 				   id="mainTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>완제품아이디</th>
-					    <th>완제품명</th>
-					    <th>현재재고</th>
+					    <th>출하번호</th>
+					    <th>출하날짜</th>
+					    <th>고객명</th>
 					</tr>
 				</thead>
 				<tbody id="mainTableBody">
@@ -239,15 +198,12 @@
 				   id="subTable" style="width:100%">
 				<thead>
 					<tr>
-					    <th>재고번호</th>
+					    <th>출하번호</th>
 					    <th>완제품아이디</th>
 					    <th>완제품명</th>
-					    <th>재고</th>
-					    <th>LOT번호</th>
-					    <th>유통기한</th>
-					    <th>저장창고</th>
-					    <th>재고관리</th>
-					    <th>이력</th>
+					    <th>출하수량</th>
+					    <th>반품수량</th>
+					    <th>반품사유</th>
 					</tr>
 				</thead>
 				<tbody id="subTableBody">
