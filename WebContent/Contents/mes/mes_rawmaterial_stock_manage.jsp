@@ -11,6 +11,7 @@
 	String rawmaterialStockNo = "";
 	String rawmaterialId = "";
 	String rawmaterialName = "";
+	String curAmt = "";
 	String ipgoOnly = "";
 	
 	if(request.getParameter("rawmaterialStockNo") != null) {
@@ -23,6 +24,10 @@
 
 	if(request.getParameter("rawmaterialName") != null) {
 		rawmaterialName = request.getParameter("rawmaterialName");
+	}
+	
+	if(request.getParameter("ioAmt") != null) {
+		curAmt = request.getParameter("ioAmt");
 	}
 
 	if(request.getParameter("ipgoOnly") != null) {
@@ -208,6 +213,11 @@
 			
 			if(Number(ioAmt) <= 0) {
 				alert('0 이상 입력 필요');
+				return false;
+			}
+			
+			if( Number("<%=curAmt%>") < Number(ioAmt) ) {
+				alert('현재 재고보다 출고량이 많습니다.');
 				return false;
 			}
 			

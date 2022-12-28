@@ -113,6 +113,7 @@ public class OrderDaoImpl implements OrderDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
+<<<<<<< HEAD
 				.append("SELECT  		\n")
 				.append("A.product_id,  		\n")
 				.append("B.product_name,  		\n")
@@ -122,6 +123,11 @@ public class OrderDaoImpl implements OrderDao {
 				.append("INNER JOIN product B \n")
 				.append("ON A.product_id = B.product_id \n")
 				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("and order_no = '" + orderNo + "'\n")
+=======
+				.append("SELECT * 		\n")
+				.append("FROM mes_order_detail \n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.append("	AND order_no = '" + orderNo + "'\n")
 				.toString();
 			
@@ -160,6 +166,7 @@ public class OrderDaoImpl implements OrderDao {
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.append("	AND order_no = '" + orderNo + "'\n")
 				.append("	AND chulha_yn = 'N'\n")
+>>>>>>> mes
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -184,7 +191,8 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return null;
 	};
-
+	
+	@Override
 	public List<Order> getOrderInfos(Connection conn) {
 		
 		try {
@@ -235,6 +243,8 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return null;
 	};
+	
+	@Override
 	public Order getOrder(Connection conn, String orderNo) {
 		
 		try {

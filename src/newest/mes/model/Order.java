@@ -13,6 +13,11 @@ public class Order {
 	
 	public Order() {}
 	
+	public Order(String orderNo, String orderDetailNo) {
+		this.orderNo = orderNo;
+		this.orderDetailNo = orderDetailNo;
+	}
+	
 	public String getOrderNo() {
 		return orderNo;
 	}

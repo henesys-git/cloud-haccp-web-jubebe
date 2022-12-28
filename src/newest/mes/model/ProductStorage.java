@@ -97,7 +97,14 @@ public class ProductStorage {
 	public void setStorageName(String storageName) {
 		this.storageName = storageName;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "ProductStorage [productStockNo=" + productStockNo + ", seqNo=" + seqNo + ", productId=" + productId
+				+ ", productName=" + productName + ", ioAmt=" + ioAmt + ", ioDatetime=" + ioDatetime + ", lotno="
+				+ lotno + ", expirationDate=" + expirationDate + ", expirationDateBigo=" + expirationDateBigo
+				+ ", bigo=" + bigo + ", storageNo=" + storageNo + ", storageName=" + storageName
+				+ ", rawmaterialDeductYn=" + rawmaterialDeductYn + "]";
+	}
 	
 }
