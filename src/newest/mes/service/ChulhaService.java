@@ -58,7 +58,7 @@ public class ChulhaService {
 		return chulhaList;
 	}
 	
-	public boolean chulha(JSONObject obj) {
+	public String chulha(JSONObject obj) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			conn.setAutoCommit(false);
@@ -75,7 +75,7 @@ public class ChulhaService {
 			inserted = chulhaDao.insert(conn, ci);
 			if(!inserted) {
 				conn.rollback();
-				return false;
+				return "fail";
 			}
 			
 			for(int i=0; i<detailList.length(); i++) {
@@ -89,7 +89,7 @@ public class ChulhaService {
 				inserted = chulhaDao.insert(conn, cid);
 				if(!inserted) {
 					conn.rollback();
-					return false;
+					return "fail";
 				}
 				
 				// 주문 상세 테이블 출하여부 update
@@ -99,27 +99,29 @@ public class ChulhaService {
 				boolean chulhaChangeToY = orderService.chulha(order);
 				if(!chulhaChangeToY) {
 					conn.rollback();
-					return false;
+					return "fail";
 				}
 				
-				boolean chulha = psService.chulha(
+				// 재고 차감
+				String chulhaResult = psService.chulha(
 										cidJson.get("productId").toString(),
 										Integer.parseInt(cidJson.get("chulhaCount").toString()));
-				if(!chulha) {
+				if(!chulhaResult.equals("success")) {
 					conn.rollback();
-					return false;
+					return chulhaResult;
 				}
 			}
 			
+			logger.debug("before commit");
 			conn.commit();
-			return true;
+			return "success";
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return false;
+		return "fail";
 	}
 	
 	public boolean update(ChulhaInfo ci, List<ChulhaInfoDetail> detailList) {

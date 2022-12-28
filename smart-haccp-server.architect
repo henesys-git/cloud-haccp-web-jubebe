@@ -1024,10 +1024,10 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL312" populated="true" UUID="2d99f2ff-1ca2-41cb-83b0-a151c5f2055d" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL313" populated="true" UUID="52451aea-c530-41f5-85a1-f06c0947f062" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_product_id_seq" defaultValue="" name="완제품 코드" nullable="0" physicalName="product_id" precision="10" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL313" populated="true" UUID="801c2f30-583c-43b2-b306-0bf9f4e3224f" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_chulha_no_seq" defaultValue="" name="출하번호" nullable="0" physicalName="chulha_no" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL314" populated="true" UUID="801c2f30-583c-43b2-b306-0bf9f4e3224f" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_chulha_no_seq" defaultValue="" name="출하번호" nullable="0" physicalName="chulha_no" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL314" populated="true" UUID="52451aea-c530-41f5-85a1-f06c0947f062" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_product_id_seq" defaultValue="" name="완제품 코드" nullable="0" physicalName="product_id" precision="10" primaryKeySeq="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL315" populated="true" UUID="16d72e1f-b2cf-4b25-b63b-e9c929985c94" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_chulha_count_seq" defaultValue="" name="출하수량" nullable="0" physicalName="chulha_count" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -1047,8 +1047,8 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <folder id="FOLTAB3114" populated="true" name="Indices" physicalName="Indices" type="4">
     <index id="IDX318" populated="true" UUID="6a75e522-e123-455c-ba84-97f4af9d2581" clustered="false" name="mes_chulha_info_detail_pk" physicalName="mes_chulha_info_detail_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC319" populated="true" UUID="d0e90d14-1016-4634-bae0-b88e9b585217" ascendingOrDescending="UNSPECIFIED" column-ref="COL312" name="테넌트아이디" physicalName="tenant_id" />
-     <index-column id="IDC320" populated="true" UUID="c3fa0748-754f-40c5-a075-fe2fa5b39921" ascendingOrDescending="UNSPECIFIED" column-ref="COL313" name="완제품 코드" physicalName="product_id" />
-     <index-column id="IDC321" populated="true" UUID="06631456-8fde-4f05-809d-5fc886bfaf2f" ascendingOrDescending="UNSPECIFIED" column-ref="COL314" name="출하번호" physicalName="chulha_no" />
+     <index-column id="IDC320" populated="true" UUID="8fd24e83-1fed-4415-b581-510cea4497ab" ascendingOrDescending="UNSPECIFIED" column-ref="COL313" name="출하번호" physicalName="chulha_no" />
+     <index-column id="IDC321" populated="true" UUID="c3fa0748-754f-40c5-a075-fe2fa5b39921" ascendingOrDescending="UNSPECIFIED" column-ref="COL314" name="완제품 코드" physicalName="product_id" />
     </index>
    </folder>
   </table>
@@ -1058,7 +1058,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column id="COL323" populated="true" UUID="b08735fc-29c8-4a94-9f11-03a2bd6537b2" autoIncrement="false" autoIncrementSequenceName="mes_chulha_prod_storage_matching_tenant_id_seq" defaultValue="" name="테넌트아이디" nullable="0" physicalName="tenant_id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL324" populated="true" UUID="b38695cc-1169-4c73-8c35-45e44ff5ccb8" autoIncrement="false" autoIncrementSequenceName="mes_chulha_prod_storage_matching_chulha_no_seq" defaultValue="" name="출하번호" nullable="0" physicalName="chulha_no" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL324" populated="true" UUID="72d9eec9-532d-46c0-ae49-8fa4656c6c72" autoIncrement="false" autoIncrementSequenceName="mes_chulha_info_detail_chulha_no_seq" defaultValue="" name="출하번호" nullable="0" physicalName="chulha_no" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL325" populated="true" UUID="b7027653-e45a-4df3-bc78-1406e0e5e5af" autoIncrement="false" autoIncrementSequenceName="mes_chulha_prod_storage_matching_product_id_seq" defaultValue="" name="완제품 코드" nullable="0" physicalName="product_id" precision="10" primaryKeySeq="2" referenceCount="2" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1078,7 +1078,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <folder id="FOLTAB3224" populated="true" name="Indices" physicalName="Indices" type="4">
     <index id="IDX328" populated="true" UUID="caba3625-f661-449e-9167-adbaa2c23fba" clustered="false" name="mes_chulha_prod_storage_matching_pk" physicalName="mes_chulha_prod_storage_matching_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC329" populated="true" UUID="372119e8-05e5-42ae-ab71-322bc747a253" ascendingOrDescending="UNSPECIFIED" column-ref="COL323" name="테넌트아이디" physicalName="tenant_id" />
-     <index-column id="IDC330" populated="true" UUID="3626ec66-1964-4d1a-bca2-6b38d80c3969" ascendingOrDescending="UNSPECIFIED" column-ref="COL324" name="출하번호" physicalName="chulha_no" />
+     <index-column id="IDC330" populated="true" UUID="3e5bf864-3efa-435c-a884-69c5f8ae9f4d" ascendingOrDescending="UNSPECIFIED" column-ref="COL324" name="출하번호" physicalName="chulha_no" />
      <index-column id="IDC331" populated="true" UUID="7554adfa-4237-4631-91c7-274cf9c6b38c" ascendingOrDescending="UNSPECIFIED" column-ref="COL325" name="완제품 코드" physicalName="product_id" />
      <index-column id="IDC332" populated="true" UUID="2c6bc338-8df5-4efd-ae3d-6e493f03a8d1" ascendingOrDescending="UNSPECIFIED" column-ref="COL326" name="완제품재고번호" physicalName="product_stock_no" />
     </index>
@@ -1317,7 +1317,7 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column-mapping id="CMP410" populated="true" UUID="02d0b1bc-2ce9-4560-94a8-2c80fd8a81d6" fk-column-ref="COL260" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
    </relationship>
    <relationship id="REL411" populated="true" UUID="0815254c-b76a-456f-b316-6439a2384ee9" deferrability="7" deleteRule="3" fk-table-ref="TAB311" fkCardinality="7" identifying="true" name="mes_chulha_info_완제품 출하_상세_fk" physicalName="mes_chulha_info_완제품 출하_상세_fk" pk-table-ref="TAB267" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP412" populated="true" UUID="0486b104-69d3-457d-81af-64065adafd1d" fk-column-ref="COL314" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
+    <column-mapping id="CMP412" populated="true" UUID="0486b104-69d3-457d-81af-64065adafd1d" fk-column-ref="COL313" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL269" />
     <column-mapping id="CMP413" populated="true" UUID="4cf2ec20-26a6-4354-87c3-5df539a556a5" fk-column-ref="COL312" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL268" />
    </relationship>
    <relationship id="REL414" populated="true" UUID="8ff958f8-3d7c-43f0-b89a-5fb0eed3a5bb" deferrability="7" deleteRule="3" fk-table-ref="TAB294" fkCardinality="7" identifying="true" name="생산계획_생산실적관리_fk" physicalName="생산계획_생산실적관리_fk" pk-table-ref="TAB275" pkCardinality="2" updateRule="3" >
@@ -1329,16 +1329,16 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
     <column-mapping id="CMP419" populated="true" UUID="65097a04-71ad-44c0-bd8c-c8232c461594" fk-column-ref="COL295" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL288" />
    </relationship>
    <relationship id="REL420" populated="true" UUID="ce4aa2d2-0e6c-4dfd-acb2-6ff1075521c0" deferrability="7" deleteRule="3" fk-table-ref="TAB322" fkCardinality="7" identifying="true" name="완제품 출하_상세_재고출하매칭테이블_fk" physicalName="완제품 출하_상세_재고출하매칭테이블_fk" pk-table-ref="TAB311" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP421" populated="true" UUID="fddc346a-aa39-4366-a183-a82d88cd551b" fk-column-ref="COL325" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL313" />
-    <column-mapping id="CMP422" populated="true" UUID="05826d27-17da-44d5-b313-3089d5d3cfd5" fk-column-ref="COL324" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL314" />
-    <column-mapping id="CMP423" populated="true" UUID="653a2c38-75ad-42de-97de-5ce85d2df9f5" fk-column-ref="COL323" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL312" />
+    <column-mapping id="CMP421" populated="true" UUID="fddc346a-aa39-4366-a183-a82d88cd551b" fk-column-ref="COL325" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL314" />
+    <column-mapping id="CMP422" populated="true" UUID="653a2c38-75ad-42de-97de-5ce85d2df9f5" fk-column-ref="COL323" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL312" />
+    <column-mapping id="CMP423" populated="true" UUID="4b22929f-8a48-441c-a4dc-d6dca3f2c774" fk-column-ref="COL324" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL313" />
    </relationship>
   </relationships>
  </target-database>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.6817928305074283" viewportX="1952" viewportY="143" relationship-style="rectilinear" names-displayLogicalNames="false" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.9999999999999993" viewportX="155" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="126" y="1336" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB10" x="140" y="1988" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB19" x="142" y="2128" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -1365,20 +1365,20 @@ ex) 금속검출기(CD) / 온도컨트롤러 / 유량계 등..</remarks>
   <table-pane table-ref="TAB224" x="467" y="2854" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB233" x="1468" y="2122" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB244" x="124" y="1718" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB251" x="122" y="565" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB259" x="139" y="768" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB251" x="188" y="571" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB259" x="173" y="772" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB267" x="481" y="762" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB275" x="814" y="561" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB287" x="816" y="450" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB294" x="1163" y="468" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB311" x="826" y="758" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB322" x="1184" y="758" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB333" x="1516" y="469" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB333" x="1473" y="470" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB350" x="1163" y="269" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB361" x="1516" y="232" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB375" x="113" y="406" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB382" x="1523" y="54" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB391" x="440" y="556" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB361" x="1472" y="236" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB375" x="193" y="448" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB382" x="1473" y="103" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB391" x="477" y="561" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-link relationship-ref="REL402" pkConnection="0.4496124031007752" fkConnection="0.49429657794676807" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
   <table-link relationship-ref="REL408" pkConnection="0.52" fkConnection="0.4533333333333333" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
   <table-link relationship-ref="REL414" pkConnection="0.6518518518518519" fkConnection="0.5111111111111111" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>

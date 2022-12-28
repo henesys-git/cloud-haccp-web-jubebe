@@ -156,14 +156,17 @@ public class ProductStorageService {
 		return false;
 	};
 
-	public boolean chulha(String productId, int ioAmt) {
+	public String chulha(String productId, int ioAmt) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String ioDatetime = sdf.format(timestamp);
+		String productName = "";
 		
 		try {
 			// product id에 맞는 재고 불러옴
 			List<ProductStorage> prodList = getStockGroupByStockNoSortByIoDatetime(this.conn, productId);
+			productName = prodList.get(0).getProductName();
+			
 			// ioAmt만큼 재고 차감
 			int leftIoAmt = ioAmt;
 			for(int i=0; i<prodList.size(); i++) {
@@ -184,18 +187,19 @@ public class ProductStorageService {
 				}
 				
 				if(leftIoAmt == 0) {
-					return true;
+					return "success";
 				}
 			}
 			
 			if(leftIoAmt > 0) {
-				return false;
+				return productName + " 재고 부족(" + leftIoAmt + "개)";
 			}
 		} catch(Exception e) {
 			logger.error(e.getMessage());
+			return "fail";
 		}
 		
-		return false;
+		return "fail";
 	};
 	
 	public boolean insert(ProductStorage productStorage) {

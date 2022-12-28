@@ -77,7 +77,7 @@
 				<thead>
 					<tr>
 					    <th>주문번호</th>
-					    <th>고객아이디</th>
+					    <th>고객명</th>
 					    <th>주문일자</th>
 					</tr>
 				</thead>
@@ -151,7 +151,7 @@
 					pageLength: 10,
 					columns: [
 						{ data: "orderNo", defaultContent: '' },
-						{ data: "customerCode", defaultContent: '' },
+						{ data: "customerName", defaultContent: '' },
 						{ data: "orderDate", defaultContent: '' }
 			        ]
 				}
@@ -204,13 +204,16 @@
 			}
 			
 			var result = await chulhaInfo.chulha(obj);
+			console.log(result);
 			
-			if(result) {
+			if(result == "success") {
 				alert('출하 등록 완료되었습니다.');
 				$('#ipgoChulgoMainModal').modal('hide');
 				chulhaJspPage.refreshMainTable();
+			} else if(result == "fail") {
+				alert('출하 등록 실패, 관리자에게 문의해주세요.\n');
 			} else {
-				alert('출하 등록 실패, 관리자에게 문의해주세요.');
+				alert('출하 등록 실패\n' + result);
 			}
 		});
 		

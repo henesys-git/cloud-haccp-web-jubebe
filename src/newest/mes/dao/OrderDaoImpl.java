@@ -74,10 +74,16 @@ public class OrderDaoImpl implements OrderDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT O.* 		\n")
+				.append("SELECT\n")
+				.append("	O.order_no,\n")
+				.append("	O.order_date,\n")
+				.append("	O.customer_code,\n")
+				.append("	C.customer_name\n")
 				.append("FROM mes_order O	\n")
-				.append("INNER JOIN mes_order_detail D	\n")
-				.append("	ON O.order_no = D.order_no	\n")
+				.append("INNER JOIN mes_order_detail D\n")
+				.append("	ON O.order_no = D.order_no\n")
+				.append("INNER JOIN mes_product_customer C\n")
+				.append("	ON O.customer_code = C.customer_code\n")
 				.append("WHERE O.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 				.append("	AND D.chulha_yn = 'N'\n")
 				.append("GROUP BY O.order_no\n")
@@ -155,11 +161,19 @@ public class OrderDaoImpl implements OrderDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT * 		\n")
-				.append("FROM mes_order_detail \n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("	AND order_no = '" + orderNo + "'\n")
-				.append("	AND chulha_yn = 'N'\n")
+				.append("SELECT\n")
+				.append("	od.order_no,\n")
+				.append("	od.order_detail_no,\n")
+				.append("	od.product_id,\n")
+				.append("	p.product_name,\n")
+				.append("	od.order_count,\n")
+				.append("	od.chulha_yn\n")
+				.append("FROM mes_order_detail od\n")
+				.append("INNER JOIN product p\n")
+				.append("	ON od.product_id = p.product_id\n")
+				.append("WHERE od.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND od.order_no = '" + orderNo + "'\n")
+				.append("	AND od.chulha_yn = 'N'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);

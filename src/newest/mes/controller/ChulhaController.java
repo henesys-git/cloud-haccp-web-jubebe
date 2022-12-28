@@ -36,6 +36,9 @@ public class ChulhaController extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException {
+		res.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = res.getWriter();
+		
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
@@ -60,15 +63,12 @@ public class ChulhaController extends HttpServlet {
 			String data = req.getParameter("data");
 			try {
 				JSONObject jsonObj = new JSONObject(data);
-				Boolean bResult = chulhaService.chulha(jsonObj);
-				result = bResult.toString();
+				result = chulhaService.chulha(jsonObj);
+				res.setContentType("plain/text; charset=UTF-8");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
 		
 		out.print(result);
 	}
