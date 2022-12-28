@@ -25,7 +25,7 @@
 	    	
 	    	var customOpts = {
 					data : stocks,
-					pageLength: 10,
+					pageLength: 5,
 					columns: [
 						{ data: "productId", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
@@ -41,6 +41,10 @@
 	    productStockJspPage.fillSubTable = async function (productId) {
 	    	var productStorage = new ProductStorage();
 	    	var stocks = await productStorage.getStockGroupByStockNo(productId);
+			// 재고번호가 없는건 실제 재고 테이블에 없는 데이터이다.
+	    	stocks = stocks.filter((obj) => {
+	    		return obj.productStockNo != null;
+	    	});
 	    	
 	    	if(subTable) {
 	    		// redraw
