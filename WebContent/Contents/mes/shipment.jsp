@@ -59,7 +59,9 @@
 				   			{
 					  			targets: [5],
 					  			render: function(td, cellData, rowData, row, col) {
-					  				if(rowData.returnType == '' || rowData.returnType == null) {
+					  				if(rowData.returnType == '' || 
+					  				   rowData.returnType == null ||
+					  				   rowData.returnType == 'null') {
 				  						return `<button class='btn btn-success return-btn'>반품</button>`;
 					  				} else {
 					  					return rowData.returnType;
@@ -113,10 +115,6 @@
     		if( $(this).hasClass("return-btn") ) {
     			editCurrentStock(this);
     		}
-    		
-    		if( $(this).hasClass("history-btn") ) {
-    			displayStockHistory(this);
-    		}
     	});
     
     	// 기존 재고 수정
@@ -124,9 +122,11 @@
     		var tr = $(that).parents('tr')[0];
 			var row = subTable.rows(tr).data()[0];
     		
+			alert('아직 지원하지 않는 기능입니다.');
 	    	$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_manage.jsp',
+                url: heneServerPath + '/Contents/mes/shipment_return.jsp',
+                /*
                 data: {
                 	productStockNo: row.productStockNo,
                 	productId: row.productId,
@@ -134,24 +134,7 @@
                 	ioAmt: row.ioAmt,
                 	ipgoOnly: "N"
                 },
-                success: function (html) {
-                    $("#modalWrapper").html(html);
-                }
-            });
-    	}
-    	
-    	// 재고 이력 조회
-    	function displayStockHistory(that) {
-    		
-    		var tr = $(that).parents('tr')[0];
-			var row = subTable.rows(tr).data()[0];
-    		
-	    	$.ajax({
-                type: "POST",
-                url: heneServerPath + '/Contents/mes/mes_product_stock_history.jsp',
-                data: {
-                	productStockNo: row.productStockNo
-                },
+                */
                 success: function (html) {
                     $("#modalWrapper").html(html);
                 }

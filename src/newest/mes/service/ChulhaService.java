@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import mes.frame.database.JDBCConnectionPool;
 import newest.mes.dao.ChulhaDao;
 import newest.mes.dao.OrderDaoImpl;
+import newest.mes.dao.ProductStorageDaoImpl;
 import newest.mes.model.ChulhaInfo;
 import newest.mes.model.ChulhaInfoDetail;
 import newest.mes.model.Order;
@@ -63,6 +64,7 @@ public class ChulhaService {
 			conn.setAutoCommit(false);
 			boolean inserted = false;
 			OrderService orderService = new OrderService(new OrderDaoImpl(), this.bizNo);
+			ProductStorageService psService = new ProductStorageService(conn, new ProductStorageDaoImpl(), this.bizNo);
 			
 			// 출하 메인 데이터 insert
 			ChulhaInfo ci = new ChulhaInfo(obj.get("chulhaNo").toString(),
@@ -96,6 +98,14 @@ public class ChulhaService {
 				
 				boolean chulhaChangeToY = orderService.chulha(order);
 				if(!chulhaChangeToY) {
+					conn.rollback();
+					return false;
+				}
+				
+				boolean chulha = psService.chulha(
+										cidJson.get("productId").toString(),
+										Integer.parseInt(cidJson.get("chulhaCount").toString()));
+				if(!chulha) {
 					conn.rollback();
 					return false;
 				}
