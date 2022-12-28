@@ -22,7 +22,7 @@
 	    	
 	    	var customOpts = {
 					data : chulhaData,
-					pageLength: 10,
+					pageLength: 5,
 					columns: [
 						{ data: "chulhaNo", defaultContent: '' },
 						{ data: "chulhaDate", defaultContent: '' },
@@ -77,11 +77,11 @@
 	    
 		initTable();
 		
-		async function refreshMainTable() {
-			var productStorage = new ProductStorage();
-	    	var stocks = await productStorage.getStockGroupByProductId();
+		chulhaJspPage.refreshMainTable = async function () {
+			var chulhaInfo = new ChulhaInfo();
+	    	var chulhaData = await chulhaInfo.getChulhaInfo();
 
-			mainTable.clear().rows.add(stocks).draw();
+			mainTable.clear().rows.add(chulhaData).draw();
 			
     		if(subTable) {
 	    		subTable.clear().draw();

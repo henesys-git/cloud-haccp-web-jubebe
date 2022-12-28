@@ -7,6 +7,15 @@ public class ChulhaInfoDetail {
 	private int returnCount;
 	private String returnType;
 	
+	public ChulhaInfoDetail() {
+	}
+	
+	public ChulhaInfoDetail(String chulhaNo, String productId, String chulhaCount) {
+		this.chulhaNo = chulhaNo;
+		this.productId = productId;
+		this.chulhaCount = Integer.parseInt(chulhaCount);
+	}
+	
 	public String getChulhaNo() {
 		return chulhaNo;
 	}

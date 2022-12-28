@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 
 import newest.mes.dao.ChulhaDaoImpl;
 import newest.mes.model.ChulhaInfo;
@@ -45,16 +46,25 @@ public class ChulhaController extends HttpServlet {
 		String id = req.getParameter("id");
 		String chulhaNo = req.getParameter("chulhaNo");
 		
-		ChulhaService ChulhaService = new ChulhaService(new ChulhaDaoImpl(), tenantId);
+		ChulhaService chulhaService = new ChulhaService(new ChulhaDaoImpl(), tenantId);
 		
 		String result = "";
 		
 		if(id.equals("all")) {
-			List<ChulhaInfoViewModel> list = ChulhaService.getChulhaInfo();
+			List<ChulhaInfoViewModel> list = chulhaService.getChulhaInfo();
 			result = FormatTransformer.toJson(list);
 		} else if(id.equals("detail")) {
-			List<ChulhaInfoViewModel> list = ChulhaService.getChulhaInfoDetail(chulhaNo);
+			List<ChulhaInfoViewModel> list = chulhaService.getChulhaInfoDetail(chulhaNo);
 			result = FormatTransformer.toJson(list);
+		} else if(id.equals("chulha")) {
+			String data = req.getParameter("data");
+			try {
+				JSONObject jsonObj = new JSONObject(data);
+				Boolean bResult = chulhaService.chulha(jsonObj);
+				result = bResult.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		res.setContentType("application/json; charset=UTF-8");
@@ -80,23 +90,23 @@ public class ChulhaController extends HttpServlet {
 	}
 	
 	public void insert(HttpServletRequest req, HttpServletResponse res) {
-		HttpSession session = req.getSession();
-		String tenantId = (String) session.getAttribute("bizNo");
-		
-		ChulhaInfo ci = new ChulhaInfo();
-		List<ChulhaInfoDetail> detailList = new ArrayList<>();
-		
-		ChulhaService chulhaService = new ChulhaService(new ChulhaDaoImpl(), tenantId);
-		Boolean inserted = chulhaService.insert(ci, detailList);
-		
-		res.setContentType("html/text; charset=UTF-8");
-		
-		try {
-			PrintWriter out = res.getWriter();
-			out.print(inserted.toString());
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+//		HttpSession session = req.getSession();
+//		String tenantId = (String) session.getAttribute("bizNo");
+//		
+//		ChulhaInfo ci = new ChulhaInfo();
+//		List<ChulhaInfoDetail> detailList = new ArrayList<>();
+//		
+//		ChulhaService chulhaService = new ChulhaService(new ChulhaDaoImpl(), tenantId);
+//		Boolean inserted = chulhaService.insert(ci, detailList);
+//		
+//		res.setContentType("html/text; charset=UTF-8");
+//		
+//		try {
+//			PrintWriter out = res.getWriter();
+//			out.print(inserted.toString());
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void update(HttpServletRequest req, HttpServletResponse res) {

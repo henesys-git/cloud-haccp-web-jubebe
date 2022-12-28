@@ -9,21 +9,21 @@
 <div class="modal fade" id="ipgoChulgoMainModal" 
 	 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" 
 	 aria-hidden="true" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="chulhaInsertTitle">출하 등록</h3>
       </div>
       <div class="modal-body">
-        <div style="float: right;">
-			<button class="btn btn-primary" id="selectOrder">
-				출하할 주문 선택
-			</button>
-		</div>
 		<div class="form-group row">
-			<div class="col-sm-3" id="ipgoChulgoDateText">출하일자</div>
-			<div class="col-sm-9">
-				<input id="ipgoChulgoDate" data-date-format='yyyy-mm-dd' />
+			<div class="col-sm-3">출하일자</div>
+			<div class="col-sm-5">
+				<input id="chulhaDate" data-date-format='yyyy-mm-dd' />
+			</div>
+			<div class="col-sm-4">
+				<button class="btn btn-primary" id="selectOrder">
+					출하할 주문 선택
+				</button>
 			</div>
 		</div>
         <div class="form-group row">
@@ -32,7 +32,7 @@
 		</div>
         <div class="form-group row">
 			<div class="col-sm-3">받을 고객아이디</div>
-			<div class="col-sm-9" id="customerId"></div>
+			<div class="col-sm-9" id="customerCode"></div>
 		</div>
 		<div class="form-group row">
 			<table class='table table-bordered nowrap table-hover' 
@@ -61,22 +61,35 @@
   </div>
 </div>
 
-<!-- 주문/비주문 선택 모달창 -->
-<div class="modal fade" id="ipgoChulgoSelectModal" 
+<!-- 주문 선택 모달창 -->
+<div class="modal fade" id="orderSelectModal" 
 	 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" 
 	 aria-hidden="true" data-keyboard="false" data-backdrop="static">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel">입출고 선택</h3>
+        <h3 class="modal-title" id="exampleModalLabel">주문 목록</h3>
       </div>
       <div class="modal-body">
-        <button type="button" class="btn btn-primary" id="chulhaFromOrder">
-        	주문출하
-        </button>
-        <button type="button" class="btn btn-primary" id="chulhaFromNonOrder">
-        	비주문출하
-        </button>lll
+        <div class="form-group row">
+	        <table class='table table-bordered nowrap table-hover' 
+					   id="orderSelectTable" style="width:100%">
+				<thead>
+					<tr>
+					    <th>주문번호</th>
+					    <th>고객아이디</th>
+					    <th>주문일자</th>
+					</tr>
+				</thead>
+				<tbody id="orderSelectTableBody">
+				</tbody>
+			</table>
+		</div>
+		<div style="float: right;">
+			<button class="btn" id="closeBtn1">
+				닫기
+			</button>
+		</div>
       </div>
     </div>
   </div>
@@ -84,130 +97,122 @@
 
 <script>
 
-	var chulhaInsertJspPage = {};
-	
 	$(document).ready(function () {
 		
 		let chulhaInsertTable;
+		let orderSelectTable;
 		
-		$('#ipgoChulgoDate').datepicker("setDate", new Date());
-		
-		$('#productStockNo').text('');
-		$('#ipgoChulgoText').text('입고수량');
-		$('#ipgoChulgoDateText').text('입고일자');
+		$('#chulhaDate').datepicker("setDate", new Date());
 		$('#ipgoChulgoMainModal').modal('show');
 		
-		chulhaJspPage.fillSubTable = async function () {
-	    	var orders = {} // get seleced order info
-	    	
-	    	if(chulhaInsertTable) {
+		var fillChulhaInsertTable = async function (orderInfo) {
+			let order = new Order();
+	    	var orders = await order.getOrderDetailsNoChulhaYet(orderInfo.orderNo);
+			
+			$('#customerCode').text(orderInfo.customerCode);
+			$('#customerName').text(orderInfo.customerName);
+
+			if(chulhaInsertTable) {
 	    		// redraw
 	    		chulhaInsertTable.clear().rows.add(orders).draw();
 	    	} else {
 	    		// initialize
 			    var option = {
 						data : orders,
-						pageLength: 10,
+						pageLength: 5,
 						columns: [
 							{ data: "productId", defaultContent: '' },
 							{ data: "productName", defaultContent: '' },
-							{ data: "chulhaCount", defaultContent: '' }
+							{ data: "orderCount", defaultContent: '' },
+							{ data: "orderNo", defaultContent: '' },
+							{ data: "orderDetailNo", defaultContent: '' }
+				        ],
+				        columnDefs: [
+				        	{
+				                targets: [3, 4],
+				                visible: false,
+				            },
 				        ]
 				}
 	    		
-			    chulhaInsertTable = $('#subTable').DataTable(
+			    chulhaInsertTable = $('#chulhaInsertTable').DataTable(
 					mergeOptions(heneMainTableOpts, option)
 				);
 	    	}
 	    };
 		
-		$('#saveBtn0').click(async function() {
-			// 예외처리
-			if(!validate()) {
-				return false;
-			}
+		$('#selectOrder').click(async function() {
+			let order = new Order();
+	    	var orders = await order.getOrdersNoChulhaYet();
+	    	
+	    	$('#orderSelectModal').on('show.bs.modal', function () {
+			    var option = {
+					data : orders,
+					pageLength: 10,
+					columns: [
+						{ data: "orderNo", defaultContent: '' },
+						{ data: "customerCode", defaultContent: '' },
+						{ data: "orderDate", defaultContent: '' }
+			        ]
+				}
+	    		
+			    setTimeout(function() { 
+				    orderSelectTable = $('#orderSelectTable').DataTable(
+						mergeOptions(heneMainTableOpts, option)
+					);
+				}, 500);
+	    	});
+	    	
+	    	$('#orderSelectModal').modal('show');
+		
+			$('#orderSelectTable tbody').on('click', 'tr', function () {
+	    		if ( !$(this).hasClass('selected') ) {
+	    			var row = orderSelectTable.row( this ).data();
+					fillChulhaInsertTable(row);
+			    	$('#orderSelectModal').modal('hide');;
+	            }
+	    	});
 			
-			let obj = {};
-			obj.productId = "";
-			obj.ioDatetime = $('#ipgoChulgoDate').val()
-							+ " " 
-							+ new HeneDate().getTime();
-			obj.productStockNo = "";
-			
-			if(ipgoChulgo == 'chulgo') {
-				obj.ioAmt = Number( $('#ioAmt').val() ) * -1;
-			} else if(ipgoChulgo == 'ipgo') {
-				obj.ioAmt = Number( $('#ioAmt').val() );
-			}
-			
-			var productStorage = new ProductStorage();
-			var result = await productStorage.ipgoChulgo(obj);
-			
-			if(result) {
-				alert('완제품 입출고 완료되었습니다.');
-				$('#ipgoChulgoMainModal').modal('hide');
-				chulhaInsertJspPage.fillSubTable("");
-			} else {
-				alert('완제품 입출고 실패, 관리자에게 문의해주세요.');
-			}
-		});
+			$('#closeBtn1').click(function() {
+				$('#orderSelectModal').modal('hide');
+			})
+		})
 		
 		$('#closeBtn0').click(function() {
 			$('#ipgoChulgoMainModal').modal('hide');
 		})
 		
-		function validateIpgoAmt() {
+		$('#saveBtn0').click(async function() {
+			var chulhaInfo = new ChulhaInfo();
+			var chulhaNo = chulhaInfo.generateChulhaNo();
+			let obj = {};
+			obj.chulhaNo = chulhaNo;
+			obj.chulhaDate = $('#chulhaDate').val();
+			obj.customerCode = $('#customerCode').text();
+			obj.detail = [];
 			
-			var ioAmt = $('#ioAmt').val();
+			let rows = chulhaInsertTable.rows().data();
 
-			if(ioAmt == "") {
-				alert('입고 수량 입력 필수');
-				return false;
+			for(let i=0; i<rows.length; i++) {
+				let innerObj = {};
+				innerObj.chulhaNo = chulhaNo;
+				innerObj.productId = rows[i].productId;
+				innerObj.chulhaCount = rows[i].orderCount;
+				innerObj.orderNo = rows[i].orderNo;
+				innerObj.orderDetailNo = rows[i].orderDetailNo;
+				obj.detail.push(innerObj);
 			}
 			
-			if(Number(ioAmt) <= 0) {
-				alert('0이상 입력 필요');
-				return false;
+			var result = await chulhaInfo.chulha(obj);
+			
+			if(result) {
+				alert('출하 등록 완료되었습니다.');
+				$('#ipgoChulgoMainModal').modal('hide');
+				chulhaJspPage.refreshMainTable();
+			} else {
+				alert('출하 등록 실패, 관리자에게 문의해주세요.');
 			}
-			
-			return true;
-		}
-		
-		function validateChulgoAmt() {
-			
-			var ioAmt = $('#ioAmt').val();
-			
-			if(ioAmt == "") {
-				alert('출고 수량 입력 필수');
-				return false;
-			}
-			
-			if(Number(ioAmt) <= 0) {
-				alert('0 이상 입력 필요');
-				return false;
-			}
-			
-			if( 1 < Number(ioAmt) ) {
-				alert('현재 재고보다 출고량이 많습니다.');
-				return false;
-			}
-			
-			return true;
-		}
-		
-		function validate() {
-			var result;
-			
-			if(ipgoChulgo == 'ipgo') {
-				result = validateIpgoAmt();
-			};
-
-			if(ipgoChulgo == 'chulgo') {
-				result = validateChulgoAmt();
-			};
-			
-			return result;
-		}
+		});
 		
 	});	// document.ready
 </script>

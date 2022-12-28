@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import dao.ProductDao;
 import mes.frame.database.JDBCConnectionPool;
-import model.Product;
 import newest.mes.dao.OrderDao;
 import newest.mes.model.Order;
-import viewmodel.ProductViewModel;
 
 public class OrderService {
 
@@ -40,6 +37,21 @@ public class OrderService {
 		return orderList;
 	}
 	
+	public List<Order> getAllOrdersNoChulhaYet() {
+		List<Order> orderList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			orderList = orderDao.getAllOrdersNoChulhaYet(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return orderList;
+	}
+	
 	public List<Order> getOrderDetails(String orderNo) {
 		List<Order> orderList = null;
 		
@@ -50,6 +62,21 @@ public class OrderService {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return orderList;
+	}
+	
+	public List<Order> getOrderDetailsNoChulhaYet(String orderNo) {
+		List<Order> orderList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			orderList = orderDao.getOrderDetailsNoChulhaYet(conn, orderNo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return orderList;
@@ -100,6 +127,19 @@ public class OrderService {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			return orderDao.delete(conn, orderNo);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
+	public boolean chulha(Order order) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return orderDao.chulha(conn, order);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

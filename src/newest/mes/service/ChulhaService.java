@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import mes.frame.database.JDBCConnectionPool;
 import newest.mes.dao.ChulhaDao;
+import newest.mes.dao.OrderDaoImpl;
 import newest.mes.model.ChulhaInfo;
 import newest.mes.model.ChulhaInfoDetail;
+import newest.mes.model.Order;
 import newest.mes.viewmodel.ChulhaInfoViewModel;
 
 public class ChulhaService {
@@ -53,21 +57,45 @@ public class ChulhaService {
 		return chulhaList;
 	}
 	
-	public boolean insert(ChulhaInfo ci, List<ChulhaInfoDetail> detailList) {
+	public boolean chulha(JSONObject obj) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			conn.setAutoCommit(false);
-			
 			boolean inserted = false;
+			OrderService orderService = new OrderService(new OrderDaoImpl(), this.bizNo);
+			
+			// 출하 메인 데이터 insert
+			ChulhaInfo ci = new ChulhaInfo(obj.get("chulhaNo").toString(),
+										   obj.get("chulhaDate").toString(),
+										   obj.get("customerCode").toString());
+			JSONArray detailList = (JSONArray) obj.get("detail");
+			
 			inserted = chulhaDao.insert(conn, ci);
 			if(!inserted) {
 				conn.rollback();
 				return false;
 			}
 			
-			for(ChulhaInfoDetail cid : detailList) {
+			for(int i=0; i<detailList.length(); i++) {
+				// 출하 상세 데이터 insert
+				JSONObject cidJson = (JSONObject) detailList.get(i);
+				ChulhaInfoDetail cid = new ChulhaInfoDetail(
+												cidJson.get("chulhaNo").toString(),
+												cidJson.get("productId").toString(),
+												cidJson.get("chulhaCount").toString()
+											);
 				inserted = chulhaDao.insert(conn, cid);
 				if(!inserted) {
+					conn.rollback();
+					return false;
+				}
+				
+				// 주문 상세 테이블 출하여부 update
+				Order order = new Order(cidJson.get("orderNo").toString(),
+										cidJson.get("orderDetailNo").toString());
+				
+				boolean chulhaChangeToY = orderService.chulha(order);
+				if(!chulhaChangeToY) {
 					conn.rollback();
 					return false;
 				}

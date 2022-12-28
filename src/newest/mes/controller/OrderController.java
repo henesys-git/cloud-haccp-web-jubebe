@@ -13,14 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import dao.ProductDaoImpl;
-import model.Product;
 import newest.mes.dao.OrderDaoImpl;
 import newest.mes.model.Order;
 import newest.mes.service.OrderService;
-import service.ProductService;
 import utils.FormatTransformer;
-import viewmodel.ProductViewModel;
 
 
 @WebServlet("/mes-order")
@@ -57,7 +53,15 @@ public class OrderController extends HttpServlet {
 		else if(id.equals("detail")) {
 			List<Order> list = orderService.getOrderDetails(orderNo);
 			result = FormatTransformer.toJson(list);
-		} 
+		}
+		else if(id.equals("allNoChulhaYet")) {
+			List<Order> list = orderService.getAllOrdersNoChulhaYet();
+			result = FormatTransformer.toJson(list);
+		}
+		else if(id.equals("detailNoChulhaYet")) {
+			List<Order> list = orderService.getOrderDetailsNoChulhaYet(orderNo);
+			result = FormatTransformer.toJson(list);
+		}
 		else {
 			Order order = orderService.getOrderById(id);
 			result = FormatTransformer.toJson(order);

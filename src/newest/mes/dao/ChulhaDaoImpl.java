@@ -1,7 +1,6 @@
 package newest.mes.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -114,6 +113,8 @@ public class ChulhaDaoImpl implements ChulhaDao {
 	@Override
 	public boolean insert(Connection conn, ChulhaInfo ci) {
 		try {
+			stmt = conn.createStatement();
+			
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
 					.append("	mes_chulha_info (\n")
@@ -124,26 +125,23 @@ public class ChulhaDaoImpl implements ChulhaDao {
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?\n")
+					.append("		'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
+					.append("		'" + ci.getChulhaNo() + "',\n")
+					.append("		'" + ci.getChulhaDate() + "',\n")
+					.append("		'" + ci.getCustomerCode() + "'\n")
 					.append("	);\n")
 					.toString();
 
-			PreparedStatement ps = conn.prepareStatement(sql);
+			logger.debug("sql:\n" + sql);
 			
-			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, ci.getChulhaNo());
-			ps.setString(3, ci.getChulhaDate());
-			ps.setString(4, ci.getCustomerCode());
-			
-	        int i = ps.executeUpdate();
-
+			int i = stmt.executeUpdate(sql);
+			logger.debug("i:" + i);
 	        if(i == 1) { return true; }
-	    } catch (SQLException ex) {
-	        ex.printStackTrace();
-	    }
+	    } catch (Exception e) {
+	    	logger.error(e.getMessage());
+	    } finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
 
 	    return false;
 	}
@@ -151,38 +149,37 @@ public class ChulhaDaoImpl implements ChulhaDao {
 	@Override
 	public boolean insert(Connection conn, ChulhaInfoDetail cid) {
 		try {
+			stmt = conn.createStatement();
+			
 			String sql = new StringBuilder()
 					.append("INSERT INTO\n")
 					.append("	mes_chulha_info_detail (\n")
 					.append("		tenant_id, \n")
 					.append("		chulha_no,\n")
+					.append("		product_id,\n")
 					.append("		chulha_count,\n")
 					.append("		return_count,\n")
 					.append("		return_type\n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?,\n")
-					.append("		?\n")
+					.append("		'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
+					.append("		'" + cid.getChulhaNo() + "',\n")
+					.append("		'" + cid.getProductId() + "',\n")
+					.append("		'" + cid.getChulhaCount() + "',\n")
+					.append("		'" + cid.getReturnCount() + "',\n")
+					.append("		'" + cid.getReturnType() + "'\n")
 					.append("	);\n")
 					.toString();
 			
-			PreparedStatement ps = conn.prepareStatement(sql);
+			logger.debug("sql:\n" + sql);
 			
-			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, cid.getChulhaNo());
-			ps.setInt(3, cid.getChulhaCount());
-			ps.setInt(4, cid.getReturnCount());
-			ps.setString(5, cid.getReturnType());
-			
-			int i = ps.executeUpdate();
-			
+			int i = stmt.executeUpdate(sql);
 			if(i == 1) { return true; }
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+		} finally {
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
 		return false;

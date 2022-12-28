@@ -11,9 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import mes.frame.database.JDBCConnectionPool;
-import model.Product;
 import newest.mes.model.Order;
-import viewmodel.ProductViewModel;
 
 public class OrderDaoImpl implements OrderDao {
 	
@@ -62,6 +60,45 @@ public class OrderDaoImpl implements OrderDao {
 	};
 	
 	@Override
+	public List<Order> getAllOrdersNoChulhaYet(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT O.* 		\n")
+				.append("FROM mes_order O	\n")
+				.append("INNER JOIN mes_order_detail D	\n")
+				.append("	ON O.order_no = D.order_no	\n")
+				.append("WHERE O.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND D.chulha_yn = 'N'\n")
+				.append("GROUP BY O.order_no\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Order> list = new ArrayList<Order>();
+			
+			while(rs.next()) {
+				Order data = extractFromResultSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
 	public List<Order> getOrderDetails(Connection conn, String orderNo) {
 		
 		try {
@@ -71,7 +108,44 @@ public class OrderDaoImpl implements OrderDao {
 				.append("SELECT * 		\n")
 				.append("FROM mes_order_detail \n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("and order_no = '" + orderNo + "'\n")
+				.append("	AND order_no = '" + orderNo + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<Order> list = new ArrayList<Order>();
+			
+			while(rs.next()) {
+				Order data = extractFromResultDetailSet(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	@Override
+	public List<Order> getOrderDetailsNoChulhaYet(Connection conn, String orderNo) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT * 		\n")
+				.append("FROM mes_order_detail \n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND order_no = '" + orderNo + "'\n")
+				.append("	AND chulha_yn = 'N'\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -239,6 +313,33 @@ public class OrderDaoImpl implements OrderDao {
 	    return false;
 	}
 	
+	@Override
+	public boolean chulha(Connection conn, Order order) {
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+					.append("UPDATE mes_order_detail\n")
+					.append("SET chulha_yn = 'Y'\n")
+					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+					.append("  AND order_no = '" + order.getOrderNo() + "'\n")
+					.append("  AND order_detail_no = '" + order.getOrderDetailNo() + "';\n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+	        int i = stmt.executeUpdate(sql);
+
+	        if(i == 1) {
+	        	return true;
+	        }
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
 	
 	private Order extractFromResultSet(ResultSet rs) throws SQLException {
 		
@@ -255,6 +356,8 @@ public class OrderDaoImpl implements OrderDao {
 		
 		Order order = new Order();
 		
+		order.setOrderNo(rs.getString("order_no"));
+		order.setOrderDetailNo(rs.getString("order_detail_no"));
 		order.setProductId(rs.getString("product_id"));
 		order.setOrderCount(rs.getString("order_count"));
 		order.setChulhaYn(rs.getString("chulha_yn"));

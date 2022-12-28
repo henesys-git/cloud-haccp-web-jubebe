@@ -5,6 +5,14 @@ public class ChulhaInfo {
 	private String chulhaDate;
 	private String customerCode;
 	
+	public ChulhaInfo() {}
+	
+	public ChulhaInfo(String chulhaNo, String chulhaDate, String customerCode) {
+		this.chulhaNo = chulhaNo;
+		this.chulhaDate = chulhaDate;
+		this.customerCode = customerCode;
+	}
+	
 	public String getChulhaNo() {
 		return chulhaNo;
 	}
