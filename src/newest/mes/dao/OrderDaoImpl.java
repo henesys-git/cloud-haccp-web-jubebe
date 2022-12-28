@@ -331,7 +331,6 @@ public class OrderDaoImpl implements OrderDao {
 			logger.debug("sql:\n" + sql);
 			
 			int i = stmt.executeUpdate(sql);
-			System.out.println("int i : " + i + "##################");
 			sql = new StringBuilder()
 					.append("DELETE FROM mes_order_detail \n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
@@ -341,9 +340,6 @@ public class OrderDaoImpl implements OrderDao {
 			logger.debug("sql:\n" + sql);
 			
 			int j = stmt.executeUpdate(sql);
-			System.out.println("int j : " + j + "##################");
-			
-			System.out.println(i == 1 && j >= 1);
 			
 	        if(i == 1 && j >= 1) {
 	        	return true;

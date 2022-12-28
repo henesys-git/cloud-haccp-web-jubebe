@@ -609,6 +609,7 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productStorage.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/rawmaterialStorage.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productionPlan.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productionResult.js"></script>
 	<!-- raw material -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/rawmaterial.js"></script>
 	<!-- customer -->
