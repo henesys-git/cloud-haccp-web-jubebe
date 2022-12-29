@@ -49,7 +49,9 @@ ProductStorage.prototype.ipgoChulgo = function (obj) {
         					+ "&productStockNo=" + obj.productStockNo
         					+ "&productId=" + obj.productId
         					+ "&ioDatetime=" + obj.ioDatetime
-        					+ "&ioAmt=" + obj.ioAmt,
+        					+ "&ioAmt=" + obj.ioAmt
+							+ "&prodResultParam=" + obj.prodResultParam
+							+ "&planNo=" + obj.planNo,
         success: function (result) {
         	return result;
         }

@@ -209,10 +209,29 @@ public class ProductStorageDaoImpl implements ProductStorageDao {
 	
 	@Override
 	public boolean ipgoChulgo(Connection conn, ProductStorage storage) {
+		
+		String sql = "";
+		
 		try {
 			stmt = conn.createStatement();
 			
-			String sql = new StringBuilder()
+			if(storage.getProdResultParam().equals("Y")) {
+				
+				sql = new StringBuilder()
+						.append("UPDATE \n")
+						.append("	mes_production_instruction \n")
+						.append("SET ipgo_yn = 'Y'\n")
+						.append("WHERE plan_no = '"+ storage.getPlanNo() + "'\n")
+						.append("\n")
+						.toString();
+				
+				
+				logger.debug("sql:\n" + sql);
+				int k = stmt.executeUpdate(sql);
+				
+			}
+			
+			sql = new StringBuilder()
 					.append("INSERT INTO\n")
 					.append("	mes_product_storage (\n")
 					.append("		tenant_id, \n")

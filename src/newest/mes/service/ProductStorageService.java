@@ -107,7 +107,9 @@ public class ProductStorageService {
 	public boolean ipgoChulgo(String productStockNo, 
 							  String productId, 
 							  String ioDatetime, 
-							  int ioAmt) {
+							  int ioAmt,
+							  String prodResultParam,
+							  String planNo) {
 		try {
 			ProductStorage storage = new ProductStorage();
 			if(productStockNo.equals("")) {
@@ -118,6 +120,8 @@ public class ProductStorageService {
 			storage.setProductId(productId);
 			storage.setIoDatetime(ioDatetime);
 			storage.setIoAmt(ioAmt);
+			storage.setProdResultParam(prodResultParam);
+			storage.setPlanNo(planNo);
 			
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
 			return productStorageDao.ipgoChulgo(conn, storage);

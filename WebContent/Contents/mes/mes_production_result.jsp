@@ -81,6 +81,7 @@
 		var row = mainTable.rows(rowIdx).data();
 		var planNo = row[0].planNo;
 		var productId = row[0].productId;
+		var packingCount = row[0].packingCount;
 			
 		$.ajax({
             type: "POST",
@@ -88,7 +89,10 @@
             data: {
             	productId: row[0].productId,
             	productName: row[0].productName,
-            	ipgoOnly: "Y"
+            	ipgoOnly: "Y",
+            	prodResultParam : "Y",
+            	planNo : planNo,
+            	packingCount : packingCount
             },
             success: function (html) {
                 $("#modalWrapper").html(html);

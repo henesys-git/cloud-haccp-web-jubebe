@@ -14,6 +14,8 @@ public class ProductStorage {
 	private String storageNo;
 	private String storageName;
 	private String rawmaterialDeductYn;
+	private String prodResultParam;
+	private String planNo;
 	
 	public ProductStorage() {}
 	
@@ -52,6 +54,12 @@ public class ProductStorage {
 	}
 	public String getRawmaterialDeductYn() {
 		return rawmaterialDeductYn;
+	}
+	public String getProdResultParam() {
+		return prodResultParam;
+	}
+	public String getPlanNo() {
+		return planNo;
 	}
 	public void setProductStockNo(String productStockNo) {
 		this.productStockNo = productStockNo;
@@ -96,6 +104,14 @@ public class ProductStorage {
 
 	public void setStorageName(String storageName) {
 		this.storageName = storageName;
+	}
+	
+	public void setProdResultParam(String prodResultParam) {
+		this.prodResultParam = prodResultParam;
+	}
+
+	public void setPlanNo(String planNo) {
+		this.planNo = planNo;
 	}
 
 	@Override

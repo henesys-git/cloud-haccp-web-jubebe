@@ -60,7 +60,9 @@ public class ProductStorageController extends HttpServlet {
 			String productStockNo = req.getParameter("productStockNo");
 			String ioDatetime = req.getParameter("ioDatetime");
 			int ioAmt = Integer.parseInt(req.getParameter("ioAmt"));
-			Boolean success = psService.ipgoChulgo(productStockNo, productId, ioDatetime, ioAmt);
+			String prodResultParam = req.getParameter("prodResultParam");
+			String planNo = req.getParameter("planNo");
+			Boolean success = psService.ipgoChulgo(productStockNo, productId, ioDatetime, ioAmt, prodResultParam, planNo);
 			result = success.toString();
 		} else if(id.equals("stock")) {
 			List<ProductStorage> list = psService.getStock(stockNo);

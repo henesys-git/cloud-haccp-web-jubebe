@@ -13,6 +13,9 @@
 	String productName = "";
 	String curAmt = "";
 	String ipgoOnly = "";
+	String prodResultParam = "";
+	String planNo = "";
+	String packingCount = "";
 	
 	if(request.getParameter("productStockNo") != null) {
 		productStockNo = request.getParameter("productStockNo");
@@ -32,6 +35,18 @@
 
 	if(request.getParameter("ipgoOnly") != null) {
 		ipgoOnly = request.getParameter("ipgoOnly");
+	}
+	
+	if(request.getParameter("prodResultParam") != null) {
+		prodResultParam = request.getParameter("prodResultParam");
+	}
+	
+	if(request.getParameter("planNo") != null) {
+		planNo = request.getParameter("planNo");
+	}
+	
+	if(request.getParameter("packingCount") != null) {
+		packingCount = request.getParameter("packingCount");
 	}
 %>
 
@@ -145,6 +160,7 @@
 			$('#ipgoChulgoTitle').text('완제품 입고');
 			$('#ipgoChulgoText').text('입고수량');
 			$('#ipgoChulgoDateText').text('입고일자');
+			$('#ioAmt').val('<%=packingCount%>');
 			$('#ipgoChulgoMainModal').modal('show');
 		} else {
 			$('#ipgoChulgoSelectModal').modal('show');
@@ -162,6 +178,8 @@
 							+ " " 
 							+ new HeneDate().getTime();
 			obj.productStockNo = "<%=productStockNo%>";
+			obj.prodResultParam = "<%=prodResultParam%>";
+			obj.planNo = "<%=planNo%>";
 			
 			if(ipgoChulgo == 'chulgo') {
 				obj.ioAmt = Number( $('#ioAmt').val() ) * -1;
@@ -175,7 +193,13 @@
 			if(result) {
 				alert('완제품 입출고 완료되었습니다.');
 				$('#ipgoChulgoMainModal').modal('hide');
-				productStockJspPage.fillSubTable("<%=productId%>");
+				
+				if('<%=prodResultParam%>' == 'Y') {
+					refreshMainTable();
+				}
+				else {
+					productStockJspPage.fillSubTable("<%=productId%>");
+				}
 			} else {
 				alert('완제품 입출고 실패, 관리자에게 문의해주세요.');
 			}
