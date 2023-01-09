@@ -97,4 +97,17 @@ public class ProductionPlanService {
 		return false;
 	}
 	
+	public boolean instructionInsert(String instructionDate, String productId, String planNo, String instructionCount) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return planDao.instructionInsert(conn, instructionDate, productId, planNo, instructionCount);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
 }

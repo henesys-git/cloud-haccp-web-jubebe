@@ -86,6 +86,10 @@ public class ProductionPlanController extends HttpServlet {
 		if(req.getParameter("type").equals("delete")) {
 			delete(req, res);
 		}
+		
+		if(req.getParameter("type").equals("instruction_insert")) {
+			instructionInsert(req, res);
+		}
 	}
 	
 	public void insert(HttpServletRequest req, HttpServletResponse res) {
@@ -171,6 +175,28 @@ public class ProductionPlanController extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void instructionInsert(HttpServletRequest req, HttpServletResponse res) {
+		HttpSession session = req.getSession();
+		String tenantId = (String) session.getAttribute("bizNo");
+		
+		String instructionDate = req.getParameter("instructionDate");
+		String productId = req.getParameter("productId");
+		String planNo = req.getParameter("planNo");
+		String instructionCount = req.getParameter("instructionCount");
+		
+		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
+		Boolean inserted = planService.instructionInsert(instructionDate, productId, planNo, instructionCount);
+		
+		res.setContentType("html/text; charset=UTF-8");
+		
+		try {
+			PrintWriter out = res.getWriter();
+			out.print(inserted.toString());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

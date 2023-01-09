@@ -76,6 +76,15 @@
 	    	$('#plan_count2').val('');
 	    };
 	     
+	    var initModal4 = function () {
+	    	$('#instruction_date').val('');
+	    	$('#product_name4').val('');
+	    	$('#customer_code4').val('');
+	    	$('#product_id4').val('');
+	    	$('#plan_no4').val('');
+	    	$('#instruction_count').val('');
+	    };
+	    
 		initTable();
 		
 		
@@ -155,6 +164,7 @@
 			$('#plan_date2').val(row[0].planDate);
 			$('#product_id2').val(row[0].productId);
 			$('#customer_code2').val(row[0].customerCode);
+			$('#product_name2').val(row[0].productName);
 			$('#plan_count2').val(row[0].planCount);
 			$('#plan_no').val(row[0].planNo);
 			
@@ -226,6 +236,72 @@
 			}
 			
 		});
+		
+		// 생산지시등록
+		$('#instruction').click(function() {
+			
+			var row = mainTable.rows( '.selected' ).data();
+			
+			if(row.length == 0) {
+				alert('생산지시를 등록할 항목을 선택해주세요.');
+				return false;
+			}
+			
+			initModal4();
+			
+			$('#myModal4').modal('show');
+			$('.modal-title4').text('생산지시등록');
+			
+			$('#product_name4').val(row[0].productName);
+			$('#product_id4').val(row[0].productId);
+			$('#plan_no4').val(row[0].planNo);
+			$('#instruction_count').val(row[0].planCount);
+			
+			$('#save4').off().click(function() {
+				var instructionDate = $('#instruction_date').val();
+				var productId = $('#product_id4').val();
+				var planNo = $('#plan_no4').val();
+				var instructionCount = $('#instruction_count').val();
+				
+				var jArray = new Array();
+				
+				if(instructionDate === '') {
+					alert('지시일자를 선택해주세요');
+					return false;
+				}
+				
+				
+				var check = confirm('생산지시를 등록하시겠습니까?');
+				
+				if(check) {
+					
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/mes-productionPlan",
+		            data: {
+		            	"type" : "instruction_insert",
+		            	"instructionDate" : instructionDate,
+		            	"planNo" : planNo,
+		            	"productId" : productId,
+		            	"instructionCount" : instructionCount
+		            	
+		            },
+		            success: function (insertResult) {
+		            	if(insertResult == 'true') {
+		            		alert('생산지시 정보가 등록되었습니다.');
+		            		$('#myModal4').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+				
+				}
+				
+			});
+		});
+		
 		
 		$('#order_no').click(function() {
 			
@@ -312,6 +388,9 @@
       	  </button>
       	  <button type="button" class="btn btn-danger" id="delete">
       	  	생산계획삭제
+      	  </button>
+      	   <button type="button" class="btn btn-warning" id="instruction">
+      	  	생산지시등록
       	  </button>
       	</div>
       </div><!-- /.col -->
@@ -478,3 +557,36 @@
         	</div>
       	</div>
  </div>
+
+ <!-- Modal -->  
+<div class="modal fade" id="myModal4" role="dialog">  
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->  
+    <div class="modal-content">  
+      <div class="modal-header">
+        <h4 class="modal-title4"></h4>  
+      </div>  
+      <div class="modal-body">
+      	<label for="basic-url">생산지시일자</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="instruction_date" readonly>
+		</div>
+		<label for="basic-url">제품명</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="product_name4" readonly>
+		  <input type="hidden" class="form-control" id="product_id4">
+		  <input type="hidden" class="form-control" id="plan_no4">
+		</div>
+		<label for="basic-url">생산지시량</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="instruction_count">
+		</div>
+      </div> 
+      <div class="modal-footer">  
+        <button type="button" class="btn btn-primary" id="save4">저장</button>  
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+      </div>  
+    </div>  
+  </div>  
+</div>

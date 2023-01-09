@@ -124,6 +124,7 @@ public class OrderDaoImpl implements OrderDao {
 				.append("B.product_name,  		\n")
 				.append("A.order_count,  		\n")
 				.append("A.chulha_yn  		\n")
+				//.append("A.order_no  		\n")
 				.append("FROM mes_order_detail A\n")
 				.append("INNER JOIN product B \n")
 				.append("ON A.product_id = B.product_id \n")
@@ -480,8 +481,8 @@ public class OrderDaoImpl implements OrderDao {
 		
 		Order order = new Order();
 		
-		order.setOrderNo(rs.getString("order_no"));
-		order.setOrderDetailNo(rs.getString("order_detail_no"));
+		//order.setOrderNo(rs.getString("order_no"));
+		//order.setOrderDetailNo(rs.getString("order_detail_no"));
 		order.setProductId(rs.getString("product_id"));
 		order.setProductName(rs.getString("product_name"));
 		order.setOrderCount(rs.getString("order_count"));

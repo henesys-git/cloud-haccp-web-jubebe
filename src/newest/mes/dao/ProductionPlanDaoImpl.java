@@ -259,6 +259,62 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 	    return false;
 	}
 	
+	@Override
+	public boolean instructionInsert(Connection conn, String instructionDate, String productId, String planNo, String instructionCount) {
+		
+		String sql = "";		
+		
+		try {
+			
+			stmt = conn.createStatement();
+			
+			sql = new StringBuilder()
+					.append("INSERT INTO\n")
+					.append("	mes_production_instruction (\n")
+					.append("		tenant_id, \n")
+					.append("		plan_no,\n")
+					.append("		work_line_no,\n")
+					.append("		plan_count_allocated,\n")
+					.append("		work_date,\n")
+					.append("		work_start_time,\n")
+					.append("		work_finish_time,\n")
+					.append("		packing_count,\n")
+					.append("		worker_count,\n")
+					.append("		rawmaterial_deduct_yn,\n")
+					.append("		work_status,\n")
+					.append("		ipgo_yn \n")
+					.append("	)\n")
+					.append("VALUES\n")
+					.append("	(\n")
+					.append("		'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
+					.append("		'" + planNo + "', \n")
+					.append("		1 ,\n")
+					.append("		'" + instructionCount + "', \n")
+					.append("		'" + instructionDate + "', \n")
+					.append("		SYSDATETIME,\n")
+					.append("		SYSDATETIME,\n")
+					.append("		0,\n")
+					.append("		1,\n")
+					.append("		'',\n")
+					.append("		'생산완료',\n")
+					.append("		'N' \n")
+					.append("	);\n")
+					.toString();
+
+			
+	        int i = stmt.executeUpdate(sql);
+	        
+	        if(i == 1) {
+	        	return true;
+	        }
+
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
 	
 	private ProductionPlan extractFromResultSet(ResultSet rs) throws SQLException {
 		

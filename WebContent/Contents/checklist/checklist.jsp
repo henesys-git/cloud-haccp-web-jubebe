@@ -473,10 +473,12 @@ table#ccpDataTable.dataTable tbody tr:hover > .sorting_1 {
 	
 	function registSignInfo(obj){
 		
-		var rowIdx = $(obj).closest("tr").index();
-		var selectedRow = mainTable.rows(rowIdx).data()[0];
+		//var rowIdx = $(obj).closest("tr").index();
+		//var selectedRow = mainTable.rows(rowIdx).data()[0];
+		var selectedRow = mainTable.row( $(obj).parents('tr') ).data();
 		var signTarget = $(obj).attr("id");
-		
+		console.log(selectedRow);
+		console.log(signTarget);
 		var check = confirm('서명하시겠습니까?');
 		
 		if(check) {

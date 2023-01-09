@@ -20,7 +20,7 @@ public class JDBCConnectionPool {
 	      try {
 	           Class.forName("org.mariadb.jdbc.Driver");
 	           
-	           String url = "jdbc:mariadb://103.60.126.81:3306/master";
+	           String url = "jdbc:mariadb://182.162.73.201:3306/master";
 	           
 	           logger.debug("DB URL: " + url);
 	           
@@ -40,7 +40,7 @@ public class JDBCConnectionPool {
 	      try {
 	           Class.forName("org.mariadb.jdbc.Driver");
 	           
-	           String url = "jdbc:mariadb://103.60.126.81:3306/" + bizNo;
+	           String url = "jdbc:mariadb://182.162.73.201:3306/" + bizNo;
 	           
 	           logger.debug("DB URL: " + url);
 	           
@@ -66,7 +66,7 @@ public class JDBCConnectionPool {
 //	  		   String JDBCStr = (String)jsonObject.get("jdbc_zip");
 	  		   
 	           Class.forName("org.mariadb.jdbc.Driver");
-	           conn = DriverManager.getConnection("jdbc:mariadb://103.60.126.81:3306/master", "root", "henesys0728!");
+	           conn = DriverManager.getConnection("jdbc:mariadb://182.162.73.201:3306/master", "root", "henesys0728!");
 	           conn.setAutoCommit (true);
 	      } catch ( Exception e ) {
 	    	  logger.error("Master DB Connection ERROR : " + e.getMessage());

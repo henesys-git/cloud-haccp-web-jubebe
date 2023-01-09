@@ -15,4 +15,5 @@ public interface ProductionPlanDao {
 	public boolean insert(Connection conn, ProductionPlan plan);
 	public boolean update(Connection conn, ProductionPlan plan);
 	public boolean delete(Connection conn, String planNo);
+	public boolean instructionInsert(Connection conn, String instructionDate, String productId, String planNo, String instructionCount);
 }
