@@ -247,6 +247,21 @@
 	    		return false;
 	    	}
     		
+	    	$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/ccpSign.jsp',
+                data: {
+                	sensorKey: sensorKey,
+                	createTime: createTime,
+                	date: selectedDate,
+                	processCode: processCode
+                },
+                success: function (html) {
+                    $("#modalWrapper2").html(html);
+                }
+            });
+	    	/*
+	    	
     		var signUserName = await ccpSign.sign(selectedDate, processCode);
     		
     		if(signUserName) {
@@ -256,6 +271,8 @@
     		} else {
     			alert('서명 실패, 관리자에게 문의해주세요');
     		}
+    		
+    		*/
     	});
 	    
     });
@@ -376,3 +393,5 @@
 <!-- /.content -->
 
 <div id="modalWrapper"></div>
+
+<div id="modalWrapper2"></div>

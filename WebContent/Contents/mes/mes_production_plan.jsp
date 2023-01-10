@@ -16,6 +16,7 @@
 		
 		let date = new SetSingleDate2("", "#plan_date", 0);
 		let date2 = new SetSingleDate2("", "#plan_date2", 0);
+		let date3 = new SetSingleDate2("", "#instruction_date", 0);
 		
 		let mainTable; //메인테이블
 		let mainTableSelectedRow;
@@ -79,7 +80,6 @@
 	    var initModal4 = function () {
 	    	$('#instruction_date').val('');
 	    	$('#product_name4').val('');
-	    	$('#customer_code4').val('');
 	    	$('#product_id4').val('');
 	    	$('#plan_no4').val('');
 	    	$('#instruction_count').val('');
@@ -239,6 +239,7 @@
 		
 		// 생산지시등록
 		$('#instruction').click(function() {
+			initModal4();
 			
 			var row = mainTable.rows( '.selected' ).data();
 			
@@ -247,7 +248,7 @@
 				return false;
 			}
 			
-			initModal4();
+			
 			
 			$('#myModal4').modal('show');
 			$('.modal-title4').text('생산지시등록');

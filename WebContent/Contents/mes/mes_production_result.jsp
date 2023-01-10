@@ -69,8 +69,70 @@
     		mainTable.clear().rows.add(resultsList).draw();
     		
 		}
-	     
+	    
+	    var initModal = function () {
+	    	$('#work_date').val('');
+	    	$('#product_name').val('');
+	    	$('#packing_count').val('');
+	    	$('#plan_no').val('');
+	    };
+	    
 		initTable();
+		
+		
+		// 수정
+		$('#update').click(function() {
+			initModal();
+			
+			var row = mainTable.rows( '.selected' ).data();
+			
+			if(row.length == 0) {
+				alert('포장수량을 수정할 실적 정보를 선택해주세요.');
+				return false;
+			}
+			
+			$('#myModal').modal('show');
+			$('.modal-title').text('생산실적 포장수량 수정');
+			
+			$('#work_date').val(row[0].workDate);
+			$('#product_name').val(row[0].productName);
+			$('#packing_count').val(row[0].packingCount);
+			$('#plan_no').val(row[0].planNo);
+			
+			
+			
+			$('#save').off().click(function() {
+				
+				var planNo = $('#plan_no').val();
+				var packingCount = $('#packing_count').val();
+				
+				var check = confirm('해당 생산실적의 포장수량을 수정하시겠습니까?');
+				
+				if(check) {
+					
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/mes-productionResult",
+		            data: {
+		            	"type" : "packingUpdate",
+		            	"packingCount" : packingCount,
+		            	"planNo" : planNo
+		            	
+		            },
+		            success: function (updateResult) {
+		            	if(updateResult == 'true') {
+		            		alert('수정되었습니다.');
+		            		$('#myModal').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('수정 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+				
+				}
+			});
+		});
 		
     });
 	
@@ -114,6 +176,9 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
       	<div class="float-sm-right">
+      		  <button type="button" class="btn btn-success" id="update">
+      	  		포장수량수정
+      	  	  </button>
       	</div>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -165,5 +230,38 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<!-- Modal -->  
+<div class="modal fade" id="myModal" role="dialog">  
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->  
+    <div class="modal-content">  
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>  
+      </div>  
+      <div class="modal-body">
+      	<label for="basic-url">작업일자</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="work_date" readonly>
+		</div>
+		<label for="basic-url">제품명</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="product_name" readonly>
+		  <input type="hidden" class="form-control" id="plan_no">
+		</div>
+		<label for="basic-url">포장수량</label>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="packing_count">
+		</div>
+      </div> 
+      <div class="modal-footer">  
+        <button type="button" class="btn btn-primary" id="save">저장</button>  
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
+      </div>  
+    </div>  
+      
+  </div>  
+</div>
 
  <div id="modalWrapper"></div>

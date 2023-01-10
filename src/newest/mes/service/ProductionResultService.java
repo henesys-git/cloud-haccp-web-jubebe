@@ -72,10 +72,10 @@ public class ProductionResultService {
 		return false;
 	}
 	
-	public boolean update(ProductionPlan plan) {
+	public boolean packingUpdate(String packingCount, String planNo) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return resultDao.update(conn, plan);
+			return resultDao.packingUpdate(conn, packingCount, planNo);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

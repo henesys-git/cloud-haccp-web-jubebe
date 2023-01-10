@@ -208,17 +208,15 @@ public class ProductionResultDaoImpl implements ProductionResultDao {
 	}
 	
 	@Override
-	public boolean update(Connection conn, ProductionPlan plan) {
+	public boolean packingUpdate(Connection conn, String packingCount, String planNo) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-					.append("UPDATE mes_production_plan\n")
-					.append("SET plan_count ='" + plan.getPlanCount() + "',\n")
-					.append("plan_date ='" + plan.getPlanDate() + "'\n")
+					.append("UPDATE mes_production_instruction\n")
+					.append("SET packing_count ='" + packingCount + "' \n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND plan_no='" + plan.getPlanNo() + "' \n")
-					.append("  AND product_id='" + plan.getProductId() + "';\n")
+					.append("  AND plan_no='" + planNo + "' \n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);

@@ -78,8 +78,8 @@ public class ProductionResultController extends HttpServlet {
 			insert(req, res);
 		}
 		
-		if(req.getParameter("type").equals("update")) {
-			update(req, res);
+		if(req.getParameter("type").equals("packingUpdate")) {
+			packingUpdate(req, res);
 		}
 		
 		if(req.getParameter("type").equals("delete")) {
@@ -123,24 +123,16 @@ public class ProductionResultController extends HttpServlet {
 		}
 	}
 
-	public void update(HttpServletRequest req, HttpServletResponse res) {
+	public void packingUpdate(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		ProductionPlan plan = new ProductionPlan();
-		
-		String planCount = req.getParameter("planCount");
+		String packingCount = req.getParameter("packingCount");
 		String planNo = req.getParameter("planNo");
-		String productId = req.getParameter("productId");
-		String planDate = req.getParameter("planDate");
 		
-		plan.setPlanCount(planCount);
-		plan.setPlanNo(planNo);
-		plan.setProductId(productId);
-		plan.setPlanDate(planDate);
 		
-		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
-		Boolean updated = planService.update(plan);
+		ProductionResultService resultService = new ProductionResultService(new ProductionResultDaoImpl(), tenantId);
+		Boolean updated = resultService.packingUpdate(packingCount, planNo);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		
