@@ -50,6 +50,7 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 					.append("	L.max_value AS lmt_max_val,\n")
 					.append("	A.sensor_key AS process_no,\n")
 					.append("	ifnull(A.create_time - Atemp.create_time, 0) AS prcs_progress_time,\n")
+					.append("	'Y' AS event_yn,\n")
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', 1) AS meas_date,\n")
 					.append("	SUBSTRING_INDEX(A.create_time, ' ', -1) AS meas_time,\n")
 					.append("	A.sensor_value AS meas_val,\n")
@@ -148,6 +149,7 @@ public class ShmC0030DaoImpl implements ShmCCPDataDao {
 		c0010.setMeasVal(rs.getString("meas_val"));
 		c0010.setBreakYn(rs.getString("break_yn"));
 		c0010.setImprvComm(rs.getString("imprv_comm"));
+		c0010.setEventYn(rs.getString("event_yn"));
 		
 	    return c0010;
 	}

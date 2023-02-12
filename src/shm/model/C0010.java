@@ -43,6 +43,8 @@ public class C0010 {
 	private String processNo;
 	@JsonProperty("PRCS_PROGRESS_TIME")
 	private String prcsProgressTime;
+	@JsonProperty("EVENT_YN")
+	private String eventYn;
 	@JsonProperty("MEAS_DATE")
 	private String measDate;
 	@JsonProperty("MEAS_TIME")
@@ -129,6 +131,9 @@ public class C0010 {
 	public String getImprvComm() {
 		return imprvComm;
 	}
+	public String getEventYn() {
+		return eventYn;
+	}
 	public void setLcnsNo(String lcnsNo) {
 		this.lcnsNo = lcnsNo;
 	}
@@ -204,17 +209,21 @@ public class C0010 {
 	public void setImprvComm(String imprvComm) {
 		this.imprvComm = imprvComm;
 	}
+	public void setEventYn(String eventYn) {
+		this.eventYn = eventYn;
+	}
 	
 	@Override
 	public String toString() {
-		return "C0010 [lcnsNo=" + lcnsNo + ", companyNm=" + companyNm + ", createDate="
-				+ createDate + ", createTime=" + createTime + ", recCode=" + recCode + ", recNm=" + recNm + ", seq="
-				+ seq + ", equipCode=" + equipCode + ", equipNm=" + equipNm + ", verfTypeCode=" + verfTypeCode
-				+ ", verfTypeNm=" + verfTypeNm + ", productlistTypeCd=" + productlistTypeCd + ", productlistTypeNm="
-				+ productlistTypeNm + ", productlistNm=" + productlistNm + ", lmtItemCode=" + lmtItemCode
-				+ ", lmtItemNm=" + lmtItemNm + ", lmtMinVal=" + lmtMinVal + ", lmtMaxVal="
-				+ lmtMaxVal + ", processNo=" + processNo + ", prcsProgressTime=" + prcsProgressTime + ", measDate="
-				+ measDate + ", measTime=" + measTime + ", measVal=" + measVal + ", breakYn=" + breakYn
-				+ ", imprvComm=" + imprvComm + "]";
+		return "C0010 [lcnsNo=" + lcnsNo + ", companyNm=" + companyNm + ", createDate=" + createDate + ", createTime="
+				+ createTime + ", recCode=" + recCode + ", recNm=" + recNm + ", seq=" + seq + ", equipCode=" + equipCode
+				+ ", equipNm=" + equipNm + ", verfTypeCode=" + verfTypeCode + ", verfTypeNm=" + verfTypeNm
+				+ ", productlistTypeCd=" + productlistTypeCd + ", productlistTypeNm=" + productlistTypeNm
+				+ ", productlistNm=" + productlistNm + ", lmtItemCode=" + lmtItemCode + ", lmtItemNm=" + lmtItemNm
+				+ ", lmtMinVal=" + lmtMinVal + ", lmtMaxVal=" + lmtMaxVal + ", processNo=" + processNo
+				+ ", prcsProgressTime=" + prcsProgressTime + ", eventYn=" + eventYn + ", measDate=" + measDate
+				+ ", measTime=" + measTime + ", measVal=" + measVal + ", breakYn=" + breakYn + ", imprvComm="
+				+ imprvComm + "]";
 	}
+	
 }
