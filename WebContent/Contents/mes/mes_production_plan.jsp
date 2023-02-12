@@ -97,6 +97,8 @@
 			$('#myModal').modal('show');
 			$('.modal-title').text('생산계획등록');
 			
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+			
 			$('#save').off().click(function() {
 				var planDate = $('#plan_date').val();
 				var orderNo = $('#order_no').val();
@@ -365,7 +367,7 @@
 		
 		 setTimeout(function(){
 		 	$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-		 }, 1000);
+		 }, 3000);
     });
 	
 </script>

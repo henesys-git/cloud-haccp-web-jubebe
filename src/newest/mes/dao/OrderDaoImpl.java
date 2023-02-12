@@ -184,7 +184,7 @@ public class OrderDaoImpl implements OrderDao {
 			List<Order> list = new ArrayList<Order>();
 			
 			while(rs.next()) {
-				Order data = extractFromResultDetailSet(rs);
+				Order data = extractFromResultChulhaDetailSet(rs);
 				list.add(data);
 			}
 			
@@ -501,6 +501,20 @@ public class OrderDaoImpl implements OrderDao {
 		order.setOrderCount(rs.getString("order_count"));
 		order.setCustomerName(rs.getString("customer_name"));
 		order.setProductName(rs.getString("product_name"));
+		
+		return order;
+	}
+	
+	private Order extractFromResultChulhaDetailSet(ResultSet rs) throws SQLException {
+		
+		Order order = new Order();
+		
+		order.setOrderNo(rs.getString("order_no"));
+		order.setOrderDetailNo(rs.getString("order_detail_no"));
+		order.setProductId(rs.getString("product_id"));
+		order.setProductName(rs.getString("product_name"));
+		order.setOrderCount(rs.getString("order_count"));
+		order.setChulhaYn(rs.getString("chulha_yn"));
 		
 		return order;
 	}

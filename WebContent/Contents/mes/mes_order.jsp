@@ -119,6 +119,7 @@
 	     
 		initTable();
 		initOrderTable();
+		initCustomerTable();
 		
 		// 등록
 		$('#insert').click(function() {
@@ -299,7 +300,7 @@
 			$('#myModal2').modal('show');
 			$('.modal-title2').text('고객사 정보 조회');
 			
-			initCustomerTable();
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 			
 			$('#customerTable tbody').on('click', 'tr', function () {
 	    		
@@ -466,7 +467,7 @@
 		
 		 setTimeout(function(){
 		 	$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-		 }, 1000);
+		 }, 3000);
     });
 	
 	//주문정보 테이블 행 제거

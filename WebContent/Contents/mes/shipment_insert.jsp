@@ -106,9 +106,10 @@
 		$('#ipgoChulgoMainModal').modal('show');
 		
 		var fillChulhaInsertTable = async function (orderInfo) {
+			console.log(orderInfo);
 			let order = new Order();
 	    	var orders = await order.getOrderDetailsNoChulhaYet(orderInfo.orderNo);
-			
+			console.log(orders);
 			$('#customerCode').text(orderInfo.customerCode);
 			$('#customerName').text(orderInfo.customerName);
 
@@ -202,7 +203,7 @@
 				innerObj.orderDetailNo = rows[i].orderDetailNo;
 				obj.detail.push(innerObj);
 			}
-			
+			console.log(obj);
 			var result = await chulhaInfo.chulha(obj);
 			console.log(result);
 			
