@@ -14,6 +14,12 @@ public class ProductViewModel {
 		this.productName = productName;
 	}
 	
+	public ProductViewModel(String productId, String productName) {
+		super();
+		this.productId = productId;
+		this.productName = productName;
+	}
+	
 	public String getProductId() {
 		return productId;
 	}

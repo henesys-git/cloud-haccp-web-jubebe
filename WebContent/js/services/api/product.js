@@ -27,3 +27,15 @@ Product.prototype.getProducts = function () {
     
 	return products;
 }
+
+Product.prototype.getProductTypes = function () {
+ 	var productType = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/product?id=type",
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return productType;
+}

@@ -106,4 +106,19 @@ public class ProductService {
 		
 		return productList;
 	}
+	
+	public List<ProductViewModel> getAllProductTypeViewModel() {
+		List<ProductViewModel> productList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			productList = productDao.getAllProductTypeViewModel(conn);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return productList;
+	}
 }

@@ -102,13 +102,15 @@ public class ProductDaoImpl implements ProductDao {
 					.append("	product (\n")
 					.append("		tenant_id,\n")
 					.append("		product_id,\n")
-					.append("		product_name\n")
+					.append("		product_name,\n")
+					.append("		parent_id \n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
 					.append("		?,\n")
 					.append("		?,\n")
-					.append("		?\n")
+					.append("		?,\n")
+					.append("		? \n")
 					.append("	);\n")
 					.toString();
 
@@ -117,6 +119,7 @@ public class ProductDaoImpl implements ProductDao {
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
 			ps.setString(2, product.getProductId());
 			ps.setString(3, product.getProductName());
+			ps.setString(4, product.getParentId());
 			
 	        int i = ps.executeUpdate();
 
@@ -138,7 +141,8 @@ public class ProductDaoImpl implements ProductDao {
 			
 			String sql = new StringBuilder()
 					.append("UPDATE product\n")
-					.append("SET product_name='" + product.getProductName() + "'\n")
+					.append("SET product_name='" + product.getProductName() + "',\n")
+					.append("    parent_id='" + product.getParentId() + "'\n")
 					.append("WHERE tenant_id='" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("  AND product_id='" + product.getProductId() + "';\n")
 					.toString();
@@ -225,10 +229,49 @@ public class ProductDaoImpl implements ProductDao {
 		return null;
 	};
 	
+	@Override
+	public List<ProductViewModel> getAllProductTypeViewModel(Connection conn) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT  								\n")
+				.append("	p1.product_id, 						\n")
+				.append("	p1.product_name  					\n")
+				.append("FROM product p1						\n")
+				.append("WHERE p1.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("	AND p1.product_level = 0			\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ProductViewModel> list = new ArrayList<ProductViewModel>();
+			
+			while(rs.next()) {
+				ProductViewModel data = extractViewModelFromResultSet2(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private Product extractFromResultSet(ResultSet rs) throws SQLException {
 		return new Product(
 					rs.getString("product_id"),
-					rs.getString("product_name")
+					rs.getString("product_name"),
+					rs.getString("parent_id")
 				);
 	}
 
@@ -236,6 +279,13 @@ public class ProductDaoImpl implements ProductDao {
 		return new ProductViewModel(
 				rs.getString("product_id"),
 				rs.getString("product_type"),
+				rs.getString("product_name")
+				);
+	}
+	
+	private ProductViewModel extractViewModelFromResultSet2(ResultSet rs) throws SQLException {
+		return new ProductViewModel(
+				rs.getString("product_id"),
 				rs.getString("product_name")
 				);
 	}

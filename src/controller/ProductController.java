@@ -52,7 +52,13 @@ public class ProductController extends HttpServlet {
 		} else if(id.equals("allvm")) {
 			List<ProductViewModel> list = productService.getAllProductsViewModel();
 			result = FormatTransformer.toJson(list);
-		} else {
+		} 
+		  else if(id.equals("type")) {
+			List<ProductViewModel> list = productService.getAllProductTypeViewModel();
+			result = FormatTransformer.toJson(list);
+		} 
+		
+		else {
 			Product product = productService.getProductById(id);
 			result = FormatTransformer.toJson(product);
 		}
@@ -83,7 +89,7 @@ public class ProductController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tenantId = (String) session.getAttribute("bizNo");
 		
-		Product product = new Product(req.getParameter("id"), req.getParameter("name"));
+		Product product = new Product(req.getParameter("id"), req.getParameter("name"), req.getParameter("parentId"));
 		
 		ProductService productService = new ProductService(new ProductDaoImpl(), tenantId);
 		Boolean inserted = productService.insert(product);

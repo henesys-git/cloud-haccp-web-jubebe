@@ -13,6 +13,13 @@ public class Product {
 		this.productId = productId;
 		this.productName = productName;
 	}
+	
+	public Product(String productId, String productName, String parentId) {
+		super();
+		this.productId = productId;
+		this.productName = productName;
+		this.parentId = parentId;
+	}
 
 	public Product(String productId, String productName, String productLevel, String parentId) {
 		super();

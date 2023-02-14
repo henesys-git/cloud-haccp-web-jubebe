@@ -20,13 +20,34 @@
 					pageLength: 10,
 					columns: [
 						{ data: "productId", defaultContent: '' },
-						{ data: "productName", defaultContent: '' }
+						{ data: "productName", defaultContent: '' },
+						{ data: "parentId", defaultContent: '' }
+			        ],
+			        'columnDefs': [
+			        	{
+							'targets': [2],
+				   			'createdCell':  function (td, cellData, rowData, rowinx, col) {
+				   				$(td).attr('style', 'display: none;'); 
+				   			}
+						}
 			        ]
 			}
 					
 			mainTable = $('#productTable').DataTable(
 				mergeOptions(heneMainTableOpts, customOpts)
 			);
+	    }
+	    
+	    async function initSelectType() {
+	    	var products = new Product();
+	    	var productsTypeList = await products.getProductTypes();
+	    	
+		    console.log(productsTypeList);
+		    console.log(productsTypeList.length);
+		    
+		    for(var i = 0; i < productsTypeList.length; i++) {
+		    	$("#product-type").append("<option value = '"+ productsTypeList[i].productId +"'>" + productsTypeList[i].productName + "</option>");
+		    }
 	    }
 	    
 	    async function refreshMainTable() {
@@ -43,6 +64,7 @@
 	    };
 	     
 		initTable();
+		initSelectType();
 		
 		// 등록
 		$('#insert').click(function() {
@@ -51,9 +73,12 @@
 			$('#myModal').modal('show');
 			$('.modal-title').text('등록');
 			
+			$('#product-type option:eq(0)').prop("selected", true);
+			
 			$('#save').off().click(function() {
 				var id = $('#product-id').val();
 				var name = $('#product-name').val();
+				var type = $('#product-type option:selected').val();
 				
 				if(id === '') {
 					alert('제품아이디를 입력해주세요');
@@ -70,7 +95,8 @@
 		            data: {
 		            	"type" : "insert",
 		            	"id" : id, 
-		            	"name" : name 
+		            	"name" : name,
+		            	"parentId" : type 
 		            },
 		            success: function (insertResult) {
 		            	if(insertResult == 'true') {
@@ -102,6 +128,8 @@
 			$('#product-id').val(row[0].productId);
 			$('#product-name').val(row[0].productName);
 			
+			$('#product-type').val(row[0].parentId).prop("selected", true);
+			
 			$('#product-id').prop('disabled', true);
 			
 			$('#save').off().click(function() {
@@ -111,7 +139,8 @@
 		            data: { 
 	            		"type" : "update",
 	            		"id" : row[0].productId,
-	            		"name" : $('#product-name').val()
+	            		"name" : $('#product-name').val(),
+		            	"parentId" : $('#product-type option:selected').val() 
 		           	},
 		            success: function (deleteResult) {
 		            	if(deleteResult == 'true') {
@@ -205,6 +234,7 @@
 					<tr>
 					    <th>제품아이디</th>
 					    <th>제품명</th>
+					    <th style = "width:0px; display:none;">분류ID</th>
 					</tr>
 				</thead>
 				<tbody id="productTableBody">		
@@ -230,6 +260,11 @@
         <h4 class="modal-title"></h4>  
       </div>  
       <div class="modal-body">
+      	<label for="basic-url">제품분류</label>
+		<div class="input-group mb-3">
+		  <select class="form-control" id="product-type">
+		  </select>
+		</div>
       	<label for="basic-url">제품아이디</label>
 		<div class="input-group mb-3">
 		  <input type="text" class="form-control" id="product-id">
