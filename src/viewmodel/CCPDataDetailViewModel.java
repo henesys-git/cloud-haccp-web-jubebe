@@ -12,6 +12,7 @@ public class CCPDataDetailViewModel {
 	private String sensorId;
 	private String minValue;
 	private String maxValue;
+	private String productName;
 	
 	public String getSensorName() {
 		return sensorName;
@@ -72,6 +73,12 @@ public class CCPDataDetailViewModel {
 	}
 	public void setMaxValue(String maxValue) {
 		this.maxValue = maxValue;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	

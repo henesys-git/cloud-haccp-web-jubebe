@@ -76,6 +76,7 @@
 				columns: [
 					{ data: "sensorKey", defaultContent: '' },
 					{ data: "sensorName", defaultContent: '' },
+					{ data: "productName", defaultContent: '' },
 					{ data: "createTime", defaultContent: '' },
 					{ data: "event", defaultContent: '' },
 					{ data: "sensorValue", defaultContent: '' },
@@ -85,13 +86,13 @@
 		        ],
 		        columnDefs : [
 		        	{
-		        		targets: [0,5,7],
+		        		targets: [0,6,8],
 		        		'createdCell': function(td, cellData, rowData, row, col){
 		        			$(td).attr('style', 'display:none;');
 			  			}
 		        	},
 		        	{
-			  			targets: [4],
+			  			targets: [5],
 			  			render: function(td, cellData, rowData, row, col){
 			  				if(rowData.sensorId.includes('CD') == true) {
 			  					if (rowData.sensorValue == '1') {
@@ -106,7 +107,7 @@
 			  			}
 			  		},
 		   			{
-			  			targets: [6],
+			  			targets: [7],
 			  			render: function(td, cellData, rowData, row, col){
 		  					if(rowData.improvementAction != null && rowData.improvementAction != '') {
 		  						return rowData.improvementAction;
@@ -115,7 +116,8 @@
 		  					}
 			  			}
 			  		}
-			    ]
+			    ],
+			    stateSave : true
 			}
 					
 			mainTable = $('#ccpDataTable').DataTable(
@@ -256,6 +258,7 @@
 					<tr>
 					    <th style = 'width:0px; display:none;'>묶음값</th>
 					    <th>센서명</th>
+					    <th>제품명</th>
 					    <th>생성시간</th>
 					    <th>이벤트</th>
 					    <th>측정값</th>

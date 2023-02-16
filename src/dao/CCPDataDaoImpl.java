@@ -592,6 +592,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("SELECT\n")
 					.append("	A.sensor_key,\n")
 					.append("	B.sensor_name,\n")
+					.append("	E.product_name,\n")
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
@@ -606,6 +607,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("INNER JOIN ccp_limit D\n")
 					.append("	ON A.event_code = D.event_code\n")
 					.append("	AND A.product_id = D.object_id\n")
+					.append("INNER JOIN product E\n")
+					.append("	ON A.product_id = E.product_id \n")
 					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
 					.append("	AND DATE_FORMAT(A.create_time, '%Y-%m-%d') BETWEEN '"+ toDate +"' \n")
 					.append("	AND '"+ fromDate +"' \n")
@@ -1313,6 +1316,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		
 		cvm.setSensorKey(rs.getString("sensor_key"));
 		cvm.setSensorName(rs.getString("sensor_name"));
+		cvm.setProductName(rs.getString("product_name"));
 		cvm.setCreateTime(rs.getTimestamp("create_time").toString());
 		cvm.setEvent(rs.getString("event"));
 		cvm.setSensorValue(rs.getString("sensor_value"));
