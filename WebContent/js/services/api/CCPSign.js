@@ -19,12 +19,13 @@ CCPSign.prototype.get = function (date, processCode) {
 }
 
 // return: 서명자 이름
-CCPSign.prototype.sign = function (date, processCode) {
+CCPSign.prototype.sign = function (date, processCode, signType) {
  	var signUser = $.ajax({
         type: "POST",
         url: heneServerPath + "/ccpsign",
         data: "date=" + date +
-        	  "&processCode=" + processCode,
+        	  "&processCode=" + processCode +
+			  "&signType=" + signType,
         success: function (result) {
         	return result;
         }
