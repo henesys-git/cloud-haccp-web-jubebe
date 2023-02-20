@@ -69,31 +69,36 @@ $(document).ready(function () {
 		$('#ccpSignModal').modal('hide');
 	});
 	
-	$('#saveBtn').off().on('click', function() {
+	$('#saveBtn').off().on('click', async function() {
 		
 		let signType = $("#sign-type option:selected").val();
 		
-		var signUserName = await ccpSign.sign(selectedDate, processCode, signType);
+		var ccpSign = new CCPSign();
+		var signUserName = await ccpSign.sign('<%=date%>', '<%=processCode%>', signType);
 		
-		$.ajax({
-	    	type: "PUT",
-	        url: "/ccp" + 
-	        	 "?method=notAll" + 
-	        	 "&date=" + '<%=date%>' + 
-	        	 "&processCode=" + '<%=processCode%>' + 
-	        	 "&signType=" + signType,
-			success: async function (resultIfFixed) {
-	        	if(resultIfFixed == 'true') {
-					$('#ccpSignModal').modal('hide');
-					
-					ccpBreakawayJSPPage.refreshTable();
-					
-	        		alert('서명 완료');
-	         	} else {
-	         		alert('서명 실패, 관리자 문의 필요');
-	         	}
+		if(signUserName) {
+			$('#ccpSignModal').modal('hide');
+			alert('서명 완료되었습니다');
+			$("#ccp-sign-btn").hide();
+			//$("#ccp-sign-text").text("서명 완료: " + signUserName);
+			
+			//TODO: CCP별로 JspPage 다르게 하는 코드. 임시처리한거라 예외처리랑 등등 더 해야됨
+			if('<%=processCode%>' == 'PC30') {
+				await ccpHeatingDataJspPage.fillSubTable();
+			} else if('<%=processCode%>' == 'PC10' || '<%=processCode%>' == 'PC15'){
+				await ccpMetalDataJspPage.fillSubTable();
+			} else if('<%=processCode%>' == 'PC60') {
+				cpTemperatureJSPPage.refreshTable();
+			} else if('<%=processCode%>' == 'PC40' || '<%=processCode%>' == 'PC45') {
+				await ccpCleaningJSPPage.fillSubTable();
+			} else {
+				ccpBreakawayJSPPage.refreshTable();
 			}
-		});
+			
+		} else {
+			alert('서명 실패, 관리자에게 문의해주세요');
+		}
+		
 	});
 	
 });

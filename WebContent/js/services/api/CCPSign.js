@@ -52,9 +52,18 @@ CCPSign.prototype.delete = function (date, processCode) {
 // return: 서명자 이름
 CCPSign.prototype.show = async function (selectedDate, processCode) {
 	let oSign = await this.get(selectedDate, processCode);
-	
+	var signText = "서명 완료: ";
+	console.log(oSign);
 	if(oSign.checkerName) {
 		$("#ccp-sign-btn").hide();
+		
+		for(var i = 0; i < oSign.length; i++) {
+		/*	
+		 if(oSign[0]) {
+			
+			}
+		*/
+		}
 		$("#ccp-sign-text").text("서명 완료: " + oSign.checkerName);
 		return oSign.checkerName;
 	} else {
@@ -66,7 +75,7 @@ CCPSign.prototype.show = async function (selectedDate, processCode) {
 // return: 에러 여부 (true/false)
 CCPSign.prototype.checkError = function (rows) {
 	if(rows.length < 1) {
-		alert('해당 일자의 서명 처리할 가열공정 데이터가 없습니다.');
+		alert('해당 일자의 서명 처리할 CCP 데이터가 없습니다.');
 		return true;
 	}
 	

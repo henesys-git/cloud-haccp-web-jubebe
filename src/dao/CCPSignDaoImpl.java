@@ -29,11 +29,14 @@ public class CCPSignDaoImpl implements CCPSignDao {
 				.append("SELECT																\n")
 				.append("	sign_date,														\n")
 				.append("	process_code,													\n")
-				.append("	checker_id														\n")
+				.append("	checker_id,														\n")
+				.append("	sign_type														\n")
 				.append("FROM data_sign														\n")
 				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
 				.append("  AND sign_date = '" + date + "'									\n")
 				.append("  AND process_code = '" + processCode + "'							\n")
+				.append("GROUP BY sign_type													\n")
+				.append("ORDER BY sign_type													\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -124,13 +127,15 @@ public class CCPSignDaoImpl implements CCPSignDao {
 	    			.append("	tenant_id,\n")
 	    			.append("	sign_date,\n")
 	    			.append("	process_code,\n")
-	    			.append("	checker_id\n")
+	    			.append("	checker_id, \n")
+	    			.append("	sign_type \n")
 	    			.append(")\n")
 	    			.append("VALUES (\n")
 	    			.append("	'" + JDBCConnectionPool.getTenantId(conn) + "',\n")
 	    			.append("	'" + ccpSign.getSignDate() + "',\n")
 	    			.append("	'" + ccpSign.getProcessCode() + "',\n")
-	    			.append("	'" + ccpSign.getCheckerId() + "'\n")
+	    			.append("	'" + ccpSign.getCheckerId() + "',\n")
+	    			.append("	'" + ccpSign.getSignType() + "' \n")
 	    			.append(");\n")
 	    			.toString();
 	    	
@@ -156,6 +161,7 @@ public class CCPSignDaoImpl implements CCPSignDao {
 		data.setSignDate(rs.getString("sign_date"));
 		data.setProcessCode(rs.getString("process_code"));
 		data.setCheckerId(rs.getString("checker_id"));
+		data.setSignType(rs.getString("sign_type"));
 		
 	    return data;
 	}

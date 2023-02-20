@@ -251,8 +251,8 @@
                 type: "POST",
                 url: heneServerPath + '/Contents/ccpSign.jsp',
                 data: {
-                	sensorKey: sensorKey,
-                	createTime: createTime,
+                	//sensorKey: sensorKey,
+                	//createTime: createTime,
                 	date: selectedDate,
                 	processCode: processCode
                 },

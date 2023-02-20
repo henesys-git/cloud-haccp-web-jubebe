@@ -68,11 +68,13 @@ public class CCPSignController extends HttpServlet {
 		
 		String date = req.getParameter("date");
 		String processCode = req.getParameter("processCode");
+		String signType = req.getParameter("signType");
 		
 		CCPSign ccpSign = new CCPSign();
 		ccpSign.setCheckerId(userId);
 		ccpSign.setProcessCode(processCode);
 		ccpSign.setSignDate(date);
+		ccpSign.setSignType(signType);
 		
 		CCPSignService ccpService = new CCPSignService(new CCPSignDaoImpl(), tenantId);
 		String checkerName = ccpService.sign(ccpSign);
