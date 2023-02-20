@@ -43,7 +43,7 @@
 				  </label>
 				  <select class = "form-control" id = "sign-type">
 				  	<option value = "CHECK">확인자</option>
-				  	<option value = "APPRV">승인자</option>
+				  	<!-- <option value = "APPRV">승인자</option> -->
 				  </select>
 				 
 				</div>
@@ -80,13 +80,14 @@ $(document).ready(function () {
 			$('#ccpSignModal').modal('hide');
 			alert('서명 완료되었습니다');
 			$("#ccp-sign-btn").hide();
-			//$("#ccp-sign-text").text("서명 완료: " + signUserName);
+			$("#ccp-sign-text").text("서명 완료: " + signUserName);
 			
 			//TODO: CCP별로 JspPage 다르게 하는 코드. 임시처리한거라 예외처리랑 등등 더 해야됨
 			if('<%=processCode%>' == 'PC30') {
-				await ccpHeatingDataJspPage.fillSubTable();
+				//await ccpHeatingDataJspPage.fillSubTable();
 			} else if('<%=processCode%>' == 'PC10' || '<%=processCode%>' == 'PC15'){
-				await ccpMetalDataJspPage.fillSubTable();
+				//await ccpMetalDataJspPage.fillSubTable();
+				//ccpMetalDataJspPage.refreshTable();
 			} else if('<%=processCode%>' == 'PC60') {
 				cpTemperatureJSPPage.refreshTable();
 			} else if('<%=processCode%>' == 'PC40' || '<%=processCode%>' == 'PC45') {
