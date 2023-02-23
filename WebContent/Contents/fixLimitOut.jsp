@@ -176,8 +176,13 @@ $(document).ready(function () {
 				success: async function (resultIfFixed) {
 		        	if(resultIfFixed == 'true') {
 						$('#improvementActionModal').modal('hide');
-						
+							
+						if('<%=processCode%>' == 'PC60') {
+							cpTemperatureJSPPage.refreshTable();
+						} 
+						else {
 							ccpBreakawayJSPPage.refreshTable();
+						}
 						
 		        		alert('개선조치 완료 (서명 초기화)');
 		         	} else {

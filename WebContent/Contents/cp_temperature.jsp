@@ -157,6 +157,28 @@
             });
     	});
     	
+		// 일괄 개선조치 버튼 클릭 시
+    	$("#improve-all-btn").click(function() {
+    		var toDate = $('#date').val();
+    		
+    		var selectedDate = date.getDate();
+	    	var processCode = "PC60";
+    		
+    		$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/fixLimitOut.jsp',
+                data: {
+                	date: selectedDate,
+                	date2: selectedDate,
+                	processCode: processCode,
+                	limitOutParam : "All",
+                },
+                success: function (html) {
+                    $("#modalWrapper").html(html);
+                }
+            });
+    	});
+		
     	$('#ccp-sign-btn').click(async function() {
     		var selectedDate = date.getDate();
 	    	var processCode = $("input[name='test-yn']:checked").val();
@@ -229,6 +251,11 @@
 	          	</h3>
 	        </div>
 	        <div class="col-md-6">
+	        	<div class="float-right" id="ccp-sign-btn-wrapper">
+		          	<button class='btn btn-success' id="improve-all-btn">
+		          	일괄 개선조치
+		          	</button>
+	        	</div>
 	        	<!-- <div class="float-right" id="ccp-sign-btn-wrapper">
 		          	<button class='btn btn-success' id="ccp-sign-btn">
 		          		<i class='fas fa-signature'></i>
