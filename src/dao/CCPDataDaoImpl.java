@@ -256,7 +256,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("  AND process_code = '" + processCode + "'\n")
 					.append("  AND sensor_id = '" + sensorId + "'\n")
 					//.append(" " + groupWhere + "\n")
-					.append("ORDER BY sensor_key, create_time ASC;\n")
+					.append("ORDER BY create_time, sensor_key ASC;\n")
 					.toString();
 			
 			logger.debug("sql:\n" + sql);
