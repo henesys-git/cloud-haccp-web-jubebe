@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,8 +42,9 @@ public class CCPSignController extends HttpServlet {
 		String processCode = req.getParameter("processCode");
 		
 		CCPSignService ccpService = new CCPSignService(new CCPSignDaoImpl(), tenantId);
-		CCPSign ccpSign = ccpService.getCCPSignByDateAndProcessCode(date, processCode);
+		List<CCPSign> ccpSign = ccpService.getCCPSignByDateAndProcessCode(date, processCode);
 		
+		/*
 		UserService userService = new UserService(new UserDaoImpl(), tenantId);
 		User user = userService.getUser(ccpSign.getCheckerId());
 		
@@ -53,7 +55,9 @@ public class CCPSignController extends HttpServlet {
 		ccpSignVM.setCheckerName(user.getUserName());
 		
 		String result = FormatTransformer.toJson(ccpSignVM);
-		
+		*/
+		String result = FormatTransformer.toJson(ccpSign);
+		System.out.println("result :" + result);
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 		

@@ -5,6 +5,7 @@ public class CCPSign {
 	private String processCode;
 	private String checkerId;
 	private String signType;
+	private String userName;
 	
 	public String getSignDate() {
 		return signDate;
@@ -18,6 +19,9 @@ public class CCPSign {
 	public String getSignType() {
 		return signType;
 	}
+	public String getUserName() {
+		return userName;
+	}
 	public void setSignDate(String signDate) {
 		this.signDate = signDate;
 	}
@@ -30,5 +34,7 @@ public class CCPSign {
 	public void setSignType(String signType) {
 		this.signType = signType;
 	}
-	
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }
