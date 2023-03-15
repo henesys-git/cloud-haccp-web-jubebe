@@ -2804,12 +2804,12 @@ function ChecklistSelectModalCCP(createDate,
 			var signInfo = await ccpSign.get(that.createDate, processCd);
 			
 			for(let a = 0; a < signInfo.length; a++) {
-				if(signInfo[i].signType == 'CHECK') {
-					that.displayData(cellList[info.writerSignCell], signInfo[a].checkerName);
+				if(signInfo[a].signType == 'CHECK') {
+					that.displayData(cellList[info.writerSignCell], signInfo[a].userName);
 				}
 				
-				else if(oSign[i].signType == 'APPRV') {
-					that.displayData(cellList[info.approverSignCell], signInfo[a].checkerName);
+				else if(signInfo[a].signType == 'APPRV') {
+					that.displayData(cellList[info.approverSignCell], signInfo[a].userName);
 				}
 			} 
 			

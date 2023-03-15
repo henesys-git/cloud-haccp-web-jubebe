@@ -59,11 +59,11 @@ CCPSign.prototype.show = async function (selectedDate, processCode) {
 	
 	for(var i = 0; i < oSign.length; i++) {
 		if(oSign[i].signType == 'CHECK') {
-			signText2 = signText2 + "확인자 :" + oSign[i].userName;
+			signText2 = signText2 + " 확인자 :" + oSign[i].userName;
 		}
 				
 		else if(oSign[i].signType == 'APPRV') {
-			signText2 = signText2 + "승인자 :" + oSign[i].userName;
+			signText2 = signText2 + " 승인자 :" + oSign[i].userName;
 		}
 	} 
 	

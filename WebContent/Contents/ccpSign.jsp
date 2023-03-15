@@ -86,11 +86,11 @@ $(document).ready(function () {
 			
 			for(var i = 0; i < signInfo.length; i++) {
 				if(signInfo[i].signType == 'CHECK') {
-					signText = signText + "확인자 :" + signInfo[i].userName;
+					signText = signText + " 확인자 :" + signInfo[i].userName;
 				}
 				
 				else if(signInfo[i].signType == 'APPRV') {
-					signText = signText + "승인자 :" + signInfo[i].userName;
+					signText = signText + " 승인자 :" + signInfo[i].userName;
 				}
 			} 
 			
