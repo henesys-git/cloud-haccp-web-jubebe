@@ -285,6 +285,23 @@
 			
 		});
 		
+		// 주문정보 엑셀등록
+		$('#excel').click(function() {
+			
+			console.log('excel pop up');
+			
+			$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/mes/mes_order_popup_excel.jsp',
+                data: {
+                },
+                success: function (html) {
+                    $("#modalWrapper2").html(html);
+                }
+            });
+			
+		});
+		
 		
 		$('#orderTable tbody').on('click', 'tr', function () {
     		
@@ -521,6 +538,9 @@
       	  <button type="button" class="btn btn-danger" id="delete">
       	  	주문정보삭제
       	  </button>
+      	  <button type="button" class="btn btn-warning" id="excel">
+      	  	주문정보엑셀등록
+      	  </button>
       	</div>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -660,3 +680,5 @@
  </div>
  
 <div id = "modalWrapper"></div>
+
+<div id = "modalWrapper2"></div>

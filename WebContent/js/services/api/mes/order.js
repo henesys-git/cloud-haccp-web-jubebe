@@ -76,3 +76,29 @@ Order.prototype.getOrderDetailsNoChulhaYet = function (orderNo) {
     
 	return orders;
 }
+
+//get Excel Order ProdCd 
+Order.prototype.getOrderExcelProdcd = function (prodNm) {
+ 	var orders = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/mes-order?id=getProdCd" + "&prodNm=" + prodNm,
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return orders;
+}
+
+//get Excel Order CustCd 
+Order.prototype.getOrderExcelCustcd = function (custNm) {
+ 	var orders = $.ajax({
+        type: "GET",
+        url: heneServerPath + "/mes-order?id=getCustCd" + "&custNm=" + custNm,
+        success: function (result) {
+        	return result;
+        }
+	});
+    
+	return orders;
+}

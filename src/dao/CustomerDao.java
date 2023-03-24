@@ -13,4 +13,5 @@ public interface CustomerDao {
 	public boolean update(Connection conn, Customer rawmaterial);
 	public boolean delete(Connection conn, String id);
 	public List<CustomerViewModel> getAllCustomerViewModels(Connection conn);
+	public Customer getCustomerByNm(Connection conn, String customerNm);
 }

@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 
 import dao.ProductDaoImpl;
 import mes.client.util.NumberGeneratorForCloudMES;
+import mes.frame.servlet.SixSeallerServerModbus;
 import model.Product;
 import newest.mes.dao.OrderDaoImpl;
 import newest.mes.dao.ProductionPlanDaoImpl;
@@ -59,16 +60,41 @@ public class ProductionResultController extends HttpServlet {
 		ProductionResultService resultService = new ProductionResultService(new ProductionResultDaoImpl(), tenantId);
 		
 		String result = "";
+		String resultString = "";
 		
 		if(id.equals("all")) {
 			List<ProductionResult> list = resultService.getAllResults();
 			result = FormatTransformer.toJson(list);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			
+			out.print(result);
+		}
+		else if(id.equals("packingRead")) {
+			String param1 = req.getParameter("param1");
+			int slaveId = Integer.parseInt(param1);
+
+			SixSeallerServerModbus sealer = new SixSeallerServerModbus();
+
+			// 1회 생산 * 6컵실러(한번에 6개 생산)
+			String tempCountStr = sealer.getCupSealerTotal(slaveId);
+			if(tempCountStr.equals("-1")) {
+				resultString = tempCountStr;
+			} else {
+				//int tempCount = Integer.parseInt(tempCountStr) * 6;
+				resultString = String.valueOf(tempCountStr);					
+			}
+			
+			logger.debug("############컵실러 카운트(*4 기준):" + resultString);
+			
+			res.setContentType("plain/text;charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			out.print(resultString.trim());
+			out.flush();
+			
 		}
 		
-		res.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		
-		out.print(result);
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) 

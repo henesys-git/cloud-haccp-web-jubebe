@@ -225,6 +225,41 @@ public class CustomerDaoImpl implements CustomerDao {
 		return null;
 	};
 	
+	@Override
+	public Customer getCustomerByNm(Connection conn, String customerNm) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT * 		\n")
+				.append("FROM mes_product_customer	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND customer_name = '" + customerNm + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			Customer customer = null;
+			
+			if(rs.next()) {
+				customer = extractFromResultSet(rs);
+			}
+			
+			return customer;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
+	
 	private Customer extractFromResultSet(ResultSet rs) throws SQLException {
 		return new Customer(
 					rs.getString("customer_code"),

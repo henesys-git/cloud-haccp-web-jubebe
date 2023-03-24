@@ -267,6 +267,40 @@ public class ProductDaoImpl implements ProductDao {
 		return null;
 	};
 	
+	@Override
+	public Product getProductByNm(Connection conn, String productNm) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT * 		\n")
+				.append("FROM product	\n")
+				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("  AND product_name = '" + productNm + "'\n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			Product product = new Product();
+			
+			if(rs.next()) {
+				product = extractFromResultSet(rs);
+			}
+			
+			return product;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return null;
+	};
+	
 	private Product extractFromResultSet(ResultSet rs) throws SQLException {
 		return new Product(
 					rs.getString("product_id"),
