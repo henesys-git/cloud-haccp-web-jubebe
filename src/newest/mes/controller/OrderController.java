@@ -205,13 +205,8 @@ public class OrderController extends HttpServlet {
 		JSONArray jsonArray;
 		
 		String orderDate = req.getParameter("orderDate");
-		String custCode = req.getParameter("custCode");
+		//String custCode = req.getParameter("custCode");
 		String orderData = req.getParameter("orderData");
-		
-		NumberGeneratorForCloudMES generator = new NumberGeneratorForCloudMES();
-		
-		String orderNo = generator.generateOdrNum();
-		
 		
 		try {
 			json = (JSONObject) parser.parse(orderData);
@@ -219,12 +214,15 @@ public class OrderController extends HttpServlet {
 			JSONArray param = (JSONArray) json.get("param");
 			
 			Order order = new Order();
-			order.setOrderNo(orderNo);
+			//order.setOrderNo(orderNo);
 			order.setOrderDate(orderDate);
-			order.setCustomerCode(custCode);
+			//order.setCustomerCode(custCode);
+			
+			System.out.println("param############################");
+			System.out.println(param);
 			
 			OrderService orderService = new OrderService(new OrderDaoImpl(), tenantId);
-			Boolean inserted = orderService.insert(order, param);
+			Boolean inserted = orderService.excelInsert(order, param);
 			
 			res.setContentType("html/text; charset=UTF-8");
 			

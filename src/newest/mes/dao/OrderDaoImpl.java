@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import mes.client.util.NumberGeneratorForCloudMES;
 import mes.frame.database.JDBCConnectionPool;
 import newest.mes.model.Order;
 
@@ -464,6 +465,161 @@ public class OrderDaoImpl implements OrderDao {
 
 	    return false;
 	}
+	
+	@Override
+	public boolean excelInsert(Connection conn, Order order, JSONArray param) {
+		
+		
+		JSONObject jsonObj;
+		JSONObject jsonObj2 = (JSONObject) param.get(0);
+		
+		String sql = "";		
+		int k = 0;
+		int dtUpdate = 0;
+		String orderNo = "";
+		String custCd = jsonObj2.get("cust_cd").toString(); // 최초 고객사코드로 초기화
+		int detailNo = 0;
+		String former = "";
+		
+		//최초에 주문번호 한번 생성
+		NumberGeneratorForCloudMES generator = new NumberGeneratorForCloudMES();
+		orderNo = generator.generateOdrNum();
+		
+		try {
+			
+			//for(int a = 0; a < param.size(); a++) {
+			
+			System.out.println("HEAD#########");
+			System.out.println(orderNo);
+			System.out.println(custCd);
+				
+			sql = new StringBuilder()
+					.append("INSERT INTO\n")
+					.append("	mes_order (\n")
+					.append("		tenant_id, \n")
+					.append("		order_no,\n")
+					.append("		order_date,\n")
+					.append("		customer_code \n")
+					.append("	)\n")
+					.append("VALUES\n")
+					.append("	(\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?\n")
+					.append("	);\n")
+					.toString();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps.setString(2, orderNo);
+			ps.setString(3, order.getOrderDate());
+			ps.setString(4, custCd);
+			
+	        int i = ps.executeUpdate();
+	        
+	        for(k = 0; k < param.size(); k++) {
+	        
+	        jsonObj = (JSONObject) param.get(k);
+	        
+	      //이전과 고객사코드가 같을 때는 주문번호 최초 그대로, detail_no + 1 추가
+			if(custCd.equals(jsonObj.get("cust_cd").toString())) {
+				
+				custCd = jsonObj.get("cust_cd").toString();
+				
+			}
+			// 고객사코드가 바뀌었을 때 주문번호 새로 생성 , detail_no 0으로 초기화, head 테이블에 insert 해준다.
+			else {
+				
+				orderNo = generator.generateOdrNum();
+				custCd = jsonObj.get("cust_cd").toString();
+				detailNo = 0;
+				
+				sql = new StringBuilder()
+						.append("INSERT INTO\n")
+						.append("	mes_order (\n")
+						.append("		tenant_id, \n")
+						.append("		order_no,\n")
+						.append("		order_date,\n")
+						.append("		customer_code \n")
+						.append("	)\n")
+						.append("VALUES\n")
+						.append("	(\n")
+						.append("		?,\n")
+						.append("		?,\n")
+						.append("		?,\n")
+						.append("		?\n")
+						.append("	);\n")
+						.toString();
+
+				PreparedStatement ps3 = conn.prepareStatement(sql);
+				
+				ps3.setString(1, JDBCConnectionPool.getTenantId(conn));
+				ps3.setString(2, orderNo);
+				ps3.setString(3, order.getOrderDate());
+				ps3.setString(4, custCd);
+				
+		        int l = ps3.executeUpdate();
+				
+			}
+	        
+	        System.out.println("BODY#########");
+			System.out.println(orderNo);
+			System.out.println(detailNo);
+			System.out.println(jsonObj.get("prod_cd").toString());
+			System.out.println(jsonObj.get("order_count").toString());
+	        
+	        sql = new StringBuilder()
+					.append("INSERT INTO\n")
+					.append("	mes_order_detail (\n")
+					.append("		tenant_id, \n")
+					.append("		order_detail_no,\n")
+					.append("		product_id,\n")
+					.append("		order_count,\n")
+					.append("		chulha_yn,\n")
+					.append("		order_no \n")
+					.append("	)\n")
+					.append("VALUES\n")
+					.append("	(\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?,\n")
+					.append("		?\n")
+					.append("	);\n")
+					.toString();
+	        
+			PreparedStatement ps2 = conn.prepareStatement(sql);
+			
+			ps2.setString(1, JDBCConnectionPool.getTenantId(conn));
+			ps2.setInt(2, detailNo);
+			ps2.setString(3, jsonObj.get("prod_cd").toString());
+			ps2.setString(4, jsonObj.get("order_count").toString());
+			ps2.setString(5, "N");
+			ps2.setString(6, orderNo);
+			
+	        int j = ps2.executeUpdate();
+	        
+	        	if(j == 1) {
+	        		dtUpdate += 1;
+	        		detailNo += 1;
+	        	}
+	        
+	        }
+	        
+	        if(i == 1 && dtUpdate >= 1) {
+	        	return true;
+	        }
+		  //} // if(former, after end)
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return false;
+	}
+	
 	
 	
 	private Order extractFromResultSet(ResultSet rs) throws SQLException {

@@ -163,4 +163,17 @@ public class OrderService {
 		return false;
 	}
 	
+	public boolean excelInsert(Order order, JSONArray param) {
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			return orderDao.excelInsert(conn, order, param);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return false;
+	}
+	
 }

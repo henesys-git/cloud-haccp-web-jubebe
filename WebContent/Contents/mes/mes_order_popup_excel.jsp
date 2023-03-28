@@ -59,6 +59,10 @@ if(request.getParameter("trNum") != null) {
                     rowObj = XLSX.utils.sheet_to_json(workbook.Sheets['order']);
                     document.getElementById('order_list').innerHTML = toHtml;
                 //	console.log(JSON.stringify(rowObj));
+                	console.log("toHtml #### : ");
+                	console.log(toHtml);
+                	console.log("rowObj #### : ");
+                	console.log(rowObj);
                 	console.log("length : " + Object(rowObj).length);
                     order_data = JSON.stringify(rowObj);
                 }
@@ -69,7 +73,7 @@ if(request.getParameter("trNum") != null) {
 	  });
 	
 	//save to db
-	$('#btn_Save').click(function() {
+	$('#btn_Save').click(async function() {
 		
 		async function getOrderExcelProdcd(prodNm) {
 			let orders = $.ajax({
@@ -148,17 +152,23 @@ if(request.getParameter("trNum") != null) {
 			var dataJson = new Object();
 			var dataJson2 = new Object();
 			
-			var prod_cd = getOrderExcelProdcd(js_data[i].품명).then(response => {console.log(response);});
-			var cust_cd = getOrderExcelCustcd(js_data[i].거래처).then(response => {console.log(response);});
+			//var prod_cd = getOrderExcelProdcd(js_data[i].품명).then(response => {console.log(response);});
+			//var cust_cd = getOrderExcelCustcd(js_data[i].거래처).then(response => {console.log(response);});
 			
-			console.log(prod_cd);
-			console.log(cust_cd);
+			var prod_cd2 = await getOrderExcelProdcd(js_data[i].품명);
+			var cust_cd2 = await getOrderExcelCustcd(js_data[i].거래처);
 			
-			console.log(cust_cd.customerName);
-			console.log(prod_cd.productName);
+			//console.log(prod_cd);
+			//console.log(cust_cd);
 			
-    		dataJson.cust_cd 				= cust_cd.customerName;
-    		dataJson.prod_cd 				= prod_cd.productName;
+			console.log(prod_cd2);
+			console.log(cust_cd2);
+			
+			//console.log(cust_cd.customerName);
+			//console.log(prod_cd.productName);
+			
+    		dataJson.cust_cd 				= cust_cd2.customerId;
+    		dataJson.prod_cd 				= prod_cd2.productId;
     		dataJson.cust_name 				= js_data[i].거래처;
     		dataJson.order_detail_seq 		= 0;
     		dataJson.order_count 			= js_data[i].주문량;
@@ -183,13 +193,14 @@ if(request.getParameter("trNum") != null) {
 	            url: "<%=Config.this_SERVER_path%>/mes-order",
 	            data: {
 	            	"type" : "excelInsert",
-	            	"orderData" : JSONParam
+	            	"orderData" : JSONparam,
+	            	"orderDate" : orderDate
 	            },
 	            success: function (insertResult) {
-	            	if(updateResult == 'true') {
+	            	if(insertResult == 'true') {
 	            		alert('등록되었습니다.');
-	            		$('#myModal').modal('hide');
-	            		refreshMainTable();
+	            		$('#myModal4').modal('hide');
+	            		orderJSPPage.refreshMainTable();
 	            	} else {
 	            		alert('등록 실패했습니다, 관리자에게 문의해주세요.');
 	            	}

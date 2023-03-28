@@ -8,6 +8,7 @@
 <script type="text/javascript">
     
 	var dataJspPage = {};
+	var orderJSPPage = {};
 	var order_table_info;
 	var order_table_RowCount = 0;
 	var orderTable;  //주문정보 테이블
