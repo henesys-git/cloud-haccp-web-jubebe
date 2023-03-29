@@ -20,7 +20,7 @@ if(request.getParameter("trNum") != null) {
 
 <script type="text/javascript">
     
-	var dataJspPage = {};
+	//var dataJspPage = {};
 	var order_table_RowCount = 0;
 	var orderTable;  //주문정보 테이블
 	var aaa;
@@ -45,17 +45,28 @@ if(request.getParameter("trNum") != null) {
             var reader = new FileReader();
  
             reader.onload = function(evt) {
+            	console.log(evt);
+            	console.log(evt.target.readyState);
                 if(evt.target.readyState == FileReader.DONE) {
                 	
                 	$("#order_list tr").remove();
                 	
                     var data = evt.target.result;
                     data = new Uint8Array(data);
- 
+ 					console.log(data);
                     // call 'xlsx' to read the file
                     var workbook = XLSX.read(data, {type: 'array'});
-                //	console.log(workbook);
+                	console.log(workbook);
+                	console.log(workbook.Sheets['order']);
+                	
+                	if(workbook.Sheets['order'] == 'undefined' || workbook.Sheets['order'] == 'null') {
+                		alert('첨부한 엑셀 파일 내에 주문정보 시트가 존재하는지 확인해 주세요.');
+                		return false;
+                	}
+                	
                     var toHtml = XLSX.utils.sheet_to_html(workbook.Sheets['order']);
+                    console.log(toHtml);
+                    
                     rowObj = XLSX.utils.sheet_to_json(workbook.Sheets['order']);
                     document.getElementById('order_list').innerHTML = toHtml;
                 //	console.log(JSON.stringify(rowObj));
@@ -158,14 +169,6 @@ if(request.getParameter("trNum") != null) {
 			var prod_cd2 = await getOrderExcelProdcd(js_data[i].품명);
 			var cust_cd2 = await getOrderExcelCustcd(js_data[i].거래처);
 			
-			//console.log(prod_cd);
-			//console.log(cust_cd);
-			
-			console.log(prod_cd2);
-			console.log(cust_cd2);
-			
-			//console.log(cust_cd.customerName);
-			//console.log(prod_cd.productName);
 			
     		dataJson.cust_cd 				= cust_cd2.customerId;
     		dataJson.prod_cd 				= prod_cd2.productId;

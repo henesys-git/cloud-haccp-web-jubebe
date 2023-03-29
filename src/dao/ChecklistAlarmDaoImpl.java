@@ -71,7 +71,8 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 					.append("        B.checklist_name,\n")
 					.append("        A.sign_writer,\n")
 					.append("        A.sign_checker,\n")
-					.append("        A.sign_approver \n")
+					.append("        A.sign_approver, \n")
+					.append("        (SELECT GROUP_CONCAT(D.signature_type) from checklist_sign D where A.checklist_id = D.checklist_id) AS sign_columns \n")
 					.append("FROM	\n")
 					.append("        checklist_data A\n")
 					.append("INNER JOIN checklist_info B\n")
@@ -187,6 +188,7 @@ public class ChecklistAlarmDaoImpl implements ChecklistAlarmDao {
 	    clSign.setSignWriter(rs.getString("sign_writer"));
 	    clSign.setSignChecker(rs.getString("sign_checker"));
 	    clSign.setSignApprover(rs.getString("sign_approver"));
+	    clSign.setSignColumns(rs.getString("sign_columns"));
 	    System.out.println("extract:"+ clSign);
 	    return clSign;
 	}

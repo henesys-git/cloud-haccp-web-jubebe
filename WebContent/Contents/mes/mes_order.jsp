@@ -109,6 +109,19 @@
     		
 		}
 	    
+	    orderJSPPage.refreshMainTable = async function () {
+	    	var orders = new Order();
+	    	var ordersList = await orders.getOrders();
+	    	
+    		mainTable.clear().rows.add(ordersList).draw();
+    		
+    		if(subTable) {
+	    		subTable.clear().draw();
+	    	}
+    		
+		}
+	    
+	    
 	    var initModal = function () {
 	    	$('#product-id').prop('disabled', false);
 	    	$('#product-id').val('');
