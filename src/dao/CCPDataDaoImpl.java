@@ -582,6 +582,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	//何利钦, 利钦 咯何 窍靛内爹 规侥栏肺 函版(2023.04.07)
 	@Override
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate) {
 		
@@ -600,7 +601,11 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
-					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '利钦', '何利钦') as judge,\n")
+					.append("   IF(A.event_code = 'CR10' || A.event_code = 'CR20' || A.event_code = 'CR50' || A.event_code = 'HT10' || A.event_code = 'HT15' || A.event_code = 'HT50' || A.event_code = 'HT55', \n")
+					.append("   IF(CAST(A.sensor_value AS double) <= CAST(D.max_value AS double) && CAST(A.sensor_value AS double) >= CAST(D.min_value AS double), '利钦', '何利钦'), \n")
+					.append("   IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '利钦', '何利钦') \n")
+					.append("   ) AS judge, \n")
+					//.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '利钦', '何利钦') as judge,\n")
 					.append("	A.improvement_action, \n")
 					.append("	A.sensor_id \n")
 					.append("FROM data_metal A\n")

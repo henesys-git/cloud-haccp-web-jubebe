@@ -32,7 +32,7 @@ public class RawmaterialStorageDaoImpl implements RawmaterialStorageDao {
 			
 			String sql = new StringBuilder()
 				.append("SELECT									\n")
-				.append("	S.rawmaterial_id,					\n")
+				.append("	P.rawmaterial_id,					\n")
 				.append("	P.rawmaterial_name,					\n")
 				.append("	IFNULL(SUM(S.io_amt), 0) AS io_amt				\n")
 				//.append("FROM mes_rawmaterial_storage S			\n")
@@ -40,8 +40,8 @@ public class RawmaterialStorageDaoImpl implements RawmaterialStorageDao {
 				.append("FROM rawmaterial P				\n")
 				.append("LEFT JOIN mes_rawmaterial_storage S		\n")
 				.append("	ON S.rawmaterial_id = P.rawmaterial_id	\n")
-				.append("WHERE S.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("GROUP BY S.rawmaterial_id					\n")
+				.append("WHERE P.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("GROUP BY P.rawmaterial_id					\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
