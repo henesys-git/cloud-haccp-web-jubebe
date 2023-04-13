@@ -301,7 +301,7 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 					.append("		now(),\n")
 					.append("		0,\n")
 					.append("		1,\n")
-					.append("		'',\n")
+					.append("		'Y',\n")
 					.append("		'생산완료',\n")
 					.append("		'N', \n")
 					.append("		'" + lotNo + "' \n")
