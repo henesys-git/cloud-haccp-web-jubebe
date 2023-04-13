@@ -25,6 +25,9 @@
 	    async function initTable() {
 	    	var plans = new ProductionPlan();
 	    	var plansList = await plans.getProductionPlans();
+	    	
+	    	console.log(plansList);
+	    	
 		    var customOpts = {
 					data : plansList,
 					pageLength: 10,
@@ -35,11 +38,13 @@
 						{ data: "customerName", defaultContent: '' },
 						{ data: "productId", defaultContent: '' },
 						{ data: "productName", defaultContent: '' },
-						{ data: "planCount", defaultContent: '' }
+						{ data: "planCount", defaultContent: '' },
+						{ data: "lotNo", defaultContent: '' },
+						{ data: "count", defaultContent: '' }
 			        ],
 			        columnDefs : [
 			        	{
-					  			targets: [0,2,4],
+					  			targets: [0,2,4,8],
 					  			createdCell:  function (td) {
 				          			$(td).attr('style', 'width:0px; display: none;'); 
 				       			}
@@ -244,12 +249,17 @@
 			initModal4();
 			
 			var row = mainTable.rows( '.selected' ).data();
-			
+			var instructionCount = row[0].count;
 			if(row.length == 0) {
 				alert('생산지시를 등록할 항목을 선택해주세요.');
 				return false;
 			}
-			
+			console.log("row[0].count");
+			console.log(row[0].count);
+			if(instructionCount.toString() != "0") {
+				alert('이미 생산지시가 처리된 항목입니다.');
+				return false;
+			}
 			
 			
 			$('#myModal4').modal('show');
@@ -286,7 +296,8 @@
 		            	"instructionDate" : instructionDate,
 		            	"planNo" : planNo,
 		            	"productId" : productId,
-		            	"instructionCount" : instructionCount
+		            	"instructionCount" : instructionCount,
+		            	"lotNo" : row[0].lotNo
 		            	
 		            },
 		            success: function (insertResult) {
@@ -426,6 +437,8 @@
 					    <th style="display:none; width:0px;">제품아이디</th>
 					    <th>제품명</th>
 					    <th>계획수량</th>
+					    <th>lotNo</th>
+					    <th style="display:none; width:0px;">count</th>
 					</tr>
 				</thead>
 				<tbody id="planTableBody">		

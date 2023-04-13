@@ -44,4 +44,19 @@ public class NumberGeneratorForCloudMES {
 	    return planNum;
 	}
 	
+	public static String generateLotNo() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+	    Date date = new Date();
+	    String dateStr = dateFormat.format(date);
+
+	    NumberGeneratorForCloudMES ong = new NumberGeneratorForCloudMES();
+	    int randomNum = ong.getRandomNumberInRange(1000, 9999);
+	    String randomNumStr = String.valueOf(randomNum);
+	    
+	    String lotNo = dateStr;
+		
+	    return lotNo;
+	}
+	
 }

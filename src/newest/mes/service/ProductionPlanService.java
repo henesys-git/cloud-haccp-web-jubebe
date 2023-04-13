@@ -97,10 +97,10 @@ public class ProductionPlanService {
 		return false;
 	}
 	
-	public boolean instructionInsert(String instructionDate, String productId, String planNo, String instructionCount) {
+	public boolean instructionInsert(String instructionDate, String productId, String planNo, String instructionCount, String lotNo) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
-			return planDao.instructionInsert(conn, instructionDate, productId, planNo, instructionCount);
+			return planDao.instructionInsert(conn, instructionDate, productId, planNo, instructionCount, lotNo);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

@@ -623,8 +623,10 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	AND '"+ fromDate +"' \n")
 					.append("	AND A.sensor_id LIKE '%" + sensorId + "%'\n")
 					.append("	AND A.process_code LIKE '%" + processCode	+ "%'\n")
-					.append("	AND (A.sensor_value > D.max_value \n")
-					.append("	OR A.sensor_value < D.min_value) \n")
+					.append("	AND IF(A.event_code = 'CR10' || A.event_code = 'CR20' || A.event_code = 'CR50' || A.event_code = 'HT10' || A.event_code = 'HT15' || A.event_code = 'HT50' || A.event_code = 'HT55', \n")
+					.append("	CAST(A.sensor_value AS double) > CAST(D.max_value AS double) || CAST(A.sensor_value AS double) < CAST(D.min_value AS double), A.sensor_value > D.max_value || A.sensor_value < D.min_value) \n")
+					//.append("	AND (A.sensor_value > D.max_value \n")
+					//.append("	OR A.sensor_value < D.min_value) \n")
 					.append("	AND A.sensor_id NOT LIKE '%TP%' \n")
 					.toString();
 			
