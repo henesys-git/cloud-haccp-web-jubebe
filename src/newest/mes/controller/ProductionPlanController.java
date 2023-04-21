@@ -105,6 +105,7 @@ public class ProductionPlanController extends HttpServlet {
 		NumberGeneratorForCloudMES generator = new NumberGeneratorForCloudMES();
 		
 		String planNo = generator.generatePlanNum();
+		String lotNo = generator.generateLotNo();
 		
 		
 		try {
@@ -115,6 +116,7 @@ public class ProductionPlanController extends HttpServlet {
 			plan.setCustomerCode(custCode);
 			plan.setProductId(productId);
 			plan.setPlanCount(planCount);
+			plan.setLotNo(lotNo);
 			
 			ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
 			Boolean inserted = planService.insert(plan);
@@ -185,9 +187,10 @@ public class ProductionPlanController extends HttpServlet {
 		String productId = req.getParameter("productId");
 		String planNo = req.getParameter("planNo");
 		String instructionCount = req.getParameter("instructionCount");
+		String lotNo = req.getParameter("lotNo");
 		
 		ProductionPlanService planService = new ProductionPlanService(new ProductionPlanDaoImpl(), tenantId);
-		Boolean inserted = planService.instructionInsert(instructionDate, productId, planNo, instructionCount);
+		Boolean inserted = planService.instructionInsert(instructionDate, productId, planNo, instructionCount, lotNo);
 		
 		res.setContentType("html/text; charset=UTF-8");
 		

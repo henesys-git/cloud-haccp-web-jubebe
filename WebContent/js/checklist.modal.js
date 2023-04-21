@@ -2803,9 +2803,19 @@ function ChecklistSelectModalCCP(createDate,
 			var ccpSign = new CCPSign();
 			var signInfo = await ccpSign.get(that.createDate, processCd);
 			
+			for(let a = 0; a < signInfo.length; a++) {
+				if(signInfo[a].signType == 'CHECK') {
+					that.displayData(cellList[info.writerSignCell], signInfo[a].userName);
+				}
+				
+				else if(signInfo[a].signType == 'APPRV') {
+					that.displayData(cellList[info.approverSignCell], signInfo[a].userName);
+				}
+			} 
+			
 			//CCP 데이터 관리에서 서명된 정보로 표시되도록 일괄 적용
-			that.displayData(cellList[info.writerSignCell], signInfo.checkerName);
-			that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
+			//that.displayData(cellList[info.writerSignCell], signInfo.checkerName);
+			//that.displayData(cellList[info.approverSignCell], signInfo.checkerName);
 			
 			var currentRow = 0;
 			var startFlag = false;
@@ -3044,7 +3054,7 @@ function ChecklistSelectModalCCP(createDate,
 								var time = "";
 								
 								if(row.detail["CR30"] != null) {
-									time = row.detail["CR30"].toString().substring(0, 5);
+									time = row.detail["CR30"].toString().substring(11, 16);
 								}
 
 								that.displayData(cell, time);

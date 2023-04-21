@@ -369,6 +369,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	//2023-03-24 한계기준 값 비교 안되는 현상 때문에 비교절 수정 (event_code 하드코딩 방식)
 	@Override
 	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey) {
 		
@@ -383,7 +384,10 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.sensor_value,\n")
 					.append("	D.min_value,\n")
 					.append("	D.max_value,\n")
-					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') as judge,\n")
+					.append("   IF(A.event_code = 'CR10' || A.event_code = 'CR20' || A.event_code = 'CR50' || A.event_code = 'HT10' || A.event_code = 'HT15' || A.event_code = 'HT50' || A.event_code = 'HT55', \n")
+					.append("   IF(CAST(A.sensor_value AS double) <= CAST(D.max_value AS double) && CAST(A.sensor_value AS double) >= CAST(D.min_value AS double), '적합', '부적합'), \n")
+					.append("   IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') \n")
+					.append("   ) AS judge, \n")
 					.append("	A.improvement_action\n")
 					.append("FROM data_metal A\n")
 					.append("INNER JOIN sensor B\n")
@@ -578,6 +582,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		return null;
 	};
 	
+	//부적합, 적합 여부 하드코딩 방식으로 변경(2023.04.07)
 	@Override
 	public List<CCPDataDetailViewModel> getMetalBreakAwayList(Connection conn, String sensorKey, String sensorId, String processCode, String toDate, String fromDate) {
 		
@@ -596,7 +601,11 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.create_time,\n")
 					.append("	C.event_name as event,\n")
 					.append("	A.sensor_value,\n")
-					.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') as judge,\n")
+					.append("   IF(A.event_code = 'CR10' || A.event_code = 'CR20' || A.event_code = 'CR50' || A.event_code = 'HT10' || A.event_code = 'HT15' || A.event_code = 'HT50' || A.event_code = 'HT55', \n")
+					.append("   IF(CAST(A.sensor_value AS double) <= CAST(D.max_value AS double) && CAST(A.sensor_value AS double) >= CAST(D.min_value AS double), '적합', '부적합'), \n")
+					.append("   IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') \n")
+					.append("   ) AS judge, \n")
+					//.append("	IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') as judge,\n")
 					.append("	A.improvement_action, \n")
 					.append("	A.sensor_id \n")
 					.append("FROM data_metal A\n")
@@ -614,8 +623,10 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	AND '"+ fromDate +"' \n")
 					.append("	AND A.sensor_id LIKE '%" + sensorId + "%'\n")
 					.append("	AND A.process_code LIKE '%" + processCode	+ "%'\n")
-					.append("	AND (A.sensor_value > D.max_value \n")
-					.append("	OR A.sensor_value < D.min_value) \n")
+					.append("	AND IF(A.event_code = 'CR10' || A.event_code = 'CR20' || A.event_code = 'CR50' || A.event_code = 'HT10' || A.event_code = 'HT15' || A.event_code = 'HT50' || A.event_code = 'HT55', \n")
+					.append("	CAST(A.sensor_value AS double) > CAST(D.max_value AS double) || CAST(A.sensor_value AS double) < CAST(D.min_value AS double), A.sensor_value > D.max_value || A.sensor_value < D.min_value) \n")
+					//.append("	AND (A.sensor_value > D.max_value \n")
+					//.append("	OR A.sensor_value < D.min_value) \n")
 					.append("	AND A.sensor_id NOT LIKE '%TP%' \n")
 					.toString();
 			

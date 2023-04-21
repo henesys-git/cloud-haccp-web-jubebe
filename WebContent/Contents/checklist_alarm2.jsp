@@ -123,9 +123,8 @@
 	            		return false;
 	            	}
 	            	
-	                data.forEach(function(item){
+	                data.forEach(function(item, index, object){
 	                	console.log(item);
-	                	console.log(item.revisionNo);
 						var className = "";
 						var goOnOff_2 = false;
 						var goOnOff_1 = false;
@@ -133,21 +132,47 @@
 						var goOnOff_minus = false;
 						var insertText = "";
 						var signInfo = "";
+						var colCnt = 0;
+						var delCnt = 0;
 						
 						writer = item.signWriter;
 						checker = item.signChecker;
 						approver = item.signApprover;
 						
-						if(writer == null) {
+						columns = item.signColumns;
+						
+						
+						if(columns.includes('WRITE')) {
+							colCnt += 1;
+						}
+						if(columns.includes('CHECK')) {
+							colCnt += 1;
+						}
+						if(columns.includes('APPRV')) {
+							colCnt += 1;
+						}
+						
+						if(writer == null && columns.includes('WRITE') == true) {
 							signInfo += "작성자 ";	
 						}
-						
-						if(checker == null) {
+						if(writer != null ) {
+							delCnt += 1;
+						}
+						if(checker == null && columns.includes('CHECK') == true) {
 							signInfo += "확인자 ";	
 						}
-						
-						if(approver == null) {
+						if(checker != null ) {
+							delCnt += 1;
+						}
+						if(approver == null && columns.includes('APPRV') == true) {
 							signInfo += "승인자";	
+						}
+						if(approver != null ) {
+							delCnt += 1;
+						}
+						
+						if(colCnt == delCnt) {
+							object.splice(index, 1);
 						}
 						
 						insertText = "(서명 필요 : " + signInfo + ")";

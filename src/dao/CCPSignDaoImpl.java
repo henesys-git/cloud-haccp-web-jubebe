@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -20,36 +22,42 @@ public class CCPSignDaoImpl implements CCPSignDao {
 	public CCPSignDaoImpl() {}
 
 	@Override
-	public CCPSign getCCPSignByDateAndProcessCode(Connection conn, String date, String processCode) {
+	public List<CCPSign> getCCPSignByDateAndProcessCode(Connection conn, String date, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT																\n")
-				.append("	sign_date,														\n")
-				.append("	process_code,													\n")
-				.append("	checker_id,														\n")
-				.append("	sign_type														\n")
-				.append("FROM data_sign														\n")
-				.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
-				.append("  AND sign_date = '" + date + "'									\n")
-				.append("  AND process_code = '" + processCode + "'							\n")
-				.append("GROUP BY sign_type													\n")
-				.append("ORDER BY sign_type													\n")
+				.append("	A.sign_date,													\n")
+				.append("	A.process_code,													\n")
+				.append("	A.checker_id,													\n")
+				.append("	A.sign_type,													\n")
+				.append("	B.user_name														\n")
+				.append("FROM data_sign	A													\n")
+				.append("LEFT OUTER JOIN user B												\n")
+				.append("ON A.checker_id = B.user_id										\n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+				.append("  AND A.sign_date = '" + date + "'									\n")
+				.append("  AND A.process_code = '" + processCode + "'							\n")
+				.append("GROUP BY A.sign_type												\n")
+				.append("ORDER BY A.sign_type												\n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
 			
 			rs = stmt.executeQuery(sql);
 			
-			CCPSign data = new CCPSign();
+			//CCPSign data = new CCPSign();
 			
-			if(rs.next()) {
-				data = extractFromResultSet(rs);
+			List<CCPSign> dataList = new ArrayList<CCPSign>();
+			
+			while(rs.next()) {
+				CCPSign data = extractFromResultSet(rs);
+				dataList.add(data);
 			}
 			
-			return data;
+			return dataList;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -162,6 +170,7 @@ public class CCPSignDaoImpl implements CCPSignDao {
 		data.setProcessCode(rs.getString("process_code"));
 		data.setCheckerId(rs.getString("checker_id"));
 		data.setSignType(rs.getString("sign_type"));
+		data.setUserName(rs.getString("user_name"));
 		
 	    return data;
 	}

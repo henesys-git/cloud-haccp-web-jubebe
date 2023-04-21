@@ -10,6 +10,8 @@ public class ProductionPlan {
 	private String orderYn;
 	private String customerName;
 	private String productName;
+	private String lotNo;
+	private String count;
 	
 	public ProductionPlan() {}
 
@@ -84,6 +86,23 @@ public class ProductionPlan {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+
+	public String getLotNo() {
+		return lotNo;
+	}
+
+	public void setLotNo(String lotNo) {
+		this.lotNo = lotNo;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+	
 	
 	
 }

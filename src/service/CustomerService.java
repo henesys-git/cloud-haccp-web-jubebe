@@ -106,4 +106,19 @@ public class CustomerService {
 		
 		return customerList;
 	}
+	
+	public Customer getCustomerByNm(String nm) {
+		Customer customer = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			customer = customerDao.getCustomerByNm(conn, nm);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return customer;
+	}
 }

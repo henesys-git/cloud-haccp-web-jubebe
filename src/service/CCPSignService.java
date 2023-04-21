@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.Connection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -9,6 +10,7 @@ import dao.UserDaoImpl;
 import mes.frame.database.JDBCConnectionPool;
 import model.CCPSign;
 import model.User;
+import viewmodel.CCPTestDataViewModel;
 
 public class CCPSignService {
 
@@ -30,17 +32,18 @@ public class CCPSignService {
 		this.conn = conn;
 	}
 	
-	public CCPSign getCCPSignByDateAndProcessCode(String date, String processCode) {
+	public List<CCPSign> getCCPSignByDateAndProcessCode(String date, String processCode) {
+		List<CCPSign> list = null;
 		try {
 			conn = JDBCConnectionPool.getTenantDB(tenantId);
-			ccpSign = ccpSignDao.getCCPSignByDateAndProcessCode(conn, date, processCode);
+			list = ccpSignDao.getCCPSignByDateAndProcessCode(conn, date, processCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {
 		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
 		}
 		
-		return ccpSign;
+		return list;
 	}
 	
 	public boolean delete(String date, String processCode) {

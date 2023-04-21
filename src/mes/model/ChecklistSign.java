@@ -6,6 +6,7 @@ public class ChecklistSign {
 	private String signWriter;
 	private String signChecker;
 	private String signApprover;
+	private String signColumns;
 	public String getChecklistId() {
 		return checklistId;
 	}
@@ -21,6 +22,9 @@ public class ChecklistSign {
 	public String getSignApprover() {
 		return signApprover;
 	}
+	public String getSignColumns() {
+		return signColumns;
+	}
 	public void setChecklistId(String checklistId) {
 		this.checklistId = checklistId;
 	}
@@ -35,6 +39,9 @@ public class ChecklistSign {
 	}
 	public void setSignApprover(String signApprover) {
 		this.signApprover = signApprover;
+	}
+	public void setSignColumns(String signColumns) {
+		this.signColumns = signColumns;
 	}
 	@Override
 	public String toString() {

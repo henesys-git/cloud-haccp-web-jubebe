@@ -44,7 +44,9 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 				.append("A.order_yn, 	\n")
 				.append("A.customer_code, \n")
 				.append("B.customer_name, \n")
-				.append("C.product_name \n")
+				.append("C.product_name, \n")
+				.append("A.lotno, \n")
+				.append("(SELECT COUNT(*) FROM mes_production_instruction AA WHERE A.plan_no = AA.plan_no) AS count\n")
 				.append("FROM mes_production_plan A	\n")
 				.append("INNER JOIN mes_product_customer B	\n")
 				.append("ON A.customer_code = B.customer_code \n")
@@ -162,10 +164,12 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 					.append("		plan_count, \n")
 					.append("		order_no, \n")
 					.append("		customer_code, \n")
-					.append("		order_yn \n")
+					.append("		order_yn, \n")
+					.append("		lotno \n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
+					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
 					.append("		?,\n")
@@ -187,6 +191,7 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 			ps.setString(6, plan.getOrderNo());
 			ps.setString(7, plan.getCustomerCode());
 			ps.setString(8, "Y");
+			ps.setString(9, plan.getLotNo());
 			
 	        int i = ps.executeUpdate();
 	        
@@ -260,7 +265,7 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 	}
 	
 	@Override
-	public boolean instructionInsert(Connection conn, String instructionDate, String productId, String planNo, String instructionCount) {
+	public boolean instructionInsert(Connection conn, String instructionDate, String productId, String planNo, String instructionCount, String lotNo) {
 		
 		String sql = "";		
 		
@@ -282,7 +287,8 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 					.append("		worker_count,\n")
 					.append("		rawmaterial_deduct_yn,\n")
 					.append("		work_status,\n")
-					.append("		ipgo_yn \n")
+					.append("		ipgo_yn, \n")
+					.append("		lotno \n")
 					.append("	)\n")
 					.append("VALUES\n")
 					.append("	(\n")
@@ -295,9 +301,10 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 					.append("		now(),\n")
 					.append("		0,\n")
 					.append("		1,\n")
-					.append("		'',\n")
+					.append("		'Y',\n")
 					.append("		'생산완료',\n")
-					.append("		'N' \n")
+					.append("		'N', \n")
+					.append("		'" + lotNo + "' \n")
 					.append("	);\n")
 					.toString();
 
@@ -328,6 +335,8 @@ public class ProductionPlanDaoImpl implements ProductionPlanDao {
 		plan.setOrderYn(rs.getString("order_yn"));
 		plan.setCustomerName(rs.getString("customer_name"));
 		plan.setProductName(rs.getString("product_name"));
+		plan.setLotNo(rs.getString("lotno"));
+		plan.setCount(rs.getString("count"));
 		
 		return plan;
 	}

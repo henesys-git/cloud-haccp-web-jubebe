@@ -53,6 +53,21 @@ public class ProductService {
 		return product;
 	}
 	
+	public Product getProductByNm(String nm) {
+		Product product = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			product = productDao.getProductByNm(conn, nm);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return product;
+	}
+	
 	public boolean insert(Product product) {
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);

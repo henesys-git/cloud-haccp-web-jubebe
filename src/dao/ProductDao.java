@@ -14,4 +14,5 @@ public interface ProductDao {
 	public boolean delete(Connection conn, String id);
 	public List<ProductViewModel> getAllProductsViewModel(Connection conn);
 	public List<ProductViewModel> getAllProductTypeViewModel(Connection conn);
+	public Product getProductByNm(Connection conn, String productNm);
 }

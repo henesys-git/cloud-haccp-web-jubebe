@@ -8,6 +8,7 @@
 <script type="text/javascript">
     
 	var dataJspPage = {};
+	var orderJSPPage = {};
 	var order_table_info;
 	var order_table_RowCount = 0;
 	var orderTable;  //주문정보 테이블
@@ -107,6 +108,19 @@
 	    	}
     		
 		}
+	    
+	    orderJSPPage.refreshMainTable = async function () {
+	    	var orders = new Order();
+	    	var ordersList = await orders.getOrders();
+	    	
+    		mainTable.clear().rows.add(ordersList).draw();
+    		
+    		if(subTable) {
+	    		subTable.clear().draw();
+	    	}
+    		
+		}
+	    
 	    
 	    var initModal = function () {
 	    	$('#product-id').prop('disabled', false);
@@ -282,6 +296,23 @@
 		            }
 		        });
 			}
+			
+		});
+		
+		// 주문정보 엑셀등록
+		$('#excel').click(function() {
+			
+			console.log('excel pop up');
+			
+			$.ajax({
+                type: "POST",
+                url: heneServerPath + '/Contents/mes/mes_order_popup_excel.jsp',
+                data: {
+                },
+                success: function (html) {
+                    $("#modalWrapper2").html(html);
+                }
+            });
 			
 		});
 		
@@ -521,6 +552,9 @@
       	  <button type="button" class="btn btn-danger" id="delete">
       	  	주문정보삭제
       	  </button>
+      	  <button type="button" class="btn btn-warning" id="excel">
+      	  	주문정보엑셀등록
+      	  </button>
       	</div>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -660,3 +694,5 @@
  </div>
  
 <div id = "modalWrapper"></div>
+
+<div id = "modalWrapper2"></div>

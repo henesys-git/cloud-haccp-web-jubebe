@@ -43,7 +43,7 @@
 				  </label>
 				  <select class = "form-control" id = "sign-type">
 				  	<option value = "CHECK">확인자</option>
-				  	<!-- <option value = "APPRV">승인자</option> -->
+				  	<option value = "APPRV">승인자</option>
 				  </select>
 				 
 				</div>
@@ -79,8 +79,30 @@ $(document).ready(function () {
 		if(signUserName) {
 			$('#ccpSignModal').modal('hide');
 			alert('서명 완료되었습니다');
-			$("#ccp-sign-btn").hide();
-			$("#ccp-sign-text").text("서명 완료: " + signUserName);
+			
+			var signInfo = await ccpSign.get('<%=date%>', '<%=processCode%>');
+			
+			var signText = "";
+			
+			for(var i = 0; i < signInfo.length; i++) {
+				if(signInfo[i].signType == 'CHECK') {
+					signText = signText + " 확인자 :" + signInfo[i].userName;
+				}
+				
+				else if(signInfo[i].signType == 'APPRV') {
+					signText = signText + " 승인자 :" + signInfo[i].userName;
+				}
+			} 
+			
+			//확인자, 승인자 모두 서명시 서명버튼 숨김 처리
+			if(signInfo.length == 2) {
+				$("#ccp-sign-btn").hide();
+				$("#ccp-sign-text").text(signText);
+			}
+			else {
+				$("#ccp-sign-btn").show();
+				$("#ccp-sign-text").text(signText);
+			}
 			
 			//TODO: CCP별로 JspPage 다르게 하는 코드. 임시처리한거라 예외처리랑 등등 더 해야됨
 			if('<%=processCode%>' == 'PC30') {

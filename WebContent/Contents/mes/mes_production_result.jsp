@@ -62,6 +62,21 @@
 			);
 	    }
 	    
+	    async function getCupSealerCountFromMachine() {
+ 			console.log('getting cup sealer count');
+ 			return $.ajax({
+	            url: "<%=Config.this_SERVER_path%>/mes-productionResult",
+	            type: 'GET',
+	            data: "param1=" + 1 + "&id=packingRead" ,
+	            contentType: "plain/text;charset=UTF-8",
+	            dataType: "text",
+	            success: function (data) {
+	            	console.log("packingCount##############");
+	            	console.log(data);
+				}
+	        });
+ 		};
+	    
 	    async function refreshMainTable() {
 	    	var results = new ProductionResult();
 	    	var resultsList = await results.getProductionResults();
@@ -78,6 +93,7 @@
 	    };
 	    
 		initTable();
+		getCupSealerCountFromMachine();
 		
 		
 		// 수정
@@ -132,11 +148,35 @@
 				
 				}
 			});
+			
+			$('#packing_read').off().click(function() {
+				
+				console.log('start');
+				
+				async function getCupSealerCountFromMachine1() {
+		 			console.log('getting cup sealer count');
+		 			return $.ajax({
+			            url: "<%=Config.this_SERVER_path%>/mes-productionResult",
+			            type: 'GET',
+			            data: "param1=" + 1 + "&id=packingRead" ,
+			            contentType: "plain/text;charset=UTF-8",
+			            dataType: "text",
+			            success: function (data) {
+			            	console.log("packingCount##############");
+			            	console.log(data.replace(" ", ""));
+			            	$('#packing_count').val(data.replace(" ", ""));
+						}
+			        });
+		 		};
+		 		
+		 		getCupSealerCountFromMachine1();
+			});
+			
 		});
 		
     });
 	
-	//점검표 알람 정보 수정
+	//생산실적 입고처리
 	function prod_ipgo(obj) {
 		
     	var rowIdx = $(obj).closest("tr").index();
@@ -255,7 +295,8 @@
 		  <input type="text" class="form-control" id="packing_count">
 		</div>
       </div> 
-      <div class="modal-footer">  
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-success" id="packing_read">포장수량조회</button>  
         <button type="button" class="btn btn-primary" id="save">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
       </div>  
