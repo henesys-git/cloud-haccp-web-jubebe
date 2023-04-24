@@ -148,6 +148,33 @@
 				
 				}
 			});
+			<%-- /*
+			$('#insert').off().click(function() {
+					
+				$.ajax({
+		            type: "POST",
+		            url: "<%=Config.this_SERVER_path%>/mes-interfaces",
+		            data: {
+		            	"data_date" : "2023-04-19",
+		            	"prev_product_id" : packingCount,
+		            	"prev_product_cnt" : planNo,
+		            	"cur_product_id" : planNo,
+		            	"cur_product_cnt" : planNo
+		            	
+		            },
+		            success: function (updateResult) {
+		            	if(updateResult == 'true') {
+		            		alert('수정되었습니다.');
+		            		$('#myModal').modal('hide');
+		            		refreshMainTable();
+		            	} else {
+		            		alert('수정 실패했습니다, 관리자에게 문의해주세요.');
+		            	}
+		            }
+		        });
+				
+			});
+			*/ --%>
 			
 			$('#packing_read').off().click(function() {
 				
@@ -170,6 +197,31 @@
 		 		};
 		 		
 		 		getCupSealerCountFromMachine1();
+			});
+			
+			$('#packing_read').off().click(function() {
+				
+				var row = mainTable.rows( '.selected' ).data();
+				
+				console.log('start');
+				
+				async function getCupSealerCountFromMachine2() {
+		 			console.log('getting cup sealer count2');
+		 			return $.ajax({
+			            url: "<%=Config.this_SERVER_path%>/mes-productionResult",
+			            type: 'GET',
+			            data: "param1=" + 1 + "&id=packingReadDB" ,
+			            contentType: "plain/text;charset=UTF-8",
+			            dataType: "text",
+			            success: function (data) {
+			            	console.log("packingCount##############");
+			            	console.log(data.replace(" ", ""));
+			            	$('#packing_count').val(data.replace(" ", ""));
+						}
+			        });
+		 		};
+		 		
+		 		getCupSealerCountFromMachine2();
 			});
 			
 		});
@@ -296,7 +348,9 @@
 		</div>
       </div> 
       <div class="modal-footer">
-      	<button type="button" class="btn btn-success" id="packing_read">포장수량조회</button>  
+      	<button type="button" class="btn btn-success" id="packing_read">포장수량조회</button>
+      	<button type="button" class="btn btn-success" id="packing_readDB">포장수량DB조회</button>
+      	<!-- <button type="button" class="btn btn-primary" id="insert">포장수량입력</button> -->
         <button type="button" class="btn btn-primary" id="save">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  
       </div>  

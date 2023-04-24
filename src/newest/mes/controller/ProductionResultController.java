@@ -94,6 +94,18 @@ public class ProductionResultController extends HttpServlet {
 			out.flush();
 			
 		}
+		else if(id.equals("packingReadDB")) {
+			String prod_cd = req.getParameter("prod_cd");
+			
+			List<ProductionResult> list = resultService.getPackingCountDB(prod_cd);
+			result = FormatTransformer.toJson(list);
+			
+			res.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			
+			out.print(result);
+			
+		}
 		
 	}
 
