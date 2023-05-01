@@ -44,6 +44,21 @@ public class ProductionResultService {
 		return resultList;
 	}
 	
+	public List<ProductionResult> getPackingCountDB(String prod_cd) {
+		List<ProductionResult> resultList = null;
+		
+		try {
+			conn = JDBCConnectionPool.getTenantDB(bizNo);
+			resultList = resultDao.getPackingCountDB(conn, prod_cd);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+		    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+		}
+		
+		return resultList;
+	}
+	
 	public Order getOrderById(String id) {
 		Order order = null;
 		

@@ -14,6 +14,11 @@ public class ProductionResult {
 	private String ipgoYn;
 	private String productName;
 	private String productId;
+	private String dataDate;
+	private String prevProductId;
+	private String prevProductCnt;
+	private String curProductId;
+	private String curProductCnt;
 	
 	public ProductionResult() {}
 
@@ -120,6 +125,47 @@ public class ProductionResult {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
+
+	public String getDataDate() {
+		return dataDate;
+	}
+
+	public void setDataDate(String dataDate) {
+		this.dataDate = dataDate;
+	}
+
+	public String getPrevProductId() {
+		return prevProductId;
+	}
+
+	public void setPrevProductId(String prevProductId) {
+		this.prevProductId = prevProductId;
+	}
+
+	public String getPrevProductCnt() {
+		return prevProductCnt;
+	}
+
+	public void setPrevProductCnt(String prevProductCnt) {
+		this.prevProductCnt = prevProductCnt;
+	}
+
+	public String getCurProductId() {
+		return curProductId;
+	}
+
+	public void setCurProductId(String curProductId) {
+		this.curProductId = curProductId;
+	}
+
+	public String getCurProductCnt() {
+		return curProductCnt;
+	}
+
+	public void setCurProductCnt(String curProductCnt) {
+		this.curProductCnt = curProductCnt;
+	}
+	
 	
 	
 	

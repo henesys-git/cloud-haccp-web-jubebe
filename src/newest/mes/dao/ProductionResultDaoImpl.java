@@ -263,6 +263,49 @@ public class ProductionResultDaoImpl implements ProductionResultDao {
 	    return false;
 	}
 	
+	@Override
+	public List<ProductionResult> getPackingCountDB(Connection conn, String prod_cd) {
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String sql = new StringBuilder()
+				.append("SELECT  		\n")
+				.append("data_date, \n")
+				.append("prev_product_id, \n")
+				.append("prev_product_cnt, \n")
+				.append("cur_product_id, \n")
+				.append("cur_product_cnt \n")
+				.append("FROM mes_packing_data	\n")
+				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
+				.append("AND A.cur_product_id = '" + prod_cd + "' \n")
+				.append("ORDER BY data_date DESC \n")
+				.append("LIMIT 1 \n")
+				.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			List<ProductionResult> list = new ArrayList<ProductionResult>();
+			
+			while(rs.next()) {
+				ProductionResult data = extractFromResultPackingCountDB(rs);
+				list.add(data);
+			}
+			
+			return list;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+		    try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		    try { stmt.close(); } catch (Exception e) { /* Ig2222222222222222222222222222222222222222222222222nored */ }
+		}
+		
+		return null;
+	};
+	
 	
 	private ProductionResult extractFromResultSet(ResultSet rs) throws SQLException {
 		
@@ -294,6 +337,19 @@ public class ProductionResultDaoImpl implements ProductionResultDao {
 		order.setChulhaYn(rs.getString("chulha_yn"));
 		
 		return order;
+	}
+	
+	private ProductionResult extractFromResultPackingCountDB(ResultSet rs) throws SQLException {
+		
+		ProductionResult result = new ProductionResult();
+		
+		result.setDataDate(rs.getString("data_date"));
+		result.setPrevProductId(rs.getString("prev_product_id"));
+		result.setPrevProductCnt(rs.getString("prev_product_cnt"));
+		result.setCurProductId(rs.getString("cur_product_id"));
+		result.setCurProductCnt(rs.getString("cur_product_cnt"));
+		
+		return result;
 	}
 	
 }

@@ -16,4 +16,5 @@ public interface ProductionResultDao {
 	public boolean insert(Connection conn, ProductionPlan plan);
 	public boolean packingUpdate(Connection conn, String packingCount, String planNo);
 	public boolean delete(Connection conn, String planNo);
+	public List<ProductionResult> getPackingCountDB(Connection conn, String prod_cd);
 }
