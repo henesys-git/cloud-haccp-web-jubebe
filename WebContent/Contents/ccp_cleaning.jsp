@@ -280,7 +280,7 @@
 			<div class="col-md-3">
 		      	<div class="form-check-inline">
 				    <label class="form-check-label">
-				      <input type="radio" class="form-check-input" name="test-yn" value="PC45" checked>운영
+				      <input type="radio" class="form-check-input" name="test-yn" value="PC20" checked>운영
 				    </label>
 				</div>
 				<div class="form-check-inline">
