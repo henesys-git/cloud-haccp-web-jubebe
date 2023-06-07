@@ -891,6 +891,8 @@
 			var checklistPath = urlPage.substr(0,29);
 			var documentNum = urlPage.substr(27,2);
 			var documentPath = urlPage.substr(0,27);
+			var uploadChecklistNum = urlPage.substr(41,2);
+			var uploadChecklistPath = urlPage.substr(0,41);
 			
 			console.debug("checklistParam:" + checklistParam);
 			console.debug("checklistParam2:" + checklistParam2);
@@ -898,6 +900,8 @@
 			console.debug("checklistPath:" + checklistPath);
 			console.debug("documentNum:" + documentNum);
 			console.debug("documentPath:" + documentPath);
+			console.debug("uploadChecklistNum:" + uploadChecklistNum);
+			console.debug("uploadChecklistPath:" + uploadChecklistPath);
 			
 			let data = "HeadmenuID=" + HeadmenuID + 
 					   "&HeadmenuName=" + HeadmenuName + 
@@ -914,6 +918,11 @@
 			else if(checklistParam == 'document/') {
 				data = data + "&documentNum=" + documentNum;
 				url = documentPath + ".jsp?documentNum=" + documentNum;
+			}
+			//파일 첨부형 선행요건 메뉴일 경우 checklist 번호를 parameter로 받아 function 진입
+			else if(checklistParam == 'uploadChe') {
+				data = data + "&uploadChecklistNum=" + uploadChecklistNum;
+				url = uploadChecklistPath + ".jsp?uploadChecklistNum=" + uploadChecklistNum;
 			}
 			//가열공정 점검표
 			else if(urlPage === "/Contents/heating.jsp") {
