@@ -11,24 +11,25 @@ import java.util.List;
 import mes.frame.database.JDBCConnectionPool;
 import model.ChecklistData;
 import model.DocumentData;
+import model.UploadChecklistData;
 
-public class UploadChecklistDataDaoImpl implements DocumentDataDao {
+public class UploadChecklistDataDaoImpl implements UploadChecklistDataDao {
 	
 	private Statement stmt;
 	private PreparedStatement ps;
 	private ResultSet rs;
 	
 	@Override
-	public int insert(Connection conn, DocumentData docData) {
+	public int insert(Connection conn, UploadChecklistData docData) {
 		
 	    try {
 	    	String sql = new StringBuilder()
-	    			.append("INSERT INTO document_data (\n")
+	    			.append("INSERT INTO upload_checklist_data (\n")
 	    			.append("	tenant_id,\n")
-	    			.append("	document_id,\n")
+	    			.append("	upload_checklist_id,\n")
 	    			.append("	seq_no,\n")
 	    			.append("	revision_no,\n")
-	    			.append("	document_data,\n")
+	    			.append("	upload_checklist_data,\n")
 	    			.append("   regist_date, \n")
 	    			.append("   bigo \n")
 	    			.append(")\n")
@@ -38,8 +39,8 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 	    			.append("	(SELECT * \n")
 	    			.append("	FROM (\n")
 	    			.append("		SELECT IFNULL((MAX(seq_no) + 1), 0) \n")
-	    			.append("		FROM document_data \n")
-	    			.append("		WHERE document_id = ?\n")
+	    			.append("		FROM upload_checklist_data \n")
+	    			.append("		WHERE upload_checklist_id = ?\n")
 	    			.append("	) AS A),\n")
 	    			.append("	?,\n")
 	    			.append("	?,\n")
@@ -51,10 +52,10 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 			ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, JDBCConnectionPool.getTenantId(conn));
-			ps.setString(2, docData.getDocumentId());
-			ps.setString(3, docData.getDocumentId());
+			ps.setString(2, docData.getUploadChecklistId());
+			ps.setString(3, docData.getUploadChecklistId());
 			ps.setInt(4, docData.getRevisionNo());
-			ps.setString(5, docData.getDocumentData());
+			ps.setString(5, docData.getUploadChecklistData());
 			ps.setString(6, docData.getBigo());
 			
 	        int i = ps.executeUpdate();
@@ -72,16 +73,16 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 	};
 	
 	@Override
-	public int update(Connection conn, DocumentData docData) {
+	public int update(Connection conn, UploadChecklistData docData) {
 		
 		String sql = "";
 		
 	    try {
 	    	sql = new StringBuilder()
-	    			.append("UPDATE document_data \n")
-	    			.append("	SET document_data = '"+docData.getDocumentData().toString()+"',	\n")
+	    			.append("UPDATE upload_checklist_data \n")
+	    			.append("	SET upload_checklist_data = '"+docData.getUploadChecklistData().toString()+"',	\n")
 	    			.append("	bigo = '"+docData.getBigo().toString()+"',	\n")
-	    			.append("WHERE document_id = '"+docData.getDocumentId()+"' \n")
+	    			.append("WHERE upload_checklist_id = '"+docData.getUploadChecklistId()+"' \n")
 	    			.append("AND seq_no = '" +docData.getSeqNo() +"' \n")
 	    			.toString();
 	    	
@@ -104,14 +105,14 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 	};
 	
 	@Override
-	public int delete(Connection conn, DocumentData docData) {
+	public int delete(Connection conn, UploadChecklistData docData) {
 		System.out.println("daoImpl###########");
-		System.out.println(docData.getDocumentId());
+		System.out.println(docData.getUploadChecklistId());
 		System.out.println(docData.getSeqNo());
 	    try {
 	    	String sql = new StringBuilder()
-	    			.append("DELETE FROM document_data \n")
-	    			.append("WHERE document_id = '"+docData.getDocumentId()+"' \n")
+	    			.append("DELETE FROM upload_checklist_data \n")
+	    			.append("WHERE upload_checklist_id = '"+docData.getUploadChecklistId()+"' \n")
 	    			.append("AND seq_no = '" +docData.getSeqNo() +"' \n")
 	    			.toString();
 	    	
@@ -133,14 +134,14 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 	};
 	
 	@Override
-	public DocumentData select(Connection conn, String documentId, int seqNo) {
+	public UploadChecklistData select(Connection conn, String documentId, int seqNo) {
 		
 		try {
 			String sql = new StringBuilder()
 					.append("SELECT *\n")
-					.append("FROM document_data\n")
+					.append("FROM upload_checklist_data\n")
 					.append("WHERE tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-					.append("  AND document_id = ?\n")
+					.append("  AND upload_checklist_id = ?\n")
 					.append("  AND seq_no = ?;\n")
 					.toString();
 			
@@ -150,7 +151,7 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 			
 			rs = ps.executeQuery();
 			
-			DocumentData docData = new DocumentData();
+			UploadChecklistData docData = new UploadChecklistData();
 					
 			if(rs.next()) {
 				docData = extractFromResultSet(rs);
@@ -169,30 +170,30 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 	}
 	
 	@Override
-	public List<DocumentData> selectAll(Connection conn, String documentId) {
+	public List<UploadChecklistData> selectAll(Connection conn, String documentId) {
 		try {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
 				.append("SELECT 									\n")
 				.append("A.tenant_id, 								\n")
-				.append("A.document_id, 							\n")
+				.append("A.upload_checklist_id, 							\n")
 				.append("A.seq_no, 									\n")
 				.append("A.revision_no, 							\n")
-				.append("A.document_data, 							\n")
+				.append("A.upload_checklist_data, 							\n")
 				.append("A.regist_date, 							\n")
 				.append("A.bigo 									\n")
-				.append("FROM document_data A						\n")
+				.append("FROM upload_checklist_data A						\n")
 				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("  AND A.document_id = '" + documentId + "'	\n")
+				.append("  AND A.upload_checklist_id = '" + documentId + "'	\n")
 				.toString();
 			
 			rs = stmt.executeQuery(sql);
 			
-			List<DocumentData> docDataList = new ArrayList<DocumentData>();
+			List<UploadChecklistData> docDataList = new ArrayList<UploadChecklistData>();
 			
 			while(rs.next()) {
-				DocumentData data = extractFromResultSet(rs);
+				UploadChecklistData data = extractFromResultSet(rs);
 				docDataList.add(data);
 			}
 			
@@ -208,13 +209,13 @@ public class UploadChecklistDataDaoImpl implements DocumentDataDao {
 		return null;
 	}
 	
-	private DocumentData extractFromResultSet(ResultSet rs) throws SQLException {
-	    DocumentData clData = new DocumentData();
+	private UploadChecklistData extractFromResultSet(ResultSet rs) throws SQLException {
+		UploadChecklistData clData = new UploadChecklistData();
 	    
-	    clData.setDocumentId(rs.getString("document_id"));
+	    clData.setUploadChecklistId(rs.getString("upload_checklist_id"));
 	    clData.setSeqNo(rs.getInt("seq_no"));
 	    clData.setRevisionNo(rs.getInt("revision_no"));
-	    clData.setDocumentData(rs.getString("document_data"));
+	    clData.setUploadChecklistData(rs.getString("upload_checklist_data"));
 	    clData.setRegistDate(rs.getString("regist_date"));
 	    clData.setBigo(rs.getString("bigo"));
 	    return clData;

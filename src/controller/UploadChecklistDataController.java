@@ -18,13 +18,16 @@ import org.json.simple.parser.ParseException;
 
 import dao.ChecklistDataDaoImpl;
 import dao.DocumentDataDaoImpl;
+import dao.UploadChecklistDataDaoImpl;
 import model.ChecklistData;
 import model.DocumentData;
+import model.UploadChecklistData;
 import service.ChecklistDataService;
 import service.DocumentDataService;
+import service.UploadChecklistDataService;
 import utils.FormatTransformer;
 
-@WebServlet("/document")
+@WebServlet("/uploadChecklist")
 public class UploadChecklistDataController extends HttpServlet {
 
 	/**
@@ -47,8 +50,8 @@ public class UploadChecklistDataController extends HttpServlet {
 		System.out.println("seq no string:" + seqNoStr);
 		
 		if(seqNoStr.equals("all")) {
-			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
-			List<DocumentData> docDataList = docService.selectAll(documentId);
+			UploadChecklistDataService docService = new UploadChecklistDataService(new UploadChecklistDataDaoImpl(), bizNo);
+			List<UploadChecklistData> docDataList = docService.selectAll(documentId);
 			String result = FormatTransformer.toJson(docDataList);
 			
 			res.setContentType("application/json; charset=UTF-8");
@@ -59,8 +62,8 @@ public class UploadChecklistDataController extends HttpServlet {
 		else {
 			int seqNo = Integer.parseInt(seqNoStr);
 			
-			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
-			DocumentData docData = docService.select(documentId, seqNo);
+			UploadChecklistDataService docService = new UploadChecklistDataService(new UploadChecklistDataDaoImpl(), bizNo);
+			UploadChecklistData docData = docService.select(documentId, seqNo);
 			String result = FormatTransformer.toJson(docData);
 			
 			res.setContentType("application/json; charset=UTF-8");
@@ -99,15 +102,15 @@ public class UploadChecklistDataController extends HttpServlet {
 			String bigo = req.getParameter("bigo");
 			int revisionNoInt = Integer.parseInt(revisionNo);
 
-			DocumentData docData = new DocumentData();
-			docData.setDocumentId(documentId);
+			UploadChecklistData docData = new UploadChecklistData();
+			docData.setUploadChecklistId(documentId);
 			docData.setRevisionNo(revisionNoInt);
-			docData.setDocumentData(documentData);
+			docData.setUploadChecklistData(documentData);
 			docData.setBigo(bigo);
 			
 			System.out.println(docData.toString());
 			
-			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			UploadChecklistDataService docService = new UploadChecklistDataService(new UploadChecklistDataDaoImpl(), bizNo);
 			int result = docService.insert(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");
@@ -134,15 +137,15 @@ public class UploadChecklistDataController extends HttpServlet {
 			String bigo = req.getParameter("bigo");
 			int seqNoInt = Integer.parseInt(seqNo);
 
-			DocumentData docData = new DocumentData();
-			docData.setDocumentId(documentId);
-			docData.setDocumentData(documentData);
+			UploadChecklistData docData = new UploadChecklistData();
+			docData.setUploadChecklistId(documentId);
+			docData.setUploadChecklistData(documentData);
 			docData.setSeqNo(seqNoInt);
 			docData.setBigo(bigo);
 			
 			System.out.println(docData.toString());
 			
-			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			UploadChecklistDataService docService = new UploadChecklistDataService(new UploadChecklistDataDaoImpl(), bizNo);
 			int result = docService.update(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");
@@ -165,13 +168,13 @@ public class UploadChecklistDataController extends HttpServlet {
 		int seqNo = Integer.parseInt(req.getParameter("seqNo").toString());
 		try {
 
-			DocumentData docData = new DocumentData();
-			docData.setDocumentId(documentId);
+			UploadChecklistData docData = new UploadChecklistData();
+			docData.setUploadChecklistId(documentId);
 			docData.setSeqNo(seqNo);
 			
 			System.out.println(docData.toString());
 			
-			DocumentDataService docService = new DocumentDataService(new DocumentDataDaoImpl(), bizNo);
+			UploadChecklistDataService docService = new UploadChecklistDataService(new UploadChecklistDataDaoImpl(), bizNo);
 			int result = docService.delete(docData);
 			
 			res.setContentType("text/html; charset=UTF-8");

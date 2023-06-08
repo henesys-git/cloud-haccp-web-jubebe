@@ -7,23 +7,25 @@ import org.apache.log4j.Logger;
 
 import dao.ChecklistDataDao;
 import dao.DocumentDataDao;
+import dao.UploadChecklistDataDao;
 import mes.frame.database.JDBCConnectionPool;
 import model.ChecklistData;
 import model.DocumentData;
+import model.UploadChecklistData;
 
 public class UploadChecklistDataService {
-	private DocumentDataDao docDao;
+	private UploadChecklistDataDao docDao;
 	private String bizNo;
 	private Connection conn;
 	
 	static final Logger logger = Logger.getLogger(UploadChecklistDataService.class.getName());
 	
-	public UploadChecklistDataService(DocumentDataDao docDao, String bizNo) {
+	public UploadChecklistDataService(UploadChecklistDataDao docDao, String bizNo) {
 		this.docDao = docDao;
 		this.bizNo = bizNo;
 	}
 	
-	public int insert(DocumentData docData) {
+	public int insert(UploadChecklistData docData) {
 		int result = -1;
 		
 		try {
@@ -38,8 +40,8 @@ public class UploadChecklistDataService {
 		return result;
 	}
 	
-	public DocumentData select(String documentId, int seqNo) {
-		DocumentData clData = null;
+	public UploadChecklistData select(String documentId, int seqNo) {
+		UploadChecklistData clData = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
@@ -53,8 +55,8 @@ public class UploadChecklistDataService {
 		return clData;
 	}
 	
-	public List<DocumentData> selectAll(String documentId) {
-		List<DocumentData> list = null;
+	public List<UploadChecklistData> selectAll(String documentId) {
+		List<UploadChecklistData> list = null;
 		
 		try {
 			conn = JDBCConnectionPool.getTenantDB(bizNo);
@@ -68,7 +70,7 @@ public class UploadChecklistDataService {
 		return list;
 	}
 	
-	public int update(DocumentData docData) {
+	public int update(UploadChecklistData docData) {
 		int result = -1;
 		
 		try {
@@ -83,7 +85,7 @@ public class UploadChecklistDataService {
 		return result;
 	}
 	
-	public int delete(DocumentData docData) {
+	public int delete(UploadChecklistData docData) {
 		int result = -1;
 		
 		try {

@@ -33,8 +33,8 @@
 		async function getData() {
 	        var fetchedList = $.ajax({
 			            type: "GET",
-			            url: "<%=Config.this_SERVER_path%>/document"
-				            	+ "?documentId=" + 'document' + '<%=documentNum%>'
+			            url: "<%=Config.this_SERVER_path%>/uploadChecklist"
+				            	+ "?documentId=" + 'uploadChecklist' + '<%=documentNum%>'
 				            	+ "&seqNo=all",
 			            success: function (result) {
 			            	return result;
@@ -52,12 +52,12 @@
 				data : list,
 				pageLength: 10,
 				columns: [
-					{ data: "documentId", defaultContent: '' },
+					{ data: "uploadChecklistId", defaultContent: '' },
 					{ data: "revisionNo", defaultContent: '' },
 					{ data: "seqNo", defaultContent: '' },
 					{ data: "registDate", defaultContent: '' },
 					{ data: "bigo", defaultContent: '' },
-					{ data: "documentData", defaultContent: '' },
+					{ data: "uploadChecklistData", defaultContent: '' },
 					{ data: "", defaultContent: '' }
 		        ],
 		        'columnDefs': [
@@ -93,11 +93,11 @@
     		initModal();
     		
     		$('#myModal').modal('show');
-			$('.modal-title').text('문서정보등록');
+			$('.modal-title').text('점검표등록');
 			
 			$('#save').off().click(function() {
 			
-			var document_id = 'document' + '<%=documentNum%>';
+			var document_id = 'uploadChecklist' + '<%=documentNum%>';
 			var fileVal = $('#file-data').val();
 			console.log(fileVal);
 			var fileRealNameSplit = fileVal.split("\\");
@@ -149,7 +149,7 @@
 						//파일 업로드 성공하면 db에 data insert
 						$.ajax({
 				            type: "POST",
-				            url: "<%=Config.this_SERVER_path%>/document",
+				            url: "<%=Config.this_SERVER_path%>/uploadChecklist",
 				            data: {
 				            	"type" : "insert",
 				            	"id" : document_id,
@@ -192,7 +192,7 @@
 			}
 
     		$('#myModal').modal('show');
-			$('.modal-title').text('문서정보수정');
+			$('.modal-title').text('점검표수정');
 			
 			$('#file-data').val(row[0].document_data);
 			$('#bigo').val(row[0].bigo);
@@ -205,7 +205,7 @@
 				
 				$.ajax({
 		            type: "POST",
-		            url: "<%=Config.this_SERVER_path%>/menu",
+		            url: "<%=Config.this_SERVER_path%>/uploadChecklist",
 		            data: { 
 	            		"type" : "update",
 	            		"id" : row[0].documentId,
@@ -242,7 +242,7 @@
     			
     			$.ajax({
     	            type: "POST",
-    	            url: "<%=Config.this_SERVER_path%>/document",
+    	            url: "<%=Config.this_SERVER_path%>/uploadChecklist",
     	            data: {
     	            	"type" : "delete",
     	            	"id" : row[0].documentId, 
@@ -275,10 +275,10 @@
 			}
     		
 			console.log(row);
-			console.log(row[0].documentData);
+			console.log(row[0].uploadChecklistData);
 			
 			//var fileName = $(obj).closest('tr').children().eq(5).text().trim();
-			var fileName = row[0].documentData;
+			var fileName = row[0].uploadChecklistData;
 			var fileNameSplit = fileName.split('.');
 			var aExt = fileNameSplit[fileNameSplit.length - 1];
 			console.log(aExt);
@@ -470,7 +470,7 @@
 	}
 	
 	async function refreshMainTable() {
-    	var docData = new DocumentData();
+    	var docData = new UploadChecklistData();
     	var docList = await docData.getAll('<%=documentNum%>');
     	console.log(docList);
 		mainTable.clear().rows.add(docList).draw();

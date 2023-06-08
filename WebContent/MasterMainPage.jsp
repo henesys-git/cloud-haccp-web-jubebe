@@ -604,6 +604,8 @@
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/DocumentData.js"></script>
 	<!-- limit -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/limit.js"></script>
+	<!-- UploadChecklistData -->
+	<script src="<%=Config.this_SERVER_path%>/js/services/api/UploadChecklistData.js"></script>
 	<!-- MES -->
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/order.js"></script>
 	<script src="<%=Config.this_SERVER_path%>/js/services/api/mes/productStorage.js"></script>
@@ -937,6 +939,11 @@
 			//크림공정 점검표
 			else if(urlPage === "/Contents/cream.jsp") {
 				data = data + "&processCode=PC80&ccpType=cream";
+				url = ccpUrl;
+			}
+			//크림공정 점검표
+			else if(urlPage === "/Contents/cream.jsp") {
+				data = data + "&processCode=PC20&ccpType=cream";
 				url = ccpUrl;
 			}
            
