@@ -941,9 +941,9 @@
 				data = data + "&processCode=PC80&ccpType=cream";
 				url = ccpUrl;
 			}
-			//크림공정 점검표
-			else if(urlPage === "/Contents/cream.jsp") {
-				data = data + "&processCode=PC20&ccpType=cream";
+			//세척공정 점검표
+			else if(urlPage === "/Contents/clean.jsp") {
+				data = data + "&processCode=PC20&ccpType=clean";
 				url = ccpUrl;
 			}
            

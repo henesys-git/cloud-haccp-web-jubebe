@@ -29,5 +29,13 @@
 		"approverSignCell" : "1",
 		"dateCell" : "2",
 		"normalSumValueWhenAddAllTestResult": "4"
+	},
+	"checklist12": {
+		"rowStartCell":"cell3",
+		"rowOrder": ["time", "prod", "DI10", "DI25", "DI40", "DI30", "DI55", "DI80", "DI60", "DI70", "judge"],
+		"writerSignCell" : "2",
+		"approverSignCell" : "0",
+		"dateCell" : "1",
+		"normalSumValueWhenAddAllTestResult": "4"
 	}
 }

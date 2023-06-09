@@ -2629,6 +2629,10 @@ function ChecklistSelectModalCCP(createDate,
 		else if(this.sensorId.includes('CR')) {
 			processCd = "PC80";
 		}
+		//cleaning machine
+		else if(this.sensorId.includes('DI')) {
+			processCd = "PC20";
+		}
 		
 		console.debug('getChecklistData()');
 		console.debug(this.sensorId);
