@@ -122,11 +122,11 @@
     		var tr = $(that).parents('tr')[0];
 			var row = subTable.rows(tr).data()[0];
     		
-			alert('아직 지원하지 않는 기능입니다.');
+			//alert('아직 지원하지 않는 기능입니다.');
 	    	$.ajax({
                 type: "POST",
-                url: heneServerPath + '/Contents/mes/shipment_return.jsp',
-                /*
+                url: heneServerPath + '/Contents/mes/shipment_return.jsp?productName=' + row.productName,
+                
                 data: {
                 	productStockNo: row.productStockNo,
                 	productId: row.productId,
@@ -134,9 +134,9 @@
                 	ioAmt: row.ioAmt,
                 	ipgoOnly: "N"
                 },
-                */
+                
                 success: function (html) {
-                    $("#modalWrapper").html(html);
+                    $("#modalWrapper2").html(html);
                 }
             });
     	}
@@ -221,3 +221,4 @@
 <!-- /.content -->
 
 <div id="modalWrapper"></div>
+<div id="modalWrapper2"></div>
