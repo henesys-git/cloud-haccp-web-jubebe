@@ -287,9 +287,18 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			Connection conn, String sensorId, 
 			String startDate, String endDate, 
 			String processCode) {
-		
+		    
 		try {
 			stmt = conn.createStatement();
+			
+			String targetTable = "";
+			
+			if(processCode.equals("PC20")) {
+				targetTable = "data_process2";
+			}
+			else {
+				targetTable = "data_metal";
+			}
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
@@ -302,7 +311,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("		SELECT CASE\n")
 					.append("			WHEN NOT EXISTS(\n")
 					.append("				SELECT *\n")
-					.append("				FROM data_metal aa\n")
+					//.append("				FROM data_metal aa\n")
+					.append("				FROM " +targetTable+ " aa \n")
 					.append("				INNER JOIN ccp_limit bb\n")
 					.append("					ON aa.event_code = bb.event_code\n")
 					.append("					AND aa.product_id = bb.object_id\n")
@@ -319,7 +329,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("		SELECT CASE \n")
 					.append("			WHEN NOT EXISTS(\n")
 					.append("				SELECT *\n")
-					.append("				FROM data_metal aa\n")
+					//.append("				FROM data_metal aa\n")
+					.append("				FROM " +targetTable+ " aa \n")
 					.append("				INNER JOIN ccp_limit bb\n")
 					.append("					ON aa.event_code = bb.event_code\n")
 					.append("					AND aa.product_id = bb.object_id\n")
@@ -333,7 +344,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("			ELSE '미완료'\n")
 					.append("			END\n")
 					.append("	) AS improvement_completion \n")
-					.append("FROM data_metal A\n")
+					//.append("FROM data_metal A\n")
+					.append("				FROM " +targetTable+ " A \n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("LEFT JOIN common_code C\n")
@@ -373,10 +385,19 @@ public class CCPDataDaoImpl implements CCPDataDao {
 	
 	//2023-03-24 한계기준 값 비교 안되는 현상 때문에 비교절 수정 (event_code 하드코딩 방식)
 	@Override
-	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey) {
+	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey, String processCode) {
 		
 		try {
 			stmt = conn.createStatement();
+			
+			String targetTable = "";
+			
+			if(processCode.equals("PC20")) {
+				targetTable = "data_process2";
+			}
+			else {
+				targetTable = "data_metal";
+			}
 			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
@@ -391,7 +412,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("   IF(A.sensor_value <= D.max_value && A.sensor_value >= D.min_value, '적합', '부적합') \n")
 					.append("   ) AS judge, \n")
 					.append("	A.improvement_action\n")
-					.append("FROM data_metal A\n")
+					//.append("FROM data_metal A\n")
+					.append("FROM " + targetTable + " A \n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("LEFT JOIN event_info C\n")

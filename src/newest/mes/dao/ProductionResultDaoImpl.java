@@ -268,18 +268,36 @@ public class ProductionResultDaoImpl implements ProductionResultDao {
 		
 		try {
 			stmt = conn.createStatement();
+			String sql = "";
+			String mapping_code = "";
 			
-			String sql = new StringBuilder()
+			sql = new StringBuilder()
+					.append("SELECT  		\n")
+					.append("mapping_code   \n")
+					.append("FROM mes_product_id_mapping \n")
+					.append("WHERE product_id = '" + prod_cd + "' \n")
+					.append("LIMIT 1 \n")
+					.toString();
+			
+			logger.debug("sql:\n" + sql);
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				mapping_code = rs.getString("mapping_code").trim();
+			}
+			
+			sql = new StringBuilder()
 				.append("SELECT  		\n")
 				.append("data_date, \n")
 				.append("prev_product_id, \n")
 				.append("prev_product_cnt, \n")
 				.append("cur_product_id, \n")
 				.append("cur_product_cnt \n")
-				.append("FROM mes_packing_data	\n")
+				.append("FROM mes_packing_data A \n")
 				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'\n")
-				.append("AND A.cur_product_id = '" + prod_cd + "' \n")
-				.append("ORDER BY data_date DESC \n")
+				.append("AND A.cur_product_id like '%" + mapping_code + "%' \n")
+				.append("ORDER BY data_date DESC, cur_product_cnt DESC \n")
 				.append("LIMIT 1 \n")
 				.toString();
 			

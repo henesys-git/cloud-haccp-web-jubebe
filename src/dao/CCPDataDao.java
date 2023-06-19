@@ -22,7 +22,7 @@ public interface CCPDataDao {
 	public List<CCPTestDataHeadViewModel> getCCPTestDataHeadByProd(Connection conn, String startDate, String endDate, String processCode);
 	public List<CCPTestDataViewModel> getCCPTestData(Connection conn, String date, String processCode, String sensorId);
 	public List<CCPDataHeadViewModel> getAllCCPDataHeadViewModel(Connection conn, String sensorId, String startDate, String endDate, String processCode);
-	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey);
+	public List<CCPDataDetailViewModel> getAllCCPDataDetailViewModel(Connection conn, String sensorKey, String processCode);
 	public boolean fixLimitOut(Connection conn, String sensorKey, String createTime, String improvement);
 	public boolean fixLimitOutAll(Connection conn, String date, String date2, String improvement, String processCode);
 	public List<CCPDataStatisticModel> getCCPDataStatisticModel(Connection conn, String toDate, String sensorId);

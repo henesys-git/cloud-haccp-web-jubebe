@@ -73,12 +73,12 @@ public class CCPDataService {
 		return cvmList;
 	}
 
-	public List<CCPDataDetailViewModel> getCCPDataDetailViewModels(String sensorKey) {
+	public List<CCPDataDetailViewModel> getCCPDataDetailViewModels(String sensorKey, String processCode) {
 		List<CCPDataDetailViewModel> cvmList = null;
 		
 		try {
 			Connection conn = JDBCConnectionPool.getTenantDB(tenantId);
-			cvmList = ccpDataDao.getAllCCPDataDetailViewModel(conn, sensorKey);
+			cvmList = ccpDataDao.getAllCCPDataDetailViewModel(conn, sensorKey, processCode);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 		} finally {

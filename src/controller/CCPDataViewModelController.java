@@ -67,7 +67,7 @@ public class CCPDataViewModelController extends HttpServlet {
 		case "detail":
 			String sensorKey = req.getParameter("sensorKey");
 			
-			List<CCPDataDetailViewModel> cvmDetailList = ccpService.getCCPDataDetailViewModels(sensorKey);
+			List<CCPDataDetailViewModel> cvmDetailList = ccpService.getCCPDataDetailViewModels(sensorKey, processCode);
 			result = FormatTransformer.toJson(cvmDetailList);
 			
 			res.setContentType("application/json; charset=UTF-8");

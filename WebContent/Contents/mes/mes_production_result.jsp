@@ -176,7 +176,7 @@
 			});
 			*/ --%>
 			
-			$('#packing_read').off().click(function() {
+			<%-- $('#packing_read').off().click(function() {
 				
 				console.log('start');
 				
@@ -197,33 +197,35 @@
 		 		};
 		 		
 		 		getCupSealerCountFromMachine1();
-			});
+			}); --%>
 			
 			$('#packing_read').off().click(function() {
 				
 				var row = mainTable.rows( '.selected' ).data();
 				
 				console.log('start');
-				
+				console.log(row[0].productId);
 				async function getCupSealerCountFromMachine2() {
 		 			console.log('getting cup sealer count2');
 		 			return $.ajax({
 			            url: "<%=Config.this_SERVER_path%>/mes-productionResult",
 			            type: 'GET',
-			            data: "param1=" + 1 + "&id=packingReadDB" ,
-			            contentType: "plain/text;charset=UTF-8",
-			            dataType: "text",
+			            data: "param1=" + 1 + "&id=packingReadDB" + "&prod_cd=" + row[0].productId,
+			            //contentType: "plain/text;charset=UTF-8",
+			            //dataType: "text",
 			            success: function (data) {
-			            	console.log("packingCount##############");
-			            	console.log(data.replace(" ", ""));
-			            	$('#packing_count').val(data.replace(" ", ""));
+			            	//console.log("packingCount##############");
+			            	//console.log(data.replace(" ", ""));
+			            	console.log(data);
+			            	console.log(data[0]);
+			            	$('#packing_count').val(data[0].curProductCnt);
 						}
 			        });
 		 		};
 		 		
 		 		getCupSealerCountFromMachine2();
 			});
-			
+
 		});
 		
     });
@@ -349,7 +351,7 @@
       </div> 
       <div class="modal-footer">
       	<button type="button" class="btn btn-success" id="packing_read">포장수량조회</button>
-      	<button type="button" class="btn btn-success" id="packing_readDB">포장수량DB조회</button>
+      	<!-- <button type="button" class="btn btn-success" id="packing_readDB">포장수량DB조회</button> -->
       	<!-- <button type="button" class="btn btn-primary" id="insert">포장수량입력</button> -->
         <button type="button" class="btn btn-primary" id="save">저장</button>  
         <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>  

@@ -114,6 +114,8 @@
 							{ data: "createTime", defaultContent: '' },
 							{ data: "event", defaultContent: '' },
 							{ data: "sensorValue", defaultContent: '' },
+							{ data: "minValue", defaultContent: '' },
+							{ data: "maxValue", defaultContent: '' },
 							{ data: "judge", defaultContent: '' },
 							{ data: "improvementAction", defaultContent: '' }
 				        ],
@@ -122,16 +124,17 @@
 					  			targets: [3],
 					  			render: function(td, cellData, rowData, row, col){
 					  				console.log(cellData);
-					  				if (rowData.sensorValue == '1') {
+					  				/* if (rowData.sensorValue == '1') {
 					  					return '검출';
 					  				}
 					  				else {
 					  					return '비검출';
-					  				}
+					  				} */
+					  				return rowData.sensorValue;
 					  			}
 					  		},
 				   			{
-					  			targets: [5],
+					  			targets: [7],
 					  			render: function(td, cellData, rowData, row, col){
 					  				if (rowData.judge == '적합') {
 					  					return 'n/a';
@@ -283,11 +286,11 @@
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC20" checked>운영
 				    </label>
 				</div>
-				<div class="form-check-inline">
+				<!-- <div class="form-check-inline">
 				    <label class="form-check-label">
 				      <input type="radio" class="form-check-input" name="test-yn" value="PC40" disabled>테스트
 				    </label>
-				</div>
+				</div> -->
        	  	</div>
         	  
 			<div class="col-md-2 input-group">
