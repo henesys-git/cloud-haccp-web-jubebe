@@ -55,11 +55,14 @@
 	    
 	    async function getSubData(sensorKey) {
 	    	
+	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	
 	        var fetchedData = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
 			            data: "method=detail" +
-			            	  "&sensorKey=" + sensorKey,
+			            	  "&sensorKey=" + sensorKey +
+			            	  "&processCode=" + processCode,
 			            success: function (result) {
 			            	return result;
 			            }
@@ -360,6 +363,8 @@
 					    <th>생성시간</th>
 					    <th>이벤트</th>
 					    <th>측정값</th>
+					    <th>최소값</th>
+					    <th>최대값</th>
 					    <th>적/부</th>
 					    <th>개선조치</th>
 					</tr>

@@ -392,6 +392,8 @@ public class CCPDataDaoImpl implements CCPDataDao {
 			
 			String targetTable = "";
 			
+			System.out.println("processCode : " + processCode);
+			
 			if(processCode.equals("PC20")) {
 				targetTable = "data_process2";
 			}
