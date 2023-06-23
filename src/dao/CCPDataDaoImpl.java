@@ -78,6 +78,15 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		try {
 			stmt = conn.createStatement();
 			
+			String targetTable = "";
+			
+			if(processCode.equals("PC20")) {
+				targetTable = "data_process2";
+			}
+			else {
+				targetTable = "data_metal";
+			}
+			
 			String sql = new StringBuilder()
 					.append("SELECT \n")
 					.append("	CAST(A.create_time AS DATE) AS create_date,\n")
@@ -86,7 +95,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("	A.product_id, \n")
 					.append("	P.parent_id, \n")
 					.append("	(SELECT product_name FROM product P2 WHERE P.parent_id = P2.product_id) AS parent_name \n")
-					.append("FROM data_metal A\n")
+					.append("FROM " + targetTable + " A\n")
 					.append("INNER JOIN sensor B\n")
 					.append("	ON A.sensor_id = B.sensor_id\n")
 					.append("INNER JOIN product P\n")
@@ -126,6 +135,15 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		
 		try {
 			stmt = conn.createStatement();
+			
+			String targetTable = "";
+			
+			if(processCode.equals("PC20")) {
+				targetTable = "data_process2";
+			}
+			else {
+				targetTable = "data_metal";
+			}
 			
 			String sql = new StringBuilder()
 					.append("SELECT \n")
@@ -231,6 +249,16 @@ public class CCPDataDaoImpl implements CCPDataDao {
 		try {
 			stmt = conn.createStatement();
 			
+			String targetTable = "";
+			
+			if(processCode.equals("PC20")) {
+				targetTable = "data_process2";
+			}
+			else {
+				targetTable = "data_metal";
+			}
+			
+			
 			String sql = new StringBuilder()
 					.append("SELECT\n")
 					.append("  B.product_name,\n")
@@ -245,7 +273,7 @@ public class CCPDataDaoImpl implements CCPDataDao {
 					.append("   END) AS sensor_value, \n")
 					.append("   C.min_value, \n")
 					.append("   C.max_value \n")
-					.append("FROM data_metal A\n")
+					.append("FROM " + targetTable + " A\n")
 					.append("INNER JOIN product B\n")
 					.append("  ON A.product_id = B.product_id\n")
 					.append("INNER JOIN ccp_limit C\n")

@@ -2891,6 +2891,43 @@ function ChecklistSelectModalCCP(createDate,
 								var cell = cellList[cellPos];
 								that.displayData(cell, row.detail["MC52"]);
 								break;
+							//start cleaning
+							case "DI20":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI20"]);
+								break;
+							case "DI25":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI25"]);
+								break;
+							case "DI30":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI30"]);
+								break;
+							case "DI40":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI40"]);
+								break;
+							case "DI45":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI45"]);
+								break;
+							case "DI50":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI50"]);
+								break;
+							case "DI55":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI55"]);
+								break;
+							case "DI80":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI80"]);
+								break;
+							case "DI85":
+								var cell = cellList[cellPos];
+								that.displayData(cell, row.detail["DI85"]);
+								break;
 							//start temperature
 							case "HT10":
 								var cell = cellList[cellPos];
