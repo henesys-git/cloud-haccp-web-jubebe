@@ -55,10 +55,13 @@
 	    
 	    async function getSubData(sensorKey) {
 	    	
+	    	var processCode = $("input[name='test-yn']:checked").val();
+	    	
 	        var fetchedData = $.ajax({
 			            type: "GET",
 			            url: "<%=Config.this_SERVER_path%>/ccpvm",
 			            data: "method=detail" +
+			            	  "&processCode=" + processCode +
 			            	  "&sensorKey=" + sensorKey,
 			            success: function (result) {
 			            	return result;
