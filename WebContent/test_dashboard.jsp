@@ -124,7 +124,7 @@
 </style>
 
 <div class="main" onbeforeunload="">
-    <div class="content-wrapper">
+    <div class="content-wrapper" style = "margin-left:0;">
         <div class="row" id="autonixTemp">
         	<div class="col-lg-2">	
         	<div class="info-box mb-3 bg-warning">
@@ -382,6 +382,10 @@ var commonOpts;
 var gaugeList;
 var tempData;
 
+var sulbiName = {"내포장실1", "내포장실2", "내포장실3", "내포장실4", "내포장실5", "내포장실6"};
+var startTime = {"13:40:23", "13:40:23", "13:40:23", "13:40:23", "13:40:23", "13:40:23"};
+var endTime =   {"15:40:23", "15:40:23", "15:40:23", "15:40:23", "15:40:23", "15:40:23"};
+var detectCount = {"5", "6", "7", "8", "9", "10"};
 
 $(document).ready(function(){
 	
@@ -546,41 +550,11 @@ $(document).ready(function(){
      --%>
     
      
- 	for(let i = 0; i < 6; i++;) {
-		//$('#autonixTemp').append('<canvas id="' + censor_no + '" class="test"></canvas>');
- 		/* $('#autonixTemp').append(' <div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">Inventory</span>
- 	                <span class="info-box-number">5,200</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">Mentions</span>
- 	                <span class="info-box-number">92,050</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">Downloads</span>
- 	                <span class="info-box-number">114,381</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">Direct Messages</span>
- 	                <span class="info-box-number">163,921</span>
- 	              </div>
- 	            </div>'); */
-		} 
+ 	for(var i = 0; i < 6; i++;) {
+		
+ 		//$('#autonixTemp').append(' <div class="info-box mb-3 bg-warning"><span class="info-box-icon"><i class="fas fa-tag"></i></span><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number"></span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number"></span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number"></span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number"></span></div></div>');
+	
+ 	} 
      
 });
 
