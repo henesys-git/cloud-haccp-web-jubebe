@@ -8,7 +8,109 @@
 <% 
 	String bizNo = session.getAttribute("bizNo").toString();
 %>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/fontawesome-free/css/all.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/ionicons-2.0.1/css/ionicons.min.css">
+	<!-- Tempusdominus Bbootstrap 4 -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- iCheck -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jqvmap/jqvmap.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/css/adminlte.min.css">
+	<!-- overlayScrollbars -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+	<!-- Daterange picker -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/daterangepicker/daterangepicker.css">
+	<!-- summernote -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/summernote/summernote-bs4.css">
+	<!-- Google Font: Source Sans Pro -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	<!-- Henesys Icon -->
+	<link rel="shotcut icon" type="image/x-icon" href="<%=Config.this_SERVER_path%>/images/henesys.jpg"/>
+	<!-- SweetAlert2 -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/sweetalert2/sweetalert2.min.css">
+ 	<!-- DataTables -->
+    <link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-select/css/select.bootstrap4.min.css">
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/cdnjs/select2.min.css">
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  	<!-- FullCalendar CSS -->
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/fullcalendar-5.5.0/lib/main.css">
+  	<!-- Henesys CSS -->
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/css/henesys.css">
+  	<!-- TimePicker -->
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-timepicker/jquery.timepicker.css">
+  	<!-- datetimepicker -->
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datetimepicker/css/bootstrap-datetimepicker.css">
+  		<!-- Date Picker -->
+	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"></link>
+	
+	 <!-- Font Awesome Icons -->
+  	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/fontawesome-free/css/all.min.css">
+  	<!-- IonIcons -->
+  	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  	<!-- Google Font: Source Sans Pro -->
+  	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	
+
+<!-- jQuery -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery/jquery.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-ui/jquery-ui.js"></script>
+	<!-- jQuery -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery Mapael -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/raphael/raphael.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-mapael/jquery.mapael.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <script src="<%=Config.this_SERVER_path%>/Lib/canvas-gauges-master/gauge.min.js"></script>
+<!-- Bootstrap 4 -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- ChartJS -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/chart.js/Chart.min.js"></script>
+	<!-- Sparkline -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/sparklines/sparkline.js"></script>
+	<!-- JQVMap -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<!-- jQuery Knob Chart -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jquery-knob/jquery.knob.min.js"></script>
+	<!-- daterangepicker -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/moment/moment.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/daterangepicker/daterangepicker.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<!-- Summernote -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/summernote/summernote-bs4.min.js"></script>
+	<!-- overlayScrollbars -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/adminlte.js"></script>
+	<!-- DataTables -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables/jquery.dataTables.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-select/js/dataTables.select.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<!-- DataTables Buttons -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/jszip/jszip.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/pdfmake/vfs_fonts.js"></script>
+	<!-- Bootstrap -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- OPTIONAL SCRIPTS -->
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/demo.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/pages/dashboard3.js"></script>
+	
 
 <style>
     .main .content { text-align: center; }
@@ -16,16 +118,264 @@
     .swal-overlay {
         background-color: rgba(255,0,0,0.3);
     }
+    .content-wrapper {
+     	margin-left : 0;
+    }
 </style>
 
 <div class="main" onbeforeunload="">
-    <div class="wrap">
-        <div class="content" id="autonixTemp">
+    <div class="content-wrapper">
+        <div class="row" id="autonixTemp">
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">5</span>
+ 	              </div>
+ 	            </div>
+        
+        	</div>
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실2</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">6</span>
+ 	              </div>
+ 	            </div>
+        	</div>
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실3</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">7</span>
+ 	              </div>
+ 	            </div>
+        	</div>
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실4</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">8</span>
+ 	              </div>
+ 	            </div>
+        	</div>
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실5</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">9</span>
+ 	              </div>
+ 	            </div>
+        	</div>
+        	<div class="col-lg-2">	
+        	<div class="info-box mb-3 bg-warning">
+ 	             <!--  <span class="info-box-icon"><i class="fas fa-tag"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">내포장실6</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-heart"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">최종테스트</span>
+ 	                <span class="info-box-number">13:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <!-- <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span> -->
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">다음테스트</span>
+ 	                <span class="info-box-number">15:40:23</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <!-- <span class="info-box-icon"><i class="far fa-comment"></i></span> -->
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">검출횟수</span>
+ 	                <span class="info-box-number">10</span>
+ 	              </div>
+ 	            </div>
+        	</div>
+        </div>
+        <div class="content" id="graph">
+        	
+         <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">검출횟수</h3>
+                <!--   <a href="javascript:void(0);">View Report</a> -->
+                </div>
+              </div>
+              <div class="card-body">
+                <!-- <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">820</span>
+                    <span>Visitors Over Time</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 12.5%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </p>
+                </div> -->
+
+                <div class="position-relative mb-4">
+                  <canvas id="visitors-chart" height="200"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> 내포장실1
+                  </span>
+                  <span class="mr-2">
+                    <i class="fas fa-square text-gray"></i> 내포장실2
+                  </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-gray"></i> 내포장실3
+                  </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-gray"></i> 내포장실4
+                  </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-gray"></i> 내포장실5
+                  </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-gray"></i> 내포장실6
+                  </span>
+                </div>
+              </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+
+
 
 //온도계 공통 옵션
 var commonOpts;
@@ -34,6 +384,8 @@ var tempData;
 
 
 $(document).ready(function(){
+	
+	
 	
     // 최초 온도값을 받아온 후 1시간 단위로 적정 온도가 지켜지는지 확인
     
@@ -128,7 +480,8 @@ $(document).ready(function(){
     	}
     }
     	 --%>
-    $.ajax({
+    	 
+    <%-- $.ajax({
         type: "GET",
         url: "<%=Config.this_SERVER_path%>/cpvm"
         	 + "?method=" + 'monitoring'
@@ -165,7 +518,7 @@ $(document).ready(function(){
             
             checkAndUpdateTempOnScreen();
         }
-    });
+    }); --%>
 	
     //}
     
@@ -194,10 +547,40 @@ $(document).ready(function(){
     
      
  	for(let i = 0; i < 6; i++;) {
-		var censor_no = data[i].sensorId;
-		$('#autonixTemp').append('<canvas id="' + censor_no + '" class="test"></canvas>');
-		//gaugeBuilder(censor_no, commonOpts).draw();
-	} 
+		//$('#autonixTemp').append('<canvas id="' + censor_no + '" class="test"></canvas>');
+ 		/* $('#autonixTemp').append(' <div class="info-box mb-3 bg-warning">
+ 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">Inventory</span>
+ 	                <span class="info-box-number">5,200</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-success">
+ 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">Mentions</span>
+ 	                <span class="info-box-number">92,050</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-danger">
+ 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">Downloads</span>
+ 	                <span class="info-box-number">114,381</span>
+ 	              </div>
+ 	            </div>
+ 	            <div class="info-box mb-3 bg-info">
+ 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
+
+ 	              <div class="info-box-content">
+ 	                <span class="info-box-text">Direct Messages</span>
+ 	                <span class="info-box-number">163,921</span>
+ 	              </div>
+ 	            </div>'); */
+		} 
      
 });
 
