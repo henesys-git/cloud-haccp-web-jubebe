@@ -53,6 +53,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("AND CAST(A.create_time AS DATE) BETWEEN '" + startDate + "'\n")
 					.append("  				   					  AND '" + endDate	+ "'\n")
 					.append("AND A.sensor_id like '%" + sensorId	+ "%'\n")
+					.append("AND B.use_yn = 'Y' \n")
 					.append("ORDER BY A.create_time DESC \n")
 					.toString();
 
@@ -105,6 +106,7 @@ public class CPDataDaoImpl implements CPDataDao {
 					.append("					   )											\n")
 					.append("  AND i.type_code = 'TP'											\n")
 					.append("  AND a.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "' \n")
+					.append("  AND i.use_yn = 'Y' \n")
 					.append("GROUP BY a.sensor_id \n")
 					.append("ORDER BY a.sensor_id ASC, a.create_time DESC \n")
 					.toString();
