@@ -126,246 +126,23 @@
 
 <div class="main" onbeforeunload="">
     <div class="content-wrapper" style = "margin-left:0;">
-        <div class="row" id="autonixTemp">
-        	<!-- <div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">5</span>
- 	              </div>
- 	            </div>
-        
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실2</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">6</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실3</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">7</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실4</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">8</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실5</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">9</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실6</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">10</span>
- 	              </div>
- 	            </div>
-        	</div> -->
-        </div>
-        <div class="content" id="graph">
-        	
-         <div class="card">
-              <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title">검출횟수</h3>
-                <!--   <a href="javascript:void(0);">View Report</a> -->
-                </div>
-              </div>
-              <div class="card-body">
-                <!-- <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <span class="text-bold text-lg">820</span>
-                    <span>Visitors Over Time</span>
-                  </p>
-                  <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 12.5%
-                    </span>
-                    <span class="text-muted">Since last week</span>
-                  </p>
-                </div> -->
-
+        <div class="row" id="autonixTemp2">
                 <div class="position-relative mb-4">
-                  <canvas id="ottogi-metal-chart" height="200"></canvas>
+                  <canvas id="ottogi-heating-chart" height="200"></canvas>
                 </div>
 
                 <div class="d-flex flex-row justify-content-end">
                   <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> 내포장실1
+                    <i class="fas fa-square text-primary"></i> 1차측Hz
                   </span>
                   <span class="mr-2">
-                    <i class="fas fa-square text-gray"></i> 내포장실2
+                    <i class="fas fa-square text-gray"></i> 1차측온도
                   </span>
                    <span class="mr-2">
-                    <i class="fas fa-square text-red"></i> 내포장실3
+                    <i class="fas fa-square text-red"></i> 2차측Hz
                   </span>
                    <span class="mr-2">
-                    <i class="fas fa-square text-yellow"></i> 내포장실4
-                  </span>
-                   <span class="mr-2">
-                    <i class="fas fa-square text-green"></i> 내포장실5
-                  </span>
-                   <span class="mr-2">
-                    <i class="fas fa-square text-orange"></i> 내포장실6
+                    <i class="fas fa-square text-yellow"></i> 2차측온도
                   </span>
                 </div>
               </div>
@@ -382,18 +159,23 @@
 var commonOpts;
 var gaugeList;
 var tempData;
-var sulbiName = new Array("내포장실1", "내포장실2", "내포장실3", "내포장실4", "내포장실5", "내포장실6");
-var startTime = new Array("13:40:23", "13:40:24", "13:40:25", "13:40:26", "13:40:27", "13:40:28");
-var endTime = new Array("15:40:23", "15:40:24", "15:40:26", "15:40:26", "15:40:27", "15:40:28");
-var detectCount = new Array("5", "6", "7", "8", "9", "10");
+var sulbiName = new Array("만두동 1라인", "만두동 2라인", "만두동 3라인", "만두동 4라인", "만두동 5라인");
+var firstHz = new Array("23.5", "23.5", "23.6", "23.7", "23.8");
+var firstTemp = new Array("53", "55", "57", "57", "57");
+var secondHz = new Array("23.6", "23.6", "23.7", "23.8", "23.9");
+var secondTemp = new Array("10.2", "10.4", "10.5", "10.6", "10.6");
 
 $(document).ready(function(){
 	
-	for(var i = 0; i < 6; i++) {
-		console.log("ini");
- 		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
+	$('#autonixTemp2').append('<div class="col-lg-1"></div');
+	
+	for(var i = 0; i < 5; i++) {
+ 		$('#autonixTemp2').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차측 Hz</span><span class="info-box-number">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차측 온도</span><span class="info-box-number">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차측 Hz</span><span class="info-box-number">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차측 온도</span><span class="info-box-number">' + secondTemp[i] + '</span></div></div></div>');
 	
  	} 
+	
+	$('#autonixTemp2').append('<div class="col-lg-1"></div');
+	
 	
     // 최초 온도값을 받아온 후 1시간 단위로 적정 온도가 지켜지는지 확인
     
