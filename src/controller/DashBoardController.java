@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import dao.CCPDataDaoImpl;
 import dao.CCPSignDaoImpl;
+import dao.DashBoardDaoImpl;
 import service.CCPDataService;
 import service.DashBoardService;
 import utils.FormatTransformer;
@@ -42,7 +43,7 @@ public class DashBoardController extends HttpServlet {
 		
 		if(method.equals("dashboard1Table")) {
 			
-			DashBoardService dashService = new DashBoardService(new DashBoardDataDaoImpl(), tenantId);
+			DashBoardService dashService = new DashBoardService(new DashBoardDaoImpl(), tenantId);
 			List<DashBoard> list = dashService.getDashBoardData1Table();
 			
 			result = FormatTransformer.toJson(list);
@@ -50,7 +51,7 @@ public class DashBoardController extends HttpServlet {
 		}
 		else if(method.equals("dashboard1Graph")) {
 			
-			DashBoardService dashService = new DashBoardService(new DashBoardDataDaoImpl(), tenantId);
+			DashBoardService dashService = new DashBoardService(new DashBoardDaoImpl(), tenantId);
 			List<DashBoard> list = dashService.getDashBoardData1Graph();
 			
 			result = FormatTransformer.toJson(list);
@@ -58,7 +59,7 @@ public class DashBoardController extends HttpServlet {
 		} 
 		else if(method.equals("dashboard2Table")) {
 			
-			DashBoardService dashService = new DashBoardService(new DashBoardDataDaoImpl(), tenantId);
+			DashBoardService dashService = new DashBoardService(new DashBoardDaoImpl(), tenantId);
 			List<DashBoard> list = dashService.getDashBoardData2Table();
 			
 			result = FormatTransformer.toJson(list);
@@ -66,7 +67,7 @@ public class DashBoardController extends HttpServlet {
 		}
 		else if(method.equals("dashboard2Graph")) {
 			
-			DashBoardService dashService = new DashBoardService(new DashBoardDataDaoImpl(), tenantId);
+			DashBoardService dashService = new DashBoardService(new DashBoardDaoImpl(), tenantId);
 			List<DashBoard> list = dashService.getDashBoardData2Graph();
 			
 			result = FormatTransformer.toJson(list);

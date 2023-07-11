@@ -382,18 +382,119 @@
 var commonOpts;
 var gaugeList;
 var tempData;
+/*
 var sulbiName = new Array("내포장실1", "내포장실2", "내포장실3", "내포장실4", "내포장실5", "내포장실6");
 var startTime = new Array("13:40:23", "13:40:24", "13:40:25", "13:40:26", "13:40:27", "13:40:28");
 var endTime = new Array("15:40:23", "15:40:24", "15:40:26", "15:40:26", "15:40:27", "15:40:28");
 var detectCount = new Array("5", "6", "7", "8", "9", "10");
+*/
+
+var sulbiName = new Array();
+var startTime = new Array();
+var endTime = new Array();
+var detectCount = new Array();
 
 $(document).ready(function(){
 	
-	for(var i = 0; i < 6; i++) {
-		console.log("ini");
- 		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
 	
- 	} 
+	
+	async function getData() {
+		
+        var fetchedData = $.ajax({
+            type: "GET",
+            url: "<%=Config.this_SERVER_path%>/dashboard",
+            data: "method=dashboard1Table",
+            success: function (result) {
+            	return result;
+            }
+        });
+
+        return fetchedData;
+    };
+    
+	async function getData2() {
+		
+        var fetchedData = $.ajax({
+            type: "GET",
+            url: "<%=Config.this_SERVER_path%>/dashboard",
+            data: "method=dashboard1Graph",
+            success: function (result) {
+            	return result;
+            }
+        });
+
+        return fetchedData;
+    };
+	
+    async function initTable() {
+    	
+    	var data = await getData();
+    	var parseData = JSON.parse(data);
+    	console.log(parseData);
+    	console.log(parseData.length);
+    	
+    	for (var j = 0; j < 6; j++) {
+    		console.log(parseData[j]);
+    		console.log(parseData[j].sensorName);
+    		console.log(parseData[j].detectCount);
+    		console.log(parseData[j].curTestTime);
+    		console.log(parseData[j].nextTestTime);
+    		
+    		sulbiName.push(parseData[j].sensorName);
+    		startTime.push(parseData[j].curTestTime);
+    		endTime.push(parseData[j].nextTestTime);
+    		detectCount.push(parseData[j].detectCount);
+    	}
+    	
+    	console.log(sulbiName);
+    	console.log(startTime);
+    	console.log(endTime);
+    	console.log(detectCount);
+    	
+    	for(var i = 0; i < 6; i++) {
+    		console.log("ini");
+     		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
+    	
+     	} 
+    }
+    
+	 async function initGraph() {
+    	
+    	var data = await getData2();
+    	var parseData = JSON.parse(data);
+    	console.log(parseData);
+    	console.log(parseData.length);
+    	
+    	for (var j = 0; j < 6; j++) {
+    		console.log(parseData[j]);
+    		console.log(parseData[j].sensorName);
+    		console.log(parseData[j].detectCount);
+    		console.log(parseData[j].curTestTime);
+    		console.log(parseData[j].nextTestTime);
+    		
+    		sulbiName.push(parseData[j].sensorName);
+    		startTime.push(parseData[j].curTestTime);
+    		endTime.push(parseData[j].nextTestTime);
+    		detectCount.push(parseData[j].detectCount);
+    	}
+    	
+    	console.log(sulbiName);
+    	console.log(startTime);
+    	console.log(endTime);
+    	console.log(detectCount);
+    	
+    	for(var i = 0; i < 6; i++) {
+    		console.log("ini");
+     		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
+    	
+     	} 
+    }
+    
+    
+    initTable();
+    initGraph();
+    
+    
 	
     // 최초 온도값을 받아온 후 1시간 단위로 적정 온도가 지켜지는지 확인
     
