@@ -9,7 +9,7 @@
 	String bizNo = session.getAttribute("bizNo").toString();
 %>
 
-	<!-- Font Awesome -->
+<%-- 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/fontawesome-free/css/all.min.css">
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/ionicons-2.0.1/css/ionicons.min.css">
@@ -109,10 +109,10 @@
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- OPTIONAL SCRIPTS -->
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/demo.js"></script>
-	<%-- <script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/pages/dashboard3.js"></script> --%>
-	<script src="<%=Config.this_SERVER_path%>/js/ottogiDashboard.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/pages/dashboard3.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/ottogiDashboard.js"></script> --%>
 	
-
+ 
 <style>
     .main .content { text-align: center; }
 
@@ -124,9 +124,9 @@
     }
 </style>
 
-<div class="main" onbeforeunload="">
+<div class="main">
     <div class="content-wrapper" style = "margin-left:0;">
-        <div class="row" id="autonixTemp2">
+        <div class="row" id="autonixTemp2"></div>
                 <div class="position-relative mb-4">
                   <canvas id="ottogi-heating-chart" height="200"></canvas>
                 </div>
@@ -145,10 +145,7 @@
                     <i class="fas fa-square text-yellow"></i> 2차측온도
                   </span>
                 </div>
-              </div>
             </div>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -176,139 +173,85 @@ $(document).ready(function(){
 	
 	$('#autonixTemp2').append('<div class="col-lg-1"></div');
 	
-	
-    // 최초 온도값을 받아온 후 1시간 단위로 적정 온도가 지켜지는지 확인
-    
-    //async function getData() {
-   <%--  
-   	//브리에잇일  경우
-    if ('<%=bizNo%>' == 'B37487014970')	 {
-    	commonOpts = {
-    			width: 300,
-    		    height: 300,
-    		    units: "°C",
-    		    minValue: 0,
-    		    maxValue: 200,
-    		    majorTicks: [ 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200 ],
-    		    minorTicks: 2,
-    		    strokeTicks: true,
-    		    ticksAngle: 225,
-    		    startAngle: 67.5,
-    		    colorMajorTicks: "#ddd",
-    		    colorMinorTicks: "#ddd",
-    		    colorTitle: "#eee",
-    		    colorUnits: "#ccc",
-    		    colorNumbers: "#eee",
-    		    colorPlate: "#222",
-    		    borderShadowWidth: 0,
-    		    borders: true,
-    		    needleType: "arrow",
-    		    needleWidth: 2,
-    		    needleCircleSize: 7,
-    		    needleCircleOuter: true,
-    		    needleCircleInner: false,
-    		    animationDuration: 1500,
-    		    animationRule: "linear",
-    		    colorBorderOuter: "#333",
-    		    colorBorderOuterEnd: "#111",
-    		    colorBorderMiddle: "#222",
-    		    colorBorderMiddleEnd: "#111",
-    		    colorBorderInner: "#111",
-    		    colorBorderInnerEnd: "#333",
-    		    colorNeedleShadowDown: "#333",
-    		    colorNeedleCircleOuter: "#333",
-    		    colorNeedleCircleOuterEnd: "#111",
-    		    colorNeedleCircleInner: "#111",
-    		    colorNeedleCircleInnerEnd: "#222",
-    		    valueBoxBorderRadius: 0,
-    		    colorValueBoxRect: "#222",
-    		    colorValueBoxRectEnd: "#333"
-    	}
-    }
-    
-    else {
-    	commonOpts = {
-    			width: 300,
-    		    height: 300,
-    		    units: "°C",
-    		    minValue: -50,
-    		    maxValue: 50,
-    		    majorTicks: [ -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 ],
-    		    minorTicks: 2,
-    		    strokeTicks: true,
-    		    ticksAngle: 225,
-    		    startAngle: 67.5,
-    		    colorMajorTicks: "#ddd",
-    		    colorMinorTicks: "#ddd",
-    		    colorTitle: "#eee",
-    		    colorUnits: "#ccc",
-    		    colorNumbers: "#eee",
-    		    colorPlate: "#222",
-    		    borderShadowWidth: 0,
-    		    borders: true,
-    		    needleType: "arrow",
-    		    needleWidth: 2,
-    		    needleCircleSize: 7,
-    		    needleCircleOuter: true,
-    		    needleCircleInner: false,
-    		    animationDuration: 1500,
-    		    animationRule: "linear",
-    		    colorBorderOuter: "#333",
-    		    colorBorderOuterEnd: "#111",
-    		    colorBorderMiddle: "#222",
-    		    colorBorderMiddleEnd: "#111",
-    		    colorBorderInner: "#111",
-    		    colorBorderInnerEnd: "#333",
-    		    colorNeedleShadowDown: "#333",
-    		    colorNeedleCircleOuter: "#333",
-    		    colorNeedleCircleOuterEnd: "#111",
-    		    colorNeedleCircleInner: "#111",
-    		    colorNeedleCircleInnerEnd: "#222",
-    		    valueBoxBorderRadius: 0,
-    		    colorValueBoxRect: "#222",
-    		    colorValueBoxRectEnd: "#333"
-    	}
-    }
-    	 --%>
-    	 
-    <%-- $.ajax({
-        type: "GET",
-        url: "<%=Config.this_SERVER_path%>/cpvm"
-        	 + "?method=" + 'monitoring'
-        	 + "&processCode=PC60",
-        success: function (data) {
-        	tempData = data;
-        	console.log(data);
-        	console.log(data[0].sensorId);
-        	for(let i in data) {
-        		var censor_no = data[i].sensorId;
-        		$('#autonixTemp').append('<canvas id="' + censor_no + '" class="test"></canvas>');
-        		gaugeBuilder(censor_no, commonOpts).draw();
-        	}
-        	
-        	gaugeList = document.gauges;
-            
-            for(var i = 0; i < gaugeList.length; i++) {
-            	var temperature = data[i].sensorValue;
-            	var location = data[i].sensorName;
-            	var minValue = data[i].minValue;
-            	var maxValue = data[i].maxValue;
+ 	 $(function () {
+		  'use strict'
 
-            	gaugeList[i].update({
-            		value: temperature,
-            		title: location,
-            		highlights: setHighlightsValue(minValue, maxValue)
-            	});
-            	
-            	gaugeList[i].minLimit = minValue;
-            	gaugeList[i].maxLimit = maxValue;
-            	
-                judgeTemp(i);
-            }
-            
-            checkAndUpdateTempOnScreen();
-        }
-    }); --%>
+		  var ticksStyle = {
+		    fontColor: '#495057',
+		    fontStyle: 'bold'
+		  }
+
+		  var mode      = 'index'
+		  var intersect = true
+
+		  var $salesChart = $('#ottogi-heating-chart')
+		  var salesChart  = new Chart($salesChart, {
+		    type   : 'bar',
+		    data   : {
+		      labels  : ['만두동1라인', '만두동2라인', '만두동3라인', '3층라인', '5층라인'],
+		      datasets: [
+		        {
+		          backgroundColor: '#007bff',
+		          borderColor    : '#007bff',
+		          data           : [0.2, 0.3, 0.4, 0.5, 0.6]
+		        },
+		        {
+		          backgroundColor: '#ced4da',
+		          borderColor    : '#ced4da',
+		          data           : [0.5, 0.6, 0.7, 0.8, 0.9]
+		        },
+				{
+		          backgroundColor: '#eb3434',
+		          borderColor    : '#eb3434',
+		          data           : [1, 1, 1, 1, 1]
+		        },
+				{
+		          backgroundColor: '#ebdf34',
+		          borderColor    : '#ebdf34',
+		          data           : [1.2, 1.2, 1.2, 1.2, 1.2]
+		        }
+		      ]
+		    },
+		    options: {
+		      maintainAspectRatio: false,
+		      tooltips           : {
+		        mode     : mode,
+		        intersect: intersect
+		      },
+		      hover              : {
+		        mode     : mode,
+		        intersect: intersect
+		      },
+		      legend             : {
+		        display: false
+		      },
+		      scales             : {
+		        yAxes: [{
+		          // display: false,
+		          gridLines: {
+		            display      : true,
+		            lineWidth    : '4px',
+		            color        : 'rgba(0, 0, 0, .2)',
+		            zeroLineColor: 'transparent'
+		          },
+		          ticks    : $.extend({
+		            beginAtZero: true,
+					suggestedMax: 1.2
+		          
+
+		          }, ticksStyle)
+		        }],
+		        xAxes: [{
+		          display  : true,
+		          gridLines: {
+		            display: false
+		          },
+		          ticks    : ticksStyle
+		        }]
+		      }
+		    }
+		  })
+		})
 	
     //}
     

@@ -9,7 +9,7 @@
 	String bizNo = session.getAttribute("bizNo").toString();
 %>
 
-	<!-- Font Awesome -->
+	<%-- <!-- Font Awesome -->
 	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/fontawesome-free/css/all.min.css">
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/ionicons-2.0.1/css/ionicons.min.css">
@@ -109,8 +109,8 @@
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- OPTIONAL SCRIPTS -->
 	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/demo.js"></script>
-	<%-- <script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/pages/dashboard3.js"></script> --%>
-	<script src="<%=Config.this_SERVER_path%>/js/ottogiDashboard.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/AdminLTE-3.0.5/dist/js/pages/dashboard3.js"></script>
+	<script src="<%=Config.this_SERVER_path%>/js/ottogiDashboard.js"></script> --%>
 	
 
 <style>
@@ -127,199 +127,7 @@
 <div class="main" onbeforeunload="">
     <div class="content-wrapper" style = "margin-left:0;">
         <div class="row" id="autonixTemp">
-        	<!-- <div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">5</span>
- 	              </div>
- 	            </div>
-        
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실2</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">6</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실3</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">7</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실4</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">8</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실5</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">9</span>
- 	              </div>
- 	            </div>
-        	</div>
-        	<div class="col-lg-2">	
-        	<div class="info-box mb-3 bg-warning">
- 	              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">내포장실6</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-success">
- 	              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">최종테스트</span>
- 	                <span class="info-box-number">13:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-danger">
- 	              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">다음테스트</span>
- 	                <span class="info-box-number">15:40:23</span>
- 	              </div>
- 	            </div>
- 	            <div class="info-box mb-3 bg-info">
- 	              <span class="info-box-icon"><i class="far fa-comment"></i></span>
- 	              <div class="info-box-content">
- 	                <span class="info-box-text">검출횟수</span>
- 	                <span class="info-box-number">10</span>
- 	              </div>
- 	            </div>
-        	</div> -->
+        	
         </div>
         <div class="content" id="graph">
         	
@@ -394,6 +202,9 @@ var startTime = new Array();
 var endTime = new Array();
 var detectCount = new Array();
 
+var detectTime = new Array();
+var detectCount2 = new Array();
+
 $(document).ready(function(){
 	
 	
@@ -467,27 +278,139 @@ $(document).ready(function(){
     	
     	for (var j = 0; j < 6; j++) {
     		console.log(parseData[j]);
-    		console.log(parseData[j].sensorName);
-    		console.log(parseData[j].detectCount);
-    		console.log(parseData[j].curTestTime);
-    		console.log(parseData[j].nextTestTime);
+    		//console.log(parseData[j].detectTime);
+    		//console.log(parseData[j].detectCount);
     		
-    		sulbiName.push(parseData[j].sensorName);
-    		startTime.push(parseData[j].curTestTime);
-    		endTime.push(parseData[j].nextTestTime);
-    		detectCount.push(parseData[j].detectCount);
+    		//detectTime.push(parseData[j].detectTime);
+    		//detectCount2.push(parseData[j].detectCount);
     	}
     	
-    	console.log(sulbiName);
-    	console.log(startTime);
-    	console.log(endTime);
+    	console.log(detectTime);
     	console.log(detectCount);
     	
-    	for(var i = 0; i < 6; i++) {
-    		console.log("ini");
-     		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
     	
-     	} 
+    	$(function () {
+    		  'use strict'
+
+    		  var ticksStyle = {
+    		    fontColor: '#495057',
+    		    fontStyle: 'bold'
+    		  }
+
+    		  var mode      = 'index'
+    		  var intersect = true
+    	
+    	var $visitorsChart = $('#ottogi-metal-chart')
+    	  var visitorsChart  = new Chart($visitorsChart, {
+    	    data   : {
+    	      labels  : ['09H', '10H', '11H', '12H', '13H', '14H', '15H'],
+    	      datasets: [{
+    	        type                : 'line',
+    	        data                : [100, 120, 170, 167, 180, 177, 160],
+    	        backgroundColor     : 'transparent',
+    	        borderColor         : '#007bff',
+    	        pointBorderColor    : '#007bff',
+    	        pointBackgroundColor: '#007bff',
+    	        fill                : false
+    	        // pointHoverBackgroundColor: '#007bff',
+    	        // pointHoverBorderColor    : '#007bff'
+    	      },
+    	        {
+    	          type                : 'line',
+    	          data                : [60, 80, 70, 67, 80, 77, 100],
+    	          backgroundColor     : 'tansparent',
+    	          borderColor         : '#ced4da',
+    	          pointBorderColor    : '#ced4da',
+    	          pointBackgroundColor: '#ced4da',
+    	          fill                : false
+    	          // pointHoverBackgroundColor: '#ced4da',
+    	          // pointHoverBorderColor    : '#ced4da'
+    	        },
+    			{
+    	          type                : 'line',
+    	          data                : [65, 86, 76, 72, 85, 82, 105],
+    	          backgroundColor     : 'tansparent',
+    	          borderColor         : '#eb3434',
+    	          pointBorderColor    : '#eb3434',
+    	          pointBackgroundColor: '#eb3434',
+    	          fill                : false
+    	          // pointHoverBackgroundColor: '#ced4da',
+    	          // pointHoverBorderColor    : '#ced4da'
+    	        },
+    			{
+    	          type                : 'line',
+    	          data                : [20, 15, 30, 42, 27, 18, 15],
+    	          backgroundColor     : 'tansparent',
+    	          borderColor         : '#ebdf34',
+    	          pointBorderColor    : '#ebdf34',
+    	          pointBackgroundColor: '#ebdf34',
+    	          fill                : false
+    	          // pointHoverBackgroundColor: '#ced4da',
+    	          // pointHoverBorderColor    : '#ced4da'
+    	        },
+    			{
+    	          type                : 'line',
+    	          data                : [80, 73, 72, 88, 73, 91, 120],
+    	          backgroundColor     : 'tansparent',
+    	          borderColor         : '#3deb34',
+    	          pointBorderColor    : '#3deb34',
+    	          pointBackgroundColor: '#3deb34',
+    	          fill                : false
+    	          // pointHoverBackgroundColor: '#ced4da',
+    	          // pointHoverBorderColor    : '#ced4da'
+    	        },
+    			{
+    	          type                : 'line',
+    	          data                : [101, 105, 102, 88, 73, 99, 110],
+    	          backgroundColor     : 'tansparent',
+    	          borderColor         : '#ebb134',
+    	          pointBorderColor    : '#ebb134',
+    	          pointBackgroundColor: '#ebb134',
+    	          fill                : false
+    	          // pointHoverBackgroundColor: '#ced4da',
+    	          // pointHoverBorderColor    : '#ced4da'
+    	        }
+    	]
+    	    },
+    	    options: {
+    	      maintainAspectRatio: false,
+    	      tooltips           : {
+    	        mode     : mode,
+    	        intersect: intersect
+    	      },
+    	      hover              : {
+    	        mode     : mode,
+    	        intersect: intersect
+    	      },
+    	      legend             : {
+    	        display: false
+    	      },
+    	      scales             : {
+    	        yAxes: [{
+    	          // display: false,
+    	          gridLines: {
+    	            display      : true,
+    	            lineWidth    : '4px',
+    	            color        : 'rgba(0, 0, 0, .2)',
+    	            zeroLineColor: 'transparent'
+    	          },
+    	          ticks    : $.extend({
+    	            beginAtZero : true,
+    	            suggestedMax: 200
+    	          }, ticksStyle)
+    	        }],
+    	        xAxes: [{
+    	          display  : true,
+    	          gridLines: {
+    	            display: false
+    	          },
+    	          ticks    : ticksStyle
+    	        }]
+    	      }
+    	    }
+    	  })
+    	})
+    	
     }
     
     
