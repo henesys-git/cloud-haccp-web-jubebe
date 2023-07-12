@@ -167,7 +167,7 @@ $(document).ready(function(){
 	$('#autonixTemp2').append('<div class="col-lg-1"></div');
 	
 	for(var i = 0; i < 5; i++) {
- 		$('#autonixTemp2').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차측 Hz</span><span class="info-box-number">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차측 온도</span><span class="info-box-number">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차측 Hz</span><span class="info-box-number">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차측 온도</span><span class="info-box-number">' + secondTemp[i] + '</span></div></div></div>');
+ 		$('#autonixTemp2').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">증숙온도</span><span class="info-box-number">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차 RPM (HZ)</span><span class="info-box-number">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차 RPM(HZ)</span><span class="info-box-number">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">동결온도</span><span class="info-box-number">' + secondTemp[i] + '</span></div></div></div>');
 	
  	} 
 	
@@ -252,115 +252,9 @@ $(document).ready(function(){
 		    }
 		  })
 		})
-	
-    //}
-    
-    //getData();
-    
-    <%-- // Check and update temperature on screen
-    var checkAndUpdateTempOnScreen = function() {
-	    interVal = setInterval(function() {
-	        $.ajax({
-	            type: "GET",
-	            url: "<%=Config.this_SERVER_path%>/cpvm"
-	           	 + "?method=" + 'monitoring'
-	           	 + "&processCode=PC60",
-	            success: function (data) {
-	                gaugeList = document.gauges;
-	                
-	                for(var i=0; i<gaugeList.length; i++) {
-	                    gaugeList[i].value = data[i].sensorValue;
-	                    //judgeTemp(i);
-	                }
-	            }
-	        });
-	    }, 1000*10*1);
-    }
-     --%>
- 	
      
 });
 
-//Check temperature and change circle color as red or blue in the gauge
-function judgeTemp(index) {
-	var gauge = gaugeList[index];
 
-	// this will draw red or blue circle on a gauge plate depending on
-    // current value
-    gauge.on('beforeNeedle', function () {
-    	var curTemp = Number(this.options.value);
-    	var min = Number(this.minLimit);
-    	var max = Number(this.maxLimit);
-    	
-        // getting canvas 2d drawing context
-        var context = this.canvas.context;
- 
-        // we can use gauge context special 'max' property which represents
-        // gauge radius in a real pixels and calculate size of relative pixel
-        // for our drawing needs
-        var pixel = context.max / 100;
-
-        // step out our circle center coordinate by 30% of its radius from
-        // gauge center
-        var centerX = 30 * pixel;
-        // stay in center by Y-coordinate
-        var centerY = 0;
-        // use circle radius equal to 5%
-        var radius = 5 * pixel;
-        // save previous context state
-        context.save();
-
-        // draw circle using canvas JS API
-        context.beginPath();
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-
-        var gradient = context.createRadialGradient(
-			            centerX, centerY, 0,
-			            centerX, centerY, radius);
-        
-        if(curTemp <= max && curTemp >= min) {
-            gradient.addColorStop(0, '#aaf');
-            gradient.addColorStop(0.82, '#00f');
-            gradient.addColorStop(1, '#88a');
-        } else {
-            gradient.addColorStop(0, '#faa');
-            gradient.addColorStop(0.82, '#f00');
-            gradient.addColorStop(1, '#a88');
-        }
-        
-        context.fillStyle = gradient;
-        context.fill();
-        context.closePath();
-
-        // restore previous context state to prevent break of
-        // further drawings
-        context.restore();
-	});
-
-    // redraw the gauge if it has been already drawn
-    gauge.draw();
-}
-
-function mergeOptions(obj1, obj2) {
-	var newObj = new Object();
-	
-	return Object.assign(newObj, obj1, obj2);
-}
-
-function setHighlightsValue(min, max) {
-	var highlights = [
-		{"from": -50, "to": min, "color": "rgba(255, 0, 0, .3)"},
-        {"from": min, "to": max, "color": "rgba(0, 0, 255, .3)"},
-        {"from": max, "to": 50, "color": "rgba(255, 0, 0, .3)"}	
-	];
-	
-	return highlights;
-}
-
-function gaugeBuilder(canvasId, additionalOption) {
-	return new RadialGauge(
-				mergeOptions({ renderTo: canvasId }, additionalOption)
-     	   );
-}
 
 </script>
