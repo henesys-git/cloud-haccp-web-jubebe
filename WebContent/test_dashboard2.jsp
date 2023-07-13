@@ -126,11 +126,22 @@
 
 <div class="main">
     <div class="content-wrapper" style = "margin-left:0;">
-        <div class="row" id="autonixTemp2"></div>
-                <div class="position-relative mb-4">
+        <div class="row" id="autonixTemp2">
+        
+        </div>
+                
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">라인별 이탈정보(회)</h3>
+                </div>
+            </div>
+				<div class="card-body">
+				
+				<div class="position-relative mb-4">
                   <canvas id="ottogi-heating-chart" height="200"></canvas>
                 </div>
-
+				
                 <div class="d-flex flex-row justify-content-end">
                   <span class="mr-2">
                     <i class="fas fa-square text-primary"></i> 1차측Hz
@@ -145,7 +156,10 @@
                     <i class="fas fa-square text-yellow"></i> 2차측온도
                   </span>
                 </div>
+               </div>
             </div>
+           </div>
+            
 </div>
 
 <script>
@@ -164,14 +178,78 @@ var secondTemp = new Array("10.2", "10.4", "10.5", "10.6", "10.6");
 
 $(document).ready(function(){
 	
-	$('#autonixTemp2').append('<div class="col-lg-1"></div');
+	// 전체
+	document.body.style.overflow = "hidden";
+	
+	async function getDat3() {
+		
+        var fetchedData = $.ajax({
+            type: "GET",
+            url: "<%=Config.this_SERVER_path%>/dashboard",
+            data: "method=dashboard2Table",
+            success: function (result) {
+            	return result;
+            }
+        });
+
+        return fetchedData;
+    };
+    
+	async function getData4() {
+		
+        var fetchedData = $.ajax({
+            type: "GET",
+            url: "<%=Config.this_SERVER_path%>/dashboard",
+            data: "method=dashboard2Graph",
+            success: function (result) {
+            	return result;
+            }
+        });
+
+        return fetchedData;
+    };
+	
+ 	async function initTable2() {
+    	
+    	var data = await getData();
+    	var parseData = JSON.parse(data);
+    	console.log(parseData);
+    	console.log(parseData.length);
+    	
+    	for (var j = 0; j < 5; j++) {
+    		console.log(parseData[j]);
+    		console.log(parseData[j].sensorName);
+    		console.log(parseData[j].detectCount);
+    		console.log(parseData[j].curTestTime);
+    		console.log(parseData[j].nextTestTime);
+    		
+    		sulbiName.push(parseData[j].sensorName);
+    		startTime.push(parseData[j].curTestTime);
+    		endTime.push(parseData[j].nextTestTime);
+    		detectCount.push(parseData[j].detectCount);
+    	}
+    	
+    	console.log(sulbiName);
+    	console.log(startTime);
+    	console.log(endTime);
+    	console.log(detectCount);
+    	
+    	
+    	for(var i = 0; i < 5; i++) {
+    		console.log("ini");
+     		$('#autonixTemp2').append('<div class="col"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number" style="text-align:center;">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">증숙온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">1차 RPM (HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">2차 RPM(HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">동결온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondTemp[i] + '</span></div></div></div>');
+    	
+     	}
+    	
+    }
+    
+    
+	
 	
 	for(var i = 0; i < 5; i++) {
- 		$('#autonixTemp2').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">증숙온도</span><span class="info-box-number">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">1차 RPM (HZ)</span><span class="info-box-number">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">2차 RPM(HZ)</span><span class="info-box-number">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">동결온도</span><span class="info-box-number">' + secondTemp[i] + '</span></div></div></div>');
+ 		$('#autonixTemp2').append('<div class="col"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number" style="text-align:center;">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">증숙온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">1차 RPM (HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">2차 RPM(HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">동결온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondTemp[i] + '</span></div></div></div>');
 	
  	} 
-	
-	$('#autonixTemp2').append('<div class="col-lg-1"></div');
 	
  	 $(function () {
 		  'use strict'

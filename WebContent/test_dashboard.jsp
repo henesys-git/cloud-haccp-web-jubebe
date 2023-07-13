@@ -129,6 +129,7 @@
         <div class="row" id="autonixTemp">
         	
         </div>
+<!--<div style = "height:15%;"></div> -->
         <div class="content" id="graph">
         	
          <div class="card">
@@ -153,11 +154,11 @@
                 </div> -->
 
                 <div class="position-relative mb-4">
-                  <canvas id="ottogi-metal-chart" height="200"></canvas>
+                  <canvas id="ottogi-metal-chart" height="300"></canvas>
                 </div>
 
                 <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
+                 <!--  <span class="mr-2">
                     <i class="fas fa-square text-primary"></i> 내포장실1
                   </span>
                   <span class="mr-2">
@@ -175,6 +176,12 @@
                    <span class="mr-2">
                     <i class="fas fa-square text-orange"></i> 내포장실6
                   </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-blue"></i> 내포장실7
+                  </span>
+                   <span class="mr-2">
+                    <i class="fas fa-square text-purple"></i> 내포장실8
+                  </span> -->
                 </div>
               </div>
             </div>
@@ -244,7 +251,7 @@ $(document).ready(function(){
     	console.log(parseData);
     	console.log(parseData.length);
     	
-    	for (var j = 0; j < 6; j++) {
+    	for (var j = 0; j < 8; j++) {
     		console.log(parseData[j]);
     		console.log(parseData[j].sensorName);
     		console.log(parseData[j].detectCount);
@@ -262,11 +269,13 @@ $(document).ready(function(){
     	console.log(endTime);
     	console.log(detectCount);
     	
-    	for(var i = 0; i < 6; i++) {
-    		console.log("ini");
-     		$('#autonixTemp').append('<div class="col-lg-2"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text">최종테스트</span><span class="info-box-number">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text">다음테스트</span><span class="info-box-number">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text">검출횟수</span><span class="info-box-number">' + detectCount[i] + '</span></div></div></div>');
     	
-     	} 
+    	for(var i = 0; i < 8; i++) {
+    		console.log("ini");
+     		$('#autonixTemp').append('<div class="col"><div class="info-box mb-3 bg-warning" style = "height:10px;"><div class="info-box-content"><span class="info-box-number" style="text-align:center;">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">최종테스트</span><span class="info-box-number" style="text-align:center; font-size:30px;">' + startTime[i] + '</span></div></div><div class="info-box mb-3 bg-danger"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">다음테스트</span><span class="info-box-number" style="text-align:center; font-size:30px;">' + endTime[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">검출횟수</span><span class="info-box-number" style="text-align:center; font-size:50px;">' + detectCount[i] + '</span></div></div></div>');
+    	
+     	}
+    	
     }
     
 	 async function initGraph() {
@@ -303,7 +312,7 @@ $(document).ready(function(){
     	var $visitorsChart = $('#ottogi-metal-chart')
     	  var visitorsChart  = new Chart($visitorsChart, {
     	    data   : {
-    	      labels  : ['09H', '10H', '11H', '12H', '13H', '14H', '15H'],
+    	      labels  : ['09H', '10H', '11H', '12H', '13H', '14H', '15H', '16H', '17H', '18H'],
     	      datasets: [{
     	        type                : 'line',
     	        data                : [100, 120, 170, 167, 180, 177, 160],
@@ -323,8 +332,6 @@ $(document).ready(function(){
     	          pointBorderColor    : '#ced4da',
     	          pointBackgroundColor: '#ced4da',
     	          fill                : false
-    	          // pointHoverBackgroundColor: '#ced4da',
-    	          // pointHoverBorderColor    : '#ced4da'
     	        },
     			{
     	          type                : 'line',
@@ -334,8 +341,6 @@ $(document).ready(function(){
     	          pointBorderColor    : '#eb3434',
     	          pointBackgroundColor: '#eb3434',
     	          fill                : false
-    	          // pointHoverBackgroundColor: '#ced4da',
-    	          // pointHoverBorderColor    : '#ced4da'
     	        },
     			{
     	          type                : 'line',
@@ -345,8 +350,6 @@ $(document).ready(function(){
     	          pointBorderColor    : '#ebdf34',
     	          pointBackgroundColor: '#ebdf34',
     	          fill                : false
-    	          // pointHoverBackgroundColor: '#ced4da',
-    	          // pointHoverBorderColor    : '#ced4da'
     	        },
     			{
     	          type                : 'line',
@@ -356,8 +359,6 @@ $(document).ready(function(){
     	          pointBorderColor    : '#3deb34',
     	          pointBackgroundColor: '#3deb34',
     	          fill                : false
-    	          // pointHoverBackgroundColor: '#ced4da',
-    	          // pointHoverBorderColor    : '#ced4da'
     	        },
     			{
     	          type                : 'line',
@@ -367,8 +368,6 @@ $(document).ready(function(){
     	          pointBorderColor    : '#ebb134',
     	          pointBackgroundColor: '#ebb134',
     	          fill                : false
-    	          // pointHoverBackgroundColor: '#ced4da',
-    	          // pointHoverBorderColor    : '#ced4da'
     	        }
     	]
     	    },

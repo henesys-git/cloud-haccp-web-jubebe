@@ -41,9 +41,9 @@ public class DashBoardDaoImpl implements DashBoardDao {
 			String sql = new StringBuilder()
 				.append("SELECT															\n")
 				.append(" B.sensor_name,	\n")
-				.append(" (SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10') AS cur_test_time,	\n")
+				.append(" DATE_FORMAT((SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10'), '%h:%i:%s') AS cur_test_time,	\n")
 				.append(" ADDTIME((SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10'), '02:00:00.000000') AS next_test_time,	\n")
-				.append(" (SELECT COUNT(*) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15' AND DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d') AND sensor_value = 1) AS detect_count 	\n")
+				.append(" IFNULL((SELECT COUNT(*) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15' AND DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d') AND sensor_value = 1), 0) AS detect_count 	\n")
 				.append("FROM data_metal A													\n")
 				.append("INNER JOIN sensor B												\n")
 				.append("	ON A.sensor_id = B.sensor_id									\n")
@@ -85,7 +85,7 @@ public class DashBoardDaoImpl implements DashBoardDao {
 				.append("SELECT				\n")
 				.append(" B.sensor_name,	\n")
 				.append(" DATE_FORMAT(A.create_time, '%h') AS detect_time,	\n")
-				.append(" (SELECT COUNT(*) FROM B16687005050.data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15'  AND DATE_FORMAT(A.create_time, '%Y-%m-%d %h') = DATE_FORMAT(AA.create_time, '%Y-%m-%d %h') AND sensor_value = 1 )  AS detect_count	\n")
+				.append(" IFNULL((SELECT COUNT(*) FROM B16687005050.data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15'  AND DATE_FORMAT(A.create_time, '%Y-%m-%d %h') = DATE_FORMAT(AA.create_time, '%Y-%m-%d %h') AND sensor_value = 1 ), 0)  AS detect_count	\n")
 				.append("FROM data_metal A													\n")
 				.append("INNER JOIN sensor B												\n")
 				.append("	ON A.sensor_id = B.sensor_id									\n")
@@ -125,11 +125,17 @@ public class DashBoardDaoImpl implements DashBoardDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT A.*															\n")
-				.append("FROM data_metal A													\n")
-				.append("INNER JOIN sensor B												\n")
-				.append("	ON A.sensor_id = B.sensor_id									\n")
-				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("SELECT															\n")
+					.append(" B.sensor_name,	\n")
+					.append(" (SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10') AS cur_test_time,	\n")
+					.append(" ADDTIME((SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10'), '02:00:00.000000') AS next_test_time,	\n")
+					.append(" IFNULL((SELECT COUNT(*) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15' AND DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d') AND sensor_value = 1), 0) AS detect_count 	\n")
+					.append("FROM data_metal A													\n")
+					.append("INNER JOIN sensor B												\n")
+					.append("	ON A.sensor_id = B.sensor_id									\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("AND A.sensor_id like '%CD%' \n")
+					.append("GROUP BY A.sensor_id \n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
@@ -162,11 +168,17 @@ public class DashBoardDaoImpl implements DashBoardDao {
 			stmt = conn.createStatement();
 			
 			String sql = new StringBuilder()
-				.append("SELECT A.*															\n")
-				.append("FROM data_metal A													\n")
-				.append("INNER JOIN sensor B												\n")
-				.append("	ON A.sensor_id = B.sensor_id									\n")
-				.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("SELECT															\n")
+					.append(" B.sensor_name,	\n")
+					.append(" (SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10') AS cur_test_time,	\n")
+					.append(" ADDTIME((SELECT MAX(create_time) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC10'), '02:00:00.000000') AS next_test_time,	\n")
+					.append(" IFNULL((SELECT COUNT(*) FROM data_metal AA WHERE A.sensor_id = AA.sensor_id AND AA.process_code = 'PC15' AND DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d') AND sensor_value = 1), 0) AS detect_count 	\n")
+					.append("FROM data_metal A													\n")
+					.append("INNER JOIN sensor B												\n")
+					.append("	ON A.sensor_id = B.sensor_id									\n")
+					.append("WHERE A.tenant_id = '" + JDBCConnectionPool.getTenantId(conn) + "'	\n")
+					.append("AND A.sensor_id like '%CD%' \n")
+					.append("GROUP BY A.sensor_id \n")
 				.toString();
 			
 			logger.debug("sql:\n" + sql);
