@@ -158,7 +158,7 @@
                 </div>
 
                 <div class="d-flex flex-row justify-content-end">
-                 <!--  <span class="mr-2">
+                 <span class="mr-2">
                     <i class="fas fa-square text-primary"></i> 내포장실1
                   </span>
                   <span class="mr-2">
@@ -181,7 +181,7 @@
                   </span>
                    <span class="mr-2">
                     <i class="fas fa-square text-purple"></i> 내포장실8
-                  </span> -->
+                  </span>
                 </div>
               </div>
             </div>
@@ -211,6 +211,8 @@ var detectCount = new Array();
 
 var detectTime = new Array();
 var detectCount2 = new Array();
+
+var chartArray = new Array();
 
 $(document).ready(function(){
 	
@@ -286,16 +288,24 @@ $(document).ready(function(){
     	console.log(parseData.length);
     	
     	for (var j = 0; j < 6; j++) {
-    		console.log(parseData[j]);
-    		//console.log(parseData[j].detectTime);
-    		//console.log(parseData[j].detectCount);
     		
-    		//detectTime.push(parseData[j].detectTime);
-    		//detectCount2.push(parseData[j].detectCount);
+    		var tempArry = new Array();
+ 		   
+    		tempArry.push(parseData[j].detectCountHour9);
+    		tempArry.push(parseData[j].detectCountHour10);
+    		tempArry.push(parseData[j].detectCountHour11);
+    		tempArry.push(parseData[j].detectCountHour12);
+    		tempArry.push(parseData[j].detectCountHour13);
+    		tempArry.push(parseData[j].detectCountHour14);
+    		tempArry.push(parseData[j].detectCountHour15);
+    		tempArry.push(parseData[j].detectCountHour16);
+    		tempArry.push(parseData[j].detectCountHour17);
+    		tempArry.push(parseData[j].detectCountHour18);
+    		
+    		chartArray.push(tempArry);
     	}
     	
-    	console.log(detectTime);
-    	console.log(detectCount);
+    	console.log(chartArray);
     	
     	
     	$(function () {
@@ -315,7 +325,7 @@ $(document).ready(function(){
     	      labels  : ['09H', '10H', '11H', '12H', '13H', '14H', '15H', '16H', '17H', '18H'],
     	      datasets: [{
     	        type                : 'line',
-    	        data                : [100, 120, 170, 167, 180, 177, 160],
+    	        data                : chartArray[0],
     	        backgroundColor     : 'transparent',
     	        borderColor         : '#007bff',
     	        pointBorderColor    : '#007bff',
@@ -326,7 +336,7 @@ $(document).ready(function(){
     	      },
     	        {
     	          type                : 'line',
-    	          data                : [60, 80, 70, 67, 80, 77, 100],
+    	          data                : chartArray[1],
     	          backgroundColor     : 'tansparent',
     	          borderColor         : '#ced4da',
     	          pointBorderColor    : '#ced4da',
@@ -335,7 +345,7 @@ $(document).ready(function(){
     	        },
     			{
     	          type                : 'line',
-    	          data                : [65, 86, 76, 72, 85, 82, 105],
+    	          data                : chartArray[2],
     	          backgroundColor     : 'tansparent',
     	          borderColor         : '#eb3434',
     	          pointBorderColor    : '#eb3434',
@@ -344,7 +354,7 @@ $(document).ready(function(){
     	        },
     			{
     	          type                : 'line',
-    	          data                : [20, 15, 30, 42, 27, 18, 15],
+    	          data                : chartArray[3],
     	          backgroundColor     : 'tansparent',
     	          borderColor         : '#ebdf34',
     	          pointBorderColor    : '#ebdf34',
@@ -353,7 +363,7 @@ $(document).ready(function(){
     	        },
     			{
     	          type                : 'line',
-    	          data                : [80, 73, 72, 88, 73, 91, 120],
+    	          data                : chartArray[4],
     	          backgroundColor     : 'tansparent',
     	          borderColor         : '#3deb34',
     	          pointBorderColor    : '#3deb34',
@@ -362,7 +372,7 @@ $(document).ready(function(){
     	        },
     			{
     	          type                : 'line',
-    	          data                : [101, 105, 102, 88, 73, 99, 110],
+    	          data                : chartArray[5],
     	          backgroundColor     : 'tansparent',
     	          borderColor         : '#ebb134',
     	          pointBorderColor    : '#ebb134',
@@ -395,7 +405,7 @@ $(document).ready(function(){
     	          },
     	          ticks    : $.extend({
     	            beginAtZero : true,
-    	            suggestedMax: 200
+    	            suggestedMax: 25
     	          }, ticksStyle)
     	        }],
     	        xAxes: [{

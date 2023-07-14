@@ -227,7 +227,7 @@ var setCount = 0;
 	   		
 	   		console.log(setCount);
 	   		
-		}, 5000);
+		}, 10000);
 		
 		
 		

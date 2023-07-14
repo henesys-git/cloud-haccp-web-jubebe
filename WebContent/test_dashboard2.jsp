@@ -170,18 +170,31 @@
 var commonOpts;
 var gaugeList;
 var tempData;
-var sulbiName = new Array("만두동 1라인", "만두동 2라인", "만두동 3라인", "만두동 4라인", "만두동 5라인");
-var firstHz = new Array("23.5", "23.5", "23.6", "23.7", "23.8");
-var firstTemp = new Array("53", "55", "57", "57", "57");
-var secondHz = new Array("23.6", "23.6", "23.7", "23.8", "23.9");
-var secondTemp = new Array("10.2", "10.4", "10.5", "10.6", "10.6");
+//var sulbiName = new Array("만두동 1라인", "만두동 2라인", "만두동 3라인", "만두동 4라인", "만두동 5라인");
+//var firstHz = new Array("23.5", "23.5", "23.6", "23.7", "23.8");
+//var firstTemp = new Array("53", "55", "57", "57", "57");
+//var secondHz = new Array("23.6", "23.6", "23.7", "23.8", "23.9");
+//var secondTemp = new Array("10.2", "10.4", "10.5", "10.6", "10.6");
+
+var sulbiName = new Array();
+var firstHz = new Array();
+var firstTemp = new Array();
+var secondHz = new Array();
+var secondTemp = new Array();
+var chartArray2 = new Array();
+
+var firstHz2 = new Array();
+var firstTemp2 = new Array();
+var secondHz2 = new Array();
+var secondTemp2 = new Array();
+
 
 $(document).ready(function(){
 	
 	// 전체
 	document.body.style.overflow = "hidden";
 	
-	async function getDat3() {
+	async function getData3() {
 		
         var fetchedData = $.ajax({
             type: "GET",
@@ -200,7 +213,7 @@ $(document).ready(function(){
         var fetchedData = $.ajax({
             type: "GET",
             url: "<%=Config.this_SERVER_path%>/dashboard",
-            data: "method=dashboard2Graph",
+            data: "method=dashboard2Table",
             success: function (result) {
             	return result;
             }
@@ -211,7 +224,7 @@ $(document).ready(function(){
 	
  	async function initTable2() {
     	
-    	var data = await getData();
+    	var data = await getData3();
     	var parseData = JSON.parse(data);
     	console.log(parseData);
     	console.log(parseData.length);
@@ -219,20 +232,23 @@ $(document).ready(function(){
     	for (var j = 0; j < 5; j++) {
     		console.log(parseData[j]);
     		console.log(parseData[j].sensorName);
-    		console.log(parseData[j].detectCount);
-    		console.log(parseData[j].curTestTime);
-    		console.log(parseData[j].nextTestTime);
+    		console.log(parseData[j].firstTemp);
+    		console.log(parseData[j].firstRpm);
+    		console.log(parseData[j].secondRpm);
+    		console.log(parseData[j].secondTemp);
     		
     		sulbiName.push(parseData[j].sensorName);
-    		startTime.push(parseData[j].curTestTime);
-    		endTime.push(parseData[j].nextTestTime);
-    		detectCount.push(parseData[j].detectCount);
+    		firstTemp.push(parseData[j].firstTemp);
+    		firstHz.push(parseData[j].firstRpm);
+    		secondHz.push(parseData[j].secondRpm);
+    		secondTemp.push(parseData[j].secondTemp);
     	}
     	
     	console.log(sulbiName);
-    	console.log(startTime);
-    	console.log(endTime);
-    	console.log(detectCount);
+    	console.log(firstTemp);
+    	console.log(firstHz);
+    	console.log(secondHz);
+    	console.log(secondTemp);
     	
     	
     	for(var i = 0; i < 5; i++) {
@@ -245,12 +261,32 @@ $(document).ready(function(){
     
     
 	
-	
+	/* 
 	for(var i = 0; i < 5; i++) {
  		$('#autonixTemp2').append('<div class="col"><div class="info-box mb-3 bg-warning"><div class="info-box-content"><span class="info-box-text"></span><span class="info-box-number" style="text-align:center;">' + sulbiName[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">증숙온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstHz[i] + '</span></div></div><div class="info-box mb-3 bg-success"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">1차 RPM (HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + firstTemp[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">2차 RPM(HZ)</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondHz[i] + '</span></div></div><div class="info-box mb-3 bg-info"><div class="info-box-content"><span class="info-box-text" style="text-align:center;">동결온도</span><span class="info-box-number" style="text-align:center; font-size:40px;">' + secondTemp[i] + '</span></div></div></div>');
 	
  	} 
-	
+	 */
+	 
+	 async function initGraph2() {
+	    	
+	    	var data = await getData3();
+	    	var parseData = JSON.parse(data);
+	    	console.log(parseData);
+	    	console.log(parseData.length);
+	 
+	   for (var j = 0; j < 5; j++) {
+		   
+		   		firstTemp2.push(parseData[j].firstTemp);
+   				firstHz2.push(parseData[j].firstRpm);
+   				secondHz2.push(parseData[j].secondRpm);
+   				secondTemp2.push(parseData[j].secondTemp);
+	    		
+	   }   	
+	    	
+	 
+	   
+	   
  	 $(function () {
 		  'use strict'
 
@@ -271,22 +307,22 @@ $(document).ready(function(){
 		        {
 		          backgroundColor: '#007bff',
 		          borderColor    : '#007bff',
-		          data           : [0.2, 0.3, 0.4, 0.5, 0.6]
+		          data           : firstHz2
 		        },
 		        {
 		          backgroundColor: '#ced4da',
 		          borderColor    : '#ced4da',
-		          data           : [0.5, 0.6, 0.7, 0.8, 0.9]
+		          data           : firstTemp2
 		        },
 				{
 		          backgroundColor: '#eb3434',
 		          borderColor    : '#eb3434',
-		          data           : [1, 1, 1, 1, 1]
+		          data           : secondHz2
 		        },
 				{
 		          backgroundColor: '#ebdf34',
 		          borderColor    : '#ebdf34',
-		          data           : [1.2, 1.2, 1.2, 1.2, 1.2]
+		          data           : secondTemp2
 		        }
 		      ]
 		    },
@@ -330,7 +366,12 @@ $(document).ready(function(){
 		    }
 		  })
 		})
-     
+		
+	 }
+	 
+	 initTable2();
+     initGraph2();
+		
 });
 
 
